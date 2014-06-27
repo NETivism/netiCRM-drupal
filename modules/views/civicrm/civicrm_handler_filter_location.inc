@@ -3,7 +3,7 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -32,7 +32,8 @@ class civicrm_handler_filter_location extends views_handler_filter_in_operator {
       if (!civicrm_initialize()) {
         return;
       }
-      self::$_locationTypes = CRM_Core_PseudoConstant::get('CRM_Core_BAO_Address', 'location_type_id');
+      require_once 'CRM/Core/PseudoConstant.php';
+      self::$_locationTypes = CRM_Core_PseudoConstant::locationType();
     }
   }
 

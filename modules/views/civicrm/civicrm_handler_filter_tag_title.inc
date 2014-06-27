@@ -3,7 +3,7 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -42,7 +42,8 @@ class civicrm_handler_filter_tag_title extends views_handler_filter_in_operator 
       if (!civicrm_initialize()) {
         return;
       }
-      self::$_tagName = CRM_Core_PseudoConstant::get('CRM_Core_DAO_EntityTag', 'tag_id');
+      require_once 'CRM/Member/PseudoConstant.php';
+      self::$_tagName = CRM_Member_PseudoConstant::tag();
     }
   }
 

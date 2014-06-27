@@ -3,7 +3,7 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -45,24 +45,27 @@ class civicrm_handler_field_datetime extends views_handler_field_date {
     // get default time zone form Drupal
     $timezone = variable_get('date_default_timezone', 0);
     $value = $values->{$this->field_alias};
+    if (str_replace(array('-', ':', ' ', '0'), '', $value)) {
+      // still has value here
+      if (is_string($value) && strpos($value, "-")) {
+        $date = new DateTime($value);
+        // gives me the offset to GMT
+        $gmt = $date->getOffset();
+        $value = strtotime($value);
+        //set the timestamp to GMT
+        $value = $value + $gmt;
+        //set the timestamp to site default
+        $value = $value - $timezone;
 
-
-    if (is_string($value) && strpos($value, "-")) {
-      $date = new DateTime($value);
-      // gives me the offset to GMT
-      $gmt = $date->getOffset();
-      $value = strtotime($value);
-      //set the timestamp to GMT
-      $value = $value + $gmt;
-      //set the timestamp to site default
-      $value = $value - $timezone;
-
-      if ($value) {
-        $values->{$this->field_alias} = $value;
+        if ($value) {
+          $values->{$this->field_alias} = $value;
+        }
       }
+      return parent::render($values);
     }
-
-    return parent::render($values);
+    else {
+      return '';
+    }
   }
 }
 

@@ -3,7 +3,7 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -41,7 +41,8 @@ class civicrm_handler_filter_gender extends views_handler_filter_in_operator {
       if (!civicrm_initialize()) {
         return;
       }
-      self::$_gender = CRM_Core_PseudoConstant::get('CRM_Contact_BAO_Contact', 'gender_id');
+      require_once 'CRM/Core/PseudoConstant.php';
+      self::$_gender = CRM_Core_PseudoConstant::gender();
     }
   }
 

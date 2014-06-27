@@ -3,7 +3,7 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -25,7 +25,7 @@
  +--------------------------------------------------------------------+
 */
 function civicrm_views_default_views() {
-  $views = NULL;
+  $view = NULL;
   if (module_exists('date_api') && module_exists('calendar')) {
     $view               = new view;
     $view->name         = 'civicrm_events';
@@ -448,10 +448,9 @@ function civicrm_views_default_views() {
       ));
     $handler->override_option('block_description', 'Upcoming Events');
     $handler->override_option('block_caching', -1);
-
-    $views[$view->name] = $view;
   }
 
+  $views[$view->name] = $view;
   return $views;
 }
 

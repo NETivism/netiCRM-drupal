@@ -3,7 +3,7 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -48,7 +48,7 @@ class civicrm_handler_field_relationship_type extends views_handler_field {
 
       $options = array();
       foreach ($relationshipType_array as $id => $value_array) {
-        $options[$id] = $value_array['label_a_b'];
+        $options[$id] = $value_array['name_a_b'];
       }
 
       self::$_relationshipType = $options;

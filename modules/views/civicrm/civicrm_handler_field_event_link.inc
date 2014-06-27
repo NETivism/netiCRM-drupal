@@ -3,7 +3,7 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -120,7 +120,7 @@ class civicrm_handler_field_event_link extends views_handler_field {
       case 'config':
         if (user_access('access CiviEvent') && $data !== NULL && $data !== '') {
           return civicrm_views_href($data,
-            'civicrm/event/manage/eventInfo',
+            'civicrm/event/manage',
             "action=update&id={$values->{$this->aliases['id']}}&reset=1"
           );
         }

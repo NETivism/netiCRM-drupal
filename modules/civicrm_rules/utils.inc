@@ -1,9 +1,10 @@
 <?php
+
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2011                                |
+ | Copyright CiviCRM LLC (c) 2004-2010                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +29,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2011
+ * @copyright CiviCRM LLC (c) 2004-2010
  * $Id$
  *
  */
@@ -40,64 +41,50 @@
 /**
  * Function to get the list of groups
  */
-function _civicrm_get_groups() {
-  civicrm_initialize();
-  $groupInformation = civicrm_api('group', 'get', array('version' => 3));
+function _civicrm_get_groups( ) {
+	civicrm_initialize( );
+	require_once 'api/v2/Group.php';
+	$params = array( 'return.id' => 1, 'return.title' => 1 );
+	$groupInformation = civicrm_group_get( $params );
 
-  $groups = array();
-  foreach ($groupInformation['values'] as $values) {
-    $groups[$values['id']] = $values['title'];
-  }
-
-  return $groups;
-}
+	$groups = array( );	
+	foreach ( $groupInformation as $values ) {
+		$groups[ $values['id'] ] = $values['title'];
+	}
+	
+	return $groups;
+}	
 
 /**
  * Function to add contacts to group
  */
-function _civicrm_rules_group_contact($contactId, $groupId, $action = 'create') {
-  civicrm_initialize();
-  $params = array(
-    'contact_id' => $contactId,
-    'group_id' => $groupId,
-    'version' => 3,
-  );
-  // This used to be civicrm_group_contact_common($params, $action);
-  civicrm_api('group_contact', $action, $params);
+function _civicrm_rules_group_contact( $contactId, $groupId, $action = 'add' ) {	
+	civicrm_initialize( );
+	require_once 'api/v2/GroupContact.php';
+	$params = array( 'contact_id' => $contactId,
+									 'group_id' => $groupId
+								 );
+	civicrm_group_contact_common( $params, $action );
 }
 
 /**
  * Loads a contact into a version suitable for the rules actions
  */
-function _civicrm_rules_load_contact($contactID) {
-  $contact = new CRM_Contact_DAO_Contact();
-  $contact->id = $contactID;
+function _civicrm_rules_load_contact( $contactID ) {
+    require_once 'CRM/Contact/DAO/Contact.php';
+    $contact = new CRM_Contact_DAO_Contact( );
+    $contact->id = $contactID;
 
-  if ($contact->id) {
-    // load the contact data here
-    $contact->find(TRUE);
-  }
-
-  return $contact;
+    if ( $contact->id ) {
+        // load the contact data here
+        $contact->find( true );
+    }
+    
+    return $contact;
 }
 
-function _civicrm_rules_in_group($contact, $group) {
-  // check if contact is in the group gid
-  return TRUE;
-}
-
-/**
- * Loads a mailing into a version suitable for the rules actions
- */
-function _civicrm_rules_load_mailing($mailingID) {
-  $mailing = new CRM_Mailing_DAO_Mailing();
-  $mailing->id = $mailingID;
-
-  if ($mailing->id) {
-    // load the mailing data here
-    $mailing->find(TRUE);
-  }
-
-  return $mailing;
+function _civicrm_rules_in_group( $contact, $group ) {
+    // check if contact is in the group gid
+    return true;
 }
 
