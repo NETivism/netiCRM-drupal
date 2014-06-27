@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -31,15 +29,14 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_activityType extends civicrm_handler_field_option {
-  function initialize() {
-    if (!self::$_options) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Core/PseudoConstant.php';
-      self::$_options = CRM_Core_PseudoConstant::activityType();
+    function initialize( ) {
+        if ( ! self::$_options ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_options = CRM_Core_PseudoConstant::activityType( );
+        }
     }
-  }
 }
-
-
+?>

@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -31,27 +29,26 @@
  * @ingroup views_field_handlers
  */
 class views_handler_field_civicrm_county extends views_handler_field_civicrm {
-  static $_counties;
-  function construct() {
-    if (!self::$_counties) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Core/PseudoConstant.php';
-      self::$_counties = CRM_Core_PseudoConstant::county();
-    }
-  }
+    static $_counties;
 
-  function render($values) {
-    $sid = $values->{$this->field_alias};
-    if (empty($sid) ||
-      (int ) $sid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_counties ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_counties = CRM_Core_PseudoConstant::county( );
+        }
     }
 
-    return self::$_counties[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $sid = $values->{$this->field_alias};
+        if ( empty( $sid ) ||
+             (int ) $sid <= 0 ) {
+            return null;
+        }
+
+        return self::$_counties[$values->{$this->field_alias}];
+    }
 }
-
-
+?>

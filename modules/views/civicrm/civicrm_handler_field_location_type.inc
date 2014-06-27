@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -31,26 +29,26 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_location_type extends views_handler_field {
-  static $_locationTypes;
-  function construct() {
-    if (!self::$_locationTypes) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      self::$_locationTypes = CRM_Core_PseudoConstant::get('CRM_Core_BAO_Address', 'location_type_id');
-    }
-  }
+    static $_locationTypes;
 
-  function render($values) {
-    $lid = $values->{$this->field_alias};
-    if (empty($lid) ||
-      (int ) $lid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_locationTypes ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_locationTypes = CRM_Core_PseudoConstant::locationType( );
+        }
     }
 
-    return self::$_locationTypes[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $lid = $values->{$this->field_alias};
+        if ( empty( $lid ) ||
+             (int ) $lid <= 0 ) {
+            return null;
+        }
+
+        return self::$_locationTypes[$values->{$this->field_alias}];
+    }
 }
-
-
+?>

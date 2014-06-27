@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -24,7 +22,6 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 */
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  *
@@ -33,27 +30,26 @@
  *
  */
 class civicrm_handler_field_membership_status extends views_handler_field {
-  static $_membershipStatus;
-  function construct() {
-    if (!self::$_membershipStatus) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Member/PseudoConstant.php';
-      self::$_membershipStatus = CRM_Member_PseudoConstant::membershipStatus(NULL, NULL, 'label');
-    }
-  }
+    static $_membershipStatus;
 
-  function render($values) {
-    $lid = $values->{$this->field_alias};
-    if (empty($lid) ||
-      (int ) $lid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_membershipStatus ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Member/PseudoConstant.php';
+            self::$_membershipStatus = CRM_Member_PseudoConstant::membershipStatus( null, null, 'label' );
+        }
     }
 
-    return self::$_membershipStatus[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $lid = $values->{$this->field_alias};
+        if ( empty( $lid ) ||
+             (int ) $lid <= 0 ) {
+            return null;
+        }
+
+        return self::$_membershipStatus[$values->{$this->field_alias}];
+    }
 }
-
-
+?>

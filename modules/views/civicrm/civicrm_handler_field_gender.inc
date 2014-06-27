@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -24,7 +22,6 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 */
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  *
@@ -33,25 +30,26 @@
  *
  */
 class civicrm_handler_field_gender extends views_handler_field {
-  static $_gender;
-  function construct() {
-    if (!self::$_gender) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      self::$_gender = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'gender_id');
-    }
-  }
+    static $_gender;
 
-  function render($values) {
-    $sid = $values->{$this->field_alias};
-    if (empty($sid) ||
-      (int ) $sid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_gender ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_gender = CRM_Core_PseudoConstant::gender( );
+        }
     }
 
-    return self::$_gender[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $sid = $values->{$this->field_alias};
+        if ( empty( $sid ) ||
+             (int ) $sid <= 0 ) {
+            return null;
+        }
+
+        return self::$_gender[$values->{$this->field_alias}];
+    }
 }
 

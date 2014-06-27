@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -25,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  *
@@ -34,26 +31,26 @@
  *
  */
 class civicrm_handler_field_activity_status extends views_handler_field {
-  static $_activityStatus;
-  function construct() {
-    if (!self::$_activityStatus) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Core/PseudoConstant.php';
-      self::$_activityStatus = CRM_Core_PseudoConstant::activityStatus();
-    }
-  }
+    static $_activityStatus;
 
-  function render($values) {
-    $sid = $values->{$this->field_alias};
-    if (empty($sid) ||
-      (int ) $sid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_activityStatus ) {
+            if ( ! civicrm_initialize( ) ) {
+	        return;
+	    } 
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_activityStatus = CRM_Core_PseudoConstant::activityStatus( );
+        }
     }
 
-    return self::$_activityStatus[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $sid = $values->{$this->field_alias};
+        if ( empty( $sid ) ||
+             (int ) $sid <= 0 ) {
+            return null;
+        }
+
+        return self::$_activityStatus[$values->{$this->field_alias}];
+    }
 }
 

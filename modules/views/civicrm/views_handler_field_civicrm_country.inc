@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -31,27 +29,26 @@
  * @ingroup views_field_handlers
  */
 class views_handler_field_civicrm_country extends views_handler_field_civicrm {
-  static $_countries;
-  function construct() {
-    if (!self::$_countries) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Core/PseudoConstant.php';
-      self::$_countries = CRM_Core_PseudoConstant::countryIsoCode();
-    }
-  }
+    static $_countries;
 
-  function render($values) {
-    $sid = $values->{$this->field_alias};
-    if (empty($sid) ||
-      (int ) $sid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_countries ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_countries = CRM_Core_PseudoConstant::countryIsoCode( );
+        }
     }
 
-    return self::$_countries[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $sid = $values->{$this->field_alias};
+        if ( empty( $sid ) ||
+             (int ) $sid <= 0 ) {
+            return null;
+        }
+
+        return self::$_countries[$values->{$this->field_alias}];
+    }
 }
-
-
+?>

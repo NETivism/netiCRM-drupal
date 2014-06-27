@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -25,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  * CiviCRM Views Integration
@@ -34,29 +31,31 @@
  * Filters Countries, and is configured using the labels from the database
  *
  */
+
 class civicrm_handler_filter_country extends views_handler_filter_in_operator {
-  static $_countries;
-  function construct() {
-    parent::construct();
-    if (!self::$_countries) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Core/PseudoConstant.php';
-      self::$_countries = CRM_Core_PseudoConstant::country();
-    }
-  }
+    static $_countries;
 
-  function get_value_options() {
-    if (!isset($this->value_options)) {
-      $this->value_title = t('Country');
-      $options = array();
-      foreach (self::$_countries as $id => $name) {
-        $options[$id] = $name;
-      }
-      $this->value_options = $options;
+    function construct( ) {
+        parent::construct();
+        if ( ! self::$_countries ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_countries = CRM_Core_PseudoConstant::country( );
+        }
     }
-  }
+
+    function get_value_options() {
+        if (!isset($this->value_options)) {
+            $this->value_title = t('Country');
+            $options = array( );
+            foreach (self::$_countries as $id => $name ) {
+                $options[$id] = $name;
+            }
+            $this->value_options = $options;
+        }
+    }
+
 }
-
-
+?>

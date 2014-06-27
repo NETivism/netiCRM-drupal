@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -31,27 +29,26 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_payment_instrument extends views_handler_field {
-  static $_paymentInstrument;
-  function construct() {
-    if (!self::$_paymentInstrument) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Contribute/PseudoConstant.php';
-      self::$_paymentInstrument = CRM_Contribute_PseudoConstant::paymentInstrument();
-    }
-  }
+    static $_paymentInstrument;
 
-  function render($values) {
-    $lid = $values->{$this->field_alias};
-    if (empty($lid) ||
-      (int ) $lid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_paymentInstrument ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Contribute/PseudoConstant.php';
+            self::$_paymentInstrument = CRM_Contribute_PseudoConstant::paymentInstrument( );
+        }
     }
 
-    return self::$_paymentInstrument[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $lid = $values->{$this->field_alias};
+        if ( empty( $lid ) ||
+             (int ) $lid <= 0 ) {
+            return null;
+        }
+
+        return self::$_paymentInstrument[$values->{$this->field_alias}];
+    }
 }
-
-
+?>

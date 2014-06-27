@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -24,21 +22,22 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 */
+
 class civicrm_handler_filter_activityType extends civicrm_handler_filter_option {
-  function initialize() {
-    parent::construct();
-    if (!self::$_options) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Core/PseudoConstant.php';
-      self::$_states = CRM_Core_PseudoConstant::activityType();
+  
+    function initialize( ) {
+        parent::construct();
+        if ( ! self::$_options ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_states = CRM_Core_PseudoConstant::activityType( );
+        }
     }
-  }
 
-  function title() {
-    return t('Activity Type');
-  }
+    function title( ) {
+        return t('Activity Type');
+    }
 }
-
-
+?>

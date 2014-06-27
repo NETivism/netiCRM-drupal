@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -24,7 +22,6 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 */
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  *
@@ -33,27 +30,26 @@
  *
  */
 class civicrm_handler_field_contribution_type extends views_handler_field {
-  static $_contributionType;
-  function construct() {
-    if (!self::$_contributionType) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Contribute/PseudoConstant.php';
-      self::$_contributionType = CRM_Contribute_PseudoConstant::financialType();
-    }
-  }
+    static $_contributionType;
 
-  function render($values) {
-    $lid = $values->{$this->field_alias};
-    if (empty($lid) ||
-      (int ) $lid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_contributionType ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Contribute/PseudoConstant.php';
+            self::$_contributionType = CRM_Contribute_PseudoConstant::contributionType( );
+        }
     }
 
-    return self::$_contributionType[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $lid = $values->{$this->field_alias};
+        if ( empty( $lid ) ||
+             (int ) $lid <= 0 ) {
+            return null;
+        }
+
+        return self::$_contributionType[$values->{$this->field_alias}];
+    }
 }
-
-
+?>

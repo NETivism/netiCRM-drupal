@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -24,27 +22,30 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 */
+
 class civicrm_handler_filter_phone_type extends views_handler_filter_in_operator {
-  static $_phoneTypes;
-  function construct() {
-    if (!self::$_phoneTypes) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      self::$_phoneTypes = CRM_Core_PseudoConstant::get('CRM_Core_BAO_Phone', 'phone_type_id');
-    }
-  }
+    static $_phoneTypes;
 
-  function get_value_options() {
-    if (!isset($this->value_options)) {
-      $this->value_title = t('Phone type');
-      $options = array();
-      foreach (self::$_phoneTypes as $id => $name) {
-        $options[$id] = $name;
-      }
-      $this->value_options = $options;
+    function construct( ) {
+        if ( ! self::$_phoneTypes ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_phoneTypes = CRM_Core_PseudoConstant::phoneType( );
+        }
     }
-  }
+
+    function get_value_options() {
+        if (!isset($this->value_options)) {
+            $this->value_title = t('Phone type');
+            $options = array( );
+            foreach (self::$_phoneTypes as $id => $name ) {
+                $options[$id] = $name;
+            }
+            $this->value_options = $options;
+        }
+    }
+
 }
-
-
+?>

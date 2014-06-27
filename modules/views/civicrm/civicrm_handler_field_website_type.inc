@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -31,27 +29,26 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_website_type extends views_handler_field {
-  static $_websiteTypes;
-  function construct() {
-    if (!self::$_websiteTypes) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Core/PseudoConstant.php';
-      self::$_locationTypes = CRM_Core_PseudoConstant::websiteType();
-    }
-  }
+    static $_websiteTypes;
 
-  function render($values) {
-    $wid = $values->{$this->field_alias};
-    if (empty($wid) ||
-      (int ) $wid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_websiteTypes ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_locationTypes = CRM_Core_PseudoConstant::websiteType( );
+        }
     }
 
-    return self::$_websiteTypes[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $wid = $values->{$this->field_alias};
+        if ( empty( $wid ) ||
+             (int ) $wid <= 0 ) {
+            return null;
+        }
+
+        return self::$_websiteTypes[$values->{$this->field_alias}];
+    }
 }
-
-
+?>

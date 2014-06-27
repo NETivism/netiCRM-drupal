@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -24,29 +22,31 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 */
+
 class civicrm_handler_filter_activity extends views_handler_filter_in_operator {
-  static $_activityTypes;
-  function construct() {
-    parent::construct();
-    if (!self::$_activityTypes) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      require_once 'CRM/Core/PseudoConstant.php';
-      self::$_activityTypes = CRM_Core_PseudoConstant::activityType();
-    }
-  }
+    static $_activityTypes;
 
-  function get_value_options() {
-    if (!isset($this->value_options)) {
-      $this->value_title = t('Activity type');
-      $options = array();
-      foreach (self::$_activityTypes as $id => $name) {
-        $options[$id] = $name;
-      }
-      $this->value_options = $options;
+    function construct( ) {
+        parent::construct();
+        if ( ! self::$_activityTypes ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_activityTypes = CRM_Core_PseudoConstant::activityType( );
+        }
     }
-  }
+
+    function get_value_options() {
+        if (!isset($this->value_options)) {
+            $this->value_title = t('Activity type');
+            $options = array( );
+            foreach (self::$_activityTypes as $id => $name ) {
+                $options[$id] = $name;
+            }
+            $this->value_options = $options;
+        }
+    }
+
 }
-
-
+?>

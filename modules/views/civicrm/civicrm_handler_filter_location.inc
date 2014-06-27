@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -24,28 +22,31 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 */
+
 class civicrm_handler_filter_location extends views_handler_filter_in_operator {
-  static $_locationTypes;
-  function construct() {
-    parent::construct();
-    if (!self::$_locationTypes) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      self::$_locationTypes = CRM_Core_PseudoConstant::get('CRM_Core_BAO_Address', 'location_type_id');
-    }
-  }
+    static $_locationTypes;
 
-  function get_value_options() {
-    if (!isset($this->value_options)) {
-      $this->value_title = t('Location type');
-      $options = array();
-      foreach (self::$_locationTypes as $id => $name) {
-        $options[$id] = $name;
-      }
-      $this->value_options = $options;
+    function construct( ) {
+        parent::construct();
+        if ( ! self::$_locationTypes ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_locationTypes = CRM_Core_PseudoConstant::locationType( );
+        }
     }
-  }
+
+    function get_value_options() {
+        if (!isset($this->value_options)) {
+            $this->value_title = t('Location type');
+            $options = array( );
+            foreach (self::$_locationTypes as $id => $name ) {
+                $options[$id] = $name;
+            }
+            $this->value_options = $options;
+        }
+    }
+
 }
-
-
+?>

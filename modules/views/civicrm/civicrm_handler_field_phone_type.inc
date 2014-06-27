@@ -1,9 +1,7 @@
 <?php
-// $Id$
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 3.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -31,26 +29,26 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_phone_type extends views_handler_field {
-  static $_phoneTypes;
-  function construct() {
-    if (!self::$_phoneTypes) {
-      if (!civicrm_initialize()) {
-        return;
-      }
-      self::$_phoneTypes = CRM_Core_PseudoConstant::get('CRM_Core_BAO_Phone', 'phone_type_id');
-    }
-  }
+    static $_phoneTypes;
 
-  function render($values) {
-    $lid = $values->{$this->field_alias};
-    if (empty($lid) ||
-      (int ) $lid <= 0
-    ) {
-      return NULL;
+    function construct( ) {
+        if ( ! self::$_phoneTypes ) {
+            if ( ! civicrm_initialize( ) ) {
+                return;
+            }
+            require_once 'CRM/Core/PseudoConstant.php';
+            self::$_phoneTypes = CRM_Core_PseudoConstant::phoneType( );
+        }
     }
 
-    return self::$_phoneTypes[$values->{$this->field_alias}];
-  }
+    function render( $values ) {
+        $lid = $values->{$this->field_alias};
+        if ( empty( $lid ) ||
+             (int ) $lid <= 0 ) {
+            return null;
+        }
+
+        return self::$_phoneTypes[$values->{$this->field_alias}];
+    }
 }
-
-
+?>
