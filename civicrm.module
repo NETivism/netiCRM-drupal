@@ -47,9 +47,9 @@ function civicrm_html_head() {
 
   if (arg(0) == 'civicrm') {
     // Add our standard css & js
-    CRM_Core_Resources::singleton()->addCoreResources();
+    // CRM_Core_Resources::singleton()->addCoreResources();
   } else {
-    CRM_Core_Resources::singleton()->addCoreStyles();
+    // CRM_Core_Resources::singleton()->addCoreStyles();
   }
 }
 
@@ -272,14 +272,15 @@ function civicrm_initialize() {
 
     $args = explode('/', $_GET['q']);
     if (
-      (!isset($args[1]) || $args[1] != 'upgrade') &&
+      (!isset($args[1]) || $args[1] != 'upgrade') 
+      // &&
       // drupal wysiwyg
-      CRM_Core_BAO_Setting::getItem(CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'editor_id') == 4
+      //CRM_Core_BAO_Setting::getItem(CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'editor_id') == 4
     ) {
       // CRM-12164
       if (!function_exists('wysiwyg_get_profile')) {
         // reset the editor choice so the warning is not displayed all the time
-        CRM_Core_BAO_Setting::setItem(NULL, CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'editor_id');
+        // CRM_Core_BAO_Setting::setItem(NULL, CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'editor_id');
 
         // display warning and url to fix
         $url = CRM_Utils_System::url('civicrm/admin/setting/preferences/display', 'reset=1');
@@ -301,7 +302,7 @@ function civicrm_initialize() {
         drupal_add_css($path . '/filter.css');
       }
     }
-    CRM_Core_Config::singleton()->userSystem->setMySQLTimeZone();
+    // CRM_Core_Config::singleton()->userSystem->setMySQLTimeZone();
   }
 
   return TRUE;
@@ -1220,7 +1221,7 @@ function civicrm_reviews() {
  */
 function civicrm_modules_installed($modules) {
   civicrm_initialize();
-  CRM_Core_Invoke::rebuildMenuAndCaches(TRUE);
+  // CRM_Core_Invoke::rebuildMenuAndCaches(TRUE);
 }
 
 /**
@@ -1228,7 +1229,7 @@ function civicrm_modules_installed($modules) {
  */
 function civicrm_modules_enabled($modules) {
   civicrm_initialize();
-  CRM_Core_Invoke::rebuildMenuAndCaches(TRUE);
+  // CRM_Core_Invoke::rebuildMenuAndCaches(TRUE);
 }
 
 /**
@@ -1236,7 +1237,7 @@ function civicrm_modules_enabled($modules) {
  */
 function civicrm_modules_disabled($modules) {
   civicrm_initialize();
-  CRM_Core_Invoke::rebuildMenuAndCaches(TRUE);
+  // CRM_Core_Invoke::rebuildMenuAndCaches(TRUE);
 }
 
 /**
@@ -1244,6 +1245,6 @@ function civicrm_modules_disabled($modules) {
  */
 function civicrm_modules_uninstalled($modules) {
   civicrm_initialize();
-  CRM_Core_Invoke::rebuildMenuAndCaches(TRUE);
+  // CRM_Core_Invoke::rebuildMenuAndCaches(TRUE);
 }
 
