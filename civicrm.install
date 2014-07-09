@@ -77,7 +77,10 @@ function civicrm_uninstall() {
 }
 
 function civicrm_requirements($phase) {
-  global $base_url;
+  global $base_url, $databases;
+  if(empty($databases)){
+    return array();
+  }
 
   $conf_path = conf_path();
   $civicrm_path = drupal_get_path('module', 'civicrm');
