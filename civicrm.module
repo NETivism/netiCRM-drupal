@@ -155,9 +155,26 @@ function civicrm_permission() {
 
   $permissions = CRM_Core_Permission::basicPermissions();
   $perms_array = array();
+  $restrict = array(
+    'profile edit',
+    'profile listings',
+    'profile listings and forms',
+    'profile view',
+    'translate CiviCRM',
+    'access CiviCRM',
+  );
   foreach ($permissions as $perm => $title) {
     //order matters here, but we deal with that later
-    $perms_array[$perm] = array('title' => $title);
+    if(preg_match('/(administer|view all|delete|edit all)/', $perm) || in_array($perm, $restrict)){
+      $restrict_access = TRUE;
+    }
+    else{
+      $restrict_access = FALSE;
+    }
+    $perms_array[$perm] = array(
+      'title' => $title,
+      'restrict access' => $restrict_access,
+    );
   }
   return $perms_array;
 }
