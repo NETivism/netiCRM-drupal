@@ -1,7 +1,7 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -47,13 +47,9 @@ class civicrm_handler_field_pseudo_constant extends views_handler_field {
     if (isset($this->definition['pseudo args']) && is_array($this->definition['pseudo args'])) {
       $pseudo_args = $this->definition['pseudo args'];
     }
-    elseif (isset($this->definition['dao class']) && isset($this->definition['real field'])) {
-      $pseudo_args = array($this->definition['dao class'], $this->definition['real field']);
-    }
     else {
       $pseudo_args = array();
     }
-      
 
     // Include and call the Pseudo Class method
     $this->_pseudo_constant = call_user_func_array($this->definition['pseudo class'] . "::" . $this->definition['pseudo method'], $pseudo_args);
@@ -61,9 +57,7 @@ class civicrm_handler_field_pseudo_constant extends views_handler_field {
 
   function render($values) {
     if (!empty($values->{$this->field_alias})) {
-      $val = $values->{$this->field_alias};
-      $val = str_replace("\x01", '', $val); // TODO This fix should be replaced as described in  CRM-12853
-      return $this->_pseudo_constant[$val];
+      return $this->_pseudo_constant[$values->{$this->field_alias}];
     }
   }
 }

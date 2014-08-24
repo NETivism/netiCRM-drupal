@@ -1,7 +1,7 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -30,7 +30,6 @@
  */
 class civicrm_handler_field_money extends views_handler_field {
   function construct() {
-    parent::construct();
     if (!civicrm_initialize()) {
       return;
     }
@@ -38,8 +37,7 @@ class civicrm_handler_field_money extends views_handler_field {
   }
 
   function render($values) {
-    $value = $this->get_value($values);
-    return CRM_Utils_Money::format($value);
+    return CRM_Utils_Money::format($values->{$this->field_alias});
   }
 }
 

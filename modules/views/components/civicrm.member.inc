@@ -1,7 +1,7 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -184,7 +184,7 @@ function _civicrm_member_data(&$data, $enabled) {
       'click sortable' => TRUE,
     ),
     'argument' => array(
-      'handler' => 'views_handler_argument_string',
+      'handler' => 'views_handler_argument',
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_string',
@@ -325,7 +325,7 @@ function _civicrm_member_data(&$data, $enabled) {
       'help' => t('Membership -> Campaign'),
       'relationship' => array(
         'base' => 'civicrm_campaign',
-        'base field' => 'id',
+        'field' => 'id',
         'handler' => 'views_handler_relationship',
         'label' => t('Membership -> Campaign'),
       ),

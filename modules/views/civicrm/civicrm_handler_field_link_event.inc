@@ -1,7 +1,7 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.3                                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -162,9 +162,9 @@ class civicrm_handler_field_link_event extends views_handler_field {
           return l($link_text, $custom_link . "{$values->id}");
         }
 
-        // see CRM-CRM-14251 - if we return null here then views is able to be configured as to what to do
+        // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE TEXT
       default:
-        return NULL;
+        return $link_text;
     }
   }
 
@@ -174,7 +174,7 @@ class civicrm_handler_field_link_event extends views_handler_field {
   }
 
   function render($values) {
-    return $this->render_link(NULL, $values);
+    return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
 
