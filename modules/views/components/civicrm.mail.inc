@@ -253,6 +253,24 @@ function _civicrm_mail_data(&$data, $enabled) {
       'handler' => 'views_handler_sort',
     ),
   );
+  //is this mailing public
+  $data['civicrm_mailing']['visibility'] = array(
+    'title' => t('Visibility'),
+    'help' => t('Is this mailing public or not?'),
+    'field' => array(
+      'handler' => 'views_handler_field_boolean',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_boolean_operator',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
   // Link to Campaign Table
   if (isset($enabled['CiviCampaign'])) {
     $data['civicrm_mailing']['campaign_id'] = array(
