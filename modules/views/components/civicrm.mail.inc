@@ -258,14 +258,14 @@ function _civicrm_mail_data(&$data, $enabled) {
     'title' => t('Visibility'),
     'help' => t('Is this mailing public or not?'),
     'field' => array(
-      'handler' => 'views_handler_field_boolean',
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'argument' => array(
       'handler' => 'views_handler_argument',
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_boolean_operator',
+      'handler' => 'civicrm_handler_filter_visibility',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',

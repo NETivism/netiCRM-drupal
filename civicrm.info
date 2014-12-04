@@ -65,6 +65,7 @@ files[] = modules/views/civicrm/civicrm_handler_filter_suffix.inc
 files[] = modules/views/civicrm/civicrm_handler_filter_country_multi.inc
 files[] = modules/views/civicrm/civicrm_handler_filter_state_multi.inc
 files[] = modules/views/civicrm/civicrm_handler_filter_domain.inc
+files[] = modules/views/civicrm/civicrm_handler_filter_visibility.inc
 
 ; activity handlers
 files[] = modules/views/civicrm/civicrm_handler_field_activity.inc
