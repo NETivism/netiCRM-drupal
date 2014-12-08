@@ -331,6 +331,10 @@ function civicrm_views_custom_data_cache(&$data, $entity_type, $groupID, $subTyp
       $jointable = 'civicrm_contribution';
       break;
 
+    case "ContributionPage":
+      $jointable = 'civicrm_contribution_page';
+      break;
+
     case "Activity":
       $jointable = 'civicrm_activity';
       break;
