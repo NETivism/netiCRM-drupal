@@ -78,9 +78,6 @@ function civicrm_uninstall() {
 
 function civicrm_requirements($phase) {
   global $base_url, $databases;
-  if(empty($databases)){
-    return array();
-  }
 
   $conf_path = conf_path();
   $civicrm_path = drupal_get_path('module', 'civicrm');
@@ -89,9 +86,9 @@ function civicrm_requirements($phase) {
 
   $url = $base_url . '/' . $civicrm_path . 'install/index.php';
 
-  $settings = glob('sites/*/civicrm.settings.php');
+  $setting = $conf_path.'/civicrm.settings.php';
   $problems = array();
-  if (empty($settings) && $phase == 'install') {
+  if (!file_exists($setting) && $phase == 'install') {
     // initialize settings
     $db = Database::getConnection()->getConnectionOptions();
     if(empty($db)){
