@@ -240,7 +240,9 @@ function _civicrm_checkmenu( ){
   $path = trim(implode('/', $args), '/');
 
   static $checked;
-  if(!isset($checked[$path])) return true;
+  if(isset($checked[$path])){
+    return $checked[$path];
+  }
 
   civicrm_initialize();
   $item = CRM_Core_Menu::get( $path );
@@ -536,6 +538,7 @@ function civicrm_invoke() {
   }
 
   CRM_Core_Invoke::invoke($args);
+  drupal_exit();
 }
 
 /**
