@@ -161,6 +161,8 @@ function civicrm_permission() {
     'profile view',
     'translate CiviCRM',
     'access CiviCRM',
+    'administer CiviCRM',
+    'administer Reserved Option',
   );
   foreach ($permissions as $perm => $title) {
     //order matters here, but we deal with that later
