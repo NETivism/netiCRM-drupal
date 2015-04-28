@@ -115,7 +115,7 @@ function civicrm_requirements($phase) {
           // test if database exists
           require_once "$crm_root/packages/DB.php";
           $db = DB::connect($dsn);
-          if((new PEAR)->isError($db)) {
+          if($pear->isError($db)) {
             $problems[] = array(
               'title' => t('Database connection failed'),
               'value' => t('Failed when trying to connect database. Please correct your database setting in civicrm.settings.php'),
@@ -206,7 +206,8 @@ function _civicrm_import_sql($filename){
   $filename = $crm_root.'/'.$filename;
 
   $db = DB::connect($dsn);
-  if((new PEAR)->isError($db)) {
+  $pear = new PEAR;
+  if($pear->isError($db)) {
     watchdog("civicrm", "Cannot open $dsn: " . $db->getMessage( ) );
     return FALSE;
   }
@@ -224,7 +225,7 @@ function _civicrm_import_sql($filename){
     $query = trim( $query );
     if ( ! empty( $query ) ) {
       $res = $db->query( $query );
-      if ( (new PEAR)->isError( $res ) ) {
+      if ( $pear->isError( $res ) ) {
         watchdog("civicrm", "Cannot execute $query: " . $res->getMessage( ) );
         return FALSE;
       }
