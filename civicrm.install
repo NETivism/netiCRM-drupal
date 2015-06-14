@@ -40,7 +40,7 @@ function civicrm_install( ) {
   global $base_url;
   // got to doing real install here.
   // prepare variables first.
-  $crm_root = rtrim(dirname(__FILE__), "/drupal");
+  $crm_root = preg_replace('/\/drupal$/', '', rtrim(dirname(__FILE__), '/'));
   $conf_path = conf_path();
   global $db_url;
   $include_path = '.'.PATH_SEPARATOR.$crm_root.PATH_SEPARATOR.$crm_root.'/packages'.PATH_SEPARATOR.get_include_path();
