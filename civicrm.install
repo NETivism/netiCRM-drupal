@@ -40,6 +40,13 @@
  */
 function civicrm_install() {
   global $base_url;
+  try {
+    $error = _civicrm_init_setting();
+  }
+  catch(Exception $e){
+    watchdog_exception('civicrm', $e);
+  }
+
   // step 1: import databases
   $success = _civicrm_import_sql('sql/civicrm.mysql');
   
@@ -79,103 +86,19 @@ function civicrm_uninstall() {
 function civicrm_requirements($phase) {
   global $base_url, $databases;
 
-  $conf_path = conf_path();
-  $civicrm_path = drupal_get_path('module', 'civicrm');
-  $crm_root = preg_replace('/\/drupal$/', '', $civicrm_path);
-  $crm_root = DRUPAL_ROOT.base_path().$crm_root;
-
-  $url = $base_url . '/' . $civicrm_path . 'install/index.php';
-
-  $setting = $conf_path.'/civicrm.settings.php';
+  $setting = conf_path().'/civicrm.settings.php';
   $problems = array();
   if (!file_exists($setting) && $phase == 'install') {
     // initialize settings
-    $db = Database::getConnection()->getConnectionOptions();
-    if(empty($db)){
-      $problems[] = array(
-        'title' => t('Could not access drupal database'),
-        'value' => t('Could not retrive database info from drupal. Please install civicrm manually <a href="!link">install</a>', array('!link' => $url)),
-        'severity' => REQUIREMENT_ERROR,
-      );
+    global $databases;
+    if(!empty($databases)){
+      $error = _civicrm_init_setting(); 
+      if(!empty($error)){
+        $problems[] = $error;
+      }
     }
     else{
-      $setting = $conf_path.'/civicrm.settings.php';
-      if(file_exists($setting)){
-        // trying to require 
-        require_once $setting;
-        $dsn = defined(CIVICRM_DSN) ? CIVICRM_DSN : NULL;
-        if(empty($dsn)){
-          $problems[] = array(
-            'title' => t('Missing database setting'),
-            'value' => t('Although we detect civicrm settings, but we could not find any database config'),
-            'severity' => REQUIREMENT_ERROR,
-          );
-        }
-        else{
-          // test if database exists
-          require_once "$crm_root/packages/DB.php";
-          $db = DB::connect($dsn);
-          if($pear->isError($db)) {
-            $problems[] = array(
-              'title' => t('Database connection failed'),
-              'value' => t('Failed when trying to connect database. Please correct your database setting in civicrm.settings.php'),
-              'severity' => REQUIREMENT_ERROR,
-            );
-          }
-          else{
-            $res = $db->query("SHOW TABLES LIKE 'ciivcrm_contact'");
-            if($res->numRows()){
-              $problems[] = array(
-                'title' => t('CiviCRM installed before.'),
-                'value' => t('Your database have exists civicrm related tables. Check your system carefully to prevent data loss.'),
-                'severity' => REQUIREMENT_ERROR,
-              );
-            }
-          }
-        }
-      }
-      else{
-        if(is_writable($conf_path)){
-          $params = array();
-          $params['%%baseURL%%'] = $base_url;
-          $params['%%cms%%'] = 'Drupal';
-          $params['%%CMSdbUser%%'] = addslashes($db['username']);
-          $params['%%CMSdbPass%%'] = addslashes($db['password']);
-          $params['%%CMSdbHost%%'] = empty($db['port']) ? $db['host'] : $db['host'].':'.$db['port'];
-          $params['%%CMSdbName%%'] = addslashes($db['database']);
-          $params['%%dbUser%%'] = addslashes($db['username']);
-          $params['%%dbPass%%'] = addslashes($db['password']);
-          $params['%%dbHost%%'] = empty($db['port']) ? $db['host'] : $db['host'].':'.$db['port'];
-          $params['%%dbName%%'] = addslashes($db['database']);
-          $params['%%crmRoot%%'] = "'.DRUPAL_ROOT.base_path().'".preg_replace('/\/drupal$/', '', $civicrm_path);
-          $params['%%templateCompileDir%%'] = "'.drupal_realpath('public://').'/civicrm/templates_c/";
-          $params['%%siteKey%%'] = md5($base_url.microtime());
-
-          $filename = $crm_root.'/templates/CRM/common/civicrm.settings.php.template';
-          $setting_content = file_get_contents($filename);
-          $setting_content = str_replace(array_keys($params), $params, $setting_content);
-          $success = file_put_contents($setting, $setting_content);
-          if($success){
-            drupal_set_message('Automatic create civicrm.settings.php by Drupal current setting.');
-          }
-          else{
-            $problems[] = array(
-              'title' => t('CiviCRM settings does not exist'),
-              'value' =>
-              t('CiviCRM settings file does not exist. It should be created by CiviCRM <a href="!link">install</a>',
-                array('!link' => $url)),
-              'severity' => REQUIREMENT_ERROR,
-            );
-          }
-        }
-        else{
-          $problems[] = array(
-            'title' => t('Drupal settings dir not writable'),
-            'value' => t('CiviCRM will create your settings automatically, but we found dir !dir not writable.', array('!dir' => $setting)),
-            'severity' => REQUIREMENT_ERROR,
-          );
-        }
-      }
+      drupal_set_message("Postponed civicrm settings initialization because profile need to verify requirement first.");
     }
   }
 
@@ -189,19 +112,111 @@ function civicrm_update_7400(&$sandbox) {
   db_query("UPDATE {system} SET weight = 100 WHERE name = 'civicrm'");
 }
 
-/**
- * Helper function for import sql
- */
-function _civicrm_import_sql($filename){
-  static $crm_root;
+function _civicrm_init_setting(){
+  global $crm_root;
   if(empty($crm_root)){
     $crm_root = DRUPAL_ROOT.base_path().drupal_get_path('module', 'civicrm');
     $crm_root = preg_replace('/\/drupal$/', '', $crm_root);
     $include_path = '.'.PATH_SEPARATOR.$crm_root.PATH_SEPARATOR.$crm_root.PATH_SEPARATOR.'packages'.PATH_SEPARATOR.get_include_path();
     set_include_path( $include_path );
-    require_once conf_path().'/civicrm.settings.php';
-    require_once "$crm_root/packages/DB.php";
   }
+  $civicrm_path = drupal_get_path('module', 'civicrm');
+  $conf_path = conf_path();
+  $url = $base_url . '/' . $civicrm_path . 'install/index.php';
+  $setting = $conf_path.'/civicrm.settings.php';
+  if(file_exists($setting)){
+    // trying to require 
+    require_once $setting;
+    $dsn = defined(CIVICRM_DSN) ? CIVICRM_DSN : NULL;
+    if(empty($dsn)){
+      throw new Exception(t('Could not detect database settings from civicrm.settings.php'));
+      return array(
+        'title' => t('Could not detect database settings from civicrm.settings.php'),
+        'value' => t('Although we detect civicrm settings, but we could not find any database config'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+  else{
+    if(is_writable($conf_path)){
+      $db = Database::getConnection()->getConnectionOptions();
+      $params = array();
+      $params['%%baseURL%%'] = $base_url;
+      $params['%%cms%%'] = 'Drupal';
+      $params['%%CMSdbUser%%'] = addslashes($db['username']);
+      $params['%%CMSdbPass%%'] = addslashes($db['password']);
+      $params['%%CMSdbHost%%'] = empty($db['port']) ? $db['host'] : $db['host'].':'.$db['port'];
+      $params['%%CMSdbName%%'] = addslashes($db['database']);
+      $params['%%dbUser%%'] = addslashes($db['username']);
+      $params['%%dbPass%%'] = addslashes($db['password']);
+      $params['%%dbHost%%'] = empty($db['port']) ? $db['host'] : $db['host'].':'.$db['port'];
+      $params['%%dbName%%'] = addslashes($db['database']);
+      $params['%%crmRoot%%'] = "'.DRUPAL_ROOT.base_path().'".preg_replace('/\/drupal$/', '', $civicrm_path);
+      $params['%%templateCompileDir%%'] = "'.drupal_realpath('public://').'/civicrm/templates_c/";
+      $params['%%siteKey%%'] = md5($base_url.microtime());
+
+      $filename = $crm_root.'/templates/CRM/common/civicrm.settings.php.template';
+      $setting_content = file_get_contents($filename);
+      $setting_content = str_replace(array_keys($params), $params, $setting_content);
+      $success = file_put_contents($setting, $setting_content);
+      if(!$success){
+        throw new Exception(t('CiviCRM settings does not exist'));
+        return array(
+          'title' => t('CiviCRM settings does not exist'),
+          'value' =>
+          t('CiviCRM settings file does not exist. It should be created by CiviCRM <a href="!link">install</a>',
+            array('!link' => $url)),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+    }
+    else{
+      throw new Exception(t('Drupal settings dir not writable'));
+      return array(
+        'title' => t('Drupal settings dir not writable'),
+        'value' => t('CiviCRM will create your settings automatically, but we found dir !dir not writable.', array('!dir' => $setting)),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+  require_once conf_path().'/civicrm.settings.php';
+  require_once "$crm_root/packages/DB.php";
+  _civicrm_db_test();
+}
+
+/**
+ * Helper function for test civicrm if installed
+ */
+function _civicrm_db_test(){
+  // test if database exists
+  $db_crm  = DB::connect(CIVICRM_DSN);
+  $pear = new PEAR;
+  if($pear->isError($db_crm)) {
+    throw new Exception(t('Database connection failed when enable civicrm'));
+    return array(
+      'title' => t('Database connection failed'),
+      'value' => t('Failed when trying to connect database. Please correct your database setting in civicrm.settings.php'),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+  else{
+    $res = $db_crm->query("SHOW TABLES LIKE 'ciivcrm_contact'");
+    if($res->numRows()){
+      throw new Exception(t('CiviCRM already installed.'));
+      return array(
+        'title' => t('CiviCRM already installed.'),
+        'value' => t('Your database have exists civicrm related tables. Check your system carefully to prevent data loss.'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+}
+
+/**
+ * Helper function for import sql
+ */
+function _civicrm_import_sql($filename){
+  global $crm_root;
   $dsn = CIVICRM_DSN;
   $filename = $crm_root.'/'.$filename;
 
