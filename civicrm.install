@@ -141,7 +141,7 @@ function _civicrm_init_setting(){
     if(is_writable($conf_path)){
       $db = Database::getConnection()->getConnectionOptions();
       $params = array();
-      $params['%%baseURL%%'] = $base_url;
+      $params['%%baseURL%%'] = base_path();
       $params['%%cms%%'] = 'Drupal';
       $params['%%CMSdbUser%%'] = addslashes($db['username']);
       $params['%%CMSdbPass%%'] = addslashes($db['password']);
