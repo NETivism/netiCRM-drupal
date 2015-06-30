@@ -762,6 +762,16 @@ function civicrm_enable() {
 
   //Update the 'blocks' DB table with the blocks
   _block_rehash();
+
+  // setup permissions
+  $anonymous_perm = array(
+    'make online contributions' => TRUE, 
+    'register for events' => TRUE,
+    'view event info' => TRUE,
+    'profile create' => TRUE,
+  );
+  user_role_change_permissions(DRUPAL_ANONYMOUS_RID, $anonymous_perm);
+  user_role_change_permissions(DRUPAL_AUTHENTICATED_RID, $anonymous_perm);
 }
 
 /**
