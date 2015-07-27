@@ -53,13 +53,14 @@ function civicrm_html_head() {
     $template = CRM_Core_Smarty::singleton( );
     $buffer = $template->fetch( 'CRM/common/jquery.files.tpl' );
     $lines  = preg_split( '/\s+/', $buffer );
+    $options = array('type' => 'file', 'scope' => 'header', 'weight' => 999, 'group' => 999);
     foreach ( $lines as $line ) {
       $line = trim( $line );
       if ( empty( $line ) ) {
         continue;
       }
       if ( strpos( $line, '.js' ) !== false ) {
-        drupal_add_js( $crm_path . $line );
+        drupal_add_js( $crm_path . $line, $options);
       }
       else if ( strpos( $line, '.css' ) !== false ) {
         drupal_add_css( $crm_path . $line );
@@ -75,9 +76,8 @@ function civicrm_html_head() {
     }
 
     // add Common.js
-    drupal_add_js( $crm_path . 'js/Common.js' );
-    drupal_add_js( $crm_path . 'js/noconflict.js' );
-
+    drupal_add_js( $crm_path . 'js/noconflict.js', $options);
+    drupal_add_js( $crm_path . 'js/Common.js', $options);
   }
   if ( isset( $config->customCSSURL ) && ! empty( $config->customCSSURL ) ) {
     $head  = "<style type=\"text/css\">@import url({$config->customCSSURL});</style>\n";
