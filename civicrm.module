@@ -902,6 +902,11 @@ function civicrm_preprocess_page(&$variables) {
       $variables['styles'] = drupal_get_css( $variables['css'] );
     }
   }
+  if ( in_array( arg(0), array('civicrm', 'user') ) && !function_exists('jquery_update_jquery_update_alter')) {
+    $scripts = drupal_add_js();
+    _civicrm_no_conflict($scripts);
+    $variables['scripts'] = drupal_get_js('header', $scripts);
+  }
 }
 
 function civicrm_checkmenu( ){
@@ -998,34 +1003,42 @@ function civicrm_page_get_cache(){
  */
 function civicrm_jquery_update_alter(&$scripts) {
   if ( in_array( arg(0), array('civicrm', 'user') ) ) {
-    // Move the CiviCRM jquery and jQuery UI libraries above Drupal's core jQuery
-    // and relatively gracefully handle noConflict.
-    $path = drupal_get_path('module', 'civicrm');
-    $val = array(
-        'cache' => TRUE,
-        'defer' => FALSE,
-        'preprocess' => TRUE,
-        );
+    _civicrm_no_conflict($scripts);
+  }
+}
 
-    unset($scripts['module'][$path . '/../packages/jquery/jquery.js']);
-    $core = array(
-        $path . '/../packages/jquery/jquery.js' => $val,
-        );
+function _civicrm_no_conflict(&$scripts){
+  // Move the CiviCRM jquery and jQuery UI libraries above Drupal's core jQuery
+  // and relatively gracefully handle noConflict.
+  $path = drupal_get_path('module', 'civicrm');
+  $val = array(
+    'cache' => TRUE,
+    'defer' => FALSE,
+    'preprocess' => TRUE,
+  );
 
-    foreach ($scripts['module'] as $script => $val) {
-      if (strpos($script, $path) === 0) {
-        $core[$script] = $scripts['module'][$script];
-        unset($scripts['module'][$script]);
-      }
+  unset($scripts['module'][$path . '/../packages/jquery/jquery.js']);
+  $core = array(
+    $path . '/../packages/jquery/jquery.js' => $val,
+  );
+
+  foreach ($scripts['module'] as $script => $val) {
+    if (strpos($script, $path) === 0) {
+      $core[$script] = $scripts['module'][$script];
+      unset($scripts['module'][$script]);
     }
+  }
 
-    $core[$path . '/../js/noconflict.js'] = $val;
+  $core[$path . '/../js/noconflict.js'] = $val;
 
+  if(module_exists('jquery_update')){
     $core[jquery_update_jquery_path()] = $scripts['core']['misc/jquery.js'];
     unset($scripts['core']['misc/jquery.js']);
+  }
 
-    $scripts['core'] = $core + $scripts['core'];
+  $scripts['core'] = $core + $scripts['core'];
 
+  if(module_exists('jquery_update')){
     foreach (jquery_update_get_replacements() as $type => $replacements) {
       foreach ($replacements as $find => $replace) {
         // If the file to replace is loaded on this page...
