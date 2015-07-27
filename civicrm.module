@@ -1,8 +1,8 @@
 <?php
-/** 
+/**
  * Project:     CiviCRM: Constituent Relationship Management for NP's
- * File:        civicrm.module 
- * 
+ * File:        civicrm.module
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
- */ 
+ *
+ */
 
 /**
  * Drupal module file.
@@ -75,9 +75,9 @@ function civicrm_html_head()
   if ( isset( $config->customCSSURL ) && ! empty( $config->customCSSURL ) ) {
     $head  = "<style type=\"text/css\">@import url({$config->customCSSURL});</style>\n";
   } else {
-    //        drupal_add_css(drupal_get_path('module', 'civicrm') . '/../css/deprecate.css'); 
-    drupal_add_css(drupal_get_path('module', 'civicrm') . '/../css/civicrm.css'); 
-    //        drupal_add_css(drupal_get_path('module', 'civicrm') . '/../css/extras.css'); 
+    //        drupal_add_css(drupal_get_path('module', 'civicrm') . '/../css/deprecate.css');
+    drupal_add_css(drupal_get_path('module', 'civicrm') . '/../css/civicrm.css');
+    //        drupal_add_css(drupal_get_path('module', 'civicrm') . '/../css/extras.css');
   }
   return $head;
 }
@@ -98,7 +98,7 @@ function civicrm_html_head()
  * text to the pages your module defines.
  */
 function civicrm_help($section)
-{	
+{
   switch ($section) {
     case 'admin/help#civicrm':
       if ( ! civicrm_initialize( ) ) {
@@ -221,7 +221,7 @@ function civicrm_menu( )
 }
 
 /**
- * Initialize CiviCRM. Call this function from other modules too if 
+ * Initialize CiviCRM. Call this function from other modules too if
  * they use the CiviCRM API.
  *
  */
@@ -257,14 +257,14 @@ function civicrm_initialize( )
     $docLinkTrouble = "http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Configuration+Trouble-shooting";
     $forumLink      = "http://forum.civicrm.org/index.php/board,6.0.html";
 
-    $errorMsgAdd = t("Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>", 
+    $errorMsgAdd = t("Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
         array('!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink ) );
 
 
     if ( $error == false ) {
       $failure = true;
-      drupal_set_message( "<strong><p class='error'>" . 
-          t("Oops! - The CiviCRM settings file (civicrm.settings.php) was not found in the expected location ") . 
+      drupal_set_message( "<strong><p class='error'>" .
+          t("Oops! - The CiviCRM settings file (civicrm.settings.php) was not found in the expected location ") .
           "(" . $settingsFile . "). </p><p class='error'>" .
           $errorMsgAdd . '</p></strong>' );
       return false;
@@ -274,11 +274,11 @@ function civicrm_initialize( )
     $error = include_once( 'CRM/Core/Config.php' );
     if ( $error == false ) {
       $failure = true;
-      drupal_set_message( "<strong><p class='error'>" . 
-          t("Oops! - The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).", 
+      drupal_set_message( "<strong><p class='error'>" .
+          t("Oops! - The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
             array( '!1' => $settingsFile ) ) .
-          "</p><p class='error'> &raquo; " . 
-          t("civicrm_root is currently set to: <em>!1</em>.", array( '!1' => $civicrm_root ) ) . 
+          "</p><p class='error'> &raquo; " .
+          t("civicrm_root is currently set to: <em>!1</em>.", array( '!1' => $civicrm_root ) ) .
           "</p><p class='error'>" .  $errorMsgAdd . "</p></strong>" );
       return false;
     }
@@ -328,7 +328,7 @@ function _civicrm_registerClassLoader() {
  *
  * @return $ctype contact type
  */
-function civicrm_get_ctype( $default = null ) 
+function civicrm_get_ctype( $default = null )
 {
   // here we are creating a new contact
   // get the contact type from the POST variables if any
@@ -347,7 +347,7 @@ function civicrm_get_ctype( $default = null )
       $ctype != 'Household' ) {
     $ctype = $default;
   }
-  return $ctype; 
+  return $ctype;
 }
 
 /**
@@ -412,12 +412,12 @@ function civicrm_invoke( )
  *
  * @return mixed           depends on the operation being performed
  */
-function civicrm_user( $type, &$edit, &$user, $category = NULL ) 
+function civicrm_user( $type, &$edit, &$user, $category = NULL )
 {
 
   if ( $type == 'load' ) {
     return;
-  }			
+  }
 
   if ( ! civicrm_initialize( ) ) {
     return;
@@ -533,7 +533,7 @@ function civicrm_on_user_page() {
 }
 
 
-function civicrm_categories( &$user ) 
+function civicrm_categories( &$user )
 {
   if ( ! civicrm_initialize( ) ) {
     return;
@@ -576,7 +576,7 @@ function _civicrm_categories_access( $profile_id ) {
 
 }
 
-function civicrm_register_data($edit, &$user, $category, $reset, $doNotProcess = false ) 
+function civicrm_register_data($edit, &$user, $category, $reset, $doNotProcess = false )
 {
   require_once 'CRM/Core/BAO/UFMatch.php';
   require_once 'CRM/Core/BAO/UFGroup.php';
@@ -618,7 +618,7 @@ function civicrm_register_data($edit, &$user, $category, $reset, $doNotProcess =
   return $output;
 }
 
-function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = false) 
+function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = false)
 {
   require_once 'CRM/Core/BAO/UFMatch.php';
   require_once 'CRM/Core/BAO/UFGroup.php';
@@ -667,7 +667,7 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = fal
   return $output;
 }
 
-function civicrm_view_data( &$user ) 
+function civicrm_view_data( &$user )
 {
   require_once 'CRM/Core/BAO/UFMatch.php';
   $userID = CRM_Core_BAO_UFMatch::getContactId( $user->uid );
@@ -722,7 +722,7 @@ function civicrm_view_data( &$user )
           array( '#title'  => $title['title'],
               '#type'   => 'user_profile_category',
               '#weight' => $weight );
-        $user->content[$title['title']][$title['title']] = 
+        $user->content[$title['title']][$title['title']] =
           array(  '#type'  => 'user_profile_item',
               '#value' => $pageContent . $editURL );
 
@@ -731,7 +731,7 @@ function civicrm_view_data( &$user )
     }
 
     if ( $contactURL ) {
-      $user->content['urls'] = 
+      $user->content['urls'] =
         array( '#value'  => $contactURL,
             '#weight' => $weight );
     }
@@ -739,7 +739,7 @@ function civicrm_view_data( &$user )
   return;
 }
 
-function civicrm_validate_data($edit, &$user, $title) 
+function civicrm_validate_data($edit, &$user, $title)
 {
   static $validated = false;
 
@@ -854,105 +854,58 @@ function  civicrm_form_alter( &$form, $formValues, $formID ) {
 }
 
 /*
- * 
- * Implementation of hook_theme_registry_alter(). 
- * Based on the jquery_update module. 
- * 
+ *
+ * Implementation of hook_theme_registry_alter().
+ * Based on the jquery_update module.
+ *
  * Make sure this page preprocess function runs last
- * so that a theme can't call drupal_get_js(). 
+ * so that a theme can't call drupal_get_js().
  */
-function civicrm_theme_registry_alter(&$theme_registry) { 
-  if ( isset($theme_registry['page'] ) ) { 
-    // See if our preprocess function is loaded, if so remove it. 
-    if ($key = array_search('civicrm_preprocess_page', $theme_registry['page']['preprocess functions'])) { 
-      unset($theme_registry['page']['preprocess functions'][$key]); 
-    } 
-    // Now add it on at the end of the array so that it runs last. 
-    $theme_registry['page']['preprocess functions'][] = 'civicrm_preprocess_page'; 
-  } 
+function civicrm_theme_registry_alter(&$theme_registry) {
+  if ( isset($theme_registry['page'] ) ) {
+    // See if our preprocess function is loaded, if so remove it.
+    if ($key = array_search('civicrm_preprocess_page', $theme_registry['page']['preprocess functions'])) {
+      unset($theme_registry['page']['preprocess functions'][$key]);
+    }
+    // Now add it on at the end of the array so that it runs last.
+    $theme_registry['page']['preprocess functions'][] = 'civicrm_preprocess_page';
+  }
 }
 
-/** 
- * Implementation of moduleName_preprocess_hook(). 
- * Based on the jquery_update module functions. 
- * 
- * Strips out JS and CSS for a path. 
+/**
+ * Implementation of moduleName_preprocess_hook().
+ * Based on the jquery_update module functions.
+ *
+ * Strips out JS and CSS for a path.
  */
-function civicrm_preprocess_page(&$variables) {	
-  // to increase it's flexibility. 
-  if ( module_exists('date_popup') && ( in_array( arg(0), array('civicrm', 'user') ) ) ) { 
-    /** 
+function civicrm_preprocess_page(&$variables) {
+  // to increase it's flexibility.
+  if ( module_exists('date_popup') && ( in_array( arg(0), array('civicrm', 'user') ) ) ) {
+    /**
      * Have hidden this function as it is not needed,
      * but left as an example when we need to unset js
      * in the future...
      *
      * // Only do this for pages that have JavaScript on them.
-     *  if (!empty($variables['scripts'])) { 
-     *  	$path = drupal_get_path('module', 'date_popup'); 
-     *  	unset($scripts['module'][$path . '/lib/ui.datepicker.js']); 
-     *  	$variables['scripts'] = drupal_get_js('header', $scripts); 
-     *  } 
+     *  if (!empty($variables['scripts'])) {
+     *  	$path = drupal_get_path('module', 'date_popup');
+     *  	unset($scripts['module'][$path . '/lib/ui.datepicker.js']);
+     *  	$variables['scripts'] = drupal_get_js('header', $scripts);
+     *  }
      */
 
-    // Similar process for CSS but there are 2 CSS related variables. 
-    // $variables['css'] and $variables['styles'] are both used. 
-    if ( ! empty( $variables['css'] ) ) {  		     
-      $path = drupal_get_path('module', 'date_popup'); 
-      unset( $variables['css']['all']['module'][$path . '/themes/datepicker.css'] );  			
-      $variables['styles'] = drupal_get_css( $variables['css'] ); 
-    } 
-  }
-
-  if ( in_array( arg(0), array('civicrm', 'user') ) ) { 
-    // Move the CiviCRM jquery and jQuery UI libraries above Drupal's core jQuery
-    // and relatively gracefully handle noConflict.
-    $path = drupal_get_path('module', 'civicrm');
-    $scripts = drupal_add_js();
-    $val = array(
-        'cache' => TRUE,
-        'defer' => FALSE,
-        'preprocess' => TRUE,
-        );
-
-    unset($scripts['module'][$path . '/../packages/jquery/jquery.js']);
-    $core = array(
-        $path . '/../packages/jquery/jquery.js' => $val,
-        );
-
-    foreach ($scripts['module'] as $script => $val) {
-      if (strpos($script, $path) === 0) {
-        $core[$script] = $scripts['module'][$script];
-        unset($scripts['module'][$script]);
-      }
+    // Similar process for CSS but there are 2 CSS related variables.
+    // $variables['css'] and $variables['styles'] are both used.
+    if ( ! empty( $variables['css'] ) ) {
+      $path = drupal_get_path('module', 'date_popup');
+      unset( $variables['css']['all']['module'][$path . '/themes/datepicker.css'] );
+      $variables['styles'] = drupal_get_css( $variables['css'] );
     }
-
-    $core[$path . '/../js/noconflict.js'] = $val;
-
-    if(module_exists('jquery_update')){
-      $core[jquery_update_jquery_path()] = $scripts['core']['misc/jquery.js'];
-      unset($scripts['core']['misc/jquery.js']);
-    }
-    $scripts['core'] = $core + $scripts['core'];
-
-    if(module_exists('jquery_update')){
-      foreach (jquery_update_get_replacements() as $type => $replacements) {
-        foreach ($replacements as $find => $replace) {
-          // If the file to replace is loaded on this page...
-          if (isset($scripts[$type][$find])) {
-            // Create a new entry for the replacement file, and unset the original one.
-            $replace = JQUERY_UPDATE_REPLACE_PATH .'/'. $replace;
-            $scripts[$type][$replace] = $scripts[$type][$find];
-            unset($scripts[$type][$find]);
-          }
-        }
-      }  
-    }
-    $variables['scripts'] = drupal_get_js('header', $scripts);
   }
 }
 
 function civicrm_checkmenu( ){
-  global $user; 
+  global $user;
   $args = func_get_args();
   $path = trim(implode('/', $args), '/');
 
@@ -1035,6 +988,54 @@ function civicrm_page_get_cache(){
       }
 
       return $cache;
+    }
+  }
+}
+
+/**
+ * Implements hook_jquery_update_alter().
+ * This takes care of the alterations in the case that jQuery Update is installed.
+ */
+function civicrm_jquery_update_alter(&$scripts) {
+  if ( in_array( arg(0), array('civicrm', 'user') ) ) {
+    // Move the CiviCRM jquery and jQuery UI libraries above Drupal's core jQuery
+    // and relatively gracefully handle noConflict.
+    $path = drupal_get_path('module', 'civicrm');
+    $val = array(
+        'cache' => TRUE,
+        'defer' => FALSE,
+        'preprocess' => TRUE,
+        );
+
+    unset($scripts['module'][$path . '/../packages/jquery/jquery.js']);
+    $core = array(
+        $path . '/../packages/jquery/jquery.js' => $val,
+        );
+
+    foreach ($scripts['module'] as $script => $val) {
+      if (strpos($script, $path) === 0) {
+        $core[$script] = $scripts['module'][$script];
+        unset($scripts['module'][$script]);
+      }
+    }
+
+    $core[$path . '/../js/noconflict.js'] = $val;
+
+    $core[jquery_update_jquery_path()] = $scripts['core']['misc/jquery.js'];
+    unset($scripts['core']['misc/jquery.js']);
+
+    $scripts['core'] = $core + $scripts['core'];
+
+    foreach (jquery_update_get_replacements() as $type => $replacements) {
+      foreach ($replacements as $find => $replace) {
+        // If the file to replace is loaded on this page...
+        if (isset($scripts[$type][$find])) {
+          // Create a new entry for the replacement file, and unset the original one.
+          $replace = JQUERY_UPDATE_REPLACE_PATH .'/'. $replace;
+          $scripts[$type][$replace] = $scripts[$type][$find];
+          unset($scripts[$type][$find]);
+        }
+      }
     }
   }
 }
