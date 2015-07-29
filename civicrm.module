@@ -1032,7 +1032,7 @@ function _civicrm_no_conflict(&$scripts){
   $core[$path . '/../js/noconflict.js'] = $val;
 
   if(module_exists('jquery_update')){
-    $core[jquery_update_jquery_path()] = $scripts['core']['misc/jquery.js'];
+    $core[jquery_update_jquery_path()] = isset($scripts['core']['misc/jquery.js']) ? $scripts['core']['misc/jquery.js'] : $val;
     unset($scripts['core']['misc/jquery.js']);
   }
 
