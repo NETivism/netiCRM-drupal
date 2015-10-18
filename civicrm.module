@@ -40,14 +40,14 @@ define('CIVICRM_UF_HEAD', TRUE);
  *
  * @return a &lt;style&gt; tag that indicates what file browsers should import
  */
-function civicrm_html_head() {
+function civicrm_html_head($force_load = FALSE) {
   if (!civicrm_initialize()) {
     return;
   }
 
   $head = '';
   $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
-  if ( arg(0) == 'civicrm' || arg(0) == 'user') {
+  if ( arg(0) == 'civicrm' || arg(0) == 'user' || $force_load) {
     $config = CRM_Core_Config::singleton();
 
     $template = CRM_Core_Smarty::singleton( );
