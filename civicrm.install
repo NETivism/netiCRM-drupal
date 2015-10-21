@@ -151,8 +151,8 @@ function _civicrm_init_setting(){
       $params['%%dbPass%%'] = addslashes($db['password']);
       $params['%%dbHost%%'] = empty($db['port']) ? $db['host'] : $db['host'].':'.$db['port'];
       $params['%%dbName%%'] = addslashes($db['database']);
-      $params['%%crmRoot%%'] = "'.DRUPAL_ROOT.base_path().'".preg_replace('/\/drupal$/', '', $civicrm_path);
-      $params['%%templateCompileDir%%'] = "'.drupal_realpath('public://').'/civicrm/templates_c/";
+      $params['%%crmRoot%%'] = $crm_root.'/';
+      $params['%%templateCompileDir%%'] = drupal_realpath('public://')."/civicrm/templates_c/";
       $params['%%siteKey%%'] = md5($base_url.microtime());
 
       $filename = $crm_root.'/templates/CRM/common/civicrm.settings.php.template';
