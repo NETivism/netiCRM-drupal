@@ -915,7 +915,9 @@ function civicrm_checkmenu( ){
   $path = trim(implode('/', $args), '/');
 
   static $checked;
-  if(!isset($checked[$path])) return true;
+  if(isset($checked[$path])) {
+    return $checked[$path];
+  }
 
   civicrm_initialize();
   require_once 'CRM/Core/Menu.php';
