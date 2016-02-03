@@ -52,7 +52,6 @@ function civicrm_html_head($force_load = FALSE) {
     $template = CRM_Core_Smarty::singleton( );
     $buffer = $template->fetch( 'CRM/common/jquery.files.tpl' );
     $lines  = preg_split( '/\s+/', $buffer );
-
     $options = array('type' => 'file', 'scope' => 'header', 'weight' => 900, 'group' => 999);
     foreach ( $lines as $line ) {
       $line = trim( $line );
