@@ -49,17 +49,20 @@ function civicrm_html_head($force_load = FALSE) {
   $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
   if ( arg(0) == 'civicrm' || arg(0) == 'user' || $force_load) {
     $config = CRM_Core_Config::singleton();
+    $options = array('type' => 'file', 'scope' => 'header', 'weight' => 900, 'group' => 999);
+    drupal_add_js($crm_path . 'packages/jquery/jquery.js', $options);
 
     $template = CRM_Core_Smarty::singleton( );
     $buffer = $template->fetch( 'CRM/common/jquery.files.tpl' );
     $lines  = preg_split( '/\s+/', $buffer );
-    $options = array('type' => 'file', 'scope' => 'header', 'weight' => 999, 'group' => 999);
+
     foreach ( $lines as $line ) {
       $line = trim( $line );
       if ( empty( $line ) ) {
         continue;
       }
       if ( strpos( $line, '.js' ) !== false ) {
+        $options['weight']++;
         drupal_add_js( $crm_path . $line, $options);
       }
       else if ( strpos( $line, '.css' ) !== false ) {
@@ -76,8 +79,9 @@ function civicrm_html_head($force_load = FALSE) {
     }
 
     // add Common.js
-    drupal_add_js( $crm_path . 'js/noconflict.js', $options);
+    $options['weight'] = 999;
     drupal_add_js( $crm_path . 'js/Common.js', $options);
+    drupal_add_js($crm_path . 'js/noconflict.js', $options);
   }
   if ( isset( $config->customCSSURL ) && ! empty( $config->customCSSURL ) ) {
     $head  = "<style type=\"text/css\">@import url({$config->customCSSURL});</style>\n";
