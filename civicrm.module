@@ -84,7 +84,9 @@ function civicrm_html_head($force_load = FALSE) {
     $head  = "<style type=\"text/css\">@import url({$config->customCSSURL});</style>\n";
   }
   else {
-    drupal_add_css($crm_path . 'css/civicrm.css'); 
+    $options['weight'] = 999;
+    drupal_add_css($crm_path . 'css/civicrm.css', $options);
+    drupal_add_css($crm_path . 'css/extras.css',  $options);
   }
   return $head;
 }
@@ -238,7 +240,7 @@ function civicrm_menu() {
  * Syncronize civicrm menu and druipal menu permission
  */
 function _civicrm_checkmenu( ){
-  global $user; 
+  global $user;
   $args = func_get_args();
   $path = trim(implode('/', $args), '/');
 
@@ -373,7 +375,7 @@ function civicrm_initialize() {
 
     $args = explode('/', $_GET['q']);
     if (
-      (!isset($args[1]) || $args[1] != 'upgrade') 
+      (!isset($args[1]) || $args[1] != 'upgrade')
       // &&
       // drupal wysiwyg
       //CRM_Core_BAO_Setting::getItem(CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'editor_id') == 4
@@ -766,7 +768,7 @@ function civicrm_enable() {
 
   // setup permissions
   $anonymous_perm = array(
-    'make online contributions' => TRUE, 
+    'make online contributions' => TRUE,
     'register for events' => TRUE,
     'view event info' => TRUE,
     'profile create' => TRUE,
