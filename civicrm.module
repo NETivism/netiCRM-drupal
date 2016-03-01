@@ -80,13 +80,16 @@ function civicrm_html_head($force_load = FALSE) {
     drupal_add_js( $crm_path . 'js/Common.js', $options);
     drupal_add_js($crm_path . 'js/noconflict.js', $options);
   }
+
+  $options['weight'] = 990;
+  $options['group'] = CSS_DEFAULT;
+  drupal_add_css($crm_path . 'css/civicrm.css', $options);
+  drupal_add_css($crm_path . 'css/extras.css',  $options);
   if ( isset( $config->customCSSURL ) && ! empty( $config->customCSSURL ) ) {
-    $head  = "<style type=\"text/css\">@import url({$config->customCSSURL});</style>\n";
-  }
-  else {
-    $options['weight'] = 999;
-    drupal_add_css($crm_path . 'css/civicrm.css', $options);
-    drupal_add_css($crm_path . 'css/extras.css',  $options);
+    $options['type'] = 'external';
+    $options['weight'] = 1000;
+    $options['group'] = CSS_THEME;
+    drupal_add_css($config->customCSSURL, $options);
   }
   return $head;
 }
