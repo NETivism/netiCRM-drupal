@@ -84,7 +84,10 @@ function civicrm_html_head($force_load = FALSE) {
   $options['weight'] = 990;
   $options['group'] = CSS_DEFAULT;
   drupal_add_css($crm_path . 'css/civicrm.css', $options);
+
+  $options['weight'] = 991;
   drupal_add_css($crm_path . 'css/extras.css',  $options);
+
   if ( isset( $config->customCSSURL ) && ! empty( $config->customCSSURL ) ) {
     $options['type'] = 'external';
     $options['weight'] = 1000;
