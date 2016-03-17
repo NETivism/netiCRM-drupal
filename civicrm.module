@@ -877,6 +877,7 @@ function civicrm_form_alter(&$form, $formValues, $formID) {
       break;
 
     case 'user_register_form':
+      civicrm_html_head(TRUE);
       $form['#attributes']['enctype'] = 'multipart/form-data';
       $form['#validate'][] = 'civicrm_user_form_validate';
       $output = civicrm_register_data($form,
