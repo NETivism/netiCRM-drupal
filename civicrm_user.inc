@@ -191,6 +191,12 @@ function civicrm_user_view($user, $view_mode) {
     }
 
     $ctype = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $userID, 'contact_type');
+    $orgtype = NULL;
+    $orgID = CRM_Contact_BAO_Relationship::currentPermittedOrganization($userID);
+    if($orgID){
+      $orgtype = 'Organization';
+    }
+
 
     $ufGroups = CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, TRUE);
     $weight = 100;
@@ -200,10 +206,11 @@ function civicrm_user_view($user, $view_mode) {
       if (CRM_Contact_BAO_ContactType::isaSubType($fieldType)) {
         $fieldType = CRM_Contact_BAO_ContactType::getBasicType($fieldType);
       }
-      if (($fieldType != 'Contact') && ($fieldType != $ctype)) {
+      if (($fieldType != 'Contact') && ($fieldType != $ctype) && $fieldType !== $orgtype) {
         continue;
       }
-      $page = new CRM_Profile_Page_Dynamic($userID, $id, NULL, TRUE);
+      $contactID = $fieldType == $orgtype ? $orgID : $userID;
+      $page = new CRM_Profile_Page_Dynamic($contactID, $id, NULL, TRUE);
       $pageContent = $page->run();
 
       // CRM-3537: profile edit link

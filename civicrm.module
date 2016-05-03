@@ -662,10 +662,20 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FAL
   //to allow Edit any profile if user have permission
   $profileID = CRM_Core_DAO::getFieldValue("CRM_Core_DAO_UFGroup", $category, 'id', 'title');
   $ufGroupIDs = CRM_Core_Permission::ufGroupClause(CRM_Core_Permission::EDIT, NULL, TRUE);
+  $ufGroups = CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, TRUE);
 
-  if (in_array($profileID, $ufGroupIDs)) {
+  $orgID = CRM_Contact_BAO_Relationship::currentPermittedOrganization($userID);
+  if (in_array($profileID, $ufGroupIDs) && !empty($ufGroups[$profileID])) {
     // get all the data for this specific category
-    $html = CRM_Core_BAO_UFGroup::getEditHTML($userID, $category, NULL, FALSE, $reset, NULL, $doNotProcess, $ctype);
+    if($orgID && $ufGroups[$profileID]['group_type'] == 'Organization'){
+      $contactType = 'Organization';
+      $contactID = $orgID;
+    }
+    else{
+      $contactType = $ctype;
+      $contactID = $userID;
+    }
+    $html = CRM_Core_BAO_UFGroup::getEditHTML($contactID, $category, NULL, FALSE, $reset, NULL, $doNotProcess, $contactType);
   }
   else {
     CRM_Core_Error::fatal(ts('The requested Profile (gid=%1) is disabled OR it is not configured to be used for \'Profile\' listings in its Settings OR there is no Profile with that ID OR you do not have permission to access this profile. Please contact the site administrator if you need assistance.',
