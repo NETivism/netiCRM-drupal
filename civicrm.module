@@ -70,6 +70,7 @@ function civicrm_html_head($force_load = FALSE) {
     // add localized calendar js
     $localisation     = explode( '_', $config->lcMessages );
     $localizationFile = drupal_get_path('module', 'civicrm' ) . '/../packages/jquery/jquery-ui-1.8.5/development-bundle/ui/i18n/jquery.ui.datepicker-'. $localisation[0] . '.js';
+    drupal_add_js($crm_path.'packages/ckeditor/ckeditor.js');
 
     if ( file_exists( $localizationFile ) ) {
       drupal_add_js( $localizationFile );
