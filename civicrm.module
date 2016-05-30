@@ -70,7 +70,6 @@ function civicrm_html_head($force_load = FALSE) {
     // add localized calendar js
     $localisation     = explode( '_', $config->lcMessages );
     $localizationFile = drupal_get_path('module', 'civicrm' ) . '/../packages/jquery/jquery-ui-1.8.5/development-bundle/ui/i18n/jquery.ui.datepicker-'. $localisation[0] . '.js';
-    drupal_add_js($crm_path.'packages/ckeditor/ckeditor.js');
 
     if ( file_exists( $localizationFile ) ) {
       drupal_add_js( $localizationFile );
@@ -920,6 +919,8 @@ function civicrm_form_alter(&$form, $formValues, $formID) {
       ) {
         $form['#validate'][] = 'civicrm_user_form_validate';
         $output = civicrm_form_data($form, $form['#user'], $form['#user_category'], TRUE);
+        $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
+        drupal_add_js($crm_path.'packages/ckeditor/ckeditor.js');
         if (!empty($output)) {
           $form['#attributes']['enctype'] = 'multipart/form-data';
           $form = array_merge($form, $output);
