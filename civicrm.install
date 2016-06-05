@@ -105,13 +105,6 @@ function civicrm_requirements($phase) {
   return $problems;
 }
 
-/**
- * Update CiviCRM module weight
- */
-function civicrm_update_7400(&$sandbox) {
-  db_query("UPDATE {system} SET weight = 100 WHERE name = 'civicrm'");
-}
-
 function _civicrm_init_setting(){
   global $crm_root;
   if(empty($crm_root)){
@@ -248,3 +241,26 @@ function _civicrm_import_sql($filename){
   }
   return TRUE;
 }
+
+/**
+ * Upgrade from 6.x to 7.x
+ */
+function civicrm_update_7000(){
+  civicrm_initialize();
+
+  $query = CRM_Core_DAO::executeQuery("SELECT id, config_backend FROM civicrm_domain");
+  while ($query->fetch()) {
+    $config = unserialize($query->config_backend);
+    unset($config['userSystem']);
+    $serialized = serialize($config);
+    CRM_Core_DAO::executeQuery("UPDATE civicrm_domain SET config_backend = '$serialized' WHERE id = $query->id");
+  }
+}
+
+/**
+ * Update CiviCRM module weight
+ */
+function civicrm_update_7400(&$sandbox) {
+  db_query("UPDATE {system} SET weight = 100 WHERE name = 'civicrm'");
+}
+
