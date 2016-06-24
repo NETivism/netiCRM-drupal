@@ -586,7 +586,7 @@ function webform_civicrm_get_options($option_group, $param = NULL) {
     $sql .= ' ORDER BY name';
   }
   elseif ($option_group == 'state_province' || $option_group == 'state_province_id') {
-    $value = $option_group == 'state_province' ? 'name' : 'id';
+    $value = 'id';
     if (!$param || $param == 'default') {
       $config = CRM_Core_Config::singleton();
       if (!$param && !empty($config->provinceLimit)) {
