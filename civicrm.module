@@ -34,6 +34,7 @@ define('CIVICRM_UF_HEAD', TRUE);
  * Utilities
  */
 
+
 /**
  * Provides a link to the CSS stylesheet associated with this module.
  * and the javascript files needed by this module
@@ -88,13 +89,36 @@ function civicrm_html_head($force_load = FALSE) {
   $options['weight'] = 991;
   drupal_add_css($crm_path . 'css/extras.css',  $options);
 
-  if ( isset( $config->customCSSURL ) && ! empty( $config->customCSSURL ) ) {
+  $customCSS = variable_get('civicrm_custom_css_url', '');
+  if (isset($config->customCSSURL) && ! empty($config->customCSSURL)) {
     $options['type'] = 'external';
     $options['weight'] = 1000;
     $options['group'] = CSS_THEME;
     drupal_add_css($config->customCSSURL, $options);
   }
+  if (isset($config->customCSSURL) && $customCSS != $config->customCSSURL) {
+    variable_set('civicrm_custom_css_url', $config->customCSSURL);
+  }
+  elseif(empty($config->customCSSURL)){
+    variable_set('civicrm_custom_css_url', '');
+  }
   return $head;
+}
+
+/**
+ * implements hook_init
+ */
+function civicrm_init() {
+  $customCSS = variable_get('civicrm_custom_css_url', '');
+  if ($customCSS) {
+    $options = array(
+      'type' => 'external',
+      'scope' => 'header',
+      'weight' => 1000,
+      'group' => CSS_THEME,
+    );
+    drupal_add_css($customCSS, $options);
+  }
 }
 
 /**
