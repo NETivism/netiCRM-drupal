@@ -83,6 +83,16 @@ function civicrm_group_roles_user($op, $edit, &$user, $category = NULL)
             //find the contact record
             $contact = civicrm_uf_match_id_get( $user->uid );
 
+/*
+            global $pageKey;
+            print_r($pageKey);
+
+            print_r($_SESSION['CiviCRM']['CRM_Contribute_Controller_Contribution_3840059561fc9712ba87d96bf50f987e_8681']['contactID']);
+            exit;
+
+            $contact = is_null($contact)? $_SESSION['CiviCRM']['transaction.userID'] : $contact;
+*/
+
             $params  = array( 'contact_id' => $contact );
             //find the groups for contact
             $groups  = civicrm_group_contact_get( $params );
@@ -143,6 +153,16 @@ function _civicrm_group_update ($form_id, $form_values) {
  */
 function civicrm_group_roles_civicrm_post( $op, $objectName, $objectId, &$objectRef )
 {
+  /*
+    global $user;
+    var_export($user);
+
+    require_once 'api/v2/UFGroup.php';
+
+    //find the contact record
+    $contact = civicrm_uf_match_id_get( $user->uid );
+    */
+
     if ( ! civicrm_initialize( ) ) {
         return;
     } 
