@@ -115,7 +115,6 @@ function _civicrm_init_setting(){
   }
   $civicrm_path = drupal_get_path('module', 'civicrm');
   $conf_path = conf_path();
-  $url = $base_url . '/' . $civicrm_path . 'install/index.php';
   $setting = $conf_path.'/civicrm.settings.php';
   if(file_exists($setting)){
     // trying to require 
@@ -157,8 +156,7 @@ function _civicrm_init_setting(){
         return array(
           'title' => t('CiviCRM settings does not exist'),
           'value' =>
-          t('CiviCRM settings file does not exist. It should be created by CiviCRM <a href="!link">install</a>',
-            array('!link' => $url)),
+          t('CiviCRM settings file does not exist.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
