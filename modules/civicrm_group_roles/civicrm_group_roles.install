@@ -39,6 +39,7 @@ function civicrm_group_roles_install( )
       $here = l(t('here'), 'admin/settings/civicrm_group_roles/add_rule');
       drupal_set_message(t('CiviGroup Roles Sync installed. You will need to specify sync rules !1.', array('!1' => $here)));
     }
+    civicrm_group_roles_update_6304();
 }
 
 /**
@@ -46,28 +47,28 @@ function civicrm_group_roles_install( )
  */
 function civicrm_group_roles_schema( ) 
 {
-    $schema['civicrm_group_roles_rules'] = array(
-                                                 'fields' => array(
-                                                                   'id' => array(
-                                                                                 'type' => 'serial', 
-                                                                                 'unsigned' => TRUE, 
-                                                                                 'not null' => TRUE,
-                                                                                 ),
-                                                                   'role_id' => array(
-                                                                                      'type' => 'int', 
-                                                                                      'unsigned' => TRUE, 
-                                                                                      'not null' => TRUE,
-                                                                                      ),
-                                                                   'group_id' => array(
-                                                                                       'type' => 'int', 
-                                                                                       'unsigned' => TRUE, 
-                                                                                       'not null' => TRUE,
-                                                                                       )
-                                                                   ),
-                                                 'primary key' => array('id'),
-                                                 );
+  $schema['civicrm_group_roles_rules'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+      ),
+      'role_id' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+      ),
+      'group_id' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+      )
+    ),
+    'primary key' => array('id'),
+  );
     
-    return $schema;
+  return $schema;
 }
 
 /**
@@ -76,4 +77,13 @@ function civicrm_group_roles_schema( )
 function civicrm_group_roles_uninstall( ) 
 {
     drupal_uninstall_schema('civicrm_group_roles');
+}
+
+/**
+ * Put hook_function of this module trigger after civicrm.
+ */
+function civicrm_group_roles_update_6304(){
+  civicrm_initialize();
+  $sql = "UPDATE system SET weight = 200 WHERE name = 'civicrm_group_roles'";
+  $dao = CRM_Core_DAO::executeQuery($sql);
 }
