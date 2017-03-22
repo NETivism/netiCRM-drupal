@@ -40,12 +40,6 @@
  */
 function civicrm_install() {
   global $base_url;
-  try {
-    $error = _civicrm_init_setting();
-  }
-  catch(Exception $e){
-    watchdog_exception('civicrm', $e);
-  }
 
   // step 1: import databases
   $success = _civicrm_import_sql('sql/civicrm.mysql');
@@ -89,16 +83,16 @@ function civicrm_requirements($phase) {
   $setting = conf_path().'/civicrm.settings.php';
   $problems = array();
   if (!file_exists($setting) && $phase == 'install') {
-    // initialize settings
-    global $databases;
-    if(!empty($databases)){
-      $error = _civicrm_init_setting(); 
-      if(!empty($error)){
-        $problems[] = $error;
-      }
+    try {
+      $error = _civicrm_init_setting();
     }
-    else{
-      drupal_set_message("Postponed civicrm settings initialization because profile need to verify requirement first.");
+    catch(Exception $e){
+      require_once DRUPAL_ROOT . '/includes/errors.inc';
+      $variables = _drupal_decode_exception($e);
+      $problems['install']['severity'] = REQUIREMENT_ERROR;
+      $problems['install']['description'] = $e->getMessage();
+      drupal_set_message($e->getMessage(), 'error');
+      watchdog_exception('civicrm', $e);
     }
   }
 
@@ -122,11 +116,6 @@ function _civicrm_init_setting(){
     $dsn = defined(CIVICRM_DSN) ? CIVICRM_DSN : NULL;
     if(empty($dsn)){
       throw new Exception(t('Could not detect database settings from civicrm.settings.php'));
-      return array(
-        'title' => t('Could not detect database settings from civicrm.settings.php'),
-        'value' => t('Although we detect civicrm settings, but we could not find any database config'),
-        'severity' => REQUIREMENT_ERROR,
-      );
     }
   }
   else{
@@ -153,21 +142,10 @@ function _civicrm_init_setting(){
       $success = file_put_contents($setting, $setting_content);
       if(!$success){
         throw new Exception(t('CiviCRM settings does not exist'));
-        return array(
-          'title' => t('CiviCRM settings does not exist'),
-          'value' =>
-          t('CiviCRM settings file does not exist.'),
-          'severity' => REQUIREMENT_ERROR,
-        );
       }
     }
     else{
       throw new Exception(t('Drupal settings dir not writable'));
-      return array(
-        'title' => t('Drupal settings dir not writable'),
-        'value' => t('CiviCRM will create your settings automatically, but we found dir !dir not writable.', array('!dir' => $setting)),
-        'severity' => REQUIREMENT_ERROR,
-      );
     }
   }
   require_once conf_path().'/civicrm.settings.php';
@@ -184,21 +162,11 @@ function _civicrm_db_test(){
   $pear = new PEAR;
   if($pear->isError($db_crm)) {
     throw new Exception(t('Database connection failed when enable civicrm'));
-    return array(
-      'title' => t('Database connection failed'),
-      'value' => t('Failed when trying to connect database. Please correct your database setting in civicrm.settings.php'),
-      'severity' => REQUIREMENT_ERROR,
-    );
   }
   else{
     $res = $db_crm->query("SHOW TABLES LIKE 'ciivcrm_contact'");
     if($res->numRows()){
-      throw new Exception(t('CiviCRM already installed.'));
-      return array(
-        'title' => t('CiviCRM already installed.'),
-        'value' => t('Your database have exists civicrm related tables. Check your system carefully to prevent data loss.'),
-        'severity' => REQUIREMENT_ERROR,
-      );
+      throw new Exception(t('CiviCRM already exists in database.'));
     }
   }
 }
@@ -214,7 +182,7 @@ function _civicrm_import_sql($filename){
   $db = DB::connect($dsn);
   $pear = new PEAR;
   if($pear->isError($db)) {
-    watchdog("civicrm", "Cannot open $dsn: " . $db->getMessage( ) );
+    watchdog("civicrm", "Cannot open $dsn: " . $db->getMessage( ), NULL, WATCHDOG_ERROR);
     return FALSE;
   }
   $string = file_get_contents( $filename );
@@ -232,7 +200,7 @@ function _civicrm_import_sql($filename){
     if ( ! empty( $query ) ) {
       $res = $db->query( $query );
       if ( $pear->isError( $res ) ) {
-        watchdog("civicrm", "Cannot execute $query: " . $res->getMessage( ) );
+        watchdog("civicrm", "Cannot execute $query: " . $res->getMessage( ) , NULL, WATCHDOG_ERROR);
         return FALSE;
       }
     }
