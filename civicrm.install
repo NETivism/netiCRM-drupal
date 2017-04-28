@@ -41,6 +41,19 @@
 function civicrm_install() {
   global $base_url;
 
+  try {
+    $error = _civicrm_init_setting();
+  }
+  catch(Exception $e){
+    require_once DRUPAL_ROOT . '/includes/errors.inc';
+    $variables = _drupal_decode_exception($e);
+    $problems['install']['severity'] = REQUIREMENT_ERROR;
+    $problems['install']['description'] = $e->getMessage();
+    drupal_set_message($e->getMessage(), 'error');
+    watchdog_exception('civicrm', $e);
+    db_query("UPDATE civicrm SET status = 0 WHERE name = 'civicrm'");
+  }
+
   // step 1: import databases
   $success = _civicrm_import_sql('sql/civicrm.mysql');
   
@@ -75,28 +88,6 @@ function civicrm_uninstall() {
 
   require_once 'CRM/Core/DAO.php';
   CRM_Core_DAO::dropAllTables();
-}
-
-function civicrm_requirements($phase) {
-  global $base_url, $databases;
-
-  $setting = conf_path().'/civicrm.settings.php';
-  $problems = array();
-  if (!file_exists($setting) && $phase == 'install') {
-    try {
-      $error = _civicrm_init_setting();
-    }
-    catch(Exception $e){
-      require_once DRUPAL_ROOT . '/includes/errors.inc';
-      $variables = _drupal_decode_exception($e);
-      $problems['install']['severity'] = REQUIREMENT_ERROR;
-      $problems['install']['description'] = $e->getMessage();
-      drupal_set_message($e->getMessage(), 'error');
-      watchdog_exception('civicrm', $e);
-    }
-  }
-
-  return $problems;
 }
 
 function _civicrm_init_setting(){
