@@ -169,6 +169,10 @@ function civicrm_views_data() {
       'handler' => 'civicrm_handler_field_drupalid',
       'click sortable' => TRUE,
     ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+      'numeric' => TRUE,
+    ),
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
