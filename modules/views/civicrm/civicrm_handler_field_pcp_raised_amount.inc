@@ -34,7 +34,6 @@ class civicrm_handler_field_pcp_raised_amount extends views_handler_field {
     if (!civicrm_initialize()) {
       return;
     }
-    require_once 'CRM/PCP/BAO/PCP.php';
     require_once 'CRM/Utils/Money.php';
   }
 
@@ -42,7 +41,7 @@ class civicrm_handler_field_pcp_raised_amount extends views_handler_field {
     // retrieve the value of the "real field"
     $pcp_id = $values->{$this->field_alias};
     // get the total amount raised
-    $amount = CRM_PCP_BAO_PCP::thermoMeter($pcp_id);
+    $amount = CRM_Contribute_BAO_PCP::thermoMeter($pcp_id);
     if (!$amount) {
       // supply a numeric string if function returns NULL or undesirable result
       $amount = '0';
