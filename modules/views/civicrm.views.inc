@@ -444,13 +444,21 @@ function civicrm_views_custom_data_cache(&$data, $entity_type, $groupID, $subTyp
         $filter_handler = civicrm_get_filter_handler($currentfield['data_type']);
       }
 
+      // support multiple value handler
+      if (in_array($currentfield['html_type'], $customMultiValueHTMLTypes)) {
+        $argument_handler = 'views_handler_argument_custom_multiple';
+      }
+      else {
+        $argument_handler = civicrm_get_argument_handler($currentfield['data_type']);
+      }
+
       //Create the Views Field
       $data[$currentgroup['table_name']][$currentfield['column_name']] = array(
         'title' => $currentfield['label'],
         'help' => $currentfield['help_post'],
         'field' => $handler,
         'argument' => array(
-          'handler' => civicrm_get_argument_handler($currentfield['data_type']),
+          'handler' => $argument_handler,
         ),
         'filter' => $filter_handler,
         'sort' => array(
@@ -549,7 +557,7 @@ function civicrm_get_argument_handler($type) {
   switch ($type) {
     case "String":
     case "Memo":
-      return 'views_handler_argument';
+      return 'views_handler_argument_string';
 
     case "Float":
     case "Int":

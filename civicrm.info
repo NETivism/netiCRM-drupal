@@ -85,6 +85,7 @@ files[] = modules/views/civicrm/views_handler_argument_civicrm_month.inc
 files[] = modules/views/civicrm/views_handler_argument_civicrm_week.inc
 files[] = modules/views/civicrm/views_handler_argument_civicrm_year.inc
 files[] = modules/views/civicrm/views_handler_argument_civicrm_year_month.inc
+files[] = modules/views/civicrm/views_handler_argument_custom_multiple.inc
 
 ; relationship handlers
 files[] = modules/views/civicrm/civicrm_handler_relationship.inc
