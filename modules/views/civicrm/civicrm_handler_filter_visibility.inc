@@ -38,7 +38,6 @@ class civicrm_handler_filter_visibility extends views_handler_filter_in_operator
   static $_visibility;
   function construct() {
     parent::construct();
-    dd(self::$_visibility);
     if (!self::$_visibility) {
       if (!civicrm_initialize()) {
         return;
