@@ -90,16 +90,16 @@ function civicrm_html_head($force_load = FALSE) {
   drupal_add_css($crm_path . 'css/extras.css',  $options);
 
   $customCSS = variable_get('civicrm_custom_css_url', '');
-  if (isset($config->customCSSURL) && ! empty($config->customCSSURL)) {
+  if (!empty($config->customCSSURL)) {
     $options['type'] = 'external';
     $options['weight'] = 1000;
     $options['group'] = CSS_THEME;
     drupal_add_css($config->customCSSURL, $options);
+    if ($customCSS != $config->customCSSURL) {
+      variable_set('civicrm_custom_css_url', $config->customCSSURL);
+    }
   }
-  if (isset($config->customCSSURL) && $customCSS != $config->customCSSURL) {
-    variable_set('civicrm_custom_css_url', $config->customCSSURL);
-  }
-  elseif(empty($config->customCSSURL)){
+  elseif(!empty($customCSS)) {
     variable_set('civicrm_custom_css_url', '');
   }
   return $head;
