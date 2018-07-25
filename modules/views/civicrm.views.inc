@@ -1812,8 +1812,6 @@ function civicrm_views_data() {
   );
 
 
-
-
   //----------------------------------------------------------------
   // CIVICRM Contributions are here with all the bling, base tabling it up.
   //----------------------------------------------------------------
@@ -1831,6 +1829,11 @@ function civicrm_views_data() {
 
   $data['civicrm_contribution']['table']['join']['civicrm_participant'] = array(
     'left_table' => 'civicrm_participant_payment',
+    'left_field' => 'contribution_id',
+    'field' => 'id',
+  );
+  $data['civicrm_contribution']['table']['join']['civicrm_membership'] = array(
+    'left_table' => 'civicrm_membership_payment',
     'left_field' => 'contribution_id',
     'field' => 'id',
   );
@@ -1920,11 +1923,24 @@ function civicrm_views_data() {
   );
 
 
-
   //Contribution Receive Date
   $data['civicrm_contribution']['receive_date'] = array(
     'title' => t('Receive Date'),
     'help' => t('The Date the Contribution was received / paid'),
+    'field' => array(
+      'handler' => 'civicrm_handler_field_datetime',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'civicrm_handler_filter_datetime',
+    ),
+    'sort' => array(
+      'handler' => 'civicrm_handler_sort_date',
+    ),
+  );
+  $data['civicrm_contribution']['created_date'] = array(
+    'title' => t('Created Date'),
+    'help' => t('The Date the Contribution was created'),
     'field' => array(
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
@@ -3764,6 +3780,14 @@ function civicrm_views_data() {
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
+    ),
+  );
+  // Explain how this table joins to others.
+  $data['civicrm_membership_payment']['table']['join'] = array(
+    // Directly links to event table
+    'civicrm_membership' => array(
+      'left_field' => 'id',
+      'field' => 'membership_id',
     ),
   );
 
