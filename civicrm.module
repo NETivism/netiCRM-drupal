@@ -308,6 +308,31 @@ function _civicrm_checkmenu( ){
 }
 
 /**
+ * hook cron
+ * Period doing some purgnation
+ */
+function civicrm_cron() {
+  civicrm_initialize();
+  $last = variable_get('civicrm_cron', array());
+  $time = REQUEST_TIME;
+  if ($time - $last['hourly'] >= 3600) {
+    $last['hourly'] = $time;
+  }
+  if ($time - $last['daily'] >= 86400) {
+    $last['daily'] = $time;
+  }
+  if ($time - $last['weekly'] >= 86400*7) {
+    $last['weekly'] = $time;
+  }
+  if ($time - $last['monthly'] >= 86400*30) {
+    CRM_Core_Error::purge();
+    $last['month'] = $time;
+  }
+  variable_set('civicrm_cron', $last);
+}
+
+
+/**
  * Implementation of hook_page_build
  */
 function civicrm_page_build($page) {
