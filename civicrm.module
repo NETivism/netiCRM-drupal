@@ -41,6 +41,9 @@ function civicrm_html_head()
   }
 
   $head = null;
+
+  $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
+  drupal_add_js( $crm_path . 'js/insights.js', 'file', 'footer', TRUE, TRUE, FALSE);
   if ( arg(0) == 'civicrm' || arg(0) == 'user') {
     require_once 'CRM/Core/Config.php';
     $config = CRM_Core_Config::singleton();
