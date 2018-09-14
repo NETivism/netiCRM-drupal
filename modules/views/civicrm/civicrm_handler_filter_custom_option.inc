@@ -60,15 +60,22 @@ class civicrm_handler_filter_custom_option extends views_handler_filter_in_opera
     $this->ensure_my_table();
 
     $sep = CRM_Core_DAO::VALUE_SEPARATOR;
-
-    // negated operator uses AND, positive uses OR
-    $op = ($this->operator == 'in') ? 'LIKE' : 'NOT LIKE';
-    $glue = ($this->operator == 'in') ? 'OR ' : 'AND ';
-    foreach ($this->value as $value) {
-      $clauses[] = "$this->table_alias.$this->real_field " . $op . " '%" . $sep . $value . $sep . "%' ";
+    $html_type = CRM_Core_DAO::singleValueQuery("SELECT html_type FROM civicrm_custom_field WHERE column_name = '$this->real_field'");
+    if ($html_type == 'CheckBox' || $html_type == 'AdvMulti-Select' || $html_type == 'Multi-Select') {
+      // negated operator uses AND, positive uses OR
+      $op = ($this->operator == 'in') ? 'LIKE' : 'NOT LIKE';
+      $glue = ($this->operator == 'in') ? 'OR ' : 'AND ';
+      foreach ($this->value as $value) {
+        $clauses[] = "$this->table_alias.$this->real_field " . $op . " '%" . $sep . $value . $sep . "%' ";
+      }
+      $clause = implode($glue, $clauses);
+      $this->query->add_where($this->options['group'], $clause);
     }
-    $clause = implode($glue, $clauses);
-    $this->query->add_where($this->options['group'], $clause);
+    else {
+      $value_str = "'".implode("','", $this->value)."'";
+      $clause = "$this->table_alias.$this->real_field " . $this->operator . "($value_str)";
+      $this->query->add_where($this->options['group'], $clause);
+    }
   }
 
 }
