@@ -317,6 +317,36 @@ function _civicrm_event_data(&$data, $enabled) {
       'handler' => 'views_handler_sort',
     ),
   );
+  $data['civicrm_event']['created_id'] = array(
+    'title' => t('Event Creator'),
+    'help' => t('The numeric ID of the creator of contact'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+      'numeric' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+      'allow empty' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+    'relationship' => array(
+      'base' => 'civicrm_contact',
+      'field' => 'created_id',
+      'handler' => 'views_handler_relationship',
+      'label' => t('CiviCRM Contact, with custom fields'),
+    ),
+  );
+  $data['civicrm_event']['table']['join']['users'] = array(
+    'left_table' => 'civicrm_uf_match',
+    'left_field' => 'contact_id',
+    'field' => 'created_id',
+  );
   // Link to Campaign Table
   if (isset($enabled['CiviCampaign'])) {
     $data['civicrm_event']['campaign_id'] = array(
