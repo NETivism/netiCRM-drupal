@@ -49,6 +49,7 @@ class civicrm_handler_field_pcp_raised_amount extends views_handler_field {
     $form['raised_amount_type'] = array(
       '#type' => 'select',
       '#title' => 'Raised Amount Type',
+      '#default_value' => $this->options['raised_amount_type'],
       '#options' => array(
         'amount' => 'Amount',
         'amount_per_contact' => 'Amount per Contact',
