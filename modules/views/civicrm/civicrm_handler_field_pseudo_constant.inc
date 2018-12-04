@@ -56,8 +56,9 @@ class civicrm_handler_field_pseudo_constant extends views_handler_field {
   }
 
   function render($values) {
+    civicrm_initialize();
     if (!empty($values->{$this->field_alias})) {
-      return $this->_pseudo_constant[$values->{$this->field_alias}];
+      return ts($this->_pseudo_constant[$values->{$this->field_alias}]);
     }
   }
 }

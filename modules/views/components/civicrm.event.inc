@@ -405,6 +405,15 @@ function _civicrm_event_data(&$data, $enabled) {
     'help' => t(""),
   );
 
+  $data['civicrm_price_field']['table']['group'] = t('CiviCRM Price Item');
+
+  $data['civicrm_price_field']['table']['base'] = array(
+    // Governs the whole mozilla
+    'field' => 'id',
+    'title' => t('CiviCRM Price Field'),
+    'help' => t(""),
+  );
+
   //TABLE JOINS FOR CIVICRM PARTICIPANTS GO HERE!
   // display user fields in Participant view
   $data['civicrm_participant']['table']['join']['users'] = array(
@@ -433,6 +442,10 @@ function _civicrm_event_data(&$data, $enabled) {
     'field' => 'price_field_value_id',
   );
 
+  $data['civicrm_price_field_value']['table']['join']['civicrm_price_field'] = array(
+    'left_field' => 'id',
+    'field' => 'price_field_id',
+  );
 
   //CiviCRM Participants - FIELDS
 
@@ -690,7 +703,7 @@ function _civicrm_event_data(&$data, $enabled) {
 
   $data['civicrm_line_item']['entity_id'] = array(
     'title' => t('Participant'),
-    'help' => t(''),
+    'help' => t('Participant ID of Line Item'),
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
@@ -706,15 +719,16 @@ function _civicrm_event_data(&$data, $enabled) {
     ),
     'relationship' => array(
       'base' => 'civicrm_participant',
-      'field' => 'id',
+      'base field' => 'id',
+      'field' => 'entity_id',
       'handler' => 'views_handler_relationship',
-      'label' => t('CiviCRM Entity ID'),
+      'label' => t('CiviCRM Participant'),
     ),
   );
 
   $data['civicrm_line_item']['label'] = array(
     'title' => t('Label'),
-    'help' => t(''),
+    'help' => t('Line Item Label'),
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
@@ -733,7 +747,7 @@ function _civicrm_event_data(&$data, $enabled) {
 
   $data['civicrm_line_item']['qty'] = array(
     'title' => t('Quality'),
-    'help' => t(''),
+    'help' => t('Line Item Quality'),
     'field' => array(
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
@@ -753,7 +767,7 @@ function _civicrm_event_data(&$data, $enabled) {
 
   $data['civicrm_line_item']['unit_price'] = array(
     'title' => t('Unit Price'),
-    'help' => t(''),
+    'help' => t('Line Item Unit Price'),
     'field' => array(
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
@@ -773,7 +787,7 @@ function _civicrm_event_data(&$data, $enabled) {
 
   $data['civicrm_line_item']['line_total'] = array(
     'title' => t('Line Total Amount'),
-    'help' => t(''),
+    'help' => t('Line Item Total Amount'),
     'field' => array(
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
@@ -793,7 +807,7 @@ function _civicrm_event_data(&$data, $enabled) {
 
   $data['civicrm_line_item']['price_field_value_id'] = array(
     'title' => t('Price Field Value ID'),
-    'help' => t(''),
+    'help' => t('Line Item Price Field Value'),
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
@@ -811,10 +825,10 @@ function _civicrm_event_data(&$data, $enabled) {
       'base' => 'civicrm_price_field_value',
       'field' => 'id',
       'handler' => 'views_handler_relationship',
-      'label' => t('CiviCRM Entity ID'),
+      'label' => t('CiviCRM Price Field Value'),
     ),
   );
-  //Numeric Participant ID
+  //Numeric Price Field　Value ID
   $data['civicrm_price_field_value']['id'] = array(
     'title' => t('Price Field Value ID'),
     'help' => t('The numeric ID of the Price Field Value'),
@@ -841,6 +855,82 @@ function _civicrm_event_data(&$data, $enabled) {
       'label' => t('CiviCRM Line Item'),
     ),
   );
+
+  //Numeric Price Field　Value ID
+  $data['civicrm_price_field_value']['price_field_id'] = array(
+    'title' => t('Price Field ID'),
+    'help' => t('The numeric ID of the Price Field'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+      'numeric' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+    'relationship' => array(
+      'base' => 'civicrm_price_field',
+      'title' => 'CiviCRM Price Field',
+      'base field' => 'id',
+      'field' => 'price_field_id',
+      'handler' => 'views_handler_relationship',
+      'label' => t('CiviCRM Price Field'),
+    ),
+  );
+
+  //Numeric Price Field ID
+  $data['civicrm_price_field']['id'] = array(
+    'title' => t('Price Field ID'),
+    'help' => t('The numeric ID of the Price Field Value'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+      'numeric' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+    'relationship' => array(
+      'base' => 'civicrm_price_field_value',
+      'title' => 'CiviCRM Price Field Value',
+      'base field' => 'price_field_id',
+      'field' => 'id',
+      'handler' => 'views_handler_relationship',
+      'label' => t('CiviCRM Line Item'),
+    ),
+  );
+
+  $data['civicrm_price_field']['label'] = array(
+    'title' => t('Label'),
+    'help' => t('Price Field Label'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+      'allow empty' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
 
   // Link to Campaign Table
   if (isset($enabled['CiviCampaign'])) {
