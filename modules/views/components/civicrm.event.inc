@@ -701,6 +701,24 @@ function _civicrm_event_data(&$data, $enabled) {
     ),
   );
 
+  $data['civicrm_line_item']['id'] = array(
+    'title' => t('Line Item ID'),
+    'help' => t('Line Item ID'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
   $data['civicrm_line_item']['entity_id'] = array(
     'title' => t('Participant'),
     'help' => t('Participant ID of Line Item'),
@@ -723,6 +741,24 @@ function _civicrm_event_data(&$data, $enabled) {
       'field' => 'entity_id',
       'handler' => 'views_handler_relationship',
       'label' => t('CiviCRM Participant'),
+    ),
+  );
+
+  $data['civicrm_line_item']['entity_table'] = array(
+    'title' => t('Line Item Entity Table'),
+    'help' => t('Entity Table of Line Item, Only "civicrm_participant" or "civicrm_contribution".'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
     ),
   );
 
@@ -823,7 +859,7 @@ function _civicrm_event_data(&$data, $enabled) {
     ),
     'relationship' => array(
       'base' => 'civicrm_price_field_value',
-      'field' => 'id',
+      'field' => 'price_field_value_id',
       'handler' => 'views_handler_relationship',
       'label' => t('CiviCRM Price Field Value'),
     ),
@@ -887,7 +923,7 @@ function _civicrm_event_data(&$data, $enabled) {
   //Numeric Price Field ID
   $data['civicrm_price_field']['id'] = array(
     'title' => t('Price Field ID'),
-    'help' => t('The numeric ID of the Price Field Value'),
+    'help' => t('The numeric ID of the Price Field'),
     'field' => array(
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
@@ -925,6 +961,25 @@ function _civicrm_event_data(&$data, $enabled) {
     'filter' => array(
       'handler' => 'views_handler_filter_string',
       'allow empty' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
+  $data['civicrm_price_field']['weight'] = array(
+    'title' => t('Price Field Weight'),
+    'help' => t('The weight of the Price Field'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+      'numeric' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
