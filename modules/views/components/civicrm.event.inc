@@ -986,6 +986,23 @@ function _civicrm_event_data(&$data, $enabled) {
     ),
   );
 
+  $data['civicrm_price_field']['is_active'] = array(
+    'title' => t('Price Field Is Active'),
+    'help' => t('Is this price field active'),
+    'field' => array(
+      'handler' => 'views_handler_field_boolean',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_boolean_operator',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
 
   // Link to Campaign Table
   if (isset($enabled['CiviCampaign'])) {
