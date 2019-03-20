@@ -200,17 +200,16 @@ function civicrm_user_view($user, $view_mode) {
 
     $ufGroups = CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, TRUE);
     $weight = 100;
-    foreach ($ufGroups as $id => $title) {
-
-      $fieldType = CRM_Core_BAO_UFField::getProfileType($id);
+    foreach ($ufGroups as $groupId => $title) {
+      $fieldType = CRM_Core_BAO_UFField::getProfileType($groupId);
       if (CRM_Contact_BAO_ContactType::isaSubType($fieldType)) {
         $fieldType = CRM_Contact_BAO_ContactType::getBasicType($fieldType);
       }
       if (($fieldType != 'Contact') && ($fieldType != $ctype) && $fieldType !== $orgtype) {
         continue;
       }
-      $contactID = $fieldType == $orgtype ? $orgID : $userID;
-      $page = new CRM_Profile_Page_Dynamic($contactID, $id, NULL, TRUE);
+      $contactID = (!empty($fieldType) && $fieldType == $orgtype) ? $orgID : $userID;
+      $page = new CRM_Profile_Page_Dynamic($contactID, $groupId, NULL, TRUE);
       $pageContent = $page->run();
 
       // CRM-3537: profile edit link
