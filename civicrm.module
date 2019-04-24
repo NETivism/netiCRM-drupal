@@ -319,6 +319,7 @@ function civicrm_cron() {
     $last['hourly'] = $time;
   }
   if ($time - $last['daily'] >= 86400) {
+    CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
     $last['daily'] = $time;
   }
   if ($time - $last['weekly'] >= 86400*7) {
