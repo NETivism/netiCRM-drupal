@@ -316,11 +316,16 @@ function civicrm_cron() {
   $last = variable_get('civicrm_cron', array());
   $time = REQUEST_TIME;
   if ($time - $last['hourly'] >= 3600) {
+    $hour = date('H', $time);
+    if ($hour > 15 && $hour < 20) {
+      CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
+    }
+    if ($hour > 21 && $hour < 24) {
+      CRM_Core_Payment_TapPay::doSyncLastDaysRecords($time);
+    }
     $last['hourly'] = $time;
   }
   if ($time - $last['daily'] >= 86400) {
-    CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
-    CRM_Core_Payment_TapPay::doSyncLastDaysRecords($time);
     $last['daily'] = $time;
   }
   if ($time - $last['weekly'] >= 86400*7) {
