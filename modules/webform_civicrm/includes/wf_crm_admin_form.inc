@@ -983,7 +983,12 @@ class wf_crm_admin_form {
    *   Array key of the container to be created
    */
   private function addAjaxItem($path, $control_element, $container, $class='civicrm-ajax-wrapper') {
-    eval('$snippet = &$this->form[\'' . str_replace(':', "']['", $path) . "'];");
+    $pathArray = explode(':', $path);
+    $currentVal = &$this->form;
+    foreach ($pathArray as $value) {
+      $currentVal =& $currentVal[$value];
+    }
+    $snippet =& $currentVal;
     $path .= ':' . $container;
     $id = 'civicrm-ajax-' . str_replace(array(':', '_'), '-', $path);
     $snippet[$control_element]['#ajax'] = array(
