@@ -90,7 +90,12 @@ function webform_civicrm_add_js($js, $type = 'file', $scope = 'header') {
  * @param $container: str. Array key of the container to be created
  */
 function webform_civicrm_ajax_form_item(&$form, $pathstr, $control_element, $container) {
-  eval('$snippet = &$form[\'' . str_replace(':', "']['", $pathstr) . "'];");
+  $pathArray = explode(':', $path);
+  $currentVal = &$form;
+  foreach ($pathArray as $value) {
+    $currentVal =& $currentVal[$value];
+  }
+  $snippet =& $currentVal;
   $pathstr = str_replace(':', '.', $pathstr) . '.' . $container;
   $id = 'civicrm-ajax-' . str_replace(array('.', '_'), '-', $pathstr);
   $snippet[$control_element]['#ahah'] = array(
