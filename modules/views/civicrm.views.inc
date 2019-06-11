@@ -355,6 +355,10 @@ function civicrm_views_custom_data_cache(&$data, $entity_type, $groupID, $subTyp
     case "Survey":
       $jointable = 'civicrm_campaign';
       break;
+
+    case "PriceField":
+      $jointable = 'civicrm_price_field';
+      break;
   }
 
   foreach ($tree as $groupkey => $currentgroup) {
