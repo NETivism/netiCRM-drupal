@@ -140,7 +140,7 @@ function civicrm_user_categories() {
     if ($value['is_active']) {
       $ufGroups[] = array(
         'name' => $value['name'],
-        'title' => $value['name'],
+        'title' => $value['title'],
         'weight' => $weight,
         'access callback' => '_civicrm_categories_access',
         'access arguments' => array("$key"),
@@ -167,28 +167,28 @@ function civicrm_user_view($user, $view_mode) {
     // make sure user has permission to view the record
     $contactURL = NULL;
     $civiPerm = CRM_Contact_BAO_Contact_Permission::allow($userID);
-    if (CRM_Core_Permission::check('access CiviCRM') && $civiPerm) {
-      $contactURL =
-  '<span class="user-page-link" id="user-page-contact" ><span class="user-page-bullet">&raquo;</span> ' .
-  l(ts("View Contact Record"),
-    'civicrm/contact/view',
-    array('query' => array('reset' => 1, 'cid' => $userID ))
-    ) .
-  '</span>';
-    }
-
     if (CRM_Core_Permission::check('access Contact Dashboard') && $civiPerm) {
       if (!empty($contactURL)) {
         $contactURL .= '<br/>';
       }
-      $contactURL .=
-  '<span class="user-page-link" id="user-page-dashboard" ><span class="user-page-bullet">&raquo;</span> ' .
+      $contactURL =
+  '<div class="user-page-link" id="user-page-dashboard"><i class="zmdi zmdi-accounts-list-alt"></i> ' .
   l(ts("View Contact Dashboard"),
     'civicrm/user',
     array('query' => array('reset' => 1, 'id' => $userID ))
     ) .
-  '</span>';
+  '</div>';
     }
+    if (CRM_Core_Permission::check('access CiviCRM') && $civiPerm) {
+      $contactURL .=
+  '<div class="user-page-link" id="user-page-contact" ><i class="zmdi zmdi-view-dashboard"></i> ' .
+  l(ts("View Contact Record"),
+    'civicrm/contact/view',
+    array('query' => array('reset' => 1, 'cid' => $userID ))
+    ) .
+  '</div>';
+    }
+
 
     $ctype = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $userID, 'contact_type');
     $orgtype = NULL;
@@ -200,43 +200,6 @@ function civicrm_user_view($user, $view_mode) {
 
     $ufGroups = CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, TRUE);
     $weight = 100;
-    foreach ($ufGroups as $id => $title) {
-
-      $fieldType = CRM_Core_BAO_UFField::getProfileType($id);
-      if (CRM_Contact_BAO_ContactType::isaSubType($fieldType)) {
-        $fieldType = CRM_Contact_BAO_ContactType::getBasicType($fieldType);
-      }
-      if (($fieldType != 'Contact') && ($fieldType != $ctype) && $fieldType !== $orgtype) {
-        continue;
-      }
-      $contactID = $fieldType == $orgtype ? $orgID : $userID;
-      $page = new CRM_Profile_Page_Dynamic($contactID, $id, NULL, TRUE);
-      $pageContent = $page->run();
-
-      // CRM-3537: profile edit link
-      $editURL = '';
-      if (user_edit_access($user)) {
-        $editURL = '<span class="user-page-link" id="user-page-profile-' . substr($title['title'], 0, 3) . '" ><span class="user-page-bullet">&raquo;</span> ' . l(ts("Edit %1", array(1 => $title['title'])),
-          "user/{$user->uid}/edit/" . $title['title']
-        ) . '</span>';
-      }
-
-      if ($pageContent) {
-        $user->content[$title['title']] = array(
-          '#title' => $title['title'],
-          '#type' => 'user_profile_category',
-          '#weight' => $weight,
-        );
-        $user->content[$title['title']][$title['title']] = array(
-          '#type' => 'user_profile_item',
-          '#title' => NULL,
-          '#value' => $pageContent . $editURL,
-          '#markup' => $pageContent . $editURL,
-        );
-
-        $weight += 10;
-      }
-    }
 
     if ($contactURL) {
       $user->content['urls'] = array(
@@ -244,6 +207,43 @@ function civicrm_user_view($user, $view_mode) {
         '#weight' => $weight,
       );
     }
+    foreach ($ufGroups as $groupId => $group) {
+      $fieldType = CRM_Core_BAO_UFField::getProfileType($groupId);
+      if (CRM_Contact_BAO_ContactType::isaSubType($fieldType)) {
+        $fieldType = CRM_Contact_BAO_ContactType::getBasicType($fieldType);
+      }
+      if (($fieldType != 'Contact') && ($fieldType != $ctype) && $fieldType !== $orgtype) {
+        continue;
+      }
+      $contactID = (!empty($fieldType) && $fieldType == $orgtype) ? $orgID : $userID;
+      $page = new CRM_Profile_Page_Dynamic($contactID, $groupId, NULL, TRUE);
+      $pageContent = $page->run();
+
+      // CRM-3537: profile edit link
+      $editURL = '';
+      if (user_edit_access($user)) {
+        $editURL = '<div class="crm-section"><span class="user-page-link content" id="user-page-profile-' . $group['name'] . '" ><i class="zmdi zmdi-edit"></i>' . l(ts("Edit %1", array(1 => $group['title'])),
+          "user/{$user->uid}/edit/" . $group['name']
+        ) . '</span></div>';
+      }
+
+      if ($pageContent) {
+        $user->content[$group['name']] = array(
+          '#title' => $group['title'],
+          '#type' => 'user_profile_category',
+          '#weight' => $weight,
+        );
+        $user->content[$group['name']][$group['title']] = array(
+          '#type' => 'user_profile_item',
+          '#title' => NULL,
+          '#value' =>  $pageContent.$editURL,
+          '#markup' => $pageContent.$editURL,
+        );
+
+        $weight += 10;
+      }
+    }
+
   }
   return;
 }

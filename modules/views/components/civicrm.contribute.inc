@@ -404,6 +404,28 @@ function _civicrm_contribute_data(&$data, $enabled) {
       'name' => 'receipt_date',
     ));
 
+
+  //Receipt ID
+  $data['civicrm_contribution']['receipt_id'] = array(
+    'title' => t('Receipt ID'),
+    'help' => t('Unique Receipt ID from system'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+      'allow empty' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
+
   //Contribution Thank You Date
   $data['civicrm_contribution']['thankyou_date'] = array(
     'title' => t('Thank You Date'),
