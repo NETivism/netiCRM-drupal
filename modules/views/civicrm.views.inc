@@ -1859,6 +1859,20 @@ function civicrm_views_data() {
       'handler' => 'views_handler_sort',
     ),
   );
+  $data['civicrm_contribution']['membership_id'] = array(
+    'real field' => 'id',
+    'title' => t('Membership ID'),
+    'help' => t('The numeric ID of the Membership'),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+    'relationship' => array(
+      'base' => 'civicrm_membership',
+      'field' => 'id',
+      'handler' => 'civicrm_handler_relationship_contribution2membership',
+      'label' => t('Membership'),
+    ),
+  );
   //Contribution Type
   $data['civicrm_contribution']['contribution_type'] = array(
     'title' => t('Contribution Type'),
