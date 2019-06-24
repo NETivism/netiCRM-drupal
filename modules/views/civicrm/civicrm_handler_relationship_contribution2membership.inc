@@ -30,7 +30,7 @@
  *
  * @ingroup civicrm_field_handlers
  */
-class civicrm_handler_relationship_contact2users extends views_handler_relationship {
+class civicrm_handler_relationship_contribution2membership extends views_handler_relationship {
 
   /**
    * Called to implement a relationship in a query.

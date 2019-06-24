@@ -1861,7 +1861,7 @@ function civicrm_views_data() {
   );
   $data['civicrm_contribution']['membership_id'] = array(
     'real field' => 'id',
-    'title' => t('Membership ID'),
+    'title' => t('Membership'),
     'help' => t('The numeric ID of the Membership'),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -5282,6 +5282,9 @@ function civicrm_views_handlers() {
         'parent' => 'views_handler_field',
       ),
       'civicrm_handler_relationship_contact2users' => array(
+        'parent' => 'views_handler_relationship',
+      ),
+      'civicrm_handler_relationship_contribution2membership' => array(
         'parent' => 'views_handler_relationship',
       ),
       'civicrm_handler_field_markup' => array(
