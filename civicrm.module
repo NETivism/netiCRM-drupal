@@ -49,7 +49,7 @@ function civicrm_html_head($force_load = FALSE) {
 
   $head = '';
   $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
-  drupal_add_js( $base_url.$base_path.$crm_path . 'js/insights.js?v=45734008', array('scope' => 'footer', 'every_page' => TRUE, 'weight' => 999, 'defer' => TRUE, 'preprocess' => FALSE, 'type' => 'file'));
+  drupal_add_js( $base_url.$base_path.$crm_path . 'js/insights.js?v=2112383a', array('scope' => 'footer', 'every_page' => TRUE, 'weight' => 999, 'defer' => TRUE, 'preprocess' => FALSE, 'type' => 'file'));
   if ( arg(0) == 'civicrm' || arg(0) == 'user' || $force_load) {
     $config = CRM_Core_Config::singleton();
     $template = CRM_Core_Smarty::singleton( );
