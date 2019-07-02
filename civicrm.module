@@ -718,7 +718,7 @@ function civicrm_view_data( &$user )
 
     if ($contactURL) {
       $user->content['urls'] = array(
-        '#markup' => $contactURL,
+        '#value' => $contactURL,
         '#weight' => $weight,
       );
     }
