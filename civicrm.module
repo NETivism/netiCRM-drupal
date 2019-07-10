@@ -316,25 +316,26 @@ function civicrm_cron() {
   civicrm_initialize();
   $last = variable_get('civicrm_cron', array());
   $time = REQUEST_TIME;
-  if ($time - $last['hourly'] >= 3600) {
-    $hour = date('H', $time);
+  $hour = date('H', $time);
+  // Avoiding totally fit the time, so reducing 50 seconds.
+  if ($time - $last['hourly'] >= 3550) {
     if ($hour > 15 && $hour < 20) {
       CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
     }
-    if ($hour > 21 && $hour < 24) {
-      CRM_Core_Payment_TapPay::doSyncLastDaysRecords($time);
-    }
     $last['hourly'] = $time;
   }
-  if ($time - $last['daily'] >= 86400) {
-    $last['daily'] = $time;
-  }
-  if ($time - $last['weekly'] >= 86400*7) {
-    $last['weekly'] = $time;
-  }
-  if ($time - $last['monthly'] >= 86400*30) {
-    CRM_Core_Error::purge();
-    $last['month'] = $time;
+  if ($hour >= 6 && $hour < 8) {
+    if ($time - $last['daily'] >= 86350) {
+      CRM_Core_Payment_TapPay::doSyncLastDaysRecords($time);
+      $last['daily'] = $time;
+    }
+    if ($time - $last['weekly'] >= (86400*7 - 50) ) {
+      $last['weekly'] = $time;
+    }
+    if ($time - $last['monthly'] >= (86400*30 - 50) ) {
+      CRM_Core_Error::purge();
+      $last['month'] = $time;
+    }
   }
   variable_set('civicrm_cron', $last);
 }
