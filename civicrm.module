@@ -319,7 +319,7 @@ function civicrm_cron() {
   $hour = date('H', $time);
   // Avoiding totally fit the time, so reducing 50 seconds.
   if ($time - $last['hourly'] >= 3550) {
-    if ($hour > 15 && $hour < 20) {
+    if ($hour > 1 ) {
       CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
     }
     $last['hourly'] = $time;
