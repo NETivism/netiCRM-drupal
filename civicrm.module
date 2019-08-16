@@ -34,16 +34,20 @@
  *
  * @return a &lt;style&gt; tag that indicates what file browsers should import
  */
-function civicrm_html_head()
-{
+function civicrm_html_head() {
+  global $base_path;
   if ( ! civicrm_initialize( ) ) {
     return;
   }
 
   $head = null;
-
+  static $runned;
   $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
-  drupal_add_js( $crm_path . 'js/insights.js', 'file', 'footer', TRUE, TRUE, FALSE);
+  if (!$runned) {
+    drupal_add_js(array('civicrm' => array('resourceBase' => array($base_path.$crm_path))), 'setting');
+    drupal_add_js($crm_path . 'js/insights.js', 'file', 'footer', TRUE, TRUE, FALSE);
+    $runned = TRUE;
+  }
   if ( arg(0) == 'civicrm' || arg(0) == 'user') {
     require_once 'CRM/Core/Config.php';
     $config = CRM_Core_Config::singleton();
