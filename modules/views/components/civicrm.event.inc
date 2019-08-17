@@ -701,6 +701,24 @@ function _civicrm_event_data(&$data, $enabled) {
     ),
   );
 
+  $data['civicrm_participant']['is_test'] = array(
+    'title' => t('Test'),
+    'help' => t('Is this participant is test?'),
+    'field' => array(
+      'handler' => 'views_handler_field_boolean',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_boolean_operator',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
   $data['civicrm_line_item']['id'] = array(
     'title' => t('Line Item ID'),
     'help' => t('Line Item ID'),
