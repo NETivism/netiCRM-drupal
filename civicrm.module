@@ -1047,9 +1047,9 @@ function _civicrm_no_conflict(&$scripts){
     'preprocess' => TRUE,
   );
 
-  unset($scripts['module'][$path . '/../packages/jquery/jquery.js']);
+  unset($scripts['module'][$path . '/../packages/jquery/jquery-1.12.4.js']);
   $core = array(
-    $path . '/../packages/jquery/jquery.js' => $val,
+    $path . '/../packages/jquery/jquery-1.12.4.js' => $val,
   );
 
   foreach ($scripts['module'] as $script => $val) {
