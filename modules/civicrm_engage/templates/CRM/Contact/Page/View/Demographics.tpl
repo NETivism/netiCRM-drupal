@@ -26,7 +26,7 @@
         {/if}
          {else}
             <td class="label">{ts}Age{/ts}</td>
-            <td>{if $age.y}{ts count=$age.y plural='%count years'}%count year{/ts}{elseif $age.m}{ts count=$age.m plural='%count months'}%count month{/ts}{/if} </td>
+            <td>{if $age.y}{ts count=$age.y plural='%count years old'}%count year old{/ts}{elseif $age.m}{ts count=$age.m plural='%count months old'}%count month old{/ts}{/if} </td>
          {/if}
 
   {foreach from=$demographics_viewCustomData item=customValues key=customGroupId}
