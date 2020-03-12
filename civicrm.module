@@ -369,20 +369,6 @@ function civicrm_invoke( )
   }
 
   civicrm_cache_disable();
-  $cache = civicrm_page_get_cache();
-  if(isset($cache->data)){
-    if($cache->data['ret']){
-      return $cache->data['out'];
-    }
-    else{
-      print $cache->data['out'];
-    }
-    return;
-  }
-  elseif(is_string($cache)){
-    global $civicrm_cache_id;
-    $civicrm_cache_id = $cache;
-  }
 
   require_once 'CRM/Core/Error.php';
 
@@ -977,54 +963,59 @@ function civicrm_checkmenu( ){
   return false;
 }
 
-function civicrm_page_get_cache(){
-  global $user;
-  if($_SERVER['REQUEST_METHOD'] != 'GET' || !empty($_SESSION['messages'])){
-    return FALSE;
+/**
+ * hook cron
+ * Period doing some purgnation
+ */
+function civicrm_cron() {
+  civicrm_initialize();
+  $last = variable_get('civicrm_cron', array());
+  $time = REQUEST_TIME;
+  $hour = date('G', $time);
+
+  // minutely
+  if ($time - $last['minutely'] >= 55) {
+    // It works when set up to execute cron by minutely.
+    $last['minutely'] = $time;
   }
-  // event info page cache
-  if($_GET['q'] == 'civicrm/event/info' && $_GET['id'] && is_numeric($_GET['id']) && !$user->uid){
-    $event  = new CRM_Event_DAO_Event();
-    $event->id = $_GET['id'];
-    if($event->find(true)){
-      foreach($event as $k => $v){
-        if($k[0] != '_') {
-          $cid .= $v;
-        }
-      }
-      $cid = 'civicrm-'.md5($cid);
-      $cache = cache_get($cid, 'cache_block');
-      if(empty($cache->data)){
-        return $cid;
-      }
 
-      // check event full
-      $left = CRM_Event_BAO_Participant::eventFull($event->id, TRUE);
-      if(!is_numeric($left) && !empty($left)){
-        return $cid;
-      }
-      // check if cache created time overdue or need expire
-      $now = $_SERVER['REQUEST_TIME'];
-      $registration_start_date = CRM_Utils_Date::unixTime($event->registration_start_date);
-      $registration_end_date = CRM_Utils_Date::unixTime($event->registration_end_date);
-      $start_date = CRM_Utils_Date::unixTime($event->start_date);
-      $end_date = CRM_Utils_Date::unixTime($event->end_date);
-      if($now > $registration_start_date && $cache->created < $registration_start_date){
-        return $cid;
-      }
-      if($now > $registration_end_date && $cache->created < $registration_end_date){
-        return $cid;
-      }
-      if($now > $start_date && $cache->created < $start_date){
-        return $cid;
-      }
-      if($now > $end_date && $cache->created < $end_date){
-        return $cid;
-      }
+  // hourly
+  // Avoiding totally fit the time, so reducing 50 seconds.
+  if ($time - $last['hourly'] >= 3550) {
+    if ($hour > 1 ) {
+      CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
+    }
+    $last['hourly'] = $time;
+  }
 
-      return $cache;
+  // daily
+  if ($hour >= 6 && $hour <= 8) {
+    if ($time - $last['daily'] >= 86350) {
+      CRM_Core_Payment_TapPay::doSyncLastDaysRecords();
+      CRM_Core_Payment_TapPay::doStatusCheck();
+      $last['daily'] = $time;
     }
   }
+
+  // weekly , monthly
+  if ($hour >= 2 && $hour <= 5) {
+    // sunday
+    if ($time - $last['weekly'] >= (86400*7 - 50) && date('w') == '0') {
+      CRM_Core_Config::singleton()->clearTempTables();
+      $last['weekly'] = $time;
+    }
+
+    // start of month
+    if ($time - $last['monthly'] >= (86400*30 - 50) && date('j') == '1') {
+      CRM_Core_Error::purge();
+      $last['month'] = $time;
+    }
+  }
+  variable_set('civicrm_cron', $last);
+}
+
+function civicrm_page_get_cache(){
+  return FALSE;
 }
 
 /**
