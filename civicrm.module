@@ -317,11 +317,15 @@ function civicrm_cron() {
   civicrm_initialize();
   $last = variable_get('civicrm_cron', array());
   $time = REQUEST_TIME;
-  $hour = date('H', $time);
+  $hour = date('G', $time);
+
+  // minutely
   if ($time - $last['minutely'] >= 55) {
     // It works when set up to execute cron by minutely.
     $last['minutely'] = $time;
   }
+
+  // hourly
   // Avoiding totally fit the time, so reducing 50 seconds.
   if ($time - $last['hourly'] >= 3550) {
     if ($hour > 1 ) {
@@ -329,16 +333,26 @@ function civicrm_cron() {
     }
     $last['hourly'] = $time;
   }
+
+  // daily
   if ($hour >= 6 && $hour <= 8) {
     if ($time - $last['daily'] >= 86350) {
       CRM_Core_Payment_TapPay::doSyncLastDaysRecords();
       CRM_Core_Payment_TapPay::doStatusCheck();
       $last['daily'] = $time;
     }
-    if ($time - $last['weekly'] >= (86400*7 - 50) ) {
+  }
+
+  // weekly , monthly
+  if ($hour >= 2 && $hour <= 5) {
+    // sunday
+    if ($time - $last['weekly'] >= (86400*7 - 50) && date('w') == '0') {
+      CRM_Core_Config::singleton()->clearTempTables();
       $last['weekly'] = $time;
     }
-    if ($time - $last['monthly'] >= (86400*30 - 50) ) {
+
+    // start of month
+    if ($time - $last['monthly'] >= (86400*30 - 50) && date('j') == '1') {
       CRM_Core_Error::purge();
       $last['month'] = $time;
     }
