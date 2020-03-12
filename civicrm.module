@@ -970,7 +970,7 @@ function civicrm_checkmenu( ){
 function civicrm_cron() {
   civicrm_initialize();
   $last = variable_get('civicrm_cron', array());
-  $time = REQUEST_TIME;
+  $time = CRM_REQUEST_TIME;
   $hour = date('G', $time);
 
   // minutely
