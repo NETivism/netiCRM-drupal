@@ -66,7 +66,7 @@
       {else}
         <div class="crm-summary-row">
           <div class="crm-label">{ts}Age{/ts}</div>
-          <div class="crm-content crm-contact-age_display">{if $age.y}{ts count=$age.y plural='%count years'}%count year{/ts}{elseif $age.m}{ts count=$age.m plural='%count months'}%count month{/ts}{/if}</div>
+          <div class="crm-content crm-contact-age_display">{if $age.y}{ts count=$age.y plural='%count years old'}%count year old{/ts}{elseif $age.m}{ts count=$age.m plural='%count months old'}%count month old{/ts}{/if}</div>
         </div>
       {/if}
 
