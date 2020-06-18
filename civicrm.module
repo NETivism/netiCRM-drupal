@@ -333,6 +333,7 @@ function civicrm_cron() {
     if ($time - $last['daily'] >= 86350) {
       CRM_Core_Payment_TapPay::doSyncLastDaysRecords();
       CRM_Core_Payment_TapPay::doStatusCheck();
+      CRM_Contribute_BAO_TaiwanACH::doStatusCheck();
       $last['daily'] = $time;
     }
     if ($time - $last['weekly'] >= (86400*7 - 50) ) {
