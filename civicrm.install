@@ -184,6 +184,7 @@ function _civicrm_import_sql($filename){
   //get rid of comments starting with # and --
   $string = preg_replace("/^#[^\n]*$/m",   "\n", $string );
   $string = preg_replace("/^(--[^-]).*/m", "\n", $string );
+  $db->query("/*!40101 SET NAMES utf8mb4 */");
 
   $queries = preg_split('/;$/m', $string);
   foreach ( $queries as $query ) {
