@@ -977,6 +977,7 @@ function civicrm_cron() {
   if ($time - $last['minutely'] >= 55) {
     // It works when set up to execute cron by minutely.
     $last['minutely'] = $time;
+    CRM_Batch_BAO_Batch::runQueue();
   }
 
   // hourly
