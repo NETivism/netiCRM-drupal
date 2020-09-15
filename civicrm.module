@@ -994,6 +994,10 @@ function civicrm_cron() {
     if ($time - $last['daily'] >= 86350) {
       CRM_Core_Payment_TapPay::doSyncLastDaysRecords();
       CRM_Core_Payment_TapPay::doStatusCheck();
+      CRM_Contribute_BAO_TaiwanACH::doStatusCheck();
+      if ($hour >= 7) {
+        CRM_Contact_BAO_GroupContactCache::checkAll();
+      }
       $last['daily'] = $time;
     }
   }
