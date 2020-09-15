@@ -42,6 +42,7 @@ define('CIVICRM_UF_HEAD', TRUE);
  * @return a &lt;style&gt; tag that indicates what file browsers should import
  */
 function civicrm_html_head($force_load = FALSE) {
+  $config = CRM_Core_Config::singleton();
   static $added;
   global $base_url, $base_path;
   if (!civicrm_initialize()) {
@@ -54,9 +55,8 @@ function civicrm_html_head($force_load = FALSE) {
   $head = '';
   $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
   drupal_add_js(array('civicrm' => array('resourceBase' => $base_url.$base_path.$crm_path)), 'setting');
-  drupal_add_js( $base_url.$base_path.$crm_path . 'js/insights.js?v=e464f3e', array('scope' => 'footer', 'every_page' => TRUE, 'weight' => 999, 'defer' => TRUE, 'preprocess' => FALSE, 'type' => 'file'));
+  drupal_add_js( $base_url.$base_path.$crm_path . 'js/insights.js?v'.$config->ver, array('scope' => 'footer', 'every_page' => TRUE, 'weight' => 999, 'defer' => TRUE, 'preprocess' => FALSE, 'type' => 'file'));
   if ( arg(0) == 'civicrm' || arg(0) == 'user' || $force_load) {
-    $config = CRM_Core_Config::singleton();
     $template = CRM_Core_Smarty::singleton( );
     $buffer = $template->fetch( 'CRM/common/jquery.files.tpl' );
     $lines  = preg_split( '/\s+/', $buffer );
