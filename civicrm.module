@@ -1036,7 +1036,8 @@ function civicrm_jquery_update_alter(&$scripts) {
 function _civicrm_no_conflict(&$scripts){
   // Move the CiviCRM jquery and jQuery UI libraries above Drupal's core jQuery
   // and relatively gracefully handle noConflict.
-  $path = preg_replace('/drupal\/?$/', '', drupal_get_path('module', 'civicrm'));
+  $path = drupal_get_path('module', 'civicrm');
+  $path2 = preg_replace('/drupal\/?$/', '', drupal_get_path('module', 'civicrm')).'packages';
   $val = array(
     'cache' => TRUE,
     'defer' => FALSE,
@@ -1049,7 +1050,7 @@ function _civicrm_no_conflict(&$scripts){
   );
 
   foreach ($scripts['module'] as $script => $val) {
-    if (strpos($script, $path) === 0) {
+    if (strpos($script, $path) === 0 || strpos($script, $path2) === 0) {
       $core[$script] = $scripts['module'][$script];
       unset($scripts['module'][$script]);
     }
