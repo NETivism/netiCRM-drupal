@@ -5,35 +5,89 @@ define('CIVICRM_UF_HEAD', TRUE);
 require_once 'civicrm.user.inc';
 
 /**
+ * Implements hook_library_info_build().
+ * 
+ * Dynamic add js / css definition to civicrm libraries yml
+ */
+function civicrm_library_info_build() {
+  $crm_path = drupal_get_path('module', 'civicrm');
+  $libraries = [];
+
+  // core
+  $libraries['civicrm-js-core'] = [
+    'header' => true,
+    'js' => ['../packages/jquery/jquery.js' => ['weight' => -10, 'minified' => true]],
+  ];
+  $libraries['civicrm-js-allpage'] = [
+    'header' => false,
+    'js' => ['../js/insights.js' => ['weight' => -0.01]],
+  ];
+  $libraries['civicrm-css-core']['css']['state']['../css/civicrm.css'] = [ 'weight' => 200 ];
+  
+  // packages
+  $template = CRM_Core_Smarty::singleton( );
+  $buffer = $template->fetch( 'CRM/common/jquery.files.tpl' );
+  $lines  = preg_split( '/\s+/', $buffer );
+
+  $libraries['civicrm-css-packages'] = [];
+  $libraries['civicrm-js-packages'] = [
+    'dependencies' => [
+      'civicrm/civicrm-js-core',
+    ],
+    'header' => true,
+  ];
+  $weight = 0;
+  foreach($lines as $line) {
+    if ( strpos( $line, '.css' ) !== false ) {
+      $weight++;
+      $libraries['civicrm-css-packages']['css']['state']['../'.$line] = [ 'weight' => $weight ];
+    }
+    if ( strpos($line, '.js' ) !== false ) {
+      if (strpos($line, 'packages/jquery/jquery-1') !== false) {
+        continue;
+      }
+      $libraries['civicrm-js-packages']['js']['../'.$line] = ['weight' => -1, 'header' => true];
+    }
+  }
+
+  // noconflict
+  $libraries['civicrm-js-packages']['js']['../js/Common.js'] = ['weight' => -1];
+  $libraries['civicrm-js-packages']['js']['../js/noconflict.js'] = ['weight' => -1];
+
+  // custom
+  if (!empty(CRM_Core_Config::singleton()->customCSSURL)) {
+    $libraries['civicrm-css-custom']['css']['theme'][CRM_Core_Config::singleton()->customCSSURL] = [ 'weight' => 999 ];
+  }
+  return $libraries;
+}
+
+/**
  * Implements hook_page_attachments().
  *
  * Inject arbitrary html into the head region.
  */
 function civicrm_page_attachments(array &$page) {
   // Only do anything if CiviCRM is bootstrapped.
-  global $civicrm_root;
-  if (empty($civicrm_root)) {
-    return;
-  }
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', ltrim($current_path, '/'));
 
   // Always add core styles (even if not on a /civicrm page).
-  CRM_Core_Resources::singleton()->addCoreStyles();
-
   // Merge CiviCRM stuff into HTML header.
-  if ($region = \CRM_Core_Region::instance('html-header', FALSE)) {
-    \CRM_Utils_System::addHTMLHead($region->render(''));
-  }
+#  if ($region = \CRM_Core_Region::instance('html-header', FALSE)) {
+#    CRM_Utils_System::addHTMLHead($region->render(''));
+#  }
 
   /** @var \Drupal\civicrm\CivicrmPageState $page_state */
   $page_state = \Drupal::service('civicrm.page_state');
 
   // Attach CSS and JS.
-  foreach ($page_state->getCSS() as $counter => $css) {
-    $page['#attached']['html_head'][] = array($css, 'civicrm-css-' . $counter);
+  if ($path_args[0] == 'civicrm' || $path_args[0] == 'user') {
+    $page['#attached']['library'][] = 'civicrm/civicrm-css-core';
+    $page['#attached']['library'][] = 'civicrm/civicrm-css-packages';
+    $page['#attached']['library'][] = 'civicrm/civicrm-js-core';
+    $page['#attached']['library'][] = 'civicrm/civicrm-js-packages';
   }
-  foreach ($page_state->getJS() as $counter => $js) {
-    $page['#attached']['html_head'][] = array($js, 'civicrm-js-' . $counter);
-  }
+  $page['#attached']['library'][] = 'civicrm/civicrm-js-allpage';
 
   // Any other miscellaneous headers.
   $headers = $page_state->getHtmlHeaders();
@@ -178,7 +232,6 @@ function civicrm_user_view(array &$build, \Drupal\user\UserInterface $account, \
     );
 
     // We need the CiviCRM core Javascript.
-    CRM_Core_Resources::singleton()->addCoreResources();
 
     foreach (_civicrm_get_profiles($contact_id) as $id => $profile) {
       $html = (new \CRM_Profile_Page_Dynamic($contact_id, $id, NULL))->run();
@@ -244,7 +297,6 @@ function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
   \Drupal::service('page_cache_kill_switch')->trigger();
 
   // We need the CiviCRM core Javascript.
-  CRM_Core_Resources::singleton()->addCoreResources();
 
   $form['civicrm_profile_register'] = array(
     '#markup' => \Drupal\Core\Render\Markup::create($html),
@@ -292,4 +344,11 @@ function civicrm_theme() {
  */
 function template_preprocess_civicrm_contact(&$vars) {
   $vars['civicrm_contact'] = $vars['elements']['#civicrm_contact'];
+}
+
+/**
+ * For backward compatibility
+ */
+function civicrm_initialize() {
+  \Drupal::service('civicrm')->initialize();
 }
