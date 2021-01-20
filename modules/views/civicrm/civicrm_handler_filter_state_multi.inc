@@ -63,7 +63,13 @@ class civicrm_handler_filter_state_multi extends views_handler_filter_in_operato
     $op = ($this->operator == 'in') ? 'LIKE' : 'NOT LIKE';
     $glue = ($this->operator == 'in') ? 'OR ' : 'AND ';
     foreach ($this->value as $value) {
-      $clauses[] = "$this->table_alias.$this->real_field " . $op . " '%" . $sep . $value . $sep . "%' ";
+      // refs #30434, we need to treat null value as string to apply not like
+      if ($op == 'NOT LIKE') {
+        $clauses[] = "IFNULL($this->table_alias.$this->real_field, '') " . $op . " '%" . $sep . $value . $sep . "%' ";
+      }
+      else {
+        $clauses[] = "$this->table_alias.$this->real_field " . $op . " '%" . $sep . $value . $sep . "%' ";
+      }
     }
     $clause = implode($glue, $clauses);
     $this->query->add_where_expression($this->options['group'], $clause);
