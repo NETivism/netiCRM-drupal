@@ -10,6 +10,9 @@ require_once 'civicrm.user.inc';
  * Dynamic add js / css definition to civicrm libraries yml
  */
 function civicrm_library_info_build() {
+  if (\Drupal::moduleHandler()->moduleExists('civicrm') && !class_exists('CRM_Core_Smarty')) {
+    return;
+  }
   $crm_path = drupal_get_path('module', 'civicrm');
   $libraries = [];
 

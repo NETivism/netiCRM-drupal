@@ -79,7 +79,7 @@ function civicrm_install() {
     'public://civicrm/custom',
   );
   foreach($dirs as $dir) {
-    \Drupal\Core\File\FileSystemInterface::prepareDirectory($dir, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY);
+    \Drupal::service('file_system')->prepareDirectory($dir, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY);
   }
   \Drupal::messenger()->addStatus('CiviCRM installed successfully.');
 }
@@ -153,17 +153,14 @@ function civicrm_requirements($phase) {
  * We also allow /modules/civicrm, which seems to work fine.
  */
 function _civicrm_find_civicrm() {
-  $possible_paths = array();
 
-  if ($path = drupal_get_path('module', 'civicrm')) {
-    $possible_paths[] = str_replace('/drupal', '', $path);
-  }
-  $possible_paths[] = 'vendor/civicrm/civicrm-core';
-  $possible_paths[] = '../vendor/civicrm/civicrm-core';
+  $path = drupal_get_path('module', 'civicrm');
+  $possible_paths = [];
+  $possible_paths[] = DRUPAL_ROOT.'/'.str_replace('/drupal', '', $path);
 
   foreach ($possible_paths as $path) {
     if (file_exists($path . '/CRM/Core/ClassLoader.php')) {
-      return \Drupal::service('file_system')->realpath($path);
+      return $path;
     }
   }
 
