@@ -7,7 +7,7 @@ require_once 'civicrm.user.inc';
 /**
  * Implements hook_library_info_build().
  * 
- * Dynamic add js / css definition to civicrm libraries yml
+ * Static add js / css definition
  */
 function civicrm_library_info_build() {
   if (\Drupal::moduleHandler()->moduleExists('civicrm') && !class_exists('CRM_Core_Smarty')) {
@@ -57,11 +57,22 @@ function civicrm_library_info_build() {
   $libraries['civicrm-js-packages']['js']['../js/Common.js'] = ['weight' => -1];
   $libraries['civicrm-js-packages']['js']['../js/noconflict.js'] = ['weight' => -1];
 
-  // custom
-  if (!empty(CRM_Core_Config::singleton()->customCSSURL)) {
-    $libraries['civicrm-css-custom']['css']['theme'][CRM_Core_Config::singleton()->customCSSURL] = [ 'weight' => 999 ];
-  }
   return $libraries;
+}
+
+/**
+ * Implements hook_library_info_alter().
+ * 
+ * Dynamic add custom css into current theme
+ */
+function civicrm_library_info_alter(&$libraries, $extension) {
+  $theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+  if (!empty(CRM_Core_Config::singleton()->customCSSURL) && $extension == $theme) {
+    $libraries['global-styling']['css']['theme'][CRM_Core_Config::singleton()->customCSSURL] = [
+      'weight' => 1,
+      'type' => 'external',
+    ];
+  }
 }
 
 /**
@@ -91,6 +102,9 @@ function civicrm_page_attachments(array &$page) {
     $page['#attached']['library'][] = 'civicrm/civicrm-js-packages';
   }
   $page['#attached']['library'][] = 'civicrm/civicrm-js-allpage';
+  if (!empty(CRM_Core_Config::singleton()->customCSSURL)) {
+    $page['#attached']['library'][] = 'civicrm/civicrm-css-custom';
+  }
 
   // Any other miscellaneous headers.
   $headers = $page_state->getHtmlHeaders();
