@@ -93,6 +93,7 @@ function civicrm_requirements($phase) {
   $requirements = array();
 
   $civicrm_base = _civicrm_find_civicrm();
+  $default_scheme = \Drupal::config('system.file')->get('default_scheme');
 
   if ($civicrm_base) {
     require_once($civicrm_base . '/Civi/Install/Requirements.php');
@@ -123,7 +124,7 @@ function civicrm_requirements($phase) {
   if (!file_exists(\Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php')) {
     $file_paths[] =  realpath(\Drupal::service('kernel')->getSitePath()); // eg. sites/default folder
   }
-  $file_paths[] = \Drupal::service('file_system')->realpath(file_default_scheme() . "://"); // eg. sites/default/files folder
+  $file_paths[] = \Drupal::service('file_system')->realpath($default_scheme . "://"); // eg. sites/default/files folder
 
   // Attempt to make directories writable
   // We don't bother checking if these attempts are actually successful as
@@ -214,6 +215,7 @@ function _civicrm_init_setting($config){
   }
   else{
     if(is_writable($config['site_dir'])){
+      $default_scheme =\Drupal::config('system.file')->get('default_scheme');
       $params = array();
       $params['%%baseURL%%'] = base_path();
       $params['%%cms%%'] = 'Drupal';
@@ -226,7 +228,7 @@ function _civicrm_init_setting($config){
       $params['%%dbHost%%'] = $config['crmdb']['server'];
       $params['%%dbName%%'] = $config['crmdb']['database'];
       $params['%%crmRoot%%'] = $config['crm_path'].'/';
-      $params['%%templateCompileDir%%'] =\Drupal::service('file_system')->realpath(file_default_scheme() . "://").'/civicrm/templates_c/';
+      $params['%%templateCompileDir%%'] =\Drupal::service('file_system')->realpath($default_scheme  . "://").'/civicrm/templates_c/';
       $params['%%siteKey%%'] = md5($GLOBALS['base_url'].microtime());
 
       $filename = $config['crm_path'].'/templates/CRM/common/civicrm.settings.php.template';
