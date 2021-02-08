@@ -7,7 +7,7 @@ function civicrm_install() {
   // If civicrm.settings.php file is already present, we assume CiviCRM
   // is already installed and abort.
   if (file_exists(\Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php')) {
-    drupal_set_message(t("CiviCRM appears to have already been installed. Skipping full installation."));
+    \Drupal::messenger()->addStatus(t("CiviCRM appears to have already been installed. Skipping full installation."));
     return;
   }
 
@@ -59,7 +59,7 @@ function civicrm_install() {
     unset($module_data['civicrm']);
     \Drupal::configFactory()->getEditable('core.extension')->set('module', $module_data)->save();
     $message = "CiviCRM installation failed on initialize civicrm settings.";
-    drupal_set_message($message);
+    \Drupal::messenger()->addStatus($message);
     \Drupal::messenger()->addError($message);
     \Drupal::logger('civicrm')->error($message.' Check Line:'. __LINE__);
     return;
