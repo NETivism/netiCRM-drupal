@@ -28,6 +28,18 @@ function civicrm_install() {
   // otherwise default to using the same database as Drupal.
   $drupal_db = \Drupal\Core\Database\Database::getConnection('default')->getConnectionOptions();
   $civicrm_db = _civicrm_get_db_config()['info'];
+  if (empty($drupal_db['port'])) {
+    $drupal_db['port'] = '3306';
+  }
+  if (empty($civicrm_db['port'])) {
+    $civicrm_db['port'] = '3306';
+  }
+  if ($drupal_db['host'] == '127.0.0.1') {
+    $drupal_db['host'] = 'localhost';
+  }
+  if ($civicrm_db['host'] == '127.0.0.1') {
+    $civicrm_db['host'] = 'localhost';
+  }
 
   $config = array(
     'cms' => 'Drupal8',
