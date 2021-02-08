@@ -28,11 +28,12 @@ function civicrm_install() {
   // otherwise default to using the same database as Drupal.
   $drupal_db = \Drupal\Core\Database\Database::getConnection('default')->getConnectionOptions();
   $civicrm_db = _civicrm_get_db_config()['info'];
-  if (empty($drupal_db['port'])) {
-    $drupal_db['port'] = '3306';
+  $port = "";
+  if (!empty($drupal_db['port'])) {
+    $port = ':'.$drupal_db['port'];
   }
-  if (empty($civicrm_db['port'])) {
-    $civicrm_db['port'] = '3306';
+  if (!empty($civicrm_db['port'])) {
+    $port = ':'.$civicrm_db['port'];
   }
   if ($drupal_db['host'] == '127.0.0.1') {
     $drupal_db['host'] = 'localhost';
@@ -50,13 +51,13 @@ function civicrm_install() {
     'crmdb' => array(
       'username' => $civicrm_db['username'],
       'password' => $civicrm_db['password'],
-      'server' => "{$civicrm_db['host']}:{$civicrm_db['port']}",
+      'server' => "{$civicrm_db['host']}{$port}",
       'database' => $civicrm_db['database'],
     ),
     'cmsdb' => array(
       'username' => $drupal_db['username'],
       'password' => $drupal_db['password'],
-      'server' => "{$drupal_db['host']}:{$drupal_db['port']}",
+      'server' => "{$drupal_db['host']}{$port}",
       'database' => $drupal_db['database'],
     )
   );
