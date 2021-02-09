@@ -112,6 +112,9 @@ function _civicrm_init_setting(){
   else{
     if(is_writable($conf_path)){
       $db = Database::getConnection()->getConnectionOptions();
+      if ($db['host'] == '127.0.0.1') {
+        $db['host'] = 'localhost'; // use mysql socket instead
+      }
       $params = array();
       $params['%%baseURL%%'] = base_path();
       $params['%%cms%%'] = 'Drupal';
