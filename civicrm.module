@@ -86,6 +86,10 @@ function civicrm_html_head($force_load = FALSE) {
     // add Common.js
     $options['weight'] = 999;
     drupal_add_js( $crm_path . 'js/Common.js', $options);
+
+    // add noconflict.js
+    // set weight to 999.9 to ensure that the file is at the end
+    $options['weight'] = 999.9;
     drupal_add_js($crm_path . 'js/noconflict.js', $options);
   }
 
