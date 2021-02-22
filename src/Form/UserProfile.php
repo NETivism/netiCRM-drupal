@@ -46,10 +46,22 @@ class UserProfile extends FormBase  {
     $this->uf_group = $uf_groups[$profile];
 
     // Grab the form html.
+    // if there were param on submit, getEditHTML will add contact directly
     $this->contact_id = \CRM_Core_BAO_UFMatch::getContactId($user->id());
     $html = \CRM_Core_BAO_UFGroup::getEditHTML($this->contact_id, $this->uf_group['title']);
+    // this dirty hack will get newly added contact
+    // add drupal user id as uf_id to save them
+    global $civicrm_profile_contact_id;
+    if (!empty($civicrm_profile_contact_id)) {
+      $params = array(
+        'contact_id' => $civicrm_profile_contact_id,
+        'uf_id' => $user->id(),
+        'uf_name' => $user->get('mail')->value,
+      );
+      \CRM_Core_BAO_UFMatch::create($params);
+    }
 
-    $form['#title'] = $this->user->getUsername();
+    $form['#title'] = $this->user->getAccountName();
     $form['form'] = array(
       '#type' => 'fieldset',
       '#title' => $this->uf_group['title'],
@@ -80,10 +92,10 @@ class UserProfile extends FormBase  {
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Somehow, somewhere, CiviCRM is processing our form. I have no idea how.
     // Invalidate caches for user, so that latest profile information shows.
     Cache::invalidateTags(array('user:' . $this->user->id()));
-    drupal_set_message($this->t("Profile successfully updated."));
+    \Drupal::messenger()->addStatus(t("Profile successfully updated."));
+    // CiviCRM will process form when redirect to getEditHTML, so we do nothing here
   }
 
   public function access($profile) {
