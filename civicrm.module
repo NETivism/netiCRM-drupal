@@ -50,13 +50,37 @@ function civicrm_library_info_build() {
       if (strpos($line, 'packages/jquery/jquery-1') !== false) {
         continue;
       }
-      $libraries['civicrm-js-packages']['js']['../'.$line] = ['weight' => -1, 'header' => true];
+      $libraries['civicrm-js-packages']['js']['../'.$line] = ['weight' => -5, 'header' => true];
     }
   }
+  $libraries['civicrm-js-packages']['js']['../js/Common.js'] = ['weight' => -2];
 
   // noconflict
-  $libraries['civicrm-js-packages']['js']['../js/Common.js'] = ['weight' => -1];
-  $libraries['civicrm-js-packages']['js']['../js/noconflict.js'] = ['weight' => -1];
+  $libraries['civicrm-js-noconflict'] = [
+    'dependencies' => [
+      'civicrm-js-packages',
+    ],
+    'header' => true,
+  ];
+  $libraries['civicrm-js-noconflict']['js']['../js/noconflict.js'] = ['weight' => -1];
+
+  // additional, mailing editor
+  $libraries['civicrm-js-mailingeditor'] = [
+    'dependencies' => [
+      'civicrm-js-packages',
+    ],
+    'header' => true,
+  ];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/poshytip/src/jquery.poshytip.min.js
+  '] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/jquery-editable/js/jquery-editable-poshytip.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/inputs-ext/quill/lib/quill.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/inputs-ext/quill/lib/placeholder/quill.placeholder.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/inputs-ext/quill/lib/emoji/quill-emoji.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/inputs-ext/quill/quill.js'] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/pickr/dist/pickr.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/Magnific-Popup/dist/jquery.magnific-popup.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/mailingEditor/mailingEditor.js'] = ['weight' => -3];
 
   return $libraries;
 }
@@ -109,6 +133,13 @@ function civicrm_page_attachments(array &$page) {
     $page['#attached']['library'][] = 'civicrm/civicrm-css-packages';
     $page['#attached']['library'][] = 'civicrm/civicrm-js-core';
     $page['#attached']['library'][] = 'civicrm/civicrm-js-packages';
+    $page['#attached']['library'][] = 'civicrm/civicrm-js-noconflict';
+  }
+  $dynamic = CRM_Core_Config::singleton()->userSystem::$jsLibraries;
+  if (!empty($dynamic) && is_array($dynamic)) {
+    foreach ($dynamic as $lib => $doncare) {
+      $page['#attached']['library'][] = $lib;
+    }
   }
   $page['#attached']['library'][] = 'civicrm/civicrm-js-allpage';
   if (!empty(CRM_Core_Config::singleton()->customCSSURL)) {
