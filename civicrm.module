@@ -162,6 +162,7 @@ function civicrm_page_attachments(array &$page) {
  */
 function civicrm_toolbar() {
   $items = [];
+  /*
 
   // Always return it with right cache context even if it's empty so that the
   // permissions can control it's visibility.
@@ -188,6 +189,7 @@ function civicrm_toolbar() {
       ],
     ];
   }
+  */
 
   return $items;
 }
