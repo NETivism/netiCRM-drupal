@@ -1,7 +1,5 @@
 <?php
 
-define('CIVICRM_UF_HEAD', TRUE);
-
 require_once 'civicrm.user.inc';
 
 /**
