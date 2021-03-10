@@ -92,7 +92,8 @@ function webform_civicrm_process_submission($node, &$submission, $op) {
     }
 
     $shared_address = array();
-    $config->doNotResetCache = 1; // refs #30818, do not reset group and acl cache when submission by webform
+    // refs #30818, do not reset group contact cache
+    $config->doNotResetGroupContactCache = 1; 
     foreach ($data['contact'] as $c => $contact) {
       if (empty($id['cid'][$c])) {
         // Don't create contact if we don't have a name or email
