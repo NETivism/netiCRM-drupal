@@ -202,23 +202,6 @@ function _civicrm_views_civicrm_entities() {
  * This is ordered alphabetically by array key.
  */
 function _civicrm_views_add_relationships(&$data) {
-  foreach (\CRM_Activity_DAO_ActivityContact::buildOptions('record_type_id') as $record_type_id => $name) {
-    $data['civicrm_activity']["id_contact_record_type_{$record_type_id}"]['relationship'] = array(
-      'id' => 'standard',
-      'field' => 'id',
-      'base' => 'civicrm_activity_contact',
-      'base field' => 'activity_id',
-      'extra' => array(
-        array(
-          'field' => 'record_type_id',
-          'value' => $record_type_id,
-        ),
-      ),
-      'title' => t('CiviCRM !record_type_name', array('!record_type_name' => $name)),
-      'label' => t('CiviCRM !record_type_name (from Activity)', array('!record_type_name' => $name)),
-      'help' => t('CiviCRM !record_type_name (from Activity)', array('!record_type_name' => $name)),
-    );
-  }
   $data['civicrm_contact']['employer_id_contact']['relationship'] = array(
     'id' => 'standard',
     'field' => 'employer_id',
