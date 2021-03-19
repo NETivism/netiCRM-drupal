@@ -27,6 +27,7 @@ function civicrm_library_info_build() {
       'core/drupalSettings'
     ]
   ];
+  $libraries['civicrm-css-allpage']['css']['state']['../packages/material-design-iconic-font/css/material-design-iconic-font.min.css'] = [ 'weight' => 0];
   $libraries['civicrm-css-core']['css']['state']['../css/civicrm.css'] = [ 'weight' => 200 ];
   
   // packages
@@ -44,6 +45,9 @@ function civicrm_library_info_build() {
   $weight = 0;
   foreach($lines as $line) {
     if ( strpos( $line, '.css' ) !== false ) {
+      if (strpos($line, 'material-design-iconic-font')) {
+        continue;  // added on all-css
+      }
       $weight++;
       $libraries['civicrm-css-packages']['css']['state']['../'.$line] = [ 'weight' => $weight ];
     }
@@ -113,6 +117,8 @@ function civicrm_library_info_alter(&$libraries, $extension) {
 function civicrm_page_attachments(array &$page) {
   // all page js place here
   $page['#attached']['library'][] = 'civicrm/civicrm-js-allpage';
+  $page['#attached']['library'][] = 'civicrm/civicrm-css-allpage';
+  $page['#attached']['drupalSettings']['basePath'] = base_path();
   $page['#attached']['drupalSettings']['civicrm']['resourceBase'] = base_path().drupal_get_path('module', 'civicrm').'/../';
 
   // do not invoke during installing
@@ -133,7 +139,7 @@ function civicrm_page_attachments(array &$page) {
   $page_state = \Drupal::service('civicrm.page_state');
 
   // Attach CSS and JS.
-  if ($path_args[0] == 'civicrm' || $path_args[0] == 'user') {
+  if ($path_args[0] == 'civicrm' || $path_args[0] == 'user' || \Drupal::service('civicrm')->initialized) {
     $page['#attached']['library'][] = 'civicrm/civicrm-css-core';
     $page['#attached']['library'][] = 'civicrm/civicrm-css-packages';
     $page['#attached']['library'][] = 'civicrm/civicrm-js-core';

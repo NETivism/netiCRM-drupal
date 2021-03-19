@@ -7,7 +7,7 @@ use Drupal\Core\Session\AccountInterface;
 
 class Civicrm {
 
-  protected $initialized = FALSE;
+  public $initialized = FALSE;
 
   /**
    * Initialize CiviCRM. Call this function from other modules too if

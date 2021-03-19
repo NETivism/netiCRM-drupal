@@ -21,7 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CivicrmBlock extends BlockBase implements ContainerFactoryPluginInterface {
   public function __construct(Civicrm $civicrm, array $configuration, $plugin_id, array $plugin_definition) {
     // Mark all CiviCRM blocks as uncachable.
-    $configuration['cache']['max_age'] = 0;
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $civicrm->initialize();
   }
@@ -33,6 +32,10 @@ class CivicrmBlock extends BlockBase implements ContainerFactoryPluginInterface 
       $plugin_id,
       $plugin_definition
     );
+  }
+
+  public function getCacheMaxAge() {
+    return 0;
   }
 
   /**
