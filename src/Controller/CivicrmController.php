@@ -46,15 +46,27 @@ class CivicrmController extends ControllerBase {
     // At the moment, civicrm doesn't allow exceptions to bubble up to Drupal. See CRM-15022.
     $content = $this->civicrm->invoke($args);
 
+    // Add inline javascript
+    $page_state = \Drupal::service('civicrm.page_state');
+    $javascripts = $page_state->getJs();
+    if (!empty($javascripts['inline'])) {
+      foreach($javascripts['inline'] as $js) {
+        $script = [
+          '#type'   => 'html_tag',
+          '#tag' => 'script',
+          '#value' => Markup::create($js),
+        ];
+        $rendered = \Drupal::service('renderer')->render($script);
+        $content .= $rendered;
+      }
+    }
+
     if ($this->civicrmPageState->isAccessDenied()) {
       throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
     }
 
     // Synchronize the Drupal user with the Contacts database (why?)
     $this->civicrm->synchronizeUser(\Drupal\user\Entity\User::load($this->currentUser()->id()));
-
-    // Add CSS, JS, etc. that is required for this page.
-//    \CRM_Core_Resources::singleton()->addCoreResources();
 
     // We set the CiviCRM markup as safe and assume all XSS (an other) issues have already
     // been taken care of.

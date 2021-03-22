@@ -26,8 +26,8 @@ class CivicrmPageState {
     return $this->css;
   }
 
-  public function addJS($script) {
-    $this->js[] = $script;
+  public function addJS($script, $type) {
+    $this->js[$type][] = $script;
   }
 
   public function getJS() {

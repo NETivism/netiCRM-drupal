@@ -129,12 +129,6 @@ function civicrm_page_attachments(array &$page) {
   $current_path = \Drupal::service('path.current')->getPath();
   $path_args = explode('/', ltrim($current_path, '/'));
 
-  // Always add core styles (even if not on a /civicrm page).
-  // Merge CiviCRM stuff into HTML header.
-#  if ($region = \CRM_Core_Region::instance('html-header', FALSE)) {
-#    CRM_Utils_System::addHTMLHead($region->render(''));
-#  }
-
   /** @var \Drupal\civicrm\CivicrmPageState $page_state */
   $page_state = \Drupal::service('civicrm.page_state');
 
@@ -420,4 +414,45 @@ function template_preprocess_civicrm_contact(&$vars) {
  */
 function civicrm_initialize() {
   \Drupal::service('civicrm')->initialize();
+}
+
+/**
+ * hook_civicrm_buildForm
+ * 
+ * this hook call by CRM_Utils_Hook
+ */
+function civicrm_civicrm_buildForm($form_name, &$form) {
+  $imceEnabled = \Drupal::moduleHandler()->moduleExists('imce');
+  if ($imceEnabled) {
+    $imceUrl = CRM_Utils_System::url('imce');
+    foreach ($form->_elements as $name => $element) {
+      if($element->_type == 'CKeditor') {
+        $eleName = $element->_attributes['name'];
+        // add external plugin
+        $ckeditorInlineJs = "
+window.civicrmImceCkeditSendTo = function (file, win) {
+  var parts = /\?(?:.*&)?CKEditorFuncNum=(\d+)(?:&|$)/.exec(win.location.href);
+  if (parts && parts.length > 1) {
+    var url = file.getUrl();
+    win.opener.CKEDITOR.tools.callFunction(parts[1], url);
+    win.close();
+  }
+  else {
+    throw 'CKEditorFuncNum parameter not found or invalid: ' + win.location.href;
+  }
+};
+cj( function( ) {
+  var editor = CKEDITOR.instances['".$eleName."'];
+  var config = {};
+  if (editor) {
+    config = editor.config;
+  }
+  config['filebrowserImageBrowseUrl'] = '".$imceUrl."?sendto=civicrmImceCkeditSendTo';
+});
+";
+        // this will add by CivicrmController
+        CRM_Utils_System::addJs(array('type' => 'inline'), $ckeditorInlineJs);
+      }
+    }
+  }
 }
