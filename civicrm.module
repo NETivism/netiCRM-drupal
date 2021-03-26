@@ -186,30 +186,35 @@ function civicrm_toolbar() {
  * Control how civicrm running job periodly
  */
 function civicrm_cron(){
-  civicrm_initialize();
   $last = \Drupal::state()->get('civicrm.last_cron', []);
   $time = REQUEST_TIME;
   $hour = date('G', $time);
+  $modified = FALSE;
 
   // minutely
   if ($time - $last['minutely'] >= 55) {
+    civicrm_initialize();
     // It works when set up to execute cron by minutely.
     $last['minutely'] = $time;
+    $modified = TRUE;
     CRM_Batch_BAO_Batch::runQueue();
   }
 
   // hourly
   // Avoiding totally fit the time, so reducing 50 seconds.
   if ($time - $last['hourly'] >= 3550) {
+    civicrm_initialize();
     $disableTappay = \Drupal\Core\Site\Settings::get('civicrm.disable_tappay_execute', FALSE);
     if ($hour > 7 && !$disableTappay) {
       CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
     }
     $last['hourly'] = $time;
+    $modified = TRUE;
   }
 
   // daily
   if ($hour >= 6 && $hour <= 8) {
+    civicrm_initialize();
     if ($time - $last['daily'] >= 86350) {
       CRM_Core_Payment_TapPay::doSyncLastDaysRecords();
       CRM_Core_Payment_TapPay::doStatusCheck();
@@ -218,26 +223,32 @@ function civicrm_cron(){
         CRM_Contact_BAO_GroupContactCache::checkAll();
       }
       $last['daily'] = $time;
+      $modified = TRUE;
     }
   }
 
   // weekly , monthly
   if ($hour >= 2 && $hour <= 5) {
+    civicrm_initialize();
     // sunday
     if ($time - $last['weekly'] >= (86400*7 - 50) && date('w') == '0') {
       CRM_Core_Config::singleton()->clearTempTables();
       CRM_Contribute_BAO_Contribution_Utils::clearDonateAgainLink();
       $last['weekly'] = $time;
+      $modified = TRUE;
     }
 
     // start of month
     if ($time - $last['monthly'] >= (86400*30 - 50) && date('j') == '1') {
       CRM_Core_Error::purge();
       $last['month'] = $time;
+      $modified = TRUE;
     }
   }
 
-  \Drupal::state()->set('civicrm.last_cron', $last);
+  if ($modified) {
+    \Drupal::state()->set('civicrm.last_cron', $last);
+  }
 }
 
 
