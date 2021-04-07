@@ -44,7 +44,9 @@ function civicrm_views_views_data() {
         'relationship' => array(),
       );
     }
+
   }
+  _civicrm_views_add_pseudoconstant($data);
 
   _civicrm_views_add_relationships($data);
   _civicrm_views_add_implicit_joins($data);
@@ -106,6 +108,7 @@ function civicrm_views_views_data_alter(&$data) {
       ),
     );
   }
+
 }
 
 function _civicrm_views_civicrm_entities() {
@@ -192,6 +195,29 @@ function _civicrm_views_civicrm_entities() {
       'base' => FALSE,
     ),
   );
+}
+
+/**
+ * Add PseudoConstant fields for civicrm Enties
+ */
+function _civicrm_views_add_pseudoconstant(&$data){
+  $data['civicrm_event']['event_type']=array(
+    'title'=>'Civicrm Event Type',
+    'help'=>'Civicrm Event Type',
+    'field'=>array(
+      'id'=>'civicrm_pseudoconstant',
+      'pseudo callback'=>'CRM_Event_PseudoConstant::eventType',
+      'pseudo arguments'=>array(),
+      'real field'=>'event_type_id'
+    ),
+    'filter'=>array(
+      'id'=>'civicrm_in_operator',
+      'options callback'=>'CRM_Event_PseudoConstant::eventType',
+      'options arguments'=>array(),
+      'real field'=>'event_type_id'
+    )
+  );
+
 }
 
 /**
@@ -391,9 +417,9 @@ function _civicrm_views_add_implicit_joins(&$data) {
       'left_field' => 'address_id',
       'field' => 'id',
     ),
-    'civicrm_event' => array( 
-      'left_field' => 'loc_block_id', 
-      'field' => 'id', 
+    'civicrm_event' => array(
+      'left_field' => 'loc_block_id',
+      'field' => 'id',
     ),
   );
   $data['civicrm_contact']['table']['join'] = array(
