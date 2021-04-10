@@ -22,7 +22,25 @@ class CivicrmPseudoconstant extends FieldPluginBase {
 
     $civicrm->initialize();
 
-    $this->pseudovalues = call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
+    if(is_array($this->definition['pseudo arguments']) && key_exists('custom_field_id', $this->definition['pseudo arguments'])){
+      require_once 'CRM/Core/BAO/CustomOption.php';
+      $field_labels= call_user_func_array($this->definition['pseudo callback'], array($this->definition['pseudo arguments']['custom_field_id']));
+      foreach($field_labels as $k=>$v){
+        $this->pseudovalues[$v['value']] = strip_tags($v['label']);
+      }
+
+      // $options= call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
+      // if (is_array($options)) {
+      //   foreach ($options as $id => $opt) {
+      //     $this->pseudovalues[$opt['value']] = strip_tags($opt['label']);
+      //   }
+      // }
+
+    }else{
+      $this->pseudovalues = call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
+    }
+
+
   }
 
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
