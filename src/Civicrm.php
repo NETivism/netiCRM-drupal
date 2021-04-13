@@ -51,13 +51,16 @@ class Civicrm {
     }
 
     // This does pretty much all of the civicrm initialization
-    $output = include_once 'CRM/Core/Config.php';
-    if ($output == FALSE) {
+    $included = include_once 'CRM/Core/Config.php';
+    if ($included == FALSE) {
       $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
           array('!1' => $settingsFile)
         ) . t("civicrm_root is currently set to: <em>!1</em>.", array('!1' => $civicrm_root)) . $errorMsgAdd;
       throw new ConfigException($msg);
     }
+
+    // Initialize the system by creating a config object
+    \CRM_Core_Config::singleton();
 
     // Mark CiviCRM as initialized.
     $this->initialized = TRUE;
