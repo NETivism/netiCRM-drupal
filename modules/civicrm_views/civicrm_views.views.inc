@@ -44,7 +44,9 @@ function civicrm_views_views_data() {
         'relationship' => array(),
       );
     }
+
   }
+  _civicrm_views_add_pseudoconstant($data);
 
   _civicrm_views_add_relationships($data);
   _civicrm_views_add_implicit_joins($data);
@@ -55,28 +57,36 @@ function civicrm_views_views_data() {
   foreach (_civicrm_views_get_custom_fields() as $field) {
     $data[$field['table']]['table']['group'] = "CiviCRM {$field['group']}";
 
-    $data[$field['join']]["id_{$field['group']}"] = array(
-      'relationship' => array(
-        'id' => 'standard',
-        'field' => 'id',
-        'base' => $field['table'],
-        'base field' => 'entity_id',
-        'title' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
-        'label' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
-        'help' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
-      ),
+    $data[$field['join']]["id_{$field['group']}"]['relationship'] = array(
+      'id' => 'standard',
+      'field' => 'id',
+      'base' => $field['table'],
+      'base field' => 'entity_id',
+      'title' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
+      'label' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
+      'help' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
     );
 
+    $data[$field['table']]['table']['join'][$field['join']] = [
+      'table' => $field['table'],
+      'left_field' => 'id',
+      'field' => 'entity_id',
+    ];
+
     $data[$field['table']][$field['name']] = array(
-      'title' => $field['title'],
-      'help' => $field['title'],
+      'title' => t('CiviCRM Custom Field: @title',array('@title' => $field['title'])),
+      // 'title'=>$field['title'],
+       'group'=>t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
+      // 'group'=>$field['group'],
+      'help' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
       'real field' => $field['real field'],
       'field' => _civicrm_views_field_to_field_plugin($civicrm_entities[$field['join']], $field),
       'sort' => _civicrm_views_field_to_sort_plugin($civicrm_entities[$field['join']], $field),
       'filter' => _civicrm_views_field_to_filter_plugin($civicrm_entities[$field['join']], $field),
       'argument' => _civicrm_views_field_to_argument_plugin($civicrm_entity, $field),
-      'relationship' => array(),
+      // 'relationship' => array(),
     );
+
   }
 
   return $data;
@@ -106,6 +116,7 @@ function civicrm_views_views_data_alter(&$data) {
       ),
     );
   }
+
 }
 
 function _civicrm_views_civicrm_entities() {
@@ -192,6 +203,29 @@ function _civicrm_views_civicrm_entities() {
       'base' => FALSE,
     ),
   );
+}
+
+/**
+ * Add PseudoConstant fields for civicrm Enties
+ */
+function _civicrm_views_add_pseudoconstant(&$data){
+  $data['civicrm_event']['event_type']=array(
+    'title'=>'Civicrm Event Type',
+    'help'=>'Civicrm Event Type',
+    'field'=>array(
+      'id'=>'civicrm_pseudoconstant',
+      'pseudo callback'=>'CRM_Event_PseudoConstant::eventType',
+      'pseudo arguments'=>array(),
+      'real field'=>'event_type_id'
+    ),
+    'filter'=>array(
+      'id'=>'civicrm_in_operator',
+      'options callback'=>'CRM_Event_PseudoConstant::eventType',
+      'options arguments'=>array(),
+      'real field'=>'event_type_id'
+    )
+  );
+
 }
 
 /**
@@ -391,9 +425,9 @@ function _civicrm_views_add_implicit_joins(&$data) {
       'left_field' => 'address_id',
       'field' => 'id',
     ),
-    'civicrm_event' => array( 
-      'left_field' => 'loc_block_id', 
-      'field' => 'id', 
+    'civicrm_event' => array(
+      'left_field' => 'loc_block_id',
+      'field' => 'id',
     ),
   );
   $data['civicrm_contact']['table']['join'] = array(
@@ -520,11 +554,25 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
         'id' => 'civicrm_date',
       );
     case 'pseudoconstant':
-      return array(
-        'id' => 'civicrm_pseudoconstant',
-        'pseudo callback' => "{$entity['dao']}::buildOptions",
-        'pseudo arguments' => array($field['name']),
-      );
+      if(preg_match('/^custom_(\d+)/',$field['name'],$match)){
+          return array(
+            'id' => 'civicrm_pseudoconstant',
+            // 'pseudo callback' => "{$entity['dao']}::buildOptions",
+             'pseudo callback' => "CRM_CORE_BAO_CustomOption::getCustomOption",
+             'pseudo arguments' => array(
+               'custom_field_id'=> $match[1]
+             ),
+          );
+
+      }else{
+        return array(
+          'id' => 'civicrm_pseudoconstant',
+          'pseudo callback' => "{$entity['dao']}::buildOptions",
+          'pseudo arguments' => array($field['name']),
+        );
+      }
+
+
     default:
       return array(
         'id' => 'standard',
@@ -605,11 +653,24 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
         'id' => 'string',
       );
     case 'pseudoconstant':
-      return array(
-        'id' => 'civicrm_in_operator',
-        'options callback' => "{$entity['dao']}::buildOptions",
-        'options arguments' => array($field['name']),
-      );
+      $args=[];
+      if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
+        return array(
+          'id' => 'civicrm_custom_option',
+          'options arguments' => array(
+            'custom_field_id'=> $match[1]
+            ),
+        );
+
+      }else{
+        return array(
+          'id' => 'civicrm_in_operator',
+          'options callback' => "{$entity['dao']}::buildOptions",
+          'options arguments' => array($field['name'], $field['pseudoconstant']),
+        );
+      }
+
+
     default:
       return array(
         'id' => 'standard',
@@ -660,6 +721,8 @@ function _civicrm_views_get_custom_fields() {
       'type' => _getStandardTypeFromCustomDataType($dao->data_type),
       'join' => _civicrm_views_get_join_table($dao->extends),
       'pseudoconstant' => $dao->option_group_id,
+      'extends'=>$dao->extends,
+      'data_type'=>$dao->data_type
     );
   }
   return $custom_fields;
