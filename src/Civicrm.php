@@ -18,6 +18,17 @@ class Civicrm {
       return;
     }
 
+    // refs #31213
+    // include_path will conflict when using autoload
+    // we need to make sure remove all PEAR related include path on autoload
+    $includePaths = explode(PATH_SEPARATOR, get_include_path());
+    foreach($includePaths as $idx => $path) {
+      if (strstr($path, 'pear')) {
+        unset($includePaths[$idx]);
+      }
+    }
+    set_include_path(implode(PATH_SEPARATOR, $includePaths));
+
     // Get ready for problems
     $docLinkInstall = "http://wiki.civicrm.org/confluence/display/CRMDOC/Drupal+Installation+Guide";
     $docLinkTrouble = "http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Configuration+Trouble-shooting";
@@ -47,9 +58,6 @@ class Civicrm {
         ) . t("civicrm_root is currently set to: <em>!1</em>.", array('!1' => $civicrm_root)) . $errorMsgAdd;
       throw new ConfigException($msg);
     }
-
-    // Initialize the system by creating a config object
-    \CRM_Core_Config::singleton()->userSystem->setMySQLTimeZone();
 
     // Mark CiviCRM as initialized.
     $this->initialized = TRUE;
