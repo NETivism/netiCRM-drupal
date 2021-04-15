@@ -142,6 +142,11 @@ function _civicrm_views_civicrm_entities() {
       'dao' => 'CRM_Contribute_DAO_Contribution',
       'base' => TRUE,
     ),
+    'civicrm_contribution_page' => array(
+      'display_name' => t('CiviCRM Contribution Page'),
+      'dao' => 'CRM_Contribute_DAO_ContributionPage',
+      'base' => TRUE,
+    ),
     'civicrm_email' => array(
       'display_name' => t('CiviCRM Email'),
       'dao' => 'CRM_Core_DAO_Email',
@@ -548,6 +553,7 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
       return array(
         'id' => 'url',
       );
+    case CRM_Utils_Type::TWELVE:
     case CRM_Utils_Type::T_DATE:
     case CRM_Utils_Type::T_TIMESTAMP:
       return array(
@@ -652,6 +658,12 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
       return array(
         'id' => 'string',
       );
+    case CRM_Utils_Type::TWELVE:
+    case CRM_Utils_Type::T_DATE:
+    case CRM_Utils_Type::T_TIMESTAMP:
+      return array(
+        'id' => 'civicrm_date',
+      );
     case 'pseudoconstant':
       $args=[];
       if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
@@ -748,6 +760,8 @@ function _civicrm_views_get_join_table($entity_type) {
       return 'civicrm_participant';
     case "Contribution":
       return 'civicrm_contribution';
+    case "ContributionPage":
+      return 'civicrm_contribution_page';
     case "Activity":
       return 'civicrm_activity';
     case "Relationship":
