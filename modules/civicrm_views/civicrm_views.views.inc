@@ -184,8 +184,13 @@ function _civicrm_views_civicrm_entities() {
     ),
     'civicrm_participant' => array(
       'display_name' => 'CiviCRM Participant',
-      'dao' => 'CRM_Event_BAO_Participant',
-      'base' => FALSE,
+      'dao' => 'CRM_Event_DAO_Participant',
+      'base' => TRUE,
+    ),
+    'civicrm_mailing' => array(
+      'display_name' => 'CiviCRM Mailings',
+      'dao' => 'CRM_Mailing_DAO_Mailing',
+      'base' => TRUE,
     ),
     'civicrm_phone' => array(
       'display_name' => 'CiviCRM Phone',
