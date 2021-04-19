@@ -1,0 +1,5 @@
+views.filter.civicrm_date:
+  type: views.filter.date
+
+views.filter_value.civicrm_date:
+  type: views.filter_value.date
