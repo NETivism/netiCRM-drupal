@@ -29,13 +29,6 @@ class CivicrmPseudoconstant extends FieldPluginBase {
         $this->pseudovalues[$v['value']] = strip_tags($v['label']);
       }
 
-      // $options= call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
-      // if (is_array($options)) {
-      //   foreach ($options as $id => $opt) {
-      //     $this->pseudovalues[$opt['value']] = strip_tags($opt['label']);
-      //   }
-      // }
-
     }else{
       $this->pseudovalues = call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
     }
