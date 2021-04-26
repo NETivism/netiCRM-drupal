@@ -18,6 +18,14 @@ class Civicrm {
       return;
     }
 
+    // refs #31356, force session start for anonymous user
+    $current_user = \Drupal::currentUser();
+    if ($current_user->isAnonymous()) {
+      // Add something to $_SESSION to force session start and session ID will persist.
+      // See https://www.drupal.org/node/2865991.
+      $_SESSION["CiviCRM_Anonymous"] = TRUE;
+    }
+
     // refs #31213
     // include_path will conflict when using autoload
     // we need to make sure remove all PEAR related include path on autoload

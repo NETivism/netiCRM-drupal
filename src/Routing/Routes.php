@@ -18,6 +18,9 @@ class Routes {
     // CiviCRM doesn't list optional path components. So we include 5 optional components for each route,
     // and let each default to empty string.
     $permissions = [];
+    $options = [
+      'no_cache' => TRUE,
+    ];
     foreach ($items as $path => $item) {
       $requirement = [];
 
@@ -55,7 +58,8 @@ class Routes {
           'args' => explode('/', $path),
           'extra' => '',
         ],
-        $requirement
+        $requirement,
+        $options
       );
       $route_name = CivicrmHelper::parseURL($path)['route_name'];
       $collection->add($route_name, $route);
@@ -83,7 +87,8 @@ class Routes {
             'args' => explode('/', $path),
             'extra' => '',
           ],
-          $requirement
+          $requirement,
+          $options
         );
         $route_name = CivicrmHelper::parseURL($path)['route_name'];
         $collection->add($route_name, $route);
