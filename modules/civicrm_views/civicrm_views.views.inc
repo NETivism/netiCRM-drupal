@@ -103,7 +103,7 @@ function civicrm_views_views_data_alter(&$data) {
 
   // Only join to the users table if the civicrm tables are in the same database.
   if (!\Drupal\Core\Database\Database::getConnectionInfo('civicrm')) {
-    $data['users']['table']['join']['civicrm_uf_match'] = array(
+    $data['users_field_data']['table']['join']['civicrm_uf_match'] = array(
       'left_field' => 'uf_id',
       'field' => 'uid',
       'extra' => array(
@@ -427,15 +427,6 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Contact B'),
     'label' => t('CiviCRM Contact B (from Relationship.contact_id_b)'),
     'help' => t('CiviCRM Contact B (from Relationship.contact_id_b)'),
-  );
-
-  $data['civicrm_participant']['contact_id']['relationship']=array(
-    'id' => 'standard',
-    'base'=>'users_field_data',
-    'base field' => 'uid',
-    'title' => t('User'),
-    'label' => t('User who participated'),
-    'help' => t('User who participated'),
   );
 }
 
