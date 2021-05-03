@@ -47,7 +47,7 @@ function civicrm_views_views_data() {
 
   }
   _civicrm_views_add_pseudoconstant($data);
-
+  // _civicrm_views_add_extra_fields($data);
   _civicrm_views_add_relationships($data);
   _civicrm_views_add_implicit_joins($data);
 
@@ -238,6 +238,13 @@ function _civicrm_views_add_pseudoconstant(&$data){
 
 }
 
+// function _civicrm_views_add_extra_fields($data){
+//   $data['civicrm_participant']['user']=[
+//     'title'=>t('User'),
+//     'field' => array(),
+//   ];
+// }
+
 /**
  * In general, we define a views relationship for one-to-many relationships. A
  * relationship may also be used in the case where an implicit join would be rarely used or would
@@ -421,6 +428,15 @@ function _civicrm_views_add_relationships(&$data) {
     'label' => t('CiviCRM Contact B (from Relationship.contact_id_b)'),
     'help' => t('CiviCRM Contact B (from Relationship.contact_id_b)'),
   );
+
+  $data['civicrm_participant']['contact_id']['relationship']=array(
+    'id' => 'standard',
+    'base'=>'users_field_data',
+    'base field' => 'uid',
+    'title' => t('User'),
+    'label' => t('User who participated'),
+    'help' => t('User who participated'),
+  );
 }
 
 /**
@@ -506,6 +522,39 @@ function _civicrm_views_add_implicit_joins(&$data) {
           ),
         ),
       ),
+    );
+
+    $data['civicrm_event']['table']['join']['users'] = array(
+      'left_table' => 'civicrm_uf_match',
+      'left_field' => 'contact_id',
+      'field' => 'created_id',
+    );
+    $data['civicrm_event']['table']['join']['users_field_data'] = array(
+      'left_field' => 'uid',
+      'field' => 'created_id',
+    );
+
+    $data['civicrm_uf_match']['table']['join']['civicrm_participant'] = array(
+      'left_field' => 'contact_id',
+      'field' => 'contact_id',
+    );
+    $data['civicrm_participant']['table']['join']['users'] = array(
+      'left_table' => 'civicrm_uf_match',
+      'left_field' => 'contact_id',
+      'field' => 'contact_id',
+    );
+    $data['civicrm_participant']['table']['join']['users_field_data'] = array(
+      'left_field' => 'uid',
+      'field' => 'contact_id',
+    );
+    $data['users']['table']['join']['civicrm_participant'] = array(
+      'left_table' => 'civicrm_uf_match',
+      'left_field' => 'uf_id',
+      'field' => 'uid',
+    );
+    $data['civicrm_uf_match']['table']['join']['civicrm_participant'] = array(
+      'left_field' => 'contact_id',
+      'field' => 'contact_id',
     );
   }
 }
