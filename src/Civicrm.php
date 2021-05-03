@@ -25,6 +25,11 @@ class Civicrm {
       // See https://www.drupal.org/node/2865991.
       $_SESSION["CiviCRM_Anonymous"] = TRUE;
     }
+    else {
+      if (isset($_SESSION['CiviCRM_Anonymous'])) {
+        unset($_SESSION['CiviCRM_Anonymous']);
+      }
+    }
 
     // refs #31213
     // include_path will conflict when using autoload
