@@ -117,6 +117,9 @@ function civicrm_views_views_data_alter(&$data) {
     );
   }
 
+  //Customized value filter for contribution page active value
+  $data['civicrm_contribution_page']['is_active']['filter']['id'] = 'numeric';
+
 }
 
 function _civicrm_views_civicrm_entities() {
