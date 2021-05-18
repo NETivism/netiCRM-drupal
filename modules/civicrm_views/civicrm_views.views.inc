@@ -162,9 +162,9 @@ function _civicrm_views_civicrm_entities() {
       'dao' => 'CRM_Contribute_DAO_ContributionPage',
       'base' => TRUE,
     ),
-    'civicrm_campaign' => array(
-      'display_name' => t('CiviCRM Campaigns'),
-      'dao' => 'CRM_Campaign_DAO_Campaign',
+    'civicrm_pcp' => array(
+      'display_name' => t('CiviCRM Personal Campaign Pages'),
+      'dao' => 'CRM_Contribute_DAO_PCP',
       'base' => TRUE,
     ),
     'civicrm_email' => array(
