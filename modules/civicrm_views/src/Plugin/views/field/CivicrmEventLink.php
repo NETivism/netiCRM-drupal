@@ -2,6 +2,8 @@
 
 namespace Drupal\civicrm_views\Plugin\views\field;
 
+use Drupal\civicrm\Civicrm;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\core\form\FormStateInterface;
 use Drupal\views\ResultRow;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
@@ -15,13 +17,25 @@ use Drupal\Core\Url as CoreUrl;
  */
 class CivicrmEventLInk extends FieldPluginBase {
 
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm){
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $civicrm->initialize();
+  }
 
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition){
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('civicrm')
+    );
+  }
 
   /**
    * {@inheritdoc}
    */
   protected function getDefaultLabel(){
-    return $this->options['link_to_civicrm_event']=='page'?$this->t('View'): $this->t('Regiter');
+    return $this->options['link_to_civicrm_event']=='page'?ts('Event Info'): ts('Online Registration');
   }
 
   /**
@@ -83,14 +97,10 @@ class CivicrmEventLInk extends FieldPluginBase {
 
 
 public function renderLink(ResultRow $row){
-    // $value = $this->getValue($row,'id');
+
     $event_id=$row->id;
-    ksm($row,$row->id, $this->options);
     $this->options['alter']['make_link'] = TRUE;
-    // $this->options['alter']['url'] = $this->getUrlInfo($row);
-    // $text = !empty($this->options['text']) ? $this->sanitizeValue($this->options['text']) : $this->getDefaultLabel();
-    // return $text;
-    // $this->addLangcode($row);
+
     $text = !empty($this->options['link_text']) ? $this->sanitizeValue($this->tokenizeValue($this->options['link_text'])) : $this->getDefaultLabel();
     switch ($this->options['link_to_civicrm_event']){
       case 'registration':
