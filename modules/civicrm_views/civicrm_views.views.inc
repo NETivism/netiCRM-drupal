@@ -117,6 +117,21 @@ function civicrm_views_views_data_alter(&$data) {
     );
   }
 
+  //Customized value filter for contribution page active value
+  $data['civicrm_contribution_page']['is_active']['filter']['id'] = 'numeric';
+
+  //alter Event registration link text
+  $data['civicrm_event']['registration_link_text']['field']['id']= 'civicrm_event_registration_text';
+  $data['civicrm_event']['event_links']=array(
+    'title' => t('Event Link'),
+    'help' => t('Registration/info Link for event'),
+    'field' => array(
+      'id' => 'civicrm_event_link',
+      'real field' => 'event_type_id'
+    ),
+  );
+
+
 }
 
 function _civicrm_views_civicrm_entities() {
@@ -145,6 +160,11 @@ function _civicrm_views_civicrm_entities() {
     'civicrm_contribution_page' => array(
       'display_name' => t('CiviCRM Contribution Page'),
       'dao' => 'CRM_Contribute_DAO_ContributionPage',
+      'base' => TRUE,
+    ),
+    'civicrm_pcp' => array(
+      'display_name' => t('CiviCRM Personal Campaign Pages'),
+      'dao' => 'CRM_Contribute_DAO_PCP',
       'base' => TRUE,
     ),
     'civicrm_email' => array(
