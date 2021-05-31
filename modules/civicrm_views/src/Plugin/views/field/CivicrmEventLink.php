@@ -116,10 +116,6 @@ public function renderLink(ResultRow $row){
         ]]))->toString();
         break;
     }
-    ksm($link);
-
-    // $text = !empty($this->options['text']) ? $this->sanitizeValue($this->options['text']) : $this->getDefaultLabel();
-    // return $text;
 
     return $link;
 }
@@ -141,6 +137,7 @@ public function renderLink(ResultRow $row){
   }
 
   /**
+   * @todo Add access control here.
    * Checks access to the link route.
    *
    * @param \Drupal\views\ResultRow $row
