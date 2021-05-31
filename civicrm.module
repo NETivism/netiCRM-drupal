@@ -85,8 +85,7 @@ function civicrm_library_info_build() {
     ],
     'header' => true,
   ];
-  $libraries['civicrm-js-mailingeditor']['js']['../packages/poshytip/src/jquery.poshytip.min.js
-  '] = ['weight' => -3];
+  $libraries['civicrm-js-mailingeditor']['js']['../packages/poshytip/src/jquery.poshytip.min.js'] = ['weight' => -3];
   $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/jquery-editable/js/jquery-editable-poshytip.min.js'] = ['weight' => -3];
   $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/inputs-ext/quill/lib/quill.min.js'] = ['weight' => -3];
   $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/inputs-ext/quill/lib/placeholder/quill.placeholder.min.js'] = ['weight' => -3];
