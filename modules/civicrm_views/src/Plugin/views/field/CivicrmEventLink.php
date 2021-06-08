@@ -15,14 +15,17 @@ use Drupal\Core\Url as CoreUrl;
  *
  * @ViewsField("civicrm_event_link")
  */
-class CivicrmEventLInk extends FieldPluginBase {
+class CivicrmEventLInk extends FieldPluginBase
+{
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm){
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm)
+  {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $civicrm->initialize();
   }
 
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition){
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition)
+  {
     return new static(
       $configuration,
       $plugin_id,
@@ -34,14 +37,16 @@ class CivicrmEventLInk extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function getDefaultLabel(){
-    return $this->options['link_to_civicrm_event']=='page'?ts('Event Info'): ts('Online Registration');
+  protected function getDefaultLabel()
+  {
+    return $this->options['link_to_civicrm_event'] == 'page' ? ts('Event Info') : ts('Online Registration');
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions(){
+  protected function defineOptions()
+  {
     $options = parent::defineOptions();
     $options['output_url_as_text'] = ['default' => FALSE];
     $options['absolute'] = ['default' => FALSE];
@@ -53,14 +58,20 @@ class CivicrmEventLInk extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state){
+  public function buildOptionsForm(&$form, FormStateInterface $form_state)
+  {
     parent::buildOptionsForm($form, $form_state);
 
     // The path is set by ::renderLink() so we do not allow to set it.
     $form['alter'] += ['path' => [], 'query' => [], 'external' => []];
     $form['alter']['path'] += ['#access' => FALSE];
+    $form['alter']['path_case'] += ['#access' => FALSE];
     $form['alter']['query'] += ['#access' => FALSE];
     $form['alter']['external'] += ['#access' => FALSE];
+    $form['alter']['prefix'] += ['#access' => FALSE];
+    $form['alter']['suffix'] += ['#access' => FALSE];
+    $form['alter']['absolute'] += ['#access' => FALSE];
+    $form['alter']['replace_spaces'] += ['#access' => FALSE];
 
     $form['link_to_civicrm_event'] = array(
       '#type' => 'select',
@@ -73,19 +84,20 @@ class CivicrmEventLInk extends FieldPluginBase {
         // 'participants' => t('Link to Event Participants'),
         // 'custom' => $this->t('Link to a Custom Node'),
       ),
-      '#default_value' => $this->options['link_to_civicrm_event']??'page',
+      '#default_value' => $this->options['link_to_civicrm_event'] ?? 'page',
     );
 
     $form['link_text'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Text to display'),
       '#default_value' => $this->options['link_text'],
-      '#description'=>'Token is available'
+      '#description' => 'Token is available'
     ];
   }
 
 
-  public function render(ResultRow $row){
+  public function render(ResultRow $row)
+  {
     // ksm($row);
     // $access = $this->checkUrlAccess($row);
     // $build = ['#markup' => $access->isAllowed() ? $this->renderLink($row) : ''];
@@ -96,29 +108,60 @@ class CivicrmEventLInk extends FieldPluginBase {
   }
 
 
-public function renderLink(ResultRow $row){
+  public function renderLink(ResultRow $row)
+  {
 
-    $event_id=$row->id;
-    $this->options['alter']['make_link'] = TRUE;
+    $event_id = $row->id;
+
+    // $this->options['alter']['make_link'] = TRUE;
 
     $text = !empty($this->options['link_text']) ? $this->sanitizeValue($this->tokenizeValue($this->options['link_text'])) : $this->getDefaultLabel();
-    switch ($this->options['link_to_civicrm_event']){
+    switch ($this->options['link_to_civicrm_event']) {
       case 'registration':
-        $link = Link::fromTextAndUrl($text, CoreUrl::fromUserInput('/civicrm/event/register', ['query' => [
-          'reset' => 1,
-          'id' => $event_id
-        ]]))->toString();
+        $link = Link::fromTextAndUrl($text, CoreUrl::fromUserInput('/civicrm/event/register', [
+          'query' => [
+            'reset' => 1,
+            'id' => $event_id
+          ],
+          'attributes' => $this->prepareLinkAttr()
+        ]))->toString();
         break;
       default:
-        $link= Link::fromTextAndUrl($text, CoreUrl::fromUserInput('/civicrm/event/info',['query'=>[
-          'reset'=>1,
-          'id'=> $event_id
-        ]]))->toString();
+        $link = Link::fromTextAndUrl($text, CoreUrl::fromUserInput('/civicrm/event/info', [
+          'query' => [
+            'reset' => 1,
+            'id' => $event_id
+          ],
+          'attributes' => $this->prepareLinkAttr()
+        ]))->toString();
         break;
     }
 
     return $link;
-}
+  }
+
+  protected function prepareLinkAttr()  {
+    $attr=[];
+    if (!$this->options['alter']['make_link']) {
+      return [];
+    }
+    $altOpts = $this->options['alter'];
+
+    if($altOpts['target']){
+      $attr['target'] = $this->tokenizeValue($altOpts['target']);
+    }
+    if ($altOpts['link_class']) {
+      $attr['class'] = $this->tokenizeValue($altOpts['link_class']);
+    }
+    if ($altOpts['alt']) {
+      $attr['title'] = $this->tokenizeValue($altOpts['alt']);
+    }
+    if ($altOpts['rel']) {
+      $attr['rel'] = $this->tokenizeValue($altOpts['rel']);
+    }
+
+    return $attr;
+  }
 
   /**
    * Gets the current active user.
@@ -129,7 +172,8 @@ public function renderLink(ResultRow $row){
    * @return \Drupal\Core\Session\AccountInterface
    *   The current user.
    */
-  protected function currentUser(){
+  protected function currentUser()
+  {
     if (!$this->currentUser) {
       $this->currentUser = \Drupal::currentUser();
     }
@@ -146,10 +190,10 @@ public function renderLink(ResultRow $row){
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkUrlAccess(ResultRow $row){
+  protected function checkUrlAccess(ResultRow $row)
+  {
     return true;
     // $url = $this->getUrlInfo($row);
     // return $this->accessManager->checkNamedRoute($url->getRouteName(), $url->getRouteParameters(), $this->currentUser(), TRUE);
   }
-
 }
