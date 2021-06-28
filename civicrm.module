@@ -302,24 +302,6 @@ function civicrm_user_view(array &$build, \Drupal\user\UserInterface $account, \
     return;
   }
 
-  // Contact record link.
-  if (($conf = $display->getComponent('civicrm_record')) && $current_user->hasPermission('access CiviCRM') && \CRM_Contact_BAO_Contact_Permission::allow($current_contact_id)) {
-    $build['civicrm_record'] = [
-      '#type' => 'item',
-      '#weight' => $conf['weight'],
-      0 => [
-        '#type' => 'link',
-        '#title' => t('View contact record'),
-        '#url' => \Drupal\Core\Url::fromRoute('civicrm.civicrm_contact_view', [
-          'reset' => 1,
-          'cid' => $contact_id,
-        ]),
-        '#prefix' => '<span class="user-page-link" id="user-page-contact" ><span class="user-page-bullet">&raquo;</span> ',
-        '#suffix' => '</span>',
-      ],
-    ];
-  }
-
   // Contact dashboard link.
   if (($conf = $display->getComponent('civicrm_dashboard')) && $current_user->hasPermission('access Contact Dashboard') && \CRM_Contact_BAO_Contact_Permission::allow($current_contact_id)) {
     $build['civicrm_dashboard'] = [
@@ -327,13 +309,31 @@ function civicrm_user_view(array &$build, \Drupal\user\UserInterface $account, \
       '#weight' => $conf['weight'],
       0 => [
         '#type' => 'link',
-        '#title' => t('View contact dashboard'),
+        '#title' => ts('View Contact Dashboard'),
         '#url' => \Drupal\Core\Url::fromRoute('civicrm.civicrm_user', [
           'reset' => 1,
           'id' => $contact_id,
         ]),
-        '#prefix' => '<span class="user-page-link" id="user-page-dashboard" ><span class="user-page-bullet">&raquo;</span> ',
-        '#suffix' => '</span>',
+        '#prefix' => '<div class="user-page-link" id="user-page-dashboard" ><i class="zmdi zmdi-accounts-list-alt"></i> ',
+        '#suffix' => '</div>',
+      ],
+    ];
+  }
+
+  // Contact record link.
+  if (($conf = $display->getComponent('civicrm_record')) && $current_user->hasPermission('access CiviCRM') && \CRM_Contact_BAO_Contact_Permission::allow($current_contact_id)) {
+    $build['civicrm_record'] = [
+      '#type' => 'item',
+      '#weight' => $conf['weight'],
+      0 => [
+        '#type' => 'link',
+        '#title' => ts('View Contact Record'),
+        '#url' => \Drupal\Core\Url::fromRoute('civicrm.civicrm_contact_view', [
+          'reset' => 1,
+          'cid' => $contact_id,
+        ]),
+        '#prefix' => '<div class="user-page-link" id="user-page-contact" ><i class="zmdi zmdi-view-dashboard"></i> ',
+        '#suffix' => '</div>',
       ],
     ];
   }
@@ -359,13 +359,13 @@ function civicrm_user_view(array &$build, \Drupal\user\UserInterface $account, \
         1 => [
           '#type' => 'link',
           '#options' => ['html' => TRUE],
-          '#title' => t('Edit %profile_name', ['%profile_name' => $profile['title']]),
+          '#title' => ts('Edit %1', ['1' => $profile['title']]),
           '#url' => \Drupal\Core\Url::fromRoute('civicrm.user_profile', [
             'user' => $account->id(),
             'profile' => $id,
           ]),
-          '#prefix' => '<span class="user-page-link" id="user-page-profile-' . substr($profile['title'], 0, 3) . '" ><span class="user-page-bullet">&raquo;</span> ',
-          '#suffix' => '</span>',
+          '#prefix' => '<div class="crm-section"><span class="user-page-link content" id="user-page-profile-' . $profile['name'] . '" ><i class="zmdi zmdi-edit"></i> ',
+          '#suffix' => '</span></div>',
         ],
       ];
     }
