@@ -760,7 +760,8 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
  * number of numeric and text fields.
  */
 function _civicrm_views_field_to_argument_plugin($entity, $field) {
-  $type = !empty($field['pseudoconstant']) ? 'pseudoconstant' : $field['type'];
+  // $type = !empty($field['pseudoconstant']) ? 'pseudoconstant' : $field['type'];
+  $type= $field['type'];
 
   switch ($type) {
     case CRM_Utils_Type::T_INT:
@@ -772,9 +773,9 @@ function _civicrm_views_field_to_argument_plugin($entity, $field) {
     case CRM_Utils_Type::T_STRING:
     case CRM_Utils_Type::T_URL:
     case CRM_Utils_Type::T_EMAIL:
-      return array(
+      return $field['data_type']!='File'?array(
         'id' => 'string',
-      );
+      ):null;
   }
 }
 
