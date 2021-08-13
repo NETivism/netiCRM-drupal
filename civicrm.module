@@ -995,6 +995,7 @@ function civicrm_cron() {
       CRM_Core_Payment_TapPay::doSyncLastDaysRecords();
       CRM_Core_Payment_TapPay::doStatusCheck();
       CRM_Contribute_BAO_TaiwanACH::doStatusCheck();
+      CRM_Contribute_BAO_Contribution_Utils::clearDonateAgainLink();
       if ($hour >= 7) {
         CRM_Contact_BAO_GroupContactCache::checkAll();
       }
@@ -1005,16 +1006,15 @@ function civicrm_cron() {
   // weekly , monthly
   if ($hour >= 2 && $hour <= 5) {
     // sunday
-    if ($time - $last['weekly'] >= (86400*7 - 50) && date('w') == '0') {
+    if ($time - $last['weekly'] >= (86300*7) && date('w') == '0') {
       CRM_Core_Config::singleton()->clearTempTables();
-      CRM_Contribute_BAO_Contribution_Utils::clearDonateAgainLink();
       $last['weekly'] = $time;
     }
 
     // start of month
     if ($time - $last['monthly'] >= (86400*30 - 50) && date('j') == '1') {
       CRM_Core_Error::purge();
-      $last['month'] = $time;
+      $last['monthly'] = $time;
     }
   }
   variable_set('civicrm_cron', $last);
