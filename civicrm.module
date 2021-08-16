@@ -1004,7 +1004,7 @@ function civicrm_cron() {
   }
 
   // weekly , monthly
-  if ($hour >= 2 && $hour <= 5) {
+  if ($hour >= 1 && $hour < 4) {
     // sunday
     if ($time - $last['weekly'] >= (86300*7) && date('w') == '0') {
       CRM_Core_Config::singleton()->clearTempTables();
