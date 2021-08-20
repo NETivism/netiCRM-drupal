@@ -243,7 +243,7 @@ function _civicrm_contribute_data(&$data, $enabled) {
   );
 
   $data['civicrm_contribution']['fee_amount'] = array(
-    'title' => t('Fee Amount'),
+    'title' => t('Transaction Fee Amount'),
     'help' => t('The fee charged by the Payment Processor for the transaction.'),
     'field' => array(
       'handler' => 'civicrm_handler_field_money',

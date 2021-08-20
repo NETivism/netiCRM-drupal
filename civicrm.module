@@ -42,7 +42,6 @@ define('CIVICRM_UF_HEAD', TRUE);
  * @return a &lt;style&gt; tag that indicates what file browsers should import
  */
 function civicrm_html_head($force_load = FALSE) {
-  $config = CRM_Core_Config::singleton();
   static $added;
   global $base_url, $base_path;
   if (!civicrm_initialize()) {
@@ -51,6 +50,7 @@ function civicrm_html_head($force_load = FALSE) {
   if ($added && !$force_load) {
     return;
   }
+  $config = CRM_Core_Config::singleton();
 
   $head = '';
   $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
@@ -77,7 +77,7 @@ function civicrm_html_head($force_load = FALSE) {
 
     // add localized calendar js
     $localisation     = explode( '_', $config->lcMessages );
-    $localizationFile = drupal_get_path('module', 'civicrm' ) . '/../packages/jquery/jquery-ui-1.8.5/development-bundle/ui/i18n/jquery.ui.datepicker-'. $localisation[0] . '.js';
+    $localizationFile = drupal_get_path('module', 'civicrm' ) . '/../packages/jquery/jquery-ui/development-bundle/ui/i18n/jquery.ui.datepicker-'. $localisation[0] . '.js';
 
     if ( file_exists( $localizationFile ) ) {
       drupal_add_js( $localizationFile );
@@ -326,32 +326,51 @@ function civicrm_cron() {
   civicrm_initialize();
   $last = variable_get('civicrm_cron', array());
   $time = REQUEST_TIME;
-  $hour = date('H', $time);
+  $hour = date('G', $time);
+
+  // minutely
   if ($time - $last['minutely'] >= 55) {
     // It works when set up to execute cron by minutely.
     $last['minutely'] = $time;
     CRM_Batch_BAO_Batch::runQueue();
   }
+
+  // hourly
   // Avoiding totally fit the time, so reducing 50 seconds.
   if ($time - $last['hourly'] >= 3550) {
-    if ($hour > 1 ) {
+    $disableTappay = variable_get('disable_civicrm_tappay_execute_recur', false);
+    if ($hour > 7 && !$disableTappay) {
       CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
     }
     $last['hourly'] = $time;
   }
+
+  // daily
   if ($hour >= 6 && $hour <= 8) {
     if ($time - $last['daily'] >= 86350) {
       CRM_Core_Payment_TapPay::doSyncLastDaysRecords();
       CRM_Core_Payment_TapPay::doStatusCheck();
       CRM_Contribute_BAO_TaiwanACH::doStatusCheck();
+      CRM_Contribute_BAO_Contribution_Utils::clearDonateAgainLink();
+      if ($hour >= 7) {
+        CRM_Contact_BAO_GroupContactCache::checkAll();
+      }
       $last['daily'] = $time;
     }
-    if ($time - $last['weekly'] >= (86400*7 - 50) ) {
+  }
+
+  // weekly , monthly
+  if ($hour >= 1 && $hour < 4) {
+    // sunday
+    if ($time - $last['weekly'] >= (86300*7) && date('w') == '0') {
+      CRM_Core_Config::singleton()->clearTempTables();
       $last['weekly'] = $time;
     }
-    if ($time - $last['monthly'] >= (86400*30 - 50) ) {
+
+    // start of month
+    if ($time - $last['monthly'] >= (86400*30 - 50) && date('j') == '1') {
       CRM_Core_Error::purge();
-      $last['month'] = $time;
+      $last['monthly'] = $time;
     }
   }
   variable_set('civicrm_cron', $last);
@@ -1428,5 +1447,34 @@ function civicrm_metatag_page_cache_cid_parts_alter(&$cid_parts) {
     $get = $_GET;
     ksort($get);
     $cid_parts['path'] .= '/' . md5(print_r($get, true));
+  }
+}
+
+/**
+ * Alter metatags before being cached.
+ *
+ * This hook is invoked prior to the meta tags for a given page are cached.
+ *
+ * @param array $output
+ *   Metatags to be displayed.
+ * @param string $instance
+ *  Context.
+ */
+function civicrm_metatag_metatags_view_alter(&$output, $instance) {
+  civicrm_initialize();
+  if(CRM_Utils_System::isSSL() == TRUE) {
+    $secure = 'https';
+  } else {
+    $secure = 'http';
+  }
+
+  $link = "$secure://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  if (arg(0) == 'civicrm') {
+    $linkUrls = array('og:url', 'canonical', 'shortlink');
+    foreach ($linkUrls as $url) {
+      if (isset($output[$url]['#attached']['drupal_add_html_head'][0][0]['#value'])) {
+        $output[$url]['#attached']['drupal_add_html_head'][0][0]['#value'] = $link;
+      }
+    } 
   }
 }

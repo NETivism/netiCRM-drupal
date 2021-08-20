@@ -112,6 +112,9 @@ function _civicrm_init_setting(){
   else{
     if(is_writable($conf_path)){
       $db = Database::getConnection()->getConnectionOptions();
+      if ($db['host'] == '127.0.0.1') {
+        $db['host'] = 'localhost'; // use mysql socket instead
+      }
       $params = array();
       $params['%%baseURL%%'] = base_path();
       $params['%%cms%%'] = 'Drupal';
@@ -184,6 +187,7 @@ function _civicrm_import_sql($filename){
   //get rid of comments starting with # and --
   $string = preg_replace("/^#[^\n]*$/m",   "\n", $string );
   $string = preg_replace("/^(--[^-]).*/m", "\n", $string );
+  $db->query("/*!40101 SET NAMES utf8mb4 */");
 
   $queries = preg_split('/;$/m', $string);
   foreach ( $queries as $query ) {

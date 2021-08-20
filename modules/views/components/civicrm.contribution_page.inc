@@ -66,32 +66,38 @@ function _civicrm_contribution_page_data(&$data, $enabled) {
     'real field' => 'contribution_type_id',
     'help' => t('The Type of Contribution made, ie Member Dues, Event Fees etc'),
     'field' => array(
-      'handler' => 'civicrm_handler_field_contribution_type',
+      'handler' => 'civicrm_handler_field_pseudo_constant',
       'click sortable' => TRUE,
+      'pseudo class' => 'CRM_Contribute_PseudoConstant',
+      'pseudo method' => 'financialType',
     ),
     'argument' => array(
       'handler' => 'views_handler_argument',
     ),
     'filter' => array(
-      'handler' => 'civicrm_handler_filter_contribution_type',
+      'handler' => 'civicrm_handler_filter_pseudo_constant',
       'allow empty' => TRUE,
+      'pseudo class' => 'CRM_Contribute_PseudoConstant',
+      'pseudo method' => 'financialType',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
   );
-  //BOOLEAN : IS Active 
+  //Numeric: IS Active 
   $data['civicrm_contribution_page']['is_active'] = array(
     'title' => t('Is Active'),
     'field' => array(
-      'handler' => 'views_handler_field_boolean',
+      'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
     ),
     'argument' => array(
-      'handler' => 'views_handler_argument',
+      'handler' => 'views_handler_argument_numeric',
+      'numeric' => TRUE,
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_boolean_operator',
+      'handler' => 'views_handler_filter_numeric',
+      'allow empty' => FALSE,
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -100,6 +106,20 @@ function _civicrm_contribution_page_data(&$data, $enabled) {
   //BOOLEAN : is_monetary
   $data['civicrm_contribution_page']['is_monetary'] = array(
     'title' => t('Execute real-time monetary transactions'),
+    'field' => array(
+      'handler' => 'views_handler_field_boolean',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_boolean_operator',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+  //BOOLEAN : is_internal
+  $data['civicrm_contribution_page']['is_internal'] = array(
+    'title' => t('Is Internal'),
     'field' => array(
       'handler' => 'views_handler_field_boolean',
       'click sortable' => TRUE,
