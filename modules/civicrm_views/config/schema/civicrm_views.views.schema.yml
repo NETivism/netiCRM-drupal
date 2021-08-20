@@ -3,3 +3,9 @@ views.filter.civicrm_date:
 
 views.filter_value.civicrm_date:
   type: views.filter_value.date
+
+views.filter.civicrm_custom_option:
+  type: views.filter.in_operator
+
+views.filter_value.civicrm_custom_option:
+  type: views.filter_value.in_operator
