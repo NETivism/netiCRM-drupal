@@ -10,6 +10,9 @@ namespace Drupal\civicrm\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Markup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Render\HtmlResponse;
 use Drupal\civicrm\CivicrmPageState;
 use Drupal\civicrm\Civicrm;
 
@@ -42,11 +45,79 @@ class CivicrmController extends ControllerBase {
     // Need to disable the page cache.
     \Drupal::service('page_cache_kill_switch')->trigger();
 
-    // @Todo: Enable CiviCRM's CRM_Core_TemporaryErrorScope::useException() and possibly catch exceptions.
-    // At the moment, civicrm doesn't allow exceptions to bubble up to Drupal. See CRM-15022.
-    $content = $this->civicrm->invoke($args);
+    // correct exception handling will display drupal themed page
+    try {
+      $content = $this->civicrm->invoke($args);
+      // Synchronize the Drupal user with the Contacts database (why?)
+      $this->civicrm->synchronizeUser(\Drupal\user\Entity\User::load($this->currentUser()->id()));
+    }
+    catch (\CRM_Core_Exception $e) {
+      // force content to white
+      $content = '';
 
-    // Add inline javascript
+      // this will save civicrm session correctly
+      $message = $e->getMessage();
+      \Drupal::logger('civicrm')->error(strip_tags($message));
+
+      $data = $e->getErrorData();
+      $code = $e->getErrorCode();
+
+      switch ($code) {
+        case \CRM_Core_Error::NO_ERROR:
+          // this will terminate response, and trigger event(KernelEvents::TERMINATE) correctly
+          // CRM already output header and content to client
+          // do not send real response here in symfony
+          // Ideally in the future, CRM should not output header and content directly
+          $kernel = \Drupal::getContainer()->get('kernel');
+          $request = \Drupal::request();
+          $response = HtmlResponse::create('', 200);
+          $response->send();
+          $kernel->terminate($request, $response);
+          exit();
+          break;
+        case \CRM_Core_Error::STATUS_BOUNCE:
+          \CRM_Core_Session::setStatus(FALSE, FALSE, 'warning'); // remove duplicate status display in CRM
+          \CRM_Utils_System::civiBeforeShutdown();
+          if (!empty($data['redirect'])) {
+            $url = $data['redirect'];
+          }
+          $message = Markup::create($message);
+          \Drupal::messenger()->addWarning($message);
+          if ($url) {
+            $response = RedirectResponse::create($url, 302);
+            return $response;
+          }
+          break;
+
+        case \CRM_Core_Error::FATAL_ERROR:
+          \CRM_Core_Session::setStatus(FALSE, FALSE, 'error');  // remove duplicate status display in CRM
+          \CRM_Utils_System::civiBeforeShutdown();
+          $message = Markup::create($message);
+          \Drupal::messenger()->addError($message);
+          throw new \Symfony\Component\ErrorHandler\Error\FatalError($e->getMessage(), $code, $data);
+          $content = '';
+          break;
+
+        default:
+          \CRM_Utils_System::civiBeforeShutdown();
+          throw new Exception\AccessDeniedHttpException();
+          $content = '';
+          break;
+      }
+    }
+    // not one of CRM_Core_Exception
+    catch (\Exception $e) {
+      \Drupal::logger('civicrm')->error($e->getMessage());
+      throw new Exception\AccessDeniedHttpException();
+    }
+
+    if ($this->civicrmPageState->isAccessDenied()) {
+      throw new Exception\AccessDeniedHttpException();
+    }
+
+    // Start doing rendering if everything is fine
+
+    // inline javascript
     $page_state = \Drupal::service('civicrm.page_state');
     $javascripts = $page_state->getJs();
     if (!empty($javascripts['inline'])) {
@@ -60,13 +131,6 @@ class CivicrmController extends ControllerBase {
         $content .= $rendered;
       }
     }
-
-    if ($this->civicrmPageState->isAccessDenied()) {
-      throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
-    }
-
-    // Synchronize the Drupal user with the Contacts database (why?)
-    $this->civicrm->synchronizeUser(\Drupal\user\Entity\User::load($this->currentUser()->id()));
 
     // We set the CiviCRM markup as safe and assume all XSS (an other) issues have already
     // been taken care of.
