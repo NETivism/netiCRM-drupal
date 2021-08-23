@@ -7,11 +7,11 @@
 
 namespace Drupal\civicrm\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Render\Markup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\HtmlResponse;
 use Drupal\civicrm\CivicrmPageState;
 use Drupal\civicrm\Civicrm;
@@ -57,7 +57,9 @@ class CivicrmController extends ControllerBase {
 
       // this will save civicrm session correctly
       $message = $e->getMessage();
-      \Drupal::logger('civicrm')->error(strip_tags($message));
+      if (\CRM_Core_Config::singleton()->userFrameworkLogging) {
+        \Drupal::logger('civicrm')->error(strip_tags($message));
+      }
 
       $data = $e->getErrorData();
       $code = $e->getErrorCode();
@@ -84,18 +86,32 @@ class CivicrmController extends ControllerBase {
           $message = Markup::create($message);
           \Drupal::messenger()->addWarning($message);
           if ($url) {
-            $response = RedirectResponse::create($url, 302);
+            $response = RedirectResponse::create($url, 302); // CRM_Core_Error::STATUS_BOUNCE should also 302
             return $response;
           }
           break;
 
         case \CRM_Core_Error::FATAL_ERROR:
+        case \CRM_Core_Error::DATABASE_ERROR:
           \CRM_Core_Session::setStatus(FALSE, FALSE, 'error');  // remove duplicate status display in CRM
           \CRM_Utils_System::civiBeforeShutdown();
-          $message = Markup::create($message);
-          \Drupal::messenger()->addError($message);
-          throw new \Symfony\Component\ErrorHandler\Error\FatalError($e->getMessage(), $code, $data);
-          $content = '';
+          if ($data['content']) {
+            $content = $data['content']; // this will fetch fatal.tpl from crm
+          }
+          else {
+            $message = Markup::create($message);
+            \Drupal::messenger()->addError($message);
+          }
+
+          # method 1, drupal way
+          // throw new Exception\ServiceUnavailableHttpException(); // do not throw this, will not display drupal theme
+
+          # method 2, crm fatal message template(not good)
+          // $response = HtmlResponse::create($content, $code);
+          // return $response;
+
+          # method 3, drupal theme warpped fatal message, but not good at http status code
+          // doing nothing, $build will include content
           break;
 
         default:
@@ -132,7 +148,7 @@ class CivicrmController extends ControllerBase {
       }
     }
 
-    // We set the CiviCRM markup as safe and assume all XSS (an other) issues have already
+    // We set the CiviCRM markup as safe and assume all XSSset (an other) issues have already
     // been taken care of.
     $build = array(
       '#markup' => Markup::create($content),
