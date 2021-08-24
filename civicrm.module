@@ -1008,6 +1008,7 @@ function civicrm_cron() {
     // sunday
     if ($time - $last['weekly'] >= (86300*7) && date('w') == '0') {
       CRM_Core_Config::singleton()->clearTempTables();
+      CRM_Core_BAO_File::clearUploadDir();
       $last['weekly'] = $time;
     }
 
