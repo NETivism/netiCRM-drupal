@@ -738,15 +738,10 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FAL
   $session = CRM_Core_Session::singleton();
   $sessionUserID = $session->get('userID');
 
-  if ($sessionUserID != $userID) {
-    // do not allow edit for anon users in joomla frontend, CRM-4668, unless u have checksum CRM-5228
-    $config = CRM_Core_Config::singleton();
-    if ($config->userFrameworkFrontend) {
-      CRM_Contact_BAO_Contact_Permission::validateOnlyChecksum($userID, $this);
-    }
-    else {
-      CRM_Contact_BAO_Contact_Permission::validateChecksumContact($userID, $this);
-    }
+  // shouldn't allow edit when user doesn't have permission
+  if ($sessionUserID != $userID && !user_access('edit all contacts')) {
+    CRM_Utils_System::permissionDenied();
+    return;
   }
 
   $ctype = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $userID, 'contact_type');
