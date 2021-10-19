@@ -601,9 +601,17 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
       );
     case CRM_Utils_Type::T_ENUM:
     case CRM_Utils_Type::T_STRING:
-      return array(
-        'id' => 'standard',
-      );
+      if($field['data_type']=='File'){
+        return array(
+          'id' => 'civicrm_pseudoconstant',
+          'pseudo info'=>$field,
+        );
+      }else{
+        return array(
+          'id' => 'standard',
+        );
+      }
+
     case CRM_Utils_Type::T_TEXT:
     case CRM_Utils_Type::T_LONGTEXT:
       // @Todo: Override markup to allow configurable text formats
@@ -631,8 +639,9 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
             // 'pseudo callback' => "{$entity['dao']}::buildOptions",
              'pseudo callback' => "CRM_CORE_BAO_CustomOption::getCustomOption",
              'pseudo arguments' => array(
-               'custom_field_id'=> $match[1]
+               'custom_field_id'=> $match[1],
              ),
+            'pseudo info'=>$field,
           );
 
       }else{
@@ -640,6 +649,7 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
           'id' => 'civicrm_pseudoconstant',
           'pseudo callback' => "{$entity['dao']}::buildOptions",
           'pseudo arguments' => array($field['name']),
+          'pseudo info'=>$field,
         );
       }
 
@@ -781,7 +791,7 @@ function _civicrm_views_field_to_argument_plugin($entity, $field) {
 
 function _civicrm_views_get_custom_fields() {
   // Pull in all the Custom fields
-  $query = "SELECT f.id, f.label, g.title, g.extends, f.data_type, f.column_name, f.option_group_id, g.table_name FROM civicrm_custom_field f
+  $query = "SELECT f.id, f.label, g.title, g.extends, f.data_type,f.html_type, f.column_name, f.option_group_id, g.table_name FROM civicrm_custom_field f
             LEFT JOIN civicrm_custom_group g ON g.id = f.custom_group_id
             where g.is_active = 1";
 
@@ -800,7 +810,8 @@ function _civicrm_views_get_custom_fields() {
       'join' => _civicrm_views_get_join_table($dao->extends),
       'pseudoconstant' => $dao->option_group_id,
       'extends'=>$dao->extends,
-      'data_type'=>$dao->data_type
+      'data_type'=>$dao->data_type,
+      'html_type'=>$dao->html_type
     );
   }
   return $custom_fields;
