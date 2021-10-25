@@ -58,12 +58,13 @@ class CivicrmDate extends Date{
   }
 
   protected function opSimple($field){
-
-    $value = intval(strtotime($this->value['value'], 0));
-
     if (!empty($this->value['type']) && $this->value['type'] == 'offset') {
+      $value = intval(strtotime($this->value['value'], 0));
       // keep sign
       $value = time() + sprintf('%+d', $value);
+    }
+    else {
+      $value = intval(strtotime($this->value['value']));
     }
 
     $value = $this->formatDate($value);
