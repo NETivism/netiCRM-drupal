@@ -121,6 +121,10 @@ class CivicrmController extends ControllerBase {
           break;
       }
     }
+    // From \Drupal\Core\Form\FormBuilder->buildForm, the Response always throw EnforcedResponseException.
+    catch(\Drupal\Core\Form\EnforcedResponseException $e) {
+      $e->getResponse()->send();
+    }
     // not one of CRM_Core_Exception
     catch (\Exception $e) {
       \Drupal::logger('civicrm')->error($e->getMessage());
