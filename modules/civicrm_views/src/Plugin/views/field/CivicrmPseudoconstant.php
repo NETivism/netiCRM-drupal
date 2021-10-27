@@ -48,7 +48,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
     $options = parent::defineOptions();
 
     if($this->html_type=='File'){
-      $options['file_display_format'] = array('default' => 'raw');
+      $options['file_display_format'] = array('default' => 'url');
     }
 
     if(key_exists('pseudo arguments',$this->definition)){
@@ -68,11 +68,13 @@ class CivicrmPseudoconstant extends FieldPluginBase {
         '#title' => t('Display format'),
         '#description' => t("Choose how to display this file."),
         '#options' => array(
-          'raw' => t('Raw value(id)'),
-          'image' => t('Image'),
-          'url' => t('File Url'),
+          'raw' => t('Raw value (file id)'),
+          'url' => t('Entity File URL (limited with permission)'),
+          'image' => t('Entity File with img tag (limited with permission)'),
+          'url_real' => t('Image URL (public accessable URL, image only)'),
+          'image_real' => t('Image Tag (public accessable URL, image only)'),
         ),
-        '#default_value' => isset($this->options['file_display_format']) ? $this->options['file_display_format'] : 'raw',
+        '#default_value' => isset($this->options['file_display_format']) ? $this->options['file_display_format'] : 'url',
       );
     }
 
@@ -103,15 +105,14 @@ class CivicrmPseudoconstant extends FieldPluginBase {
   }
 
   public function render(ResultRow $values) {
-    //@ytodo: add support for File display
-//    if($this->html_type=='File'){
-//      return $this->renderFile($values);
-//    }
+    if($this->html_type=='File'){
+      return $this->renderFile($values);
+    }
 
     $values = $this->sanitizeValue($this->getValue($values));
 
     if (isset($this->options['pseudoconstant_format']) && $this->options['pseudoconstant_format'] == 'pseudoconstant') {
-      $values=str_replace(array_keys($this->pseudovalues),array_values($this->pseudovalues),$values);
+      $values = str_replace(array_keys($this->pseudovalues),array_values($this->pseudovalues),$values);
 
       if($this->html_type=='Multi-Select'){
         $output=$values;
@@ -125,24 +126,43 @@ class CivicrmPseudoconstant extends FieldPluginBase {
 
     // Return raw value either if pseudoconstant_format is set to raw or, for some reason,
     // the raw value doesn't exist as a key in the $this->pseudovalues array.
-    return $values;;
+    return $values;
   }
 
   protected function renderFile(ResultRow $values){
-    $file_id=$this->getValue($values);
-//    ksm($values);
-    switch ($this->options['file_display_format']){
-      case 'image':
-
-        break;
-      case 'url':
-        return ['#markup'=>[
-
-        ]];
-        break;
-      default:
-        return $this->getValue($values);
+    $file_id = $this->getValue($values);
+    $entity = \CRM_Core_BAO_File::getEntity($file_id);
+    if (intval($file_id) && intval($entity['entity_id'])) {
+      if ($this->options['file_display_format'] == 'raw') {
+        return $file_id;
+      }
+      $entity_file = \CRM_Core_BAO_File::getEntityFile($entity['entity_table'], $entity['entity_id']);
+      $file = $entity_file[$file_id];
+      switch ($this->options['file_display_format']){
+        case 'url':
+          return $file['url'];
+          break;
+        case 'image':
+          if ($file['img']) { // mimetype already checked
+            return ['#markup'=> $file['img']];
+          }
+          break;
+        case 'url_real':
+          if ($file['img']) { // mimetype already checked, caution this will be accessable by public
+            return $file['url_real'];
+          }
+          break;
+        case 'image_real':
+          if ($file['img']) { // mimetype already checked, caution this will be accessable by public
+            return ['#markup'=> $file['img_real']];
+          }
+          break;
+        case 'raw':
+        default:
+          return $file_id;
+      }
     }
-  }
 
+    return $values;
+  }
 }
