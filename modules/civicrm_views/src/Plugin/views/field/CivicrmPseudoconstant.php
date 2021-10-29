@@ -105,6 +105,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
   }
 
   public function render(ResultRow $values) {
+    $val = $this->getValue($values);
     if($this->html_type=='File'){
       return $this->renderFile($values);
     }
@@ -162,7 +163,5 @@ class CivicrmPseudoconstant extends FieldPluginBase {
           return $file_id;
       }
     }
-
-    return $values;
   }
 }
