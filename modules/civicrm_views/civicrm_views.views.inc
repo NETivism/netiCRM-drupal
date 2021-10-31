@@ -774,6 +774,7 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
 function _civicrm_views_field_to_argument_plugin($entity, $field) {
   // $type = !empty($field['pseudoconstant']) ? 'pseudoconstant' : $field['type'];
   $type= $field['type'];
+  $type=(!empty($field['pseudoconstant']) && $field['html_type']=='Multi-Select')?'pseudoconstant':$type;
 
   switch ($type) {
     case CRM_Utils_Type::T_INT:
@@ -788,6 +789,16 @@ function _civicrm_views_field_to_argument_plugin($entity, $field) {
       return $field['data_type']!='File'?array(
         'id' => 'string',
       ):null;
+    case 'pseudoconstant':
+      if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
+        return array(
+          'id' => 'civicrm_custom_multiple',
+          'options arguments' => array(
+            'custom_field_id'=> $match[1]
+          ),
+          'pseudo info'=>$field,
+        );
+      }
   }
 }
 
