@@ -16,7 +16,7 @@ class CivicrmCustomOption extends CivicrmInOperator {
 
   public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL){
     parent::init($view, $display, $options);
-    // require_once 'CRM/Core/BAO/CustomOption.php';
+    $this->html_type=$this->definition['pseudo info']['html_type'];
   }
 
   public function getValueOptions(){
@@ -57,6 +57,26 @@ class CivicrmCustomOption extends CivicrmInOperator {
       );
     }
     return $options;
+  }
+
+  protected function opSimple() {
+    if (empty($this->value)) {
+      return;
+    }
+    $this->ensureMyTable();
+    if($this->html_type=='Multi-Select'){
+      $db_or=$this->query
+        ->getConnection()
+        ->condition('OR');
+      foreach (array_values($this->value) as $value) {
+        $db_or->condition("$this->tableAlias.$this->realField","%$value%",'LIKE');
+      }
+      $this->query->addWhere($this->options['group'], $db_or);
+
+    }else{
+      $this->query->addWhere($this->options['group'], "$this->tableAlias.$this->realField", array_values($this->value), $this->operator);
+    }
+
   }
 
 

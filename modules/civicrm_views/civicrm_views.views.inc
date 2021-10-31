@@ -747,6 +747,7 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
           'options arguments' => array(
             'custom_field_id'=> $match[1]
             ),
+          'pseudo info'=>$field,
         );
 
       }else{
@@ -754,6 +755,7 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
           'id' => 'civicrm_in_operator',
           'options callback' => "{$entity['dao']}::buildOptions",
           'options arguments' => array($field['name'], $field['pseudoconstant']),
+          'pseudo info'=>$field,
         );
       }
 
