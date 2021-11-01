@@ -64,17 +64,26 @@ class CivicrmCustomOption extends CivicrmInOperator {
       return;
     }
     $this->ensureMyTable();
-    if($this->html_type=='Multi-Select'){
-      $db_or=$this->query
-        ->getConnection()
-        ->condition('OR');
+    $sep = \CRM_Core_DAO::VALUE_SEPARATOR;
+    if(in_array($this->html_type,['Multi-Select','CheckBox','AdvMulti-Select'])){
+      $op = ($this->operator == 'in') ? 'LIKE' : 'NOT LIKE';
+      $glue = ($this->operator == 'in') ? 'OR ' : 'AND ';
+
       foreach (array_values($this->value) as $value) {
-        $db_or->condition("$this->tableAlias.$this->realField","%$value%",'LIKE');
+        if ($op == 'NOT LIKE') {
+          $clauses[] = "IFNULL($this->tableAlias.$this->realField, '') " . $op . " '%" . $sep . $value . $sep . "%' ";
+        }
+        else {
+          $clauses[] = "$this->tableAlias.$this->realField " . $op . " '%" . $sep . $value . $sep . "%' ";
+        }
+        $clause = implode($glue, $clauses);
+        $this->query->addWhereExpression($this->options['group'], $clause);
       }
-      $this->query->addWhere($this->options['group'], $db_or);
 
     }else{
-      $this->query->addWhere($this->options['group'], "$this->tableAlias.$this->realField", array_values($this->value), $this->operator);
+      $value_str = "'".implode("','", $this->value)."'";
+      $clause = "$this->tableAlias.$this->realField " . $this->operator . "($value_str)";
+      $this->query->addWhereExpression($this->options['group'], $clause);
     }
 
   }
