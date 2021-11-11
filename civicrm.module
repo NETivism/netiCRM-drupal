@@ -174,11 +174,11 @@ function civicrm_page_attachments(array &$page) {
     '#markup' => \Drupal\Core\Render\Markup::create($headers),
   ];
   $page['#attached']['html_head'][] = [$markup, 'civicrm-headers'];
-
-  // Add meta content from CRM_Utils_Drupal::addHTMLHead function.
-  global $civicrm_head;
-  foreach ($civicrm_head as $meta) {
-    $page['#attached']['html_head'][] = [$meta, $meta['name']];
+  $metaGroup = $page_state->getHtmlHeadersMeta();
+  if (is_array($metaGroup)) {
+    foreach ($metaGroup as $key => $meta) {
+      $page['#attached']['html_head'][] = [$meta, 'civicrm-headers-meta-'.$meta['#tag'].'-'.$key];
+    }
   }
 }
 

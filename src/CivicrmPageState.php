@@ -9,6 +9,7 @@ class CivicrmPageState {
   protected $breadcrumbs = array();
   protected $accessDenied = FALSE;
   protected $html_headers = array();
+  protected $html_headers_meta = array();
 
   public function setTitle($title) {
     $this->title = $title;
@@ -46,12 +47,47 @@ class CivicrmPageState {
     return $this->breadcrumbs;
   }
 
-  public function addHtmlHeader($html) {
-    $this->html_headers[] = $html;
+  /**
+   * Add markup text to stacked variable: $html_headers.
+   *
+   * @param string $html The complete html tags string.
+   *
+   * @return void
+   * @access public
+   */
+  public function addHtmlHeaderMarkup($html) {
+    if (is_string($html)) {
+      $this->html_headers[] = $html;
+    }
+  }
+
+  /**
+   * Save tag array to stacked variable: $html_headers_meta.
+   *
+   * @param string $meta The tag array, which likes: 
+   * [
+   *   '#tag' => 'style',
+   *   '#attribute' => [
+   *     'type' => 'text/css',
+   *   ],
+   *   '#value => '@import url(xxx.css)',
+   * ]
+   *
+   * @return void
+   * @access public
+   */
+  public function addHtmlHeaderMeta($meta) {
+    if (is_array($meta)){
+      $this->html_headers_meta[] = $meta;
+    }
   }
 
   public function getHtmlHeaders() {
     return implode(' ', $this->html_headers);
+  }
+
+  public function getHtmlHeadersMeta() {
+    return $this->html_headers_meta;
   }
 
   public function setAccessDenied() {
