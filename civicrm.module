@@ -644,8 +644,64 @@ function civicrm_invoke() {
     $_GET['q'] = implode('/', $args);
   }
 
-  CRM_Core_Invoke::invoke($args);
-  drupal_exit();
+  // correct exception handling
+  try {
+    ob_start();
+    CRM_Core_Invoke::invoke($args);
+    $content = ob_get_clean();
+  }
+  catch (CRM_Core_Exception $e) {
+    // force content to white
+    $content = '';
+
+    // this will save civicrm session correctly
+    $message = $e->getMessage();
+    if (CRM_Core_Config::singleton()->userFrameworkLogging) {
+      watchdog('civicrm', strip_tags($message), array(), WATCHDOG_ERROR);
+    }
+
+    $data = $e->getErrorData();
+    $code = $e->getErrorCode();
+
+    switch ($code) {
+      case CRM_Core_Error::NO_ERROR:
+        // CRM already output header and content to client
+        drupal_exit();
+        break;
+      case CRM_Core_Error::STATUS_BOUNCE:
+        CRM_Core_Session::setStatus(FALSE, FALSE, 'warning'); // remove duplicate status display in CRM
+        CRM_Utils_System::civiBeforeShutdown();
+        if (!empty($data['redirect'])) {
+          $url = $data['redirect'];
+        }
+        drupal_set_message($message, 'warning');
+        if ($url) {
+          header('Location: ' . $url, TRUE, $code);
+        }
+        return; // make sure no code execution after redirect
+        break;
+
+      case CRM_Core_Error::FATAL_ERROR:
+      case CRM_Core_Error::DATABASE_ERROR:
+        CRM_Core_Session::setStatus(FALSE, FALSE, 'error');  // remove duplicate status display in CRM
+        CRM_Utils_System::civiBeforeShutdown();
+        if ($data['content']) {
+          $content = $data['content']; // this will fetch fatal.tpl from crm
+        }
+        else {
+          drupal_set_message($message, 'error');
+        }
+        return $content;
+        break;
+
+      default:
+        CRM_Utils_System::civiBeforeShutdown();
+        throw new Exception('Unknow Exception');
+        $content = '';
+        break;
+    }
+  }
+  return $content;
 }
 
 /**
