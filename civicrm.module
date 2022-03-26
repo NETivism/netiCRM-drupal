@@ -701,6 +701,12 @@ function civicrm_invoke() {
         break;
     }
   }
+  // not one of CRM_Core_Exception
+  /* We may not need this here.
+  catch (\Exception $e) {
+    throw new Exception($e->getMessage());
+  }
+  */
   return $content;
 }
 
