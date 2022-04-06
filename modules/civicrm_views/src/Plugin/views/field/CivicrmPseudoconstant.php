@@ -25,12 +25,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
     $civicrm->initialize();
     $this->html_type=$this->definition['pseudo info']['html_type'];
     if(key_exists('pseudo arguments',$this->definition)){
-      if(is_array($this->definition['pseudo arguments']) && key_exists('custom_field_id', $this->definition['pseudo arguments'])){
-        $query=$conn->query('select value k,label v from civicrm_option_value where option_group_id=:og_id',[':og_id'=>$this->definition['pseudo info']['pseudoconstant']]);
-        $this->pseudovalues=$query->fetchAllKeyed();
-      }else{
-        $this->pseudovalues = call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
-      }
+      $this->pseudovalues = call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
     }
   }
 
@@ -55,8 +50,8 @@ class CivicrmPseudoconstant extends FieldPluginBase {
       $options['pseudoconstant_format'] = array('default' => 'raw');
     }
 
-    if($this->html_type=='Multi-Select'){
-      $options['value_separator'] = array('default' => ' , ');
+    if(strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox'){
+      $options['value_separator'] = array('default' => ', ');
     }
     return $options;
   }
@@ -91,7 +86,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
       );
     }
 
-    if($this->html_type=='Multi-Select'){
+    if(strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox'){
       $form['value_separator'] = [
         '#title' => $this->t('Value separator'),
         '#type' => 'textfield',
@@ -105,29 +100,46 @@ class CivicrmPseudoconstant extends FieldPluginBase {
   }
 
   public function render(ResultRow $values) {
-    $val = $this->getValue($values);
+    $value = $this->getValue($values);
     if($this->html_type=='File'){
       return $this->renderFile($values);
     }
-
-    $values = $this->sanitizeValue($this->getValue($values));
-
-    if (isset($this->options['pseudoconstant_format']) && $this->options['pseudoconstant_format'] == 'pseudoconstant') {
-      $values = str_replace(array_keys($this->pseudovalues),array_values($this->pseudovalues),$values);
-
-      if($this->html_type=='Multi-Select'){
-        $output=$values;
+    $output = '';
+    if (isset($this->options['pseudoconstant_format'])) {
+      if(strstr($this->html_type, 'Multi-Select') || $this->html_type === 'CheckBox'){
+        $multiple = explode(\CRM_Core_DAO::VALUE_SEPARATOR, trim($value, \CRM_Core_DAO::VALUE_SEPARATOR));
+        if($this->options['pseudoconstant_format'] == 'pseudoconstant') {
+          foreach($multiple as $idx => $val) {
+            $multiple[$idx] = $this->sanitizeValue($this->pseudovalues[$val]);
+          }
+        }
+        else {
+          foreach($multiple as $idx => $val) {
+            $multiple[$idx] = $this->sanitizeValue($val);
+          }
+        }
         if($this->options['value_separator']){
-          $output=str_replace("",$this->options['value_separator'],trim($values," \n\r\t\v\0"));
+          $output = implode($this->options['value_separator'], $multiple);
+        }
+        else {
+          $output = implode(', ', $multiple);
         }
         return ['#markup'=>$output];
       }
-
+      else {
+        if($this->options['pseudoconstant_format'] == 'pseudoconstant' && isset($this->pseudovalues[$value])) {
+          $output = $this->sanitizeValue($this->pseudovalues[$value]);
+        }
+        else {
+          $output = $this->sanitizeValue($value);
+        }
+        return ['#markup'=>$output];
+      }
     }
 
     // Return raw value either if pseudoconstant_format is set to raw or, for some reason,
     // the raw value doesn't exist as a key in the $this->pseudovalues array.
-    return $values;
+    return $this->sanitizeValue($this->getValue($values));
   }
 
   protected function renderFile(ResultRow $values){

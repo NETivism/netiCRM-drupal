@@ -97,7 +97,7 @@ class CustomMultiple extends ArgumentPluginBase {
       $count = 0;
       foreach($this->value as $value) {
         $count++;
-        $conditions[$count] = "FIND_IN_SET($placeholder".$count.", REPLACE("."$field".", '', ','))";
+        $conditions[$count] = 'FIND_IN_SET('.$placeholder.$count.', REPLACE('.$field.", '".\CRM_Core_DAO::VALUE_SEPARATOR."', ','))";
         $placeholders[$placeholder.$count] = $value;
       }
       $where = implode(' '.$this->operator.' ', $conditions);

@@ -47,7 +47,6 @@ function civicrm_views_views_data() {
 
   }
   _civicrm_views_add_pseudoconstant($data);
-  // _civicrm_views_add_extra_fields($data);
   _civicrm_views_add_relationships($data);
   _civicrm_views_add_implicit_joins($data);
 
@@ -75,9 +74,7 @@ function civicrm_views_views_data() {
 
     $data[$field['table']][$field['name']] = array(
       'title' => t('CiviCRM Custom Field: @title',array('@title' => $field['title'])),
-      // 'title'=>$field['title'],
-       'group'=>t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
-      // 'group'=>$field['group'],
+      'group'=>t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
       'help' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
       'real field' => $field['real field'],
       'field' => _civicrm_views_field_to_field_plugin($civicrm_entities[$field['join']], $field),
@@ -244,8 +241,15 @@ function _civicrm_views_add_pseudoconstant(&$data){
     'help'=>'Civicrm Event Type',
     'field'=>array(
       'id'=>'civicrm_pseudoconstant',
-      'pseudo callback'=>'CRM_Event_PseudoConstant::eventType',
-      'pseudo arguments'=>array(),
+      'pseudo callback'=>'_civicrm_views_get_field_options',
+      'pseudo arguments'=>array(
+        'event',
+        'getoptions',
+        array(
+          'version' => 3,
+          'field' => 'event_type_id',
+        ),
+      ),
       'real field'=>'event_type_id'
     ),
     'filter'=>array(
@@ -591,7 +595,7 @@ function _civicrm_views_add_implicit_joins(&$data) {
  * @Todo: display currencies nicely
  */
 function _civicrm_views_field_to_field_plugin($entity, $field) {
-  $type = !empty($field['pseudoconstant']) ? 'pseudoconstant' : $field['type'];
+  $type = _civicrm_views_get_field_type($field);
 
   switch($type) {
     case CRM_Utils_Type::T_INT:
@@ -636,11 +640,15 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
       if(preg_match('/^custom_(\d+)/',$field['name'],$match)){
           return array(
             'id' => 'civicrm_pseudoconstant',
-            // 'pseudo callback' => "{$entity['dao']}::buildOptions",
-             'pseudo callback' => "CRM_CORE_BAO_CustomOption::getCustomOption",
-             'pseudo arguments' => array(
-               'custom_field_id'=> $match[1],
-             ),
+            'pseudo callback' => "_civicrm_views_get_field_options",
+            'pseudo arguments' => array(
+              'contact',
+              'getoptions',
+              array(
+                'version' => 3,
+                'field' => $field['name'],
+              ),
+            ),
             'pseudo info'=>$field,
           );
 
@@ -711,7 +719,7 @@ function _civicrm_views_field_to_sort_plugin($entity, $field) {
  * @Todo: filtering for dates
  */
 function _civicrm_views_field_to_filter_plugin($entity, $field) {
-  $type = !empty($field['pseudoconstant']) ? 'pseudoconstant' : $field['type'];
+  $type = _civicrm_views_get_field_type($field);
 
   switch ($type) {
     case CRM_Utils_Type::T_BOOLEAN:
@@ -740,7 +748,6 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
         'id' => 'civicrm_date',
       );
     case 'pseudoconstant':
-      $args=[];
       if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
         return array(
           'id' => 'civicrm_custom_option',
@@ -772,9 +779,7 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
  * number of numeric and text fields.
  */
 function _civicrm_views_field_to_argument_plugin($entity, $field) {
-  // $type = !empty($field['pseudoconstant']) ? 'pseudoconstant' : $field['type'];
-  $type= $field['type'];
-  $type=(!empty($field['pseudoconstant']) && $field['html_type']=='Multi-Select')?'pseudoconstant':$type;
+  $type = _civicrm_views_get_field_type($field);
 
   switch ($type) {
     case CRM_Utils_Type::T_INT:
@@ -828,6 +833,29 @@ function _civicrm_views_get_custom_fields() {
     );
   }
   return $custom_fields;
+}
+
+function _civicrm_views_get_field_type($field) {
+  if (!empty($field['pseudoconstant']) ||
+    (!empty($field['data_type']) && $field['data_type'] === 'StateProvince') ||
+    (!empty($field['data_type']) && $field['data_type'] === 'Country') ||
+    (!empty($field['html_type']) && $field['html_type']=='Multi-Select') ) {
+    return 'pseudoconstant';
+  }
+  else {
+    return $field['type'];
+  }
+}
+
+function _civicrm_views_get_field_options($entity, $action, $params) {
+  $result = civicrm_api($entity, $action, $params);
+  $values = array();
+  if (empty($result['is_error']) && !empty($result['values'])) {
+    foreach($result['values'] as $ary) {
+      $values[$ary['value']] = $ary['label'];
+    }
+  }
+  return $values;
 }
 
 /**
