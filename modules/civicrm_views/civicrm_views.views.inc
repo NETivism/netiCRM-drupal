@@ -847,17 +847,6 @@ function _civicrm_views_get_field_type($field) {
   }
 }
 
-function _civicrm_views_get_field_options($entity, $action, $params) {
-  $result = civicrm_api($entity, $action, $params);
-  $values = array();
-  if (empty($result['is_error']) && !empty($result['values'])) {
-    foreach($result['values'] as $ary) {
-      $values[$ary['value']] = $ary['label'];
-    }
-  }
-  return $values;
-}
-
 /**
  * Return the implicit join table for a custom group table based on its entity type.
  */
