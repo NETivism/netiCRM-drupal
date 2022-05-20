@@ -65,7 +65,7 @@ class CivicrmCustomOption extends CivicrmInOperator {
     }
     $this->ensureMyTable();
     $sep = \CRM_Core_DAO::VALUE_SEPARATOR;
-    if(strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox'){
+    if(strstr($this->html_type, 'Multi-Select') || $this->html_type === 'CheckBox'){
       $op = ($this->operator == 'in') ? 'LIKE' : 'NOT LIKE';
       $glue = ($this->operator == 'in') ? 'OR ' : 'AND ';
 

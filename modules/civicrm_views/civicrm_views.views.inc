@@ -134,97 +134,116 @@ function civicrm_views_views_data_alter(&$data) {
 function _civicrm_views_civicrm_entities() {
   return array(
     'civicrm_activity' => array(
+      'entity' => 'Activity',
       'display_name' => t('CiviCRM Activity'),
       'dao' => 'CRM_Activity_DAO_Activity',
       'base' => TRUE,
       'custom_fields' => TRUE,
     ),
     'civicrm_address' => array(
+      'entity' => 'Cddress',
       'display_name' => t('CiviCRM Address'),
       'dao' => 'CRM_Core_DAO_Address',
       'base' => TRUE,
     ),
     'civicrm_contact' => array(
+      'entity' => 'Contact',
       'display_name' => t('CiviCRM Contact'),
       'dao' => 'CRM_Contact_DAO_Contact',
       'base' => TRUE,
     ),
     'civicrm_contribution' => array(
+      'entity' => 'Contribution',
       'display_name' => t('CiviCRM Contribution'),
       'dao' => 'CRM_Contribute_DAO_Contribution',
       'base' => TRUE,
     ),
     'civicrm_contribution_page' => array(
+      'entity' => 'ContributionPage',
       'display_name' => t('CiviCRM Contribution Page'),
       'dao' => 'CRM_Contribute_DAO_ContributionPage',
       'base' => TRUE,
     ),
     'civicrm_pcp' => array(
+      'entity' => 'Pcp',
       'display_name' => t('CiviCRM Personal Campaign Pages'),
       'dao' => 'CRM_Contribute_DAO_PCP',
       'base' => TRUE,
     ),
     'civicrm_email' => array(
+      'entity' => 'Email',
       'display_name' => t('CiviCRM Email'),
       'dao' => 'CRM_Core_DAO_Email',
       'base' => FALSE,
     ),
     'civicrm_entity_tag' => array(
+      'entity' => 'Tag',
       'display_name' => t('CiviCRM Tag'),
       'dao' => 'CRM_Core_DAO_EntityTag',
       'base' => TRUE,
     ),
     'civicrm_event' => array(
+      'entity' => 'Event',
       'display_name' => 'CiviCRM Event',
       'dao' => 'CRM_Event_DAO_Event',
       'base' => TRUE,
     ),
     'civicrm_group' => array(
+      'entity' => 'Group',
       'display_name' => 'CiviCRM Group',
       'dao' => 'CRM_Contact_DAO_Group',
       'base' => TRUE,
     ),
     'civicrm_group_contact' => array(
+      'entity' => 'GroupContact',
       'display_name' => 'CiviCRM Group Contact',
       'dao' => 'CRM_Contact_DAO_GroupContact',
       'base' => FALSE,
     ),
     'civicrm_membership' => array(
+      'entity' => 'Membership',
       'display_name' => 'CiviCRM Membership',
       'dao' => 'CRM_Member_DAO_Membership',
       'base' => TRUE,
     ),
     'civicrm_membership_type' => array(
+      'entity' => 'MembershipType',
       'display_name' => 'CiviCRM Membership Type',
       'dao' => 'CRM_Member_DAO_MembershipType',
       'base' => FALSE,
     ),
     'civicrm_participant' => array(
+      'entity' => 'Participant',
       'display_name' => 'CiviCRM Participant',
       'dao' => 'CRM_Event_DAO_Participant',
       'base' => TRUE,
     ),
     'civicrm_mailing' => array(
+      'entity' => 'Mailing',
       'display_name' => 'CiviCRM Mailings',
       'dao' => 'CRM_Mailing_DAO_Mailing',
       'base' => TRUE,
     ),
     'civicrm_phone' => array(
+      'entity' => 'Phone',
       'display_name' => 'CiviCRM Phone',
       'dao' => 'CRM_Core_DAO_Phone',
       'base' => TRUE,
     ),
     'civicrm_relationship' => array(
+      'entity' => 'Relationship',
       'display_name' => 'CiviCRM Relationship',
       'dao' => 'CRM_Contact_DAO_Relationship',
       'base' => TRUE,
     ),
     'civicrm_relationship_type' => array(
+      'entity' => 'RelationshipType',
       'display_name' => 'CiviCRM Relationship Type',
       'dao' => 'CRM_Contact_DAO_RelationshipType',
       'base' => FALSE,
     ),
     'civicrm_uf_match' => array(
+      'entity' => 'UFMatch',
       'display_name' => 'CiviCRM UF Match',
       'dao' => 'CRM_Core_DAO_UFMatch',
       'base' => FALSE,
@@ -638,29 +657,24 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
       );
     case 'pseudoconstant':
       if(preg_match('/^custom_(\d+)/',$field['name'],$match)){
-          return array(
-            'id' => 'civicrm_pseudoconstant',
-            'pseudo callback' => "_civicrm_views_get_field_options",
-            'pseudo arguments' => array(
-              'contact',
-              'getoptions',
-              array(
-                'version' => 3,
-                'field' => $field['name'],
-              ),
-            ),
-            'pseudo info'=>$field,
-          );
-
-      }else{
-        return array(
-          'id' => 'civicrm_pseudoconstant',
-          'pseudo callback' => "{$entity['dao']}::buildOptions",
-          'pseudo arguments' => array($field['name']),
-          'pseudo info'=>$field,
-        );
+        $entityName = 'contact';
       }
-
+      else{
+        $entityName = $entity['entity'];
+      }
+      return array(
+        'id' => 'civicrm_pseudoconstant',
+        'pseudo callback' => "_civicrm_views_get_field_options",
+        'pseudo arguments' => array(
+          $entityName,
+          'getoptions',
+          array(
+            'version' => 3,
+            'field' => $field['name'],
+          ),
+        ),
+        'pseudo info'=>$field,
+      );
 
     default:
       return array(
@@ -756,16 +770,7 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
             ),
           'pseudo info'=>$field,
         );
-
-      }else{
-        return array(
-          'id' => 'civicrm_in_operator',
-          'options callback' => "{$entity['dao']}::buildOptions",
-          'options arguments' => array($field['name'], $field['pseudoconstant']),
-          'pseudo info'=>$field,
-        );
       }
-
 
     default:
       return array(
