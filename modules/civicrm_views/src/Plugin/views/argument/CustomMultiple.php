@@ -60,7 +60,7 @@ class CustomMultiple extends ArgumentPluginBase {
       '#title' => t('Allow multiple values'),
       '#description' => t('If selected, users can enter multiple values in the form of 1+2+3 (for OR) or 1,2,3 (for AND).'),
       '#default_value' => !empty($this->options['break_phrase']),
-      '#fieldset' => 'more',
+      '#group' => 'options][more',
     );
   }
 
