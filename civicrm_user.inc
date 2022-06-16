@@ -216,7 +216,7 @@ function civicrm_user_view($user, $view_mode) {
         continue;
       }
       $contactID = (!empty($fieldType) && $fieldType == $orgtype) ? $orgID : $userID;
-      $page = new CRM_Profile_Page_Dynamic($contactID, $groupId, NULL, TRUE);
+      $page = new CRM_Profile_Page_Dynamic($contactID, $groupId, NULL, TRUE, NULL, FALSE);
       $pageContent = $page->run();
 
       // CRM-3537: profile edit link
