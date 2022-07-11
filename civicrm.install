@@ -56,7 +56,7 @@ function civicrm_install() {
 
   // step 1: import databases
   $success = _civicrm_import_sql('sql/civicrm.mysql');
-  
+
   if($success){
     _civicrm_import_sql('sql/civicrm_data.zh_TW.mysql');
     _civicrm_import_sql('sql/civicrm_acl.zh_TW.mysql');
@@ -64,11 +64,16 @@ function civicrm_install() {
 
   // step 2: create file directory
   // Oh we can't create civicrm directory here. Leave it for initialize auto create script.
-  file_prepare_directory(file_build_uri('civicrm'), FILE_CREATE_DIRECTORY);
-  file_prepare_directory(file_build_uri('civicrm/templates_c'), FILE_CREATE_DIRECTORY);
-  file_prepare_directory(file_build_uri('civicrm/upload'), FILE_CREATE_DIRECTORY);
-  file_prepare_directory(file_build_uri('civicrm/persist'), FILE_CREATE_DIRECTORY);
-  file_prepare_directory(file_build_uri('civicrm/custom'), FILE_CREATE_DIRECTORY);
+  $dir1 = file_build_uri('civicrm');
+  file_prepare_directory($dir1, FILE_CREATE_DIRECTORY);
+  $dir2 = file_build_uri('civicrm/templates_c');
+  file_prepare_directory($dir2, FILE_CREATE_DIRECTORY);
+  $dir3 = file_build_uri('civicrm/upload');
+  file_prepare_directory($dir3, FILE_CREATE_DIRECTORY);
+  $dir4 = file_build_uri('civicrm/persist');
+  file_prepare_directory($dir4, FILE_CREATE_DIRECTORY);
+  $dir5 = file_build_uri('civicrm/custom');
+  file_prepare_directory($dir5, FILE_CREATE_DIRECTORY);
 
   drupal_set_message("Successful install CiviCRM");
 }
