@@ -152,6 +152,24 @@ function _civicrm_event_data(&$data, $enabled) {
       'handler' => 'views_handler_sort',
     ),
   );
+  //BOOLEAN : Is Monetary?
+  $data['civicrm_event']['is_monetary'] = array(
+    'title' => t('Is Monetary'),
+    'help' => 'Is this a PAID event? If true, one or more fee amounts must be set and a Payment Processor must be configured for Online Event Registration.',
+    'field' => array(
+      'handler' => 'views_handler_field_boolean',
+      'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_boolean_operator',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
   //EVENT TITLE
   $data['civicrm_event']['title'] = array(
     'title' => t('Title'),
@@ -317,6 +335,27 @@ function _civicrm_event_data(&$data, $enabled) {
       'handler' => 'views_handler_sort',
     ),
   );
+
+  // Numeric Event Max Participant
+  $data['civicrm_event']['max_participants'] = array(
+    'title' => t('Max Participants'),
+    'help' => t('Maximum number of registered participants to allow. After max is reached, a custom Event Full message is displayed. If NULL, allow unlimited number of participants.'),
+    'field' => array(
+      'handler' => 'civicrm_handler_field_event_available_places',
+      'click sortable' => FALSE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+      'numeric' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
   $data['civicrm_event']['created_id'] = array(
     'title' => t('Event Creator'),
     'help' => t('The numeric ID of the creator of contact'),

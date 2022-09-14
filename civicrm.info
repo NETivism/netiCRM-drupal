@@ -29,6 +29,7 @@ files[] = modules/views/civicrm/civicrm_handler_field_encounter_medium.inc
 files[] = modules/views/civicrm/civicrm_handler_field_event.inc
 files[] = modules/views/civicrm/civicrm_handler_field_event_link.inc
 files[] = modules/views/civicrm/civicrm_handler_field_event_price_set.inc
+files[] = modules/views/civicrm/civicrm_handler_field_event_available_places.inc
 files[] = modules/views/civicrm/civicrm_handler_field_contribution_page_link.inc
 files[] = modules/views/civicrm/civicrm_handler_field_file.inc
 files[] = modules/views/civicrm/civicrm_handler_field_link.inc
