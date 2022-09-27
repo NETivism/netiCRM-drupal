@@ -35,6 +35,7 @@
 class civicrm_handler_field_event_available_places extends views_handler_field {
   function construct() {
     parent::construct();
+    civicrm_initialize();
     require_once('api/v3/Event.php');
   }
 
