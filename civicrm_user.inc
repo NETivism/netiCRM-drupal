@@ -52,9 +52,18 @@ function civicrm_user_login(&$edit, $user) {
   if (!civicrm_initialize()) {
     return;
   }
-  return CRM_Core_BAO_UFMatch::synchronize($user, FALSE, 'Drupal',
-    civicrm_get_ctype('Individual')
-  );
+  // synchronize normal login
+  CRM_Core_BAO_UFMatch::synchronize($user, FALSE, 'Drupal', civicrm_get_ctype('Individual'));
+
+  // The user session will be reset when registered then login immediately
+  // When visiting multi-step form, they may not show thank-you page correctly because session reset.
+  // This hack detect event and contribution page last step login
+  if (isset($_POST['_qf_Confirm_next'])) {
+    // this redirection will prevent user see wrong page
+    // TODO: got to add success or fail on payment state
+    drupal_set_message(t('Registration successful. You are now logged in.'));
+    drupal_goto('user');
+  }
 }
 
 /**
