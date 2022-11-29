@@ -1,12 +1,20 @@
 <?php
 
-use \Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 
 /**
  * Implements hook_user_login().
  */
 function civicrm_user_login(AccountInterface $account) {
-  \Drupal::service('civicrm')->synchronizeUser($account);
+  # refs #36521, we don'w need to do anything here.
+  # Drupal 7 use synchronizeUser, will let thank-you page failed because session being reset
+  # Drupal 9 we change to save anonymous session to private temp store.
+  # This will keep user session after login even in multi-step form thank-you page.
+  # comment out below for disable error code
+  // \Drupal::service('civicrm')->synchronizeUser($account);
 }
 
 /**
@@ -14,7 +22,11 @@ function civicrm_user_login(AccountInterface $account) {
  */
 function civicrm_user_insert(AccountInterface $account) {
   $civicrm = \Drupal::service('civicrm');
-  $civicrm->synchronizeUser($account);
+  $civicrm->initialize();
+  $userSystem = CRM_Core_Config::singleton()->userSystem;
+  $userSystemID = $userSystem->getBestUFID($account);
+  $uniqId = $userSystem->getBestUFUniqueIdentifier($account);
+  \CRM_Core_BAO_UFMatch::synchronizeUFMatch($account, $userSystemID, $uniqId, 'Drupal', NULL, 'Individual', $isLogin = FALSE);
 
   // As per CRM-7858, the email address in CiviCRM isn't always set
   // with a call to synchronize(). So we force this through.
@@ -32,8 +44,11 @@ function civicrm_user_insert(AccountInterface $account) {
   }
 
   // Process any profile form fields that may have been submitted.
-  // In particular, this will pick up form fields that were submitted on the user_registration page.
-  \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
+  // In particular, this will pick up form fields that were submitted on the
+  // user_registration page.
+  if (civicrm_on_user_page()) {
+    \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
+  }
 }
 
 /**

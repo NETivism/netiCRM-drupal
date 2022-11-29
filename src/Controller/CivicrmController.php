@@ -7,6 +7,7 @@
 
 namespace Drupal\civicrm\Controller;
 
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -45,11 +46,14 @@ class CivicrmController extends ControllerBase {
     // Need to disable the page cache.
     \Drupal::service('page_cache_kill_switch')->trigger();
 
+    // Synchronize the Drupal user with the Contacts database (dev/drupal#107)
+    if (!$this->currentUser()->isAnonymous()) {
+      $this->civicrm->synchronizeUser(User::load($this->currentUser()->id()));
+    }
+
     // correct exception handling will display drupal themed page
     try {
       $content = $this->civicrm->invoke($args);
-      // Synchronize the Drupal user with the Contacts database (why?)
-      $this->civicrm->synchronizeUser(\Drupal\user\Entity\User::load($this->currentUser()->id()));
     }
     catch (\CRM_Core_Exception $e) {
       // force content to white
