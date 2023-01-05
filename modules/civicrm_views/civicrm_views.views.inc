@@ -206,6 +206,12 @@ function _civicrm_views_civicrm_entities() {
       'dao' => 'CRM_Member_DAO_Membership',
       'base' => TRUE,
     ),
+    'civicrm_membership_payment' => array(
+      'entity' => 'MembershipPayment',
+      'display_name' => 'CiviCRM Membership Payment',
+      'dao' => 'CRM_Member_DAO_MembershipPayment',
+      'base' => FALSE,
+    ),
     'civicrm_membership_type' => array(
       'entity' => 'MembershipType',
       'display_name' => 'CiviCRM Membership Type',
@@ -217,6 +223,12 @@ function _civicrm_views_civicrm_entities() {
       'display_name' => 'CiviCRM Participant',
       'dao' => 'CRM_Event_DAO_Participant',
       'base' => TRUE,
+    ),
+    'civicrm_participant_payment' => array(
+      'entity' => 'ParticipantPayment',
+      'display_name' => 'CiviCRM Participant Payment',
+      'dao' => 'CRM_Event_DAO_ParticipantPayment',
+      'base' => FALSE,
     ),
     'civicrm_mailing' => array(
       'entity' => 'Mailing',
@@ -471,6 +483,24 @@ function _civicrm_views_add_relationships(&$data) {
     'label' => t('CiviCRM Contact B (from Relationship.contact_id_b)'),
     'help' => t('CiviCRM Contact B (from Relationship.contact_id_b)'),
   );
+  $data['civicrm_membership_payment']['id_membership']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'membership_id',
+    'base' => 'civicrm_membership',
+    'base field' => 'id',
+    'title' => t('Membership (from Contribution)'),
+    'label' => t('Membership (from Contribution)'),
+    'help' => t('Membership (from Contribution)'),
+  );
+  $data['civicrm_participant_payment']['id_participant']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'participant_id',
+    'base' => 'civicrm_participant',
+    'base field' => 'id',
+    'title' => t('Participant (from Contribution)'),
+    'label' => t('Participant (from Contribution)'),
+    'help' => t('Participant (from Contribution)'),
+  );
 }
 
 /**
@@ -538,6 +568,28 @@ function _civicrm_views_add_implicit_joins(&$data) {
     'civicrm_relationship' => array(
       'left_field' => 'relationship_type_id',
       'field' => 'id',
+    ),
+  );
+
+  $data['civicrm_membership_payment']['table']['join'] = array(
+    'civicrm_membership' => array(
+      'left_field' => 'id',
+      'field' => 'membership_id',
+    ),
+    'civicrm_contribution' => array(
+      'left_field' => 'id',
+      'field' => 'contribution_id',
+    ),
+  );
+
+  $data['civicrm_participant_payment']['table']['join'] = array(
+    'civicrm_participant' => array(
+      'left_field' => 'id',
+      'field' => 'participant_id',
+    ),
+    'civicrm_contribution' => array(
+      'left_field' => 'id',
+      'field' => 'contribution_id',
     ),
   );
 
