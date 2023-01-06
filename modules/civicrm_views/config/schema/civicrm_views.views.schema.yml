@@ -12,3 +12,9 @@ views.filter_value.civicrm_custom_option:
 
 views.argument.civicrm_custom_multiple:
   type: views.argument.string
+
+views.filter.civicrm_in_operator:
+  type: view.filter.civicrm_in_operator
+
+views.filter_value.civicrm_in_operator:
+  type: view.filter_value.civicrm_in_operator
