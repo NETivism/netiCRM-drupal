@@ -268,8 +268,8 @@ function _civicrm_views_civicrm_entities() {
  */
 function _civicrm_views_add_pseudoconstant(&$data){
   $data['civicrm_event']['event_type']=array(
-    'title'=>'Civicrm Event Type',
-    'help'=>'Civicrm Event Type',
+    'title'=> 'Civicrm Event Type',
+    'help'=> 'Civicrm Event Type',
     'field'=>array(
       'id'=>'civicrm_pseudoconstant',
       'pseudo callback'=>'_civicrm_views_get_field_options',
@@ -291,6 +291,86 @@ function _civicrm_views_add_pseudoconstant(&$data){
     )
   );
 
+  $data['civicrm_contribution']['contribution_status_id']['field'] = array(
+    'id'=>'civicrm_pseudoconstant',
+    'pseudo callback'=>'_civicrm_views_get_field_options',
+    'pseudo arguments'=>array(
+      'contribution',
+      'getoptions',
+      array(
+        'version' => 3,
+        'field' => 'contribution_status_id',
+      ),
+    ),
+    'real field'=> 'contribution_status_id'
+  );
+  $data['civicrm_contribution']['contribution_status_id']['filter'] = array(
+    'id'=>'civicrm_in_operator',
+    'options callback'=>'_civicrm_views_get_field_options',
+    'options arguments'=> array(
+      'contribution',
+      'getoptions',
+      array(
+        'version' => 3,
+        'field' => 'contribution_status_id',
+      ),
+    ),
+    'real field'=> 'contribution_status_id'
+  );
+
+  $data['civicrm_contribution']['contribution_type_id']['field'] = array(
+    'id'=>'civicrm_pseudoconstant',
+    'pseudo callback'=>'_civicrm_views_get_field_options',
+    'pseudo arguments'=>array(
+      'contribution',
+      'getoptions',
+      array(
+        'version' => 3,
+        'field' => 'contribution_type_id',
+      ),
+    ),
+    'real field'=> 'contribution_type_id'
+  );
+  $data['civicrm_contribution']['contribution_type_id']['filter'] = array(
+    'id'=>'civicrm_in_operator',
+    'options callback'=>'_civicrm_views_get_field_options',
+    'options arguments'=> array(
+      'contribution',
+      'getoptions',
+      array(
+        'version' => 3,
+        'field' => 'contribution_type_id',
+      ),
+    ),
+    'real field'=> 'contribution_type_id'
+  );
+
+  $data['civicrm_membership']['status_id']['field'] = array(
+    'id'=>'civicrm_pseudoconstant',
+    'pseudo callback'=>'_civicrm_views_get_field_options',
+    'pseudo arguments'=>array(
+      'membership',
+      'getoptions',
+      array(
+        'version' => 3,
+        'field' => 'status_id',
+      ),
+    ),
+    'real field'=> 'status_id'
+  );
+  $data['civicrm_membership']['status_id']['filter'] = array(
+    'id'=>'civicrm_in_operator',
+    'options callback'=>'_civicrm_views_get_field_options',
+    'options arguments'=> array(
+      'membership',
+      'getoptions',
+      array(
+        'version' => 3,
+        'field' => 'status_id',
+      ),
+    ),
+    'real field'=> 'status_id'
+  );
 }
 
 // function _civicrm_views_add_extra_fields($data){
