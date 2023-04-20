@@ -184,7 +184,7 @@ function civicrm_requirements($phase) {
  */
 function _civicrm_find_civicrm() {
 
-  $path = drupal_get_path('module', 'civicrm');
+  $path = \Drupal::service('extension.list.module')->getPath('civicrm');
   $possible_paths = [];
   $possible_paths[] = DRUPAL_ROOT.'/'.str_replace('/drupal', '', $path);
 
