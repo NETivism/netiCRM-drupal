@@ -199,7 +199,7 @@ function civicrm_toolbar() {
  */
 function civicrm_cron(){
   $last = \Drupal::state()->get('civicrm.last_cron', []);
-  $time = REQUEST_TIME;
+  $time = \Drupal::time()->getRequestTime();
   $hour = date('G', $time);
   $modified = FALSE;
 
