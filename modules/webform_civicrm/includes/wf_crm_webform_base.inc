@@ -445,8 +445,8 @@ abstract class wf_crm_webform_base {
         }
         $insert = 0;
         foreach ($values as $custom) {
-          if ($id = each($existing[$table])) {
-            $suf = $id['key'];
+          if ($id_key = key($existing[$table])) {
+            $suf = $id_key;
           }
           else {
             $suf = --$insert;

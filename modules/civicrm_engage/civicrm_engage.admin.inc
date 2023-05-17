@@ -227,14 +227,14 @@ function civicrm_engage_load_contact_subtypes() {
   );
   require_once ("CRM/Contact/BAO/ContactType.php");
   $existing_types = CRM_Contact_BAO_ContactType::subTypeInfo();
-  while (list($k) = each($existing_types)) {
+  foreach(array_keys($existing_types) as $k) {
     if (array_key_exists($k, $create)) {
       drupal_set_message(t("Not creating @type, already exists.", array("@type" => $k)));
       unset($create[$k]);
     }
   }
   $contact_type = new CRM_Contact_BAO_ContactType();
-  while (list($k, $v) = each($create)) {
+  foreach($create as $k => $v) {
     drupal_set_message(t("Creating %c", array('%c' => $k)));
     $contact_type->add($v);
   }
