@@ -436,7 +436,7 @@ function _civicrm_entity_getproperties($civicrm_entity, $context = '') {
 function civicrm_entity_metadata_civicrm_entity_get_properties($data, $options, $name, $type, $info) {
   $entity = civicrm_api($info['property_info']['entity'], 'get', array(
     'version' => 3,
-    'id' => $data->$info['property_info']['field'],
+    'id' => $data->{$info['property_info']['field']},
     'sequential' => 1
   ));
   return (object) $entity['values'][0];
