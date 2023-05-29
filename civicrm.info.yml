@@ -3,5 +3,5 @@ type: module
 description: 'Constituent Relationship Management system. Allows sites to manage contacts, relationships and groups, and track contact activities, contributions, memberships and events.'
 package: CiviCRM
 version: 8.x-develop
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^8.8 || ^9 || ^10
 configure: civicrm.settings
