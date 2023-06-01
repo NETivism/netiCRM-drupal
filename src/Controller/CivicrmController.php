@@ -76,7 +76,7 @@ class CivicrmController extends ControllerBase {
           // Ideally in the future, CRM should not output header and content directly
           $kernel = \Drupal::getContainer()->get('kernel');
           $request = \Drupal::request();
-          $response = HtmlResponse::create('', 200);
+          $response = new HtmlResponse('', 200);
           $response->send();
           $kernel->terminate($request, $response);
           exit();
@@ -90,7 +90,7 @@ class CivicrmController extends ControllerBase {
           $message = Markup::create($message);
           \Drupal::messenger()->addWarning($message);
           if ($url) {
-            $response = RedirectResponse::create($url, 302); // CRM_Core_Error::STATUS_BOUNCE should also 302
+            $response = new RedirectResponse($url, 302); // CRM_Core_Error::STATUS_BOUNCE should also 302
             return $response;
           }
           break;
@@ -111,7 +111,7 @@ class CivicrmController extends ControllerBase {
           // throw new Exception\ServiceUnavailableHttpException(); // do not throw this, will not display drupal theme
 
           # method 2, crm fatal message template(not good)
-          // $response = HtmlResponse::create($content, $code);
+          // $response = new HtmlResponse($content, $code);
           // return $response;
 
           # method 3, drupal theme warpped fatal message, but not good at http status code
