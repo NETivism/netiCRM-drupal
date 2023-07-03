@@ -3,5 +3,5 @@ type: module
 description: 'Provides Views for CiviCRM entites, like Contacts, Groups, Memberships, etc.'
 package: CiviCRM
 version: 8.x-4.7
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^9 || ^10
 dependencies: [civicrm, views]
