@@ -127,17 +127,6 @@ function civicrm_requirements($phase) {
     return $requirements;
   }
 
-  // Grab db connection info
-  $db_config = _civicrm_get_db_config();
-  if (!empty($db_config['info'])) {
-    $db_config = $db_config['info'];
-  }
-  else {
-    $db_config = [];
-  }
-
-  $install_requirements = new \Civi\Install\Requirements();
-
   // Gather directories that need to be writable
   $file_paths = [];
   if (!file_exists(\Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php')) {
@@ -151,6 +140,24 @@ function civicrm_requirements($phase) {
   foreach ($file_paths as $path) {
     @chmod($path, 0755);
   }
+
+  // Grab db connection info
+  $db_config = _civicrm_get_db_config();
+  if (!empty($db_config['info'])) {
+    $db_config = $db_config['info'];
+  }
+  else {
+    $db_config = [];
+  }
+
+  // refs #37956, workaround for drush site:install requirement check error of drupal 10
+  // database settings doesn't exists but drush check requirement before any installation
+  // skip it!
+  if (empty($db_config) && class_exists(Drush\Commands\core\SiteInstallCommands::class)) {
+    return $requirements;
+  }
+
+  $install_requirements = new \Civi\Install\Requirements();
 
   foreach ($install_requirements->checkAll(['db_config' => $db_config, 'file_paths' => $file_paths]) as $key => $result) {
     if ($result['severity'] == REQUIREMENT_ERROR && $phase == 'install' && strstr($result['title'], 'MySQL')) {
@@ -224,10 +231,16 @@ function _civicrm_get_db_config() {
     ];
   }
   else {
-    return [
-      'key' => 'default',
-      'info' => \Drupal\Core\Database\Database::getConnectionInfo('default')['default'],
-    ];
+    $info = \Drupal\Core\Database\Database::getConnectionInfo('default');
+    if (!empty($info['default'])) {
+      return [
+        'key' => 'default',
+        'info' => $info['default'],
+      ];
+    }
+    else {
+      return [];
+    }
   }
 }
 
