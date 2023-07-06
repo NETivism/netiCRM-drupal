@@ -85,7 +85,7 @@ function civicrm_install() {
   // step 2: create file directory
   // Oh we can't create civicrm directory here. Leave it for initialize auto create script.
   $dirs = [
-    'public:://civicrm',
+    'public://civicrm',
     'public://civicrm/templates_c',
     'public://civicrm/upload',
     'public://civicrm/persist',
