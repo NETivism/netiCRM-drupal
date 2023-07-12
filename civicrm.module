@@ -27,7 +27,7 @@ function civicrm_library_info_build() {
   ];
   $libraries['civicrm-js-allpage'] = [
     'header' => false,
-    'js' => ['../js/insights.js' => ['weight' => -0.01]],
+    'js' => ['../js/insights.js' => ['weight' => -0.01, 'preprocess' => false]],
     'dependencies' => [
       'core/drupalSettings'
     ]
