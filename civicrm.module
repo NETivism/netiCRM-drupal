@@ -315,6 +315,9 @@ function _civicrm_checkmenu( ){
  * Period doing some purgnation
  */
 function civicrm_cron() {
+  if (!empty(variable_get('maintenance_mode', ''))) {
+    return;
+  }
   civicrm_initialize();
   $last = variable_get('civicrm_cron', array());
   $time = REQUEST_TIME;
