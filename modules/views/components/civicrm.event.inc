@@ -572,6 +572,7 @@ function _civicrm_event_data(&$data, $enabled) {
       'click sortable' => TRUE,
       'pseudo class' => 'CRM_Event_PseudoConstant',
       'pseudo method' => 'participantStatus',
+      'pseudo args' => array(NULL, NULL, 'label'),
     ),
     'argument' => array(
       'handler' => 'views_handler_argument',
@@ -581,6 +582,7 @@ function _civicrm_event_data(&$data, $enabled) {
       'allow empty' => TRUE,
       'pseudo class' => 'CRM_Event_PseudoConstant',
       'pseudo method' => 'participantStatus',
+      'pseudo args' => array(NULL, NULL, 'label'),
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
