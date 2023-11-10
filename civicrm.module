@@ -93,6 +93,15 @@ function civicrm_library_info_build() {
   $libraries['civicrm-js-mailingeditor']['js']['../packages/Magnific-Popup/dist/jquery.magnific-popup.min.js'] = ['weight' => -3];
   $libraries['civicrm-js-mailingeditor']['js']['../packages/mailingEditor/mailingEditor.js'] = ['weight' => -3];
 
+  // additional, magnific-popup
+  $libraries['civicrm-js-magnific-popup'] = [
+    'dependencies' => [
+      'civicrm-js-packages',
+    ],
+    'header' => true,
+  ];
+  $libraries['civicrm-js-magnific-popup']['js']['../packages/Magnific-Popup/dist/jquery.magnific-popup.min.js'] = ['weight' => -3];
+
   // additional, side panel
   $libraries['civicrm-js-sidepanel'] = [
     'dependencies' => [
@@ -102,7 +111,7 @@ function civicrm_library_info_build() {
   ];
   $libraries['civicrm-js-sidepanel']['js']['../packages/sidePanel/sidePanel.js'] = ['weight' => -3];
 
-  // additional, side panel
+  // additional, side aicompletion
   $libraries['civicrm-js-aicompletion'] = [
     'dependencies' => [
       'civicrm-js-packages',
