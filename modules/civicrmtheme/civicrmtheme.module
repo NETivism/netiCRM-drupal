@@ -117,6 +117,9 @@ function civicrmtheme_custom_theme() {
   // Get the menu items.
   $args = explode('?', $_GET['q']);
   $path = $args[0];
+  if ($path == 'civicrm/contribute/payment') {
+    return;
+  }
 
   // Get the menu for above URL.
   $item = CRM_Core_Menu::get($path);
