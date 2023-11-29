@@ -117,12 +117,14 @@ function civicrmtheme_custom_theme() {
   // Get the menu items.
   $args = explode('?', $_GET['q']);
   $path = $args[0];
-  if ($path == 'civicrm/contribute/payment') {
-    return;
-  }
 
   // Get the menu for above URL.
   $item = CRM_Core_Menu::get($path);
+  if (in_array($path, array(
+    'civicrm/contribute/payment',
+  ))) {
+    $item['is_public'] = TRUE;
+  }
 
   // Check for public pages
   // If public page and civicrm public theme is set, apply civicrm public theme
