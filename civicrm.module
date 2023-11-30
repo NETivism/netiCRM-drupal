@@ -225,6 +225,11 @@ function civicrm_toolbar() {
  * Control how civicrm running job periodly
  */
 function civicrm_cron(){
+  $is_maintenance = \Drupal::state()->get('system.maintenance_mode');
+  if (!empty($is_maintenance)) {
+    return;
+  }
+
   $last = \Drupal::state()->get('civicrm.last_cron', []);
   $time = \Drupal::time()->getRequestTime();
   $hour = date('G', $time);
