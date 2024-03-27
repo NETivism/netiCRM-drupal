@@ -372,6 +372,53 @@ function _civicrm_views_add_pseudoconstant(&$data){
     ),
     'real field'=> 'status_id'
   );
+
+  $data['civicrm_address']['state_province']=array(
+    'title'=> 'Civicrm State Province',
+    'help'=> 'Civicrm State Province',
+    'field'=>array(
+      'id'=>'civicrm_pseudoconstant',
+      'pseudo callback'=>'_civicrm_views_get_field_options',
+      'pseudo arguments'=>array(
+        'contact',
+        'getoptions',
+        array(
+          'version' => 3,
+          'field' => 'state_province_id',
+        ),
+      ),
+      'real field'=>'state_province_id'
+    ),
+    'filter'=>array(
+      'id'=>'civicrm_in_operator',
+      'options callback'=>'CRM_Core_PseudoConstant::stateProvince',
+      'options arguments'=>array(),
+      'real field'=>'state_province_id'
+    )
+  );
+  $data['civicrm_address']['country']=array(
+    'title'=> 'Civicrm Country',
+    'help'=> 'Civicrm Country',
+    'field'=>array(
+      'id'=>'civicrm_pseudoconstant',
+      'pseudo callback'=>'_civicrm_views_get_field_options',
+      'pseudo arguments'=>array(
+        'contact',
+        'getoptions',
+        array(
+          'version' => 3,
+          'field' => 'country_id',
+        ),
+      ),
+      'real field'=>'country_id'
+    ),
+    'filter'=>array(
+      'id'=>'civicrm_in_operator',
+      'options callback'=>'CRM_Event_PseudoConstant::country',
+      'options arguments'=>array(),
+      'real field'=>'country_id'
+    )
+  );
 }
 
 // function _civicrm_views_add_extra_fields($data){
