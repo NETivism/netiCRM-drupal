@@ -261,6 +261,18 @@ function _civicrm_views_civicrm_entities() {
       'dao' => 'CRM_Core_DAO_UFMatch',
       'base' => FALSE,
     ),
+    'civicrm_activity_target' => array(
+      'entity' => 'ActivityTarget',
+      'display_name' => 'CiviCRM Activity Target',
+      'dao' => 'CRM_Activity_DAO_ActivityTarget',
+      'base' => FALSE,
+    ),
+    'civicrm_activity_assignment' => array(
+      'entity' => 'ActivityAssignment',
+      'display_name' => 'CiviCRM Activity Assignment',
+      'dao' => 'CRM_Activity_DAO_ActivityAssignment',
+      'base' => FALSE,
+    ),
   );
 }
 
@@ -628,6 +640,51 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('Participant (from Contribution)'),
     'label' => t('Participant (from Contribution)'),
     'help' => t('Participant (from Contribution)'),
+  );
+  $data['civicrm_activity']['id_civicrm_activity_target']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'id',
+    'base' => 'civicrm_activity_target',
+    'base field' => 'activity_id',
+    'title' => t('Activity ID (from civicrm_activity_target.activity_id)'),
+    'label' => t('Activity ID (from civicrm_activity_target.activity_id)'),
+    'help' => t('Activity ID (from civicrm_activity_target.activity_id)'),
+  );
+  $data['civicrm_activity']['id_civicrm_activity_assignee']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'id',
+    'base' => 'civicrm_activity_assignment',
+    'base field' => 'activity_id',
+    'title' => t('Activity ID (from civicrm_activity_assignment.activity_id)'),
+    'label' => t('Activity ID (from civicrm_activity_assignment.activity_id)'),
+    'help' => t('Activity ID (from civicrm_activity_assignment.activity_id)'),
+  );
+  $data['civicrm_activity']['source_contact_id']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'source_contact_id',
+    'base' => 'civicrm_contact',
+    'base field' => 'id',
+    'title' => t('source_contact_id (from civicrm_contact.id)'),
+    'label' => t('source_contact_id (from civicrm_contact.id)'),
+    'help' => t('source_contact_id (from civicrm_contact.id)'),
+  );
+  $data['civicrm_activity_target']['target_civicrm_contact']['relationship'] = array(
+    'id' => 'standard',
+      'field' => 'target_contact_id',
+      'base' => 'civicrm_contact',
+      'base field' => 'id',
+      'title' => t('target_contact_id (from civicrm_contact.id)'),
+      'label' => t('target_contact_id (from civicrm_contact.id)'),
+      'help' => t('target_contact_id (from civicrm_contact.id)'),
+  );
+  $data['civicrm_activity_target']['assignee_civicrm_contact']['relationship'] = array(
+    'id' => 'standard',
+      'field' => 'assignee_contact_id',
+      'base' => 'civicrm_contact',
+      'base field' => 'id',
+      'title' => t('assignee_contact_id (from civicrm_contact.id)'),
+      'label' => t('assignee_contact_id (from civicrm_contact.id)'),
+      'help' => t('assignee_contact_id (from civicrm_contact.id)'),
   );
 }
 
