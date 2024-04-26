@@ -677,7 +677,7 @@ function _civicrm_views_add_relationships(&$data) {
       'label' => t('target_contact_id (from civicrm_contact.id)'),
       'help' => t('target_contact_id (from civicrm_contact.id)'),
   );
-  $data['civicrm_activity_target']['assignee_civicrm_contact']['relationship'] = array(
+  $data['civicrm_activity_assignment']['assignee_civicrm_contact']['relationship'] = array(
     'id' => 'standard',
       'field' => 'assignee_contact_id',
       'base' => 'civicrm_contact',
