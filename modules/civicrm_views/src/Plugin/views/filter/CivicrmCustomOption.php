@@ -40,11 +40,7 @@ class CivicrmCustomOption extends CivicrmInOperator {
     $req_time = \Drupal::time()->getRequestTime();
     $cache_id = 'custom_' . $custom_field_id;
 
-    if (
-      key_exists($cache_id, $this->options_cache) &&
-      !$ignore_cache &&
-      ($req_time < $this->options_cache[$cache_id]['expired'])
-    ) {
+    if (is_array($this->options_cache) && isset($this->options_cache[$cache_id]) && !$ignore_cache && ($req_time < $this->options_cache[$cache_id]['expired'])) {
       $options = $this->options_cache[$cache_id]['options'];
     } else {
       $raw_options = \CRM_Core_BAO_CustomOption::getCustomOption($custom_field_id);
