@@ -37,7 +37,7 @@ function civicrm_views_views_data() {
     foreach ($civicrm_entity['dao']::fields() as $field) {
       $data[$table][$field['name']] = array(
         'title' => !empty($field['title']) ? $field['title'] : "{$civicrm_entity['display_name']}.{$field['name']}",
-        'help' => !empty($field['title']) ? $field['title'] : "{$civicrm_entity['display_name']}.{$field['name']}",
+        'help' => "{$civicrm_entity['display_name']} - $table.{$field['name']}",
         'field' => _civicrm_views_field_to_field_plugin($civicrm_entity, $field),
         'sort' => _civicrm_views_field_to_sort_plugin($civicrm_entity, $field),
         'filter' => _civicrm_views_field_to_filter_plugin($civicrm_entity, $field),
@@ -855,9 +855,14 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
 
   switch($type) {
     case CRM_Utils_Type::T_INT:
-    case CRM_Utils_Type::T_FLOAT:
       return array(
         'id' => 'numeric',
+      );
+    case CRM_Utils_Type::T_FLOAT:
+    case CRM_Utils_Type::T_MONEY:
+      return array(
+        'id' => 'numeric',
+        'float' => true,
       );
     case CRM_Utils_Type::T_ENUM:
     case CRM_Utils_Type::T_STRING:
@@ -868,7 +873,7 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
         );
       }else{
         return array(
-          'id' => 'standard',
+          'id' => 'civicrm_standard',
         );
       }
 

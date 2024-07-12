@@ -15,7 +15,7 @@ use Drupal\Core\Url as CoreUrl;
  *
  * @ViewsField("civicrm_event_link")
  */
-class CivicrmEventLInk extends FieldPluginBase
+class CivicrmEventLink extends FieldPluginBase
 {
 
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm)
