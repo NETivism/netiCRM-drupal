@@ -670,22 +670,31 @@ function _civicrm_views_add_relationships(&$data) {
   );
   $data['civicrm_activity_target']['target_civicrm_contact']['relationship'] = array(
     'id' => 'standard',
-      'field' => 'target_contact_id',
-      'base' => 'civicrm_contact',
-      'base field' => 'id',
-      'title' => t('target_contact_id (from civicrm_contact.id)'),
-      'label' => t('target_contact_id (from civicrm_contact.id)'),
-      'help' => t('target_contact_id (from civicrm_contact.id)'),
+    'field' => 'target_contact_id',
+    'base' => 'civicrm_contact',
+    'base field' => 'id',
+    'title' => t('target_contact_id (from civicrm_contact.id)'),
+    'label' => t('target_contact_id (from civicrm_contact.id)'),
+    'help' => t('target_contact_id (from civicrm_contact.id)'),
   );
   $data['civicrm_activity_assignment']['assignee_civicrm_contact']['relationship'] = array(
     'id' => 'standard',
-      'field' => 'assignee_contact_id',
-      'base' => 'civicrm_contact',
-      'base field' => 'id',
-      'title' => t('assignee_contact_id (from civicrm_contact.id)'),
-      'label' => t('assignee_contact_id (from civicrm_contact.id)'),
-      'help' => t('assignee_contact_id (from civicrm_contact.id)'),
+    'field' => 'assignee_contact_id',
+    'base' => 'civicrm_contact',
+    'base field' => 'id',
+    'title' => t('assignee_contact_id (from civicrm_contact.id)'),
+    'label' => t('assignee_contact_id (from civicrm_contact.id)'),
+    'help' => t('assignee_contact_id (from civicrm_contact.id)'),
   );
+  $data['civicrm_activity']['civicrm_activity_parent_id']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'parent_id',
+    'base' => 'civicrm_activity',
+    'base field' => 'id',
+    'title' => t('civicrm_activity_parent_id (from civicrm_activity.id)'),
+    'label' => t('civicrm_activity_parent_id (from civicrm_activity.id)'),
+    'help' => t('civicrm_activity_parent_id (from civicrm_activity.id)'),
+    );
 }
 
 /**
