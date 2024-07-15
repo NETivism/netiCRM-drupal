@@ -1041,6 +1041,12 @@ function _civicrm_views_field_to_argument_plugin($entity, $field) {
       return $field['data_type']!='File'?array(
         'id' => 'string',
       ):null;
+    case CRM_Utils_Type::TWELVE:
+    case CRM_Utils_Type::T_DATE:
+    case CRM_Utils_Type::T_TIMESTAMP:
+        return array(
+          'id' => 'civicrm_date',
+      );
     case 'pseudoconstant':
       if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
         return array(
