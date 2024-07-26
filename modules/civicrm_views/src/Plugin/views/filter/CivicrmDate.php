@@ -10,6 +10,13 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class CivicrmDate extends Date{
 
+  protected function valueForm(&$form, FormStateInterface $form_state) {
+    parent::valueForm($form, $form_state);
+    if (isset($form['value']) && !empty($form['value']['operator']) && $form['value']['operator']['#type'] == 'radios' ) {
+      $form['value']['operator']['#options']['regular_expression'] = ts('Regular expression');
+      $form['value']['operator']['#options']['not_regular_expression'] = ts('Negated regular expression');
+    }
+  }
   public function operators() {
     return [
       '<' => [
@@ -54,6 +61,18 @@ class CivicrmDate extends Date{
         'short' => $this->t('between'),
         'values' => 2,
       ],
+      'regular_expression' => [
+        'title' => $this->t('Regular expression'),
+        'short' => $this->t('regex'),
+        'method' => 'opRegex',
+        'values' => 1,
+      ],
+      'not_regular_expression' => [
+        'title' => $this->t('Negated regular expression'),
+        'short' => $this->t('not regex'),
+        'method' => 'opNotRegex',
+        'values' => 1,
+      ],
     ];
   }
 
@@ -86,10 +105,22 @@ class CivicrmDate extends Date{
 
     if ($this->value['type'] == 'offset') {
       $now = time();
-      // keep sign
-      $a = $now + sprintf('%+d', $a);
-      // keep sign
-      $b = $now + sprintf('%+d', $b);
+      if (!preg_match('^[+-][\d]+', $this->value['min'])) {
+        // support strtotime relative string
+        $a = strtotime($this->value['min']);
+      }
+      else {
+        // keep sign
+        $a = $now + sprintf('%+d', $a);
+      }
+      if (!preg_match('^[+-][\d]+', $this->value['max'])) {
+        // support strtotime relative string
+        $b = strtotime($this->value['max']);
+      }
+      else {
+        // keep sign
+        $b = $now + sprintf('%+d', $b);
+      }
     }
 
     if($a){
