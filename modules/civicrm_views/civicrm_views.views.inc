@@ -431,6 +431,25 @@ function _civicrm_views_add_pseudoconstant(&$data){
       'real field'=>'country_id'
     )
   );
+  $data['civicrm_participant']['status_id'] = array(
+    'title' => 'CiviCRM Participant Status',
+    'help' => 'CiviCRM Participant Status',
+    'field'=>array(
+      'id'=>'civicrm_pseudoconstant',
+      'pseudo callback'=>'_civicrm_views_get_field_database',
+      'pseudo arguments'=>array(
+        'CRM_Event_PseudoConstant::CRM_Event_PseudoConstant',
+        array(NULL, NULL, 'label'),
+      ),
+      'real field'=>'status_id'
+    ),
+    'filter' => array(
+        'id' => 'civicrm_in_operator',
+        'options callback' => 'CRM_Event_PseudoConstant::participantStatus',
+        'options arguments' => array(NULL, NULL, 'label'),
+        'real field' => 'status_id'
+    )
+);
 }
 
 // function _civicrm_views_add_extra_fields($data){
