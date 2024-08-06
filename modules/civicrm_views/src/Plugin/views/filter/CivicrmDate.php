@@ -105,7 +105,7 @@ class CivicrmDate extends Date{
 
     if ($this->value['type'] == 'offset') {
       $now = time();
-      if (!preg_match('^[+-][\d]+', $this->value['min'])) {
+      if (!preg_match('/^[+\-]\d+/', $this->value['min'])) {
         // support strtotime relative string
         $a = strtotime($this->value['min']);
       }
@@ -113,7 +113,7 @@ class CivicrmDate extends Date{
         // keep sign
         $a = $now + sprintf('%+d', $a);
       }
-      if (!preg_match('^[+-][\d]+', $this->value['max'])) {
+      if (!preg_match('/^[+\-]\d+/', $this->value['max'])) {
         // support strtotime relative string
         $b = strtotime($this->value['max']);
       }
