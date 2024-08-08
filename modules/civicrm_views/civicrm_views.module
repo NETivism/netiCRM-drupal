@@ -10,12 +10,3 @@ function _civicrm_views_get_field_options($entity, $action, $params) {
   }
   return $values;
 }
-
-function _civicrm_views_get_field_database($className, $name) {
-  $callable = "$className::$name";
-  $values = array();
-  if (is_callable($callable)) {
-    $values = CRM_Event_PseudoConstant::participantStatus(NULL, NULL, 'label');
-  }
-  return $values;
-}
