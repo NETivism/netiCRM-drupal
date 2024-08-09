@@ -44,7 +44,7 @@ class civicrm_handler_field_link_pcp extends views_handler_field {
   function construct() {
     parent::construct();
     $this->additional_fields['id'] = 'id';
-    $this->additional_fields['page_id'] = 'page_id';
+    $this->additional_fields['contribution_page_id'] = 'contribution_page_id';
   }
 
   function option_definition() {
