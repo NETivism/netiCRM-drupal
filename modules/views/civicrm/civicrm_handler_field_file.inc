@@ -47,8 +47,16 @@ class civicrm_handler_field_file extends views_handler_field {
   }
 
   function render($values) {
-    $id = $values->{$this->field_alias};
-    if ($file_id = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_EntityFile', $id, 'file_id', 'entity_id')) {
+    if ($this->table_alias === 'civicrm_pcp') {
+      $pcpId = $values->{$this->real_field};
+      $images = CRM_Contribute_BAO_PCP::getPcpImages($pcpId);
+      if (!empty($images)) {
+        $src = $images[0][0];
+        return $this->sanitize_value($src);
+      }
+      return NULL;
+    }
+    elseif ($file_id = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_EntityFile', $id, 'file_id', 'entity_id')) {
       $params = array(
         'id' => $file_id,
         'file_type_id' => NULL,
