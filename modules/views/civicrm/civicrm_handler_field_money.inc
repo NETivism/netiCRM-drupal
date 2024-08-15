@@ -30,14 +30,17 @@
  */
 class civicrm_handler_field_money extends views_handler_field {
   function construct() {
-    if (!civicrm_initialize()) {
-      return;
-    }
-    require_once 'CRM/Utils/Money.php';
+    parent::construct();
   }
 
   function render($values) {
-    return CRM_Utils_Money::format($values->{$this->field_alias});
+    if (isset($values->civicrm_pcp_currency) && !empty($values->civicrm_pcp_currency)) {
+      $currency = $values->civicrm_pcp_currency;
+    }
+    else {
+      $currency = CRM_Core_Config::singleton()->defaultCurrency;
+    }
+    return CRM_Utils_Money::format($values->{$this->field_alias}, $currency);
   }
 }
 
