@@ -454,6 +454,29 @@ function _civicrm_views_add_pseudoconstant(&$data){
       'real field'=>'gender_id'
     )
   );
+  $data['civicrm_participant']['status_id']=array(
+    'title'=> 'Civicrm Participant Status',
+    'help'=> 'Civicrm Participant Status',
+    'field'=>array(
+      'id'=>'civicrm_pseudoconstant',
+      'pseudo callback'=>'_civicrm_views_get_field_options',
+      'pseudo arguments'=>array(
+        'participant',
+        'getoptions',
+        array(
+          'version' => 3,
+          'field' => 'status_id',
+        ),
+      ),
+      'real field'=>'status_id'
+    ),
+    'filter'=>array(
+      'id'=>'civicrm_in_operator',
+      'options callback'=>'CRM_Event_PseudoConstant::participantStatus()',
+      'options arguments'=>array(),
+      'real field'=>'status_id'
+    )
+  );
 }
 
 // function _civicrm_views_add_extra_fields($data){
