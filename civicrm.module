@@ -841,8 +841,13 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FAL
     return;
   }
 
+  // Check if a user is currently logged in
+  if ($GLOBALS['user']) {
+    $loginUserID = $GLOBALS['user']->uid;
+  }
+
   // shouldn't allow edit when user doesn't have permission
-  if (!$userID && !user_access('edit all contacts')) {
+  if ($user->uid != $loginUserID && !user_access('edit all contacts')) {
     CRM_Utils_System::permissionDenied();
     return;
   }
