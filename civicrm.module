@@ -842,7 +842,7 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FAL
   }
 
   // shouldn't allow edit when user doesn't have permission
-  if (!user_access('edit all contacts')) {
+  if (!$userID && !user_access('edit all contacts')) {
     CRM_Utils_System::permissionDenied();
     return;
   }
