@@ -273,6 +273,12 @@ function _civicrm_views_civicrm_entities() {
       'dao' => 'CRM_Activity_DAO_ActivityAssignment',
       'base' => FALSE,
     ),
+    'civicrm_note' => array(
+      'entity' => 'Note',
+      'display_name' => t('CiviCRM Note'),
+      'dao' => 'CRM_Core_DAO_Note',
+      'base' => FALSE,
+    ),
   );
 }
 
@@ -748,6 +754,51 @@ function _civicrm_views_add_relationships(&$data) {
     'label' => t('civicrm_activity_parent_id (from civicrm_activity.id)'),
     'help' => t('civicrm_activity_parent_id (from civicrm_activity.id)'),
     );
+  $data['civicrm_contact']['id_entity_note']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'id',
+    'base' => 'civicrm_note',
+    'base field' => 'entity_id',
+    'extra' => array(
+      array(
+        'field' => 'entity_table',
+        'value' => 'civicrm_contact',
+      ),
+    ),
+    'title' => t('CiviCRM Notes'),
+    'label' => t('CiviCRM Notes (from Contact.id)'),
+    'help' => t('CiviCRM Notes (from Contact.id)'),
+  );
+  $data['civicrm_contribution']['id_entity_note']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'id',
+    'base' => 'civicrm_note',
+    'base field' => 'entity_id',
+    'extra' => array(
+      array(
+        'field' => 'entity_table',
+        'value' => 'civicrm_contribution',
+      ),
+    ),
+    'title' => t('CiviCRM Notes'),
+    'label' => t('CiviCRM Notes (from Contribution.id)'),
+    'help' => t('CiviCRM Notes (from Contribution.id)'),
+  );
+  $data['civicrm_participant']['id_entity_note']['relationship'] = array(
+    'id' => 'standard',
+    'field' => 'id',
+    'base' => 'civicrm_note',
+    'base field' => 'entity_id',
+    'extra' => array(
+      array(
+        'field' => 'entity_table',
+        'value' => 'civicrm_participant',
+      ),
+    ),
+    'title' => t('CiviCRM Notes'),
+    'label' => t('CiviCRM Notes (from Participant.id)'),
+    'help' => t('CiviCRM Notes (from Participant.id)'),
+  );
 }
 
 /**
