@@ -472,8 +472,15 @@ function _civicrm_views_add_pseudoconstant(&$data){
     ),
     'filter'=>array(
       'id'=>'civicrm_in_operator',
-      'options callback'=>'CRM_Event_PseudoConstant::participantStatus()',
-      'options arguments'=>array(),
+      'options callback'=>'_civicrm_views_get_field_options',
+      'options arguments'=>array(
+        'participant',
+        'getoptions',
+        array(
+          'version' => 3,
+          'field' => 'status_id',
+        ),
+      ),
       'real field'=>'status_id'
     )
   );
