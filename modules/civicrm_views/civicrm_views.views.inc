@@ -432,7 +432,7 @@ function _civicrm_views_add_pseudoconstant(&$data){
     ),
     'filter'=>array(
       'id'=>'civicrm_in_operator',
-      'options callback'=>'CRM_Event_PseudoConstant::country',
+      'options callback'=>'CRM_Core_PseudoConstant::country',
       'options arguments'=>array(),
       'real field'=>'country_id'
     )
