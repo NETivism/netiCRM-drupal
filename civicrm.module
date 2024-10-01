@@ -823,6 +823,8 @@ function civicrm_register_data($edit, &$user, $category, $reset, $doNotProcess =
 }
 
 function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FALSE) {
+  civicrm_initialize();
+
   // lets suppress key generation for all CMS forms
   civicrm_key_disable();
 
@@ -844,6 +846,10 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FAL
   // Check if a user is currently logged in
   if ($GLOBALS['user']) {
     $loginUserID = $GLOBALS['user']->uid;
+    if ($loginUserID == $user->uid) {
+      // make sure we have userID set in session
+      CRM_Core_BAO_UFMatch::synchronize($user, FALSE, 'Drupal', $ctype);
+    }
   }
 
   // shouldn't allow edit when user doesn't have permission
