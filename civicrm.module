@@ -1584,3 +1584,14 @@ function civicrm_metatag_metatags_view_alter(&$output, $instance) {
     } 
   }
 }
+
+function civicrm_exit() {
+  if (defined('CRM_REQUEST_TIME')) {
+    // civicrm is initialized
+    if (class_exists('CRM_Utils_System')) {
+      if (!\CRM_Utils_System::$_shutdowned) {
+        \CRM_Utils_System::civiBeforeShutdown();
+      }
+    }
+  }
+}
