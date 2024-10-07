@@ -12,3 +12,7 @@ services:
     class: Drupal\civicrm\PathProcessor\CivicrmPathProcessor
     tags:
       - { name: path_processor_inbound, priority: 250 }
+  civicrm.exit:
+    class: Drupal\civicrm\EventSubscriber\CivicrmExit
+    tags:
+      - {name: event_subscriber}
