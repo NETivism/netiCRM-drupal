@@ -1311,7 +1311,7 @@ function _civicrm_contribute_data(&$data, $enabled) {
   // contribution page
   $data['civicrm_pcp']['contribution_page'] = array(
     'title' => t('Associated Contribution or Event Page'),
-    'real field' => 'page_id',
+    'real field' => 'contribution_page_id',
     'help' => t('The Contribution or Event Page with which this Personal Campaign Page is associated.'),
     'field' => array(
       'handler' => 'civicrm_handler_field_pseudo_constant',
@@ -1339,14 +1339,14 @@ function _civicrm_contribute_data(&$data, $enabled) {
     'title' => t('Is Thermometer'),
     'help' => t('Does the page use a progress indicator?'),
     'field' => array(
-      'handler' => 'views_handler_field_boolean',
+      'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
     ),
     'argument' => array(
       'handler' => 'views_handler_argument',
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_boolean_operator',
+      'handler' => 'views_handler_filter_numeric',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',

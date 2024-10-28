@@ -272,6 +272,38 @@ function civicrm_menu() {
       'type' => MENU_CALLBACK,
       'weight' => 0,
     ),
+    'spgateway/ipn' => array(
+      'title' => 'CiviCRM',
+      'access callback'  => '_civicrm_checkmenu',
+      'access arguments'  => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+      'page callback' => 'civicrm_invoke',
+      'type' => MENU_CALLBACK,
+      'weight' => 0,
+    ),
+    'spgateway/neweb-transfer' => array(
+      'title' => 'CiviCRM',
+      'access callback'  => '_civicrm_checkmenu',
+      'access arguments'  => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+      'page callback' => 'civicrm_invoke',
+      'type' => MENU_CALLBACK,
+      'weight' => 0,
+    ),
+    'allpay/ipn' => array(
+      'title' => 'Allpay',
+      'access callback'  => '_civicrm_checkmenu',
+      'access arguments'  => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+      'page callback' => 'civicrm_invoke',
+      'type' => MENU_CALLBACK,
+      'weight' => 0,
+    ),
+    'allpay/record' => array(
+      'title' => 'Allpay',
+      'access callback'  => '_civicrm_checkmenu',
+      'access arguments'  => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+      'page callback' => 'civicrm_invoke',
+      'type' => MENU_CALLBACK,
+      'weight' => 0,
+    ),
     // administration section for civicrm integration modules.
     'admin/config/civicrm' => array(
       'title' => 'CiviCRM',
@@ -349,6 +381,12 @@ function civicrm_cron() {
   // hourly
   // Avoiding totally fit the time, so reducing 50 seconds.
   if ($time - $last['hourly'] >= 3550) {
+    # smart marketing sync
+    if ($hour == 6) {
+      CRM_Mailing_External_SmartMarketing::syncAll();
+    }
+
+    # tappay sync
     $disableTappay = variable_get('disable_civicrm_tappay_execute_recur', false);
     if ($hour > 7 && !$disableTappay) {
       CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
@@ -375,7 +413,7 @@ function civicrm_cron() {
     // sunday
     if ($time - $last['weekly'] >= (86300*7)) {
       CRM_Core_Config::singleton()->clearTempTables();
-      CRM_Core_BAO_File::clearUploadDir();
+      CRM_Core_BAO_File::clearUploadDir(28);
       CRM_Utils_Mail::validDKIMDomainList(TRUE, CRM_Utils_Mail::DKIM_EXTERNAL_VERIFIED_FILE);
       $last['weekly'] = $time;
     }
@@ -793,6 +831,8 @@ function civicrm_register_data($edit, &$user, $category, $reset, $doNotProcess =
 }
 
 function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FALSE) {
+  civicrm_initialize();
+
   // lets suppress key generation for all CMS forms
   civicrm_key_disable();
 
@@ -811,13 +851,17 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FAL
     return;
   }
 
-  // check for permission
-  // CRM-7509
-  $session = CRM_Core_Session::singleton();
-  $sessionUserID = $session->get('userID');
+  // Check if a user is currently logged in
+  if ($GLOBALS['user']) {
+    $loginUserID = $GLOBALS['user']->uid;
+    if ($loginUserID == $user->uid) {
+      // make sure we have userID set in session
+      CRM_Core_BAO_UFMatch::synchronize($user, FALSE, 'Drupal', $ctype);
+    }
+  }
 
   // shouldn't allow edit when user doesn't have permission
-  if ($sessionUserID != $userID && !user_access('edit all contacts')) {
+  if ($user->uid != $loginUserID && !user_access('edit all contacts')) {
     CRM_Utils_System::permissionDenied();
     return;
   }
@@ -1546,5 +1590,16 @@ function civicrm_metatag_metatags_view_alter(&$output, $instance) {
         $output[$url]['#attached']['drupal_add_html_head'][0][0]['#value'] = $link;
       }
     } 
+  }
+}
+
+function civicrm_exit() {
+  if (defined('CRM_REQUEST_TIME')) {
+    // civicrm is initialized
+    if (class_exists('CRM_Utils_System')) {
+      if (!\CRM_Utils_System::$_shutdowned) {
+        \CRM_Utils_System::civiBeforeShutdown();
+      }
+    }
   }
 }
