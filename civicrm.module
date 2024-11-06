@@ -387,6 +387,10 @@ function civicrm_cron() {
     if ($hour > 7 && !$disableTappay) {
       CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
     }
+
+    # cancel stuck batch
+    CRM_Batch_BAO_Batch::cancelStuckBatch();
+
     $last['hourly'] = $time;
   }
 
