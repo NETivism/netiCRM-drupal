@@ -490,6 +490,36 @@ function _civicrm_views_add_pseudoconstant(&$data){
       'real field'=>'status_id'
     )
   );
+  $data['civicrm_activity']['status_id']=array(
+    'title'=> 'Civicrm Activity Status',
+    'help'=> 'Civicrm Activity Status',
+    'field'=>array(
+      'id'=>'civicrm_pseudoconstant',
+      'pseudo callback'=>'_civicrm_views_get_field_options',
+      'pseudo arguments'=>array(
+        'activity',
+        'getoptions',
+        array(
+          'version' => 3,
+          'field' => 'status_id',
+        ),
+      ),
+      'real field'=>'status_id'
+    ),
+    'filter'=>array(
+      'id'=>'civicrm_in_operator',
+      'options callback'=>'_civicrm_views_get_field_options',
+      'options arguments'=>array(
+        'activity',
+        'getoptions',
+        array(
+          'version' => 3,
+          'field' => 'status_id',
+        ),
+      ),
+      'real field'=>'status_id'
+    )
+  );
 }
 
 // function _civicrm_views_add_extra_fields($data){
