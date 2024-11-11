@@ -39,10 +39,10 @@ class Routes {
         $requirement['_permission'] = $perm;
         $permissions[$path] = $requirement['_permission'];
       }
-      elseif ($item['access_callback'] == 1) {
+      elseif (isset($item['access_callback']) && $item['access_callback'] == 1) {
         $requirement['_access'] = 'TRUE';
       }
-      elseif ($item['is_public']) {
+      elseif (isset($item['is_public']) && !empty($item['is_public'])) {
         $requirement['_access'] = 'TRUE';
       }
       else {
