@@ -172,9 +172,12 @@ class CivicrmDate extends Date{
   public function validateValidTime(&$form, FormStateInterface $form_state, $operator, $value){
     $operators = $this->operators();
     if ($operators[$operator]['values'] == 1) {
-      $convert = strtotime($value['value']);
-      if (!empty($form['value']) && ($convert == -1 || $convert === FALSE)) {
-        $form_state->setError($form['value'], $this->t('Invalid date format.'));
+      $valueToCheck = is_array($value) ? $value['value'] : $value;
+      if (!empty($valueToCheck)) {
+        $convert = strtotime($valueToCheck);
+        if ($convert == -1 || $convert === FALSE) {
+            $form_state->setError($form['value'], $this->t('Invalid date format.'));
+        }
       }
     } elseif ($operators[$operator]['values'] == 2) {
       $min = strtotime($value['min']);
