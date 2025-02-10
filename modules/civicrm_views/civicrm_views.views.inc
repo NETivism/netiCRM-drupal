@@ -518,7 +518,19 @@ function _civicrm_views_add_pseudoconstant(&$data){
         ),
       ),
       'real field'=>'status_id'
-    )
+    ),
+    'argument' => array(
+      'id' => 'civicrm_custom_label',
+      'label callback'=>'_civicrm_views_get_field_options',
+      'label arguments'=>array(
+        'activity',
+        'getoptions',
+        array(
+          'version' => 3,
+          'field' => 'status_id',
+        ),
+      ),
+    ),
   );
 }
 
