@@ -105,7 +105,7 @@ class CivicrmDate extends Date{
 
     if ($this->value['type'] == 'offset') {
       $now = time();
-      if (!preg_match('/^[+\-]\d+/', $this->value['min'])) {
+      if (!preg_match('/^[+\-]\d+\s*(year|month|day|hour|minute|second)s?\s*$/', $this->value['min'])) {
         // support strtotime relative string
         $a = strtotime($this->value['min']);
       }
@@ -113,7 +113,7 @@ class CivicrmDate extends Date{
         // keep sign
         $a = $now + sprintf('%+d', $a);
       }
-      if (!preg_match('/^[+\-]\d+/', $this->value['max'])) {
+      if (!preg_match('/^[+\-]\d+\s*(year|month|day|hour|minute|second)s?\s*$/', $this->value['max'])) {
         // support strtotime relative string
         $b = strtotime($this->value['max']);
       }
@@ -172,9 +172,12 @@ class CivicrmDate extends Date{
   public function validateValidTime(&$form, FormStateInterface $form_state, $operator, $value){
     $operators = $this->operators();
     if ($operators[$operator]['values'] == 1) {
-      $convert = strtotime($value['value']);
-      if (!empty($form['value']) && ($convert == -1 || $convert === FALSE)) {
-        $form_state->setError($form['value'], $this->t('Invalid date format.'));
+      $valueToCheck = is_array($value) ? $value['value'] : $value;
+      if (!empty($valueToCheck)) {
+        $convert = strtotime($valueToCheck);
+        if ($convert == -1 || $convert === FALSE) {
+            $form_state->setError($form['value'], $this->t('Invalid date format.'));
+        }
       }
     } elseif ($operators[$operator]['values'] == 2) {
       $min = strtotime($value['min']);

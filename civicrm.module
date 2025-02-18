@@ -407,7 +407,8 @@ function civicrm_user_view(array &$build, \Drupal\user\UserInterface $account, \
     // We need the CiviCRM core Javascript.
 
     foreach (_civicrm_get_profiles($contact_id) as $id => $profile) {
-      $html = (new \CRM_Profile_Page_Dynamic($contact_id, $id, NULL))->run();
+      $dynamic = new \CRM_Profile_Page_Dynamic($contact_id, $id, NULL, TRUE, NULL, FALSE);
+      $html = $dynamic->run();
       $build['civicrm_profiles']["civicrm_profile_{$id}"] = [
         '#theme' => 'civicrm_user_profile',
         '#title' => $profile['title'],
@@ -478,6 +479,10 @@ function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
     ],
   );
   $form['#validate'][] = '_civicrm_user_register_form_validate';
+}
+
+function civicrm_form_user_admin_settings_alter(&$form, &$form_state, $form_id) {
+  $form['registration_cancellation']['user_email_verification']['#required'] = TRUE;
 }
 
 /**

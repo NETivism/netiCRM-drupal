@@ -94,6 +94,12 @@ function civicrm_install() {
   foreach($dirs as $dir) {
     \Drupal::service('file_system')->prepareDirectory($dir, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY);
   }
+
+  // #36521, make sure user validation email is required
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('user.settings');
+  $config->set('verify_mail', 1)->save(TRUE);
+
   \Drupal::messenger()->addStatus('CiviCRM installed successfully.');
 }
 

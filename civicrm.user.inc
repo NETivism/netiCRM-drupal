@@ -9,12 +9,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * Implements hook_user_login().
  */
 function civicrm_user_login(AccountInterface $account) {
-  # refs #36521, we don'w need to do anything here.
-  # Drupal 7 use synchronizeUser, will let thank-you page failed because session being reset
-  # Drupal 9 we change to save anonymous session to private temp store.
-  # This will keep user session after login even in multi-step form thank-you page.
-  # comment out below for disable error code
-  // \Drupal::service('civicrm')->synchronizeUser($account);
+  # refs #36521, #42221, we should sync user anyway
+  \Drupal::service('civicrm')->synchronizeUser($account);
 }
 
 /**
