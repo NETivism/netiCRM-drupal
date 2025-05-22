@@ -79,8 +79,16 @@ function civicrm_install() {
   }
   // step 1: import databases
   _civicrm_import_sql($config, 'sql/civicrm.mysql');
-  _civicrm_import_sql($config, 'sql/civicrm_data.zh_TW.mysql');
-  _civicrm_import_sql($config, 'sql/civicrm_acl.zh_TW.mysql');
+  $lang_id = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if ($lang_id == 'zh-hant') {
+    _civicrm_import_sql($config, 'sql/civicrm_data.zh_TW.mysql');
+    _civicrm_import_sql($config, 'sql/civicrm_acl.zh_TW.mysql');
+  }
+  else {
+    _civicrm_import_sql($config, 'sql/civicrm_data.mysql');
+    _civicrm_import_sql($config, 'sql/civicrm_acl.mysql');
+  }
+
 
   // step 2: create file directory
   // Oh we can't create civicrm directory here. Leave it for initialize auto create script.
