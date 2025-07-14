@@ -291,6 +291,7 @@ function civicrm_cron(){
     // sunday
     if ($time - $last['weekly'] >= (86400*7 - 50) && date('w') == '0') {
       CRM_Core_Config::singleton()->clearTempTables();
+      CRM_Core_BAO_File::clearUploadDir(28);
       CRM_Contribute_BAO_Contribution_Utils::clearDonateAgainLink();
       $last['weekly'] = $time;
       $modified = TRUE;
