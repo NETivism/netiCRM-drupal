@@ -395,6 +395,11 @@ function civicrm_cron() {
     if ($hour > 7 && !$disableTappay) {
       CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
     }
+    # spgateway agreement sync
+    $disableSpgateway = variable_get('disable_civicrm_spgateway_execute_recur', FALSE);
+    if ($hour > 7 && !$disableSpgateway) {
+      CRM_Core_Payment_SPGATEWAY::doExecuteAllRecur($time);
+    }
 
     # cancel stuck batch
     CRM_Batch_BAO_Batch::cancelStuckBatch();
