@@ -428,6 +428,10 @@ function civicrm_cron() {
       CRM_Core_Config::singleton()->clearTempTables();
       CRM_Core_BAO_File::clearUploadDir(28);
       CRM_Utils_Mail::validDKIMDomainList(TRUE, CRM_Utils_Mail::DKIM_EXTERNAL_VERIFIED_FILE);
+      if ($hour >= 2) {
+        // periodically verify dkim / spf
+        CRM_Admin_Form_FromEmailAddress::verifyEmailDomains();
+      }
       $last['weekly'] = $time;
     }
 
