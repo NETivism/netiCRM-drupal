@@ -363,6 +363,32 @@ function _civicrm_views_add_pseudoconstant(&$data){
     ),
     'real field'=> 'contribution_type_id'
   );
+  $data['civicrm_contribution']['payment_instrument_id']['field'] = array(
+    'id'=>'civicrm_pseudoconstant',
+    'pseudo callback'=>'_civicrm_views_get_field_options',
+    'pseudo arguments'=>array(
+      'contribution',
+      'getoptions',
+      array(
+        'version' => 3,
+        'field' => 'payment_instrument_id',
+      ),
+    ),
+    'real field'=> 'payment_instrument_id'
+  );
+  $data['civicrm_contribution']['payment_instrument_id']['filter'] = array(
+    'id'=>'civicrm_in_operator',
+    'options callback'=>'_civicrm_views_get_field_options',
+    'options arguments'=> array(
+      'contribution',
+      'getoptions',
+      array(
+        'version' => 3,
+        'field' => 'payment_instrument_id',
+      ),
+    ),
+    'real field'=> 'payment_instrument_id'
+  );
 
   $data['civicrm_membership']['status_id']['field'] = array(
     'id'=>'civicrm_pseudoconstant',
