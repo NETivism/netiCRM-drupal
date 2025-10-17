@@ -290,6 +290,7 @@ function civicrm_cron(){
       CRM_Core_Payment_TapPay::doStatusCheck();
       CRM_Contribute_BAO_Contribution_Utils::clearDonateAgainLink();
       $last['daily'] = $time;
+      $modified = TRUE;
     }
   }
   // daily - section 2
@@ -299,6 +300,7 @@ function civicrm_cron(){
       CRM_Contribute_BAO_TaiwanACH::doStatusCheck();
       CRM_Contact_BAO_GroupContactCache::checkAll();
       $last['daily-h8'] = $time;
+      $modified = TRUE;
     }
   }
 
