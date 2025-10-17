@@ -283,18 +283,22 @@ function civicrm_cron(){
     $modified = TRUE;
   }
 
-  // daily
-  if ($hour >= 6 && $hour <= 8) {
-    civicrm_initialize();
+  // daily - section 1
+  if ($hour >= 6 && $hour <= 7) {
     if ($time - $last['daily'] >= 86350) {
       CRM_Core_Payment_TapPay::doSyncLastDaysRecords();
       CRM_Core_Payment_TapPay::doStatusCheck();
-      CRM_Contribute_BAO_TaiwanACH::doStatusCheck();
-      if ($hour >= 7) {
-        CRM_Contact_BAO_GroupContactCache::checkAll();
-      }
+      CRM_Contribute_BAO_Contribution_Utils::clearDonateAgainLink();
       $last['daily'] = $time;
-      $modified = TRUE;
+    }
+  }
+  // daily - section 2
+  if ($hour >= 8 && $hour <= 9) {
+    if ($time - $last['daily-h8'] >= 86350) {
+      CRM_Contribute_BAO_Premium::restockContributionProducts();
+      CRM_Contribute_BAO_TaiwanACH::doStatusCheck();
+      CRM_Contact_BAO_GroupContactCache::checkAll();
+      $last['daily-h8'] = $time;
     }
   }
 
@@ -305,11 +309,8 @@ function civicrm_cron(){
     if ($time - $last['weekly'] >= (86400*7 - 50) && date('w') == '0') {
       CRM_Core_Config::singleton()->clearTempTables();
       CRM_Core_BAO_File::clearUploadDir(28);
-      CRM_Contribute_BAO_Contribution_Utils::clearDonateAgainLink();
-      if ($hour >= 2) {
-        // periodically verify dkim / spf
-        CRM_Admin_Form_FromEmailAddress::verifyEmailDomains();
-      }
+      // periodically verify dkim / spf
+      CRM_Admin_Form_FromEmailAddress::verifyEmailDomains();
       $last['weekly'] = $time;
       $modified = TRUE;
     }
