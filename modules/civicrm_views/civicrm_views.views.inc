@@ -129,6 +129,15 @@ function civicrm_views_views_data_alter(&$data) {
     ),
   );
 
+  // Add contribution page goal achievement fields
+  $data['civicrm_contribution_page']['goal_achievement'] = array(
+    'title' => t('Goal Achievement'),
+    'help' => t('Contribution page goal achievement data (percent, current, target, etc.)'),
+    'field' => array(
+      'id' => 'civicrm_contribution_page_goal',
+      'real field' => 'id'
+    ),
+  );
 
 }
 
