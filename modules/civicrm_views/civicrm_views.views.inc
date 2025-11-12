@@ -137,6 +137,10 @@ function civicrm_views_views_data_alter(&$data) {
       'id' => 'civicrm_contribution_page_goal',
       'real field' => 'id'
     ),
+    'filter' => array(
+      'id' => 'civicrm_contribution_page_goal_filter',
+      'real field' => 'id'
+    ),
   );
 
 }
