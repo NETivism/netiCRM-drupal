@@ -167,9 +167,6 @@ class CivicrmContributionPageGoalFilter extends FilterPluginBase {
         unset($values[$key]);
       }
     }
-
-    // Re-index array
-    $values = array_values($values);
   }
 
   /**
