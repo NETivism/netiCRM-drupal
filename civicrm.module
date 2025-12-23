@@ -1657,7 +1657,6 @@ function civicrm_system_theme_settings_post_render($html, $form) {
   // Build dynamic template based on AI completion validity
   $tabs_html = '';
   $panels_html = '';
-  $ai_image_active = $ai_completion_valid ? '' : 'is-active';
   
   // Add AI Copywriter tab and panel only if valid
   if ($ai_completion_valid) {
@@ -1673,8 +1672,8 @@ function civicrm_system_theme_settings_post_render($html, $form) {
   }
   
   // Always add AI Image Generator tab and panel
-  $tabs_html .= '<li><a href="#nme-aiimagegeneration" class="' . $ai_image_active . '" data-target-id="nme-aiimagegeneration">{ts}AI Image Generator{/ts}</a></li>';
-  $panels_html .= '<div id="nme-aiimagegeneration" class="nme-aiimagegeneration nme-setting-panel ' . $ai_image_active . '">
+  $tabs_html .= '<li><a href="#nme-aiimagegeneration" class="is-active" data-target-id="nme-aiimagegeneration">{ts}AI Image Generator{/ts}</a></li>';
+  $panels_html .= '<div id="nme-aiimagegeneration" class="nme-aiimagegeneration nme-setting-panel is-active">
         <div class="nme-setting-panel-inner">
           <h3 class="nme-setting-panel-title">{ts}AI Image Generator{/ts}</h3>
           <div class="nme-setting-panel-content">
@@ -1706,6 +1705,12 @@ EOT;
   require_once 'CRM/Core/Smarty/resources/String.php';
   civicrm_smarty_register_string_resource();
   $smarty = CRM_Core_Smarty::singleton();
+  
+  // Assign AI completion variables for template rendering
+  $smarty->assign('ai_completion_default', $ai_completion_default);
+  $smarty->assign('ai_completion_url_basepath', $config->userSystem->languageNegotiationURL('/'));
+  $smarty->assign('ai_completion_component', '');
+  
   $civicrm_side_panel = $smarty->fetch("string:" . $tpl);
 
   // Append custom HTML at the end of the form
