@@ -39,7 +39,7 @@
  * Drupal specific direct database install for civicrm
  */
 function civicrm_install() {
-  global $base_url;
+  global $base_url, $language;
 
   try {
     $error = _civicrm_init_setting();
@@ -58,8 +58,14 @@ function civicrm_install() {
   $success = _civicrm_import_sql('sql/civicrm.mysql');
 
   if($success){
-    _civicrm_import_sql('sql/civicrm_data.zh_TW.mysql');
-    _civicrm_import_sql('sql/civicrm_acl.zh_TW.mysql');
+    if ($language->language == 'zh-hant') {
+      _civicrm_import_sql('sql/civicrm_data.zh_TW.mysql');
+      _civicrm_import_sql('sql/civicrm_acl.zh_TW.mysql');
+    }
+    else {
+      _civicrm_import_sql('sql/civicrm_data.mysql');
+      _civicrm_import_sql('sql/civicrm_acl.mysql');
+    }
   }
 
   // step 2: create file directory
