@@ -119,6 +119,13 @@ function civicrm_library_info_build() {
     'header' => true,
   ];
   $libraries['civicrm-js-aicompletion']['js']['../packages/AICompletion/AICompletion.js'] = ['weight' => -3];
+  $libraries['civicrm-js-ncfunnel'] = [
+    'dependencies' => [
+      'civicrm/civicrm-js-packages',
+    ],
+    'header' => true,
+  ];
+  $libraries['civicrm-js-ncfunnel']['js']['../packages/ncfunnel/ncfunnel.js'] = ['weight' => -3];
 
   // additional, aiimagegeneration
   $libraries['civicrm-js-aiimagegeneration'] = [
