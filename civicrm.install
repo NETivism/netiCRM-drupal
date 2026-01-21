@@ -58,7 +58,8 @@ function civicrm_install() {
   $success = _civicrm_import_sql('sql/civicrm.mysql');
 
   if($success){
-    if ($language->language == 'zh-hant') {
+    $lang_code = _civicrm_get_install_language();
+    if ($lang_code === 'zh-hant' || $lang_code === 'zh_TW') {
       _civicrm_import_sql('sql/civicrm_data.zh_TW.mysql');
       _civicrm_import_sql('sql/civicrm_acl.zh_TW.mysql');
     }
@@ -234,5 +235,37 @@ function civicrm_update_7000(){
  */
 function civicrm_update_7400(&$sandbox) {
   db_query("UPDATE {system} SET weight = 100 WHERE name = 'civicrm'");
+}
+
+/**
+ * Get the install language code.
+ *
+ * Prioritizes drush --locale parameter when running in CLI mode,
+ * otherwise falls back to Drupal global $language.
+ *
+ * @return string
+ *   The language code (e.g., 'zh-hant', 'zh_TW', 'en').
+ */
+function _civicrm_get_install_language() {
+  global $language;
+
+  // Check if running in CLI mode (drush)
+  if (PHP_SAPI === 'cli') {
+    // Check if drush is available and get --locale option
+    if (function_exists('drush_get_option')) {
+      $locale = drush_get_option('locale', NULL);
+      if (!empty($locale)) {
+        return $locale;
+      }
+    }
+  }
+
+  // Fall back to Drupal global $language
+  if (isset($language->language)) {
+    return $language->language;
+  }
+
+  // Default to English
+  return 'en';
 }
 
