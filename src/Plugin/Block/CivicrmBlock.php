@@ -47,10 +47,10 @@ class CivicrmBlock extends BlockBase implements ContainerFactoryPluginInterface 
 
     // Bypass Drupal SafeString escaping by setting output as already escaped.
     if ($content) {
-      return array(
+      return [
         '#markup' => Markup::create($content),
-      );
+      ];
     }
-    return array();
+    return [];
   }
 }

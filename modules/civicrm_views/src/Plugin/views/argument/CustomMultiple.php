@@ -55,13 +55,13 @@ class CustomMultiple extends ArgumentPluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
     // allow + for or, , for and
-    $form['break_phrase'] = array(
+    $form['break_phrase'] = [
       '#type' => 'checkbox',
       '#title' => t('Allow multiple values'),
       '#description' => t('If selected, users can enter multiple values in the form of 1+2+3 (for OR) or 1,2,3 (for AND).'),
       '#default_value' => !empty($this->options['break_phrase']),
       '#group' => 'options][more',
-    );
+    ];
   }
 
   public function query($group_by = FALSE) {

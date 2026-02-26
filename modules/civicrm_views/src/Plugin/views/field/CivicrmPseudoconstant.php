@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ViewsField("civicrm_pseudoconstant")
  */
 class CivicrmPseudoconstant extends FieldPluginBase {
-  protected $pseudovalues = array();
+  protected $pseudovalues = [];
   protected $html_type='';
 
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm,Connection $conn) {
@@ -43,47 +43,47 @@ class CivicrmPseudoconstant extends FieldPluginBase {
     $options = parent::defineOptions();
 
     if($this->html_type=='File'){
-      $options['file_display_format'] = array('default' => 'url');
+      $options['file_display_format'] = ['default' => 'url'];
     }
 
     if(key_exists('pseudo arguments',$this->definition)){
-      $options['pseudoconstant_format'] = array('default' => 'raw');
+      $options['pseudoconstant_format'] = ['default' => 'raw'];
     }
 
     if(strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox'){
-      $options['value_separator'] = array('default' => ', ');
+      $options['value_separator'] = ['default' => ', '];
     }
     return $options;
   }
 
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     if($this->html_type=='File'){
-      $form['file_display_format'] = array(
+      $form['file_display_format'] = [
         '#type' => 'select',
         '#title' => t('Display format'),
         '#description' => t("Choose how to display this file."),
-        '#options' => array(
+        '#options' => [
           'raw' => t('Raw value (file id)'),
           'url' => t('Entity File URL (limited with permission)'),
           'image' => t('Entity File with img tag (limited with permission)'),
           'url_real' => t('Image URL (public accessable URL, image only)'),
           'image_real' => t('Image Tag (public accessable URL, image only)'),
-        ),
-        '#default_value' => isset($this->options['file_display_format']) ? $this->options['file_display_format'] : 'url',
-      );
+        ],
+        '#default_value' => $this->options['file_display_format'] ?? 'url',
+      ];
     }
 
     if(key_exists('pseudo arguments',$this->definition)){
-      $form['pseudoconstant_format'] = array(
+      $form['pseudoconstant_format'] = [
         '#type' => 'radios',
         '#title' => t('Display format'),
         '#description' => t("Choose how to display this field. 'Raw' will display this field as it is stored in the database, eg. as a number. 'Human friendly' will attempt to turn this raw value into something meaningful."),
-        '#options' => array(
+        '#options' => [
           'raw' => t('Raw value'),
           'pseudoconstant' => t('Human friendly'),
-        ),
-        '#default_value' => isset($this->options['pseudoconstant_format']) ? $this->options['pseudoconstant_format'] : 'raw',
-      );
+        ],
+        '#default_value' => $this->options['pseudoconstant_format'] ?? 'raw',
+      ];
     }
 
     if(strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox'){

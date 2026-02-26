@@ -53,30 +53,30 @@ class UserProfile extends FormBase  {
     // add drupal user id as uf_id to save them
     global $civicrm_profile_contact_id;
     if (!empty($civicrm_profile_contact_id)) {
-      $params = array(
+      $params = [
         'contact_id' => $civicrm_profile_contact_id,
         'uf_id' => $user->id(),
         'uf_name' => $user->get('mail')->value,
-      );
+      ];
       \CRM_Core_BAO_UFMatch::create($params);
     }
 
     $form['#title'] = $this->user->getAccountName();
-    $form['form'] = array(
+    $form['form'] = [
       '#type' => 'fieldset',
       '#title' => $this->uf_group['title'],
-      'html' => array(
+      'html' => [
         '#markup' => Markup::create($html),
-      ),
-    );
-    $form['actions'] = array(
+      ],
+    ];
+    $form['actions'] = [
       '#type' => 'actions',
-      'submit' => array(
+      'submit' => [
         '#type' => 'submit',
         '#value' => t('Save'),
         '#button_type' => 'primary',
-      ),
-    );
+      ],
+    ];
 
     return $form;
   }
@@ -93,7 +93,7 @@ class UserProfile extends FormBase  {
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Invalidate caches for user, so that latest profile information shows.
-    Cache::invalidateTags(array('user:' . $this->user->id()));
+    Cache::invalidateTags(['user:' . $this->user->id()]);
     \Drupal::messenger()->addStatus(t("Profile successfully updated."));
     // CiviCRM will process form when redirect to getEditHTML, so we do nothing here
   }

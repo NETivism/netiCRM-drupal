@@ -47,10 +47,10 @@ class CivicrmCustomOption extends CivicrmInOperator {
       foreach ($raw_options as $k => $v) {
         $options[$v['value']] = $v['label'];
       }
-      $this->options_cache[$cache_id] = array(
+      $this->options_cache[$cache_id] = [
         'options' => $options,
         'expired' => $req_time + 3600 //一小時快取
-      );
+      ];
     }
     return $options;
   }

@@ -32,6 +32,6 @@ class CivicrmDate extends ArgumentPluginBase {
     $field = "$this->tableAlias.$this->realField";
     $value = $this->argument;
     $placeholder = $this->placeholder();
-    $this->query->addWhereExpression($this->options['group'], "$field = $placeholder", array( $placeholder => $value));
+    $this->query->addWhereExpression($this->options['group'], "$field = $placeholder", [ $placeholder => $value]);
   }
 }

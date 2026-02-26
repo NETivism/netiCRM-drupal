@@ -16,20 +16,20 @@ class CivicrmMarkup extends FieldPluginBase {
 
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['format'] = array('default' => 'plain_text');
+    $options['format'] = ['default' => 'plain_text'];
     return $options;
   }
 
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['format'] = array(
+    $form['format'] = [
       '#type' => 'select',
       '#title' => t('Text format'),
       '#description' => t("Select which Drupal text format to use to filter this text."),
-      '#options' => array(
+      '#options' => [
         'civicrm_raw' => 'Raw (bypass security filtering!)',
-      ),
-      '#default_value' => isset($this->options['format']) ? $this->options['format'] : 'plain_text',
-    );
+      ],
+      '#default_value' => $this->options['format'] ?? 'plain_text',
+    ];
 
     $formats = filter_formats();
     foreach ($formats as $format) {

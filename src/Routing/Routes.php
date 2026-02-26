@@ -53,7 +53,7 @@ class Routes {
       $route = new Route(
         '/' . $path . '/{extra}',
         [
-          '_title' => isset($item['title']) ? $item['title'] : 'CiviCRM',
+          '_title' => $item['title'] ?? 'CiviCRM',
           '_controller' => 'Drupal\civicrm\Controller\CivicrmController::main',
           'args' => explode('/', $path),
           'extra' => '',
@@ -82,7 +82,7 @@ class Routes {
         $route = new Route(
           '/' . $path . '/{extra}',
           [
-            '_title' => isset($item['title']) ? $item['title'] : 'CiviCRM',
+            '_title' => $item['title'] ?? 'CiviCRM',
             '_controller' => 'Drupal\civicrm\Controller\CivicrmController::main',
             'args' => explode('/', $path),
             'extra' => '',

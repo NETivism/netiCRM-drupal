@@ -73,19 +73,19 @@ class CivicrmEventLink extends FieldPluginBase
     $form['alter']['absolute'] += ['#access' => FALSE];
     $form['alter']['replace_spaces'] += ['#access' => FALSE];
 
-    $form['link_to_civicrm_event'] = array(
+    $form['link_to_civicrm_event'] = [
       '#type' => 'select',
       '#title' => $this->t('Choose where to link this field'),
-      '#options' => array(
+      '#options' => [
         // 'none' => $this->t('Don\'t Link this Field'),
         'page' => $this->t('Link to Event Page'),
         'registration' => t('Link to Event Registration'),
         // 'config' => $this->t('Link to Event Configuration'),
         // 'participants' => t('Link to Event Participants'),
         // 'custom' => $this->t('Link to a Custom Node'),
-      ),
+      ],
       '#default_value' => $this->options['link_to_civicrm_event'] ?? 'page',
-    );
+    ];
 
     $form['link_text'] = [
       '#type' => 'textfield',

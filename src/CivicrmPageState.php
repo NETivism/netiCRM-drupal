@@ -4,12 +4,12 @@ namespace Drupal\civicrm;
 
 class CivicrmPageState {
   protected $title = '';
-  protected $css = array();
-  protected $js = array();
-  protected $breadcrumbs = array();
+  protected $css = [];
+  protected $js = [];
+  protected $breadcrumbs = [];
   protected $accessDenied = FALSE;
-  protected $html_headers = array();
-  protected $html_headers_meta = array();
+  protected $html_headers = [];
+  protected $html_headers_meta = [];
 
   public function setTitle($title) {
     $this->title = $title;
@@ -40,7 +40,7 @@ class CivicrmPageState {
   }
 
   public function resetBreadcrumbs() {
-    $this->breadcrumbs = array();
+    $this->breadcrumbs = [];
   }
 
   public function getBreadcrumbs() {

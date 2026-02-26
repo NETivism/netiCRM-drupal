@@ -1,7 +1,7 @@
 <?php
 
 function civicrm_views_views_data() {
-  $data = array();
+  $data = [];
 
   try {
     \Drupal::service('civicrm')->initialize();
@@ -27,23 +27,23 @@ function civicrm_views_views_data() {
     // be a base table in views (and not just a table that is brought in via a relationship
     // or an implicit join) ie. a table that you can start building a view from.
     if ($civicrm_entity['base']) {
-      $data[$table]['table']['base'] = array(
+      $data[$table]['table']['base'] = [
         'field' => 'id',
         'title' => $civicrm_entity['display_name'],
         'database' => $database,
-      );
+      ];
     };
 
     foreach ($civicrm_entity['dao']::fields() as $field) {
-      $data[$table][$field['name']] = array(
+      $data[$table][$field['name']] = [
         'title' => !empty($field['title']) ? $field['title'] : "{$civicrm_entity['display_name']}.{$field['name']}",
         'help' => "{$civicrm_entity['display_name']} - $table.{$field['name']}",
         'field' => _civicrm_views_field_to_field_plugin($civicrm_entity, $field),
         'sort' => _civicrm_views_field_to_sort_plugin($civicrm_entity, $field),
         'filter' => _civicrm_views_field_to_filter_plugin($civicrm_entity, $field),
         'argument' => _civicrm_views_field_to_argument_plugin($civicrm_entity, $field),
-        'relationship' => array(),
-      );
+        'relationship' => [],
+      ];
     }
 
   }
@@ -57,15 +57,15 @@ function civicrm_views_views_data() {
   foreach (_civicrm_views_get_custom_fields() as $field) {
     $data[$field['table']]['table']['group'] = "CiviCRM {$field['group']}";
 
-    $data[$field['join']]["id_{$field['group']}"]['relationship'] = array(
+    $data[$field['join']]["id_{$field['group']}"]['relationship'] = [
       'id' => 'standard',
       'field' => 'id',
       'base' => $field['table'],
       'base field' => 'entity_id',
-      'title' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
-      'label' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
-      'help' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
-    );
+      'title' => t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
+      'label' => t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
+      'help' => t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
+    ];
 
     $data[$field['table']]['table']['join'][$field['join']] = [
       'table' => $field['table'],
@@ -73,17 +73,17 @@ function civicrm_views_views_data() {
       'field' => 'entity_id',
     ];
 
-    $data[$field['table']][$field['name']] = array(
-      'title' => t('CiviCRM Custom Field: @title',array('@title' => $field['title'])),
-      'group'=>t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
-      'help' => t('CiviCRM Custom Field: @title', array('@title' => $field['group'])),
+    $data[$field['table']][$field['name']] = [
+      'title' => t('CiviCRM Custom Field: @title',['@title' => $field['title']]),
+      'group'=>t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
+      'help' => t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
       'real field' => $field['real field'],
       'field' => _civicrm_views_field_to_field_plugin($civicrm_entities[$field['join']], $field),
       'sort' => _civicrm_views_field_to_sort_plugin($civicrm_entities[$field['join']], $field),
       'filter' => _civicrm_views_field_to_filter_plugin($civicrm_entities[$field['join']], $field),
       'argument' => _civicrm_views_field_to_argument_plugin($civicrm_entity, $field),
       // 'relationship' => array(),
-    );
+    ];
 
   }
 
@@ -101,18 +101,18 @@ function civicrm_views_views_data_alter(&$data) {
 
   // Only join to the users table if the civicrm tables are in the same database.
   if (!\Drupal\Core\Database\Database::getConnectionInfo('civicrm')) {
-    $data['users_field_data']['table']['join']['civicrm_uf_match'] = array(
+    $data['users_field_data']['table']['join']['civicrm_uf_match'] = [
       'left_field' => 'uf_id',
       'field' => 'uid',
-      'extra' => array(
-        array(
+      'extra' => [
+        [
           'table' => 'civicrm_uf_match',
           'field' => 'domain_id',
           'value' => \CRM_Core_Config::domainID(),
           'numeric' => TRUE,
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
   }
 
   //Customized value filter for contribution page active value
@@ -120,457 +120,457 @@ function civicrm_views_views_data_alter(&$data) {
 
   //alter Event registration link text
   $data['civicrm_event']['registration_link_text']['field']['id']= 'civicrm_event_registration_text';
-  $data['civicrm_event']['event_links']=array(
+  $data['civicrm_event']['event_links']=[
     'title' => t('Event Link'),
     'help' => t('Registration/info Link for event'),
-    'field' => array(
+    'field' => [
       'id' => 'civicrm_event_link',
       'real field' => 'event_type_id'
-    ),
-  );
+    ],
+  ];
 
   // Add contribution page goal achievement fields
-  $data['civicrm_contribution_page']['goal_achievement'] = array(
+  $data['civicrm_contribution_page']['goal_achievement'] = [
     'title' => t('Goal Achievement'),
     'help' => t('Contribution page goal achievement data (percent, current, target, etc.)'),
-    'field' => array(
+    'field' => [
       'id' => 'civicrm_contribution_page_goal',
       'real field' => 'id'
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'id' => 'civicrm_contribution_page_goal_filter',
       'real field' => 'id'
-    ),
-  );
+    ],
+  ];
 
 }
 
 function _civicrm_views_civicrm_entities() {
-  return array(
-    'civicrm_activity' => array(
+  return [
+    'civicrm_activity' => [
       'entity' => 'Activity',
       'display_name' => t('CiviCRM Activity'),
       'dao' => 'CRM_Activity_DAO_Activity',
       'base' => TRUE,
       'custom_fields' => TRUE,
-    ),
-    'civicrm_address' => array(
+    ],
+    'civicrm_address' => [
       'entity' => 'Cddress',
       'display_name' => t('CiviCRM Address'),
       'dao' => 'CRM_Core_DAO_Address',
       'base' => TRUE,
-    ),
-    'civicrm_contact' => array(
+    ],
+    'civicrm_contact' => [
       'entity' => 'Contact',
       'display_name' => t('CiviCRM Contact'),
       'dao' => 'CRM_Contact_DAO_Contact',
       'base' => TRUE,
-    ),
-    'civicrm_contribution' => array(
+    ],
+    'civicrm_contribution' => [
       'entity' => 'Contribution',
       'display_name' => t('CiviCRM Contribution'),
       'dao' => 'CRM_Contribute_DAO_Contribution',
       'base' => TRUE,
-    ),
-    'civicrm_contribution_page' => array(
+    ],
+    'civicrm_contribution_page' => [
       'entity' => 'ContributionPage',
       'display_name' => t('CiviCRM Contribution Page'),
       'dao' => 'CRM_Contribute_DAO_ContributionPage',
       'base' => TRUE,
-    ),
-    'civicrm_pcp' => array(
+    ],
+    'civicrm_pcp' => [
       'entity' => 'Pcp',
       'display_name' => t('CiviCRM Personal Campaign Pages'),
       'dao' => 'CRM_Contribute_DAO_PCP',
       'base' => TRUE,
-    ),
-    'civicrm_email' => array(
+    ],
+    'civicrm_email' => [
       'entity' => 'Email',
       'display_name' => t('CiviCRM Email'),
       'dao' => 'CRM_Core_DAO_Email',
       'base' => FALSE,
-    ),
-    'civicrm_entity_tag' => array(
+    ],
+    'civicrm_entity_tag' => [
       'entity' => 'Tag',
       'display_name' => t('CiviCRM Tag'),
       'dao' => 'CRM_Core_DAO_EntityTag',
       'base' => TRUE,
-    ),
-    'civicrm_event' => array(
+    ],
+    'civicrm_event' => [
       'entity' => 'Event',
       'display_name' => 'CiviCRM Event',
       'dao' => 'CRM_Event_DAO_Event',
       'base' => TRUE,
-    ),
-    'civicrm_group' => array(
+    ],
+    'civicrm_group' => [
       'entity' => 'Group',
       'display_name' => 'CiviCRM Group',
       'dao' => 'CRM_Contact_DAO_Group',
       'base' => TRUE,
-    ),
-    'civicrm_group_contact' => array(
+    ],
+    'civicrm_group_contact' => [
       'entity' => 'GroupContact',
       'display_name' => 'CiviCRM Group Contact',
       'dao' => 'CRM_Contact_DAO_GroupContact',
       'base' => FALSE,
-    ),
-    'civicrm_membership' => array(
+    ],
+    'civicrm_membership' => [
       'entity' => 'Membership',
       'display_name' => 'CiviCRM Membership',
       'dao' => 'CRM_Member_DAO_Membership',
       'base' => TRUE,
-    ),
-    'civicrm_membership_payment' => array(
+    ],
+    'civicrm_membership_payment' => [
       'entity' => 'MembershipPayment',
       'display_name' => 'CiviCRM Membership Payment',
       'dao' => 'CRM_Member_DAO_MembershipPayment',
       'base' => FALSE,
-    ),
-    'civicrm_membership_type' => array(
+    ],
+    'civicrm_membership_type' => [
       'entity' => 'MembershipType',
       'display_name' => 'CiviCRM Membership Type',
       'dao' => 'CRM_Member_DAO_MembershipType',
       'base' => FALSE,
-    ),
-    'civicrm_participant' => array(
+    ],
+    'civicrm_participant' => [
       'entity' => 'Participant',
       'display_name' => 'CiviCRM Participant',
       'dao' => 'CRM_Event_DAO_Participant',
       'base' => TRUE,
-    ),
-    'civicrm_participant_payment' => array(
+    ],
+    'civicrm_participant_payment' => [
       'entity' => 'ParticipantPayment',
       'display_name' => 'CiviCRM Participant Payment',
       'dao' => 'CRM_Event_DAO_ParticipantPayment',
       'base' => FALSE,
-    ),
-    'civicrm_mailing' => array(
+    ],
+    'civicrm_mailing' => [
       'entity' => 'Mailing',
       'display_name' => 'CiviCRM Mailings',
       'dao' => 'CRM_Mailing_DAO_Mailing',
       'base' => TRUE,
-    ),
-    'civicrm_phone' => array(
+    ],
+    'civicrm_phone' => [
       'entity' => 'Phone',
       'display_name' => 'CiviCRM Phone',
       'dao' => 'CRM_Core_DAO_Phone',
       'base' => TRUE,
-    ),
-    'civicrm_relationship' => array(
+    ],
+    'civicrm_relationship' => [
       'entity' => 'Relationship',
       'display_name' => 'CiviCRM Relationship',
       'dao' => 'CRM_Contact_DAO_Relationship',
       'base' => TRUE,
-    ),
-    'civicrm_relationship_type' => array(
+    ],
+    'civicrm_relationship_type' => [
       'entity' => 'RelationshipType',
       'display_name' => 'CiviCRM Relationship Type',
       'dao' => 'CRM_Contact_DAO_RelationshipType',
       'base' => FALSE,
-    ),
-    'civicrm_uf_match' => array(
+    ],
+    'civicrm_uf_match' => [
       'entity' => 'UFMatch',
       'display_name' => 'CiviCRM UF Match',
       'dao' => 'CRM_Core_DAO_UFMatch',
       'base' => FALSE,
-    ),
-    'civicrm_activity_target' => array(
+    ],
+    'civicrm_activity_target' => [
       'entity' => 'ActivityTarget',
       'display_name' => 'CiviCRM Activity Target',
       'dao' => 'CRM_Activity_DAO_ActivityTarget',
       'base' => FALSE,
-    ),
-    'civicrm_activity_assignment' => array(
+    ],
+    'civicrm_activity_assignment' => [
       'entity' => 'ActivityAssignment',
       'display_name' => 'CiviCRM Activity Assignment',
       'dao' => 'CRM_Activity_DAO_ActivityAssignment',
       'base' => FALSE,
-    ),
-    'civicrm_note' => array(
+    ],
+    'civicrm_note' => [
       'entity' => 'Note',
       'display_name' => t('CiviCRM Note'),
       'dao' => 'CRM_Core_DAO_Note',
       'base' => FALSE,
-    ),
-  );
+    ],
+  ];
 }
 
 /**
  * Add PseudoConstant fields for civicrm Enties
  */
 function _civicrm_views_add_pseudoconstant(&$data){
-  $data['civicrm_event']['event_type']=array(
+  $data['civicrm_event']['event_type']=[
     'title'=> 'Civicrm Event Type',
     'help'=> 'Civicrm Event Type',
-    'field'=>array(
+    'field'=>[
       'id'=>'civicrm_pseudoconstant',
       'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>array(
+      'pseudo arguments'=>[
         'event',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'event_type_id',
-        ),
-      ),
+        ],
+      ],
       'real field'=>'event_type_id'
-    ),
-    'filter'=>array(
+    ],
+    'filter'=>[
       'id'=>'civicrm_in_operator',
       'options callback'=>'CRM_Event_PseudoConstant::eventType',
-      'options arguments'=>array(),
+      'options arguments'=>[],
       'real field'=>'event_type_id'
-    )
-  );
+    ]
+  ];
 
-  $data['civicrm_contribution']['contribution_status_id']['field'] = array(
+  $data['civicrm_contribution']['contribution_status_id']['field'] = [
     'id'=>'civicrm_pseudoconstant',
     'pseudo callback'=>'_civicrm_views_get_field_options',
-    'pseudo arguments'=>array(
+    'pseudo arguments'=>[
       'contribution',
       'getoptions',
-      array(
+      [
         'version' => 3,
         'field' => 'contribution_status_id',
-      ),
-    ),
+      ],
+    ],
     'real field'=> 'contribution_status_id'
-  );
-  $data['civicrm_contribution']['contribution_status_id']['filter'] = array(
+  ];
+  $data['civicrm_contribution']['contribution_status_id']['filter'] = [
     'id'=>'civicrm_in_operator',
     'options callback'=>'_civicrm_views_get_field_options',
-    'options arguments'=> array(
+    'options arguments'=> [
       'contribution',
       'getoptions',
-      array(
+      [
         'version' => 3,
         'field' => 'contribution_status_id',
-      ),
-    ),
+      ],
+    ],
     'real field'=> 'contribution_status_id'
-  );
+  ];
 
-  $data['civicrm_contribution']['contribution_type_id']['field'] = array(
+  $data['civicrm_contribution']['contribution_type_id']['field'] = [
     'id'=>'civicrm_pseudoconstant',
     'pseudo callback'=>'_civicrm_views_get_field_options',
-    'pseudo arguments'=>array(
+    'pseudo arguments'=>[
       'contribution',
       'getoptions',
-      array(
+      [
         'version' => 3,
         'field' => 'contribution_type_id',
-      ),
-    ),
+      ],
+    ],
     'real field'=> 'contribution_type_id'
-  );
-  $data['civicrm_contribution']['contribution_type_id']['filter'] = array(
+  ];
+  $data['civicrm_contribution']['contribution_type_id']['filter'] = [
     'id'=>'civicrm_in_operator',
     'options callback'=>'_civicrm_views_get_field_options',
-    'options arguments'=> array(
+    'options arguments'=> [
       'contribution',
       'getoptions',
-      array(
+      [
         'version' => 3,
         'field' => 'contribution_type_id',
-      ),
-    ),
+      ],
+    ],
     'real field'=> 'contribution_type_id'
-  );
-  $data['civicrm_contribution']['payment_instrument_id']['field'] = array(
+  ];
+  $data['civicrm_contribution']['payment_instrument_id']['field'] = [
     'id'=>'civicrm_pseudoconstant',
     'pseudo callback'=>'_civicrm_views_get_field_options',
-    'pseudo arguments'=>array(
+    'pseudo arguments'=>[
       'contribution',
       'getoptions',
-      array(
+      [
         'version' => 3,
         'field' => 'payment_instrument_id',
-      ),
-    ),
+      ],
+    ],
     'real field'=> 'payment_instrument_id'
-  );
-  $data['civicrm_contribution']['payment_instrument_id']['filter'] = array(
+  ];
+  $data['civicrm_contribution']['payment_instrument_id']['filter'] = [
     'id'=>'civicrm_in_operator',
     'options callback'=>'_civicrm_views_get_field_options',
-    'options arguments'=> array(
+    'options arguments'=> [
       'contribution',
       'getoptions',
-      array(
+      [
         'version' => 3,
         'field' => 'payment_instrument_id',
-      ),
-    ),
+      ],
+    ],
     'real field'=> 'payment_instrument_id'
-  );
+  ];
 
-  $data['civicrm_membership']['status_id']['field'] = array(
+  $data['civicrm_membership']['status_id']['field'] = [
     'id'=>'civicrm_pseudoconstant',
     'pseudo callback'=>'_civicrm_views_get_field_options',
-    'pseudo arguments'=>array(
+    'pseudo arguments'=>[
       'membership',
       'getoptions',
-      array(
+      [
         'version' => 3,
         'field' => 'status_id',
-      ),
-    ),
+      ],
+    ],
     'real field'=> 'status_id'
-  );
-  $data['civicrm_membership']['status_id']['filter'] = array(
+  ];
+  $data['civicrm_membership']['status_id']['filter'] = [
     'id'=>'civicrm_in_operator',
     'options callback'=>'_civicrm_views_get_field_options',
-    'options arguments'=> array(
+    'options arguments'=> [
       'membership',
       'getoptions',
-      array(
+      [
         'version' => 3,
         'field' => 'status_id',
-      ),
-    ),
+      ],
+    ],
     'real field'=> 'status_id'
-  );
+  ];
 
-  $data['civicrm_address']['state_province']=array(
+  $data['civicrm_address']['state_province']=[
     'title'=> 'Civicrm State Province',
     'help'=> 'Civicrm State Province',
-    'field'=>array(
+    'field'=>[
       'id'=>'civicrm_pseudoconstant',
       'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>array(
+      'pseudo arguments'=>[
         'contact',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'state_province_id',
-        ),
-      ),
+        ],
+      ],
       'real field'=>'state_province_id'
-    ),
-    'filter'=>array(
+    ],
+    'filter'=>[
       'id'=>'civicrm_in_operator',
       'options callback'=>'CRM_Core_PseudoConstant::stateProvince',
-      'options arguments'=>array(),
+      'options arguments'=>[],
       'real field'=>'state_province_id'
-    )
-  );
-  $data['civicrm_address']['country']=array(
+    ]
+  ];
+  $data['civicrm_address']['country']=[
     'title'=> 'Civicrm Country',
     'help'=> 'Civicrm Country',
-    'field'=>array(
+    'field'=>[
       'id'=>'civicrm_pseudoconstant',
       'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>array(
+      'pseudo arguments'=>[
         'contact',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'country_id',
-        ),
-      ),
+        ],
+      ],
       'real field'=>'country_id'
-    ),
-    'filter'=>array(
+    ],
+    'filter'=>[
       'id'=>'civicrm_in_operator',
       'options callback'=>'CRM_Core_PseudoConstant::country',
-      'options arguments'=>array(),
+      'options arguments'=>[],
       'real field'=>'country_id'
-    )
-  );
-  $data['civicrm_contact']['gender_id']=array(
+    ]
+  ];
+  $data['civicrm_contact']['gender_id']=[
     'title'=> 'Civicrm Gender',
     'help'=> 'Civicrm Gender',
-    'field'=>array(
+    'field'=>[
       'id'=>'civicrm_pseudoconstant',
       'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>array(
+      'pseudo arguments'=>[
         'contact',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'gender_id',
-        ),
-      ),
+        ],
+      ],
       'real field'=>'gender_id'
-    ),
-    'filter'=>array(
+    ],
+    'filter'=>[
       'id'=>'civicrm_in_operator',
       'options callback'=>'CRM_Event_PseudoConstant::gender',
-      'options arguments'=>array(),
+      'options arguments'=>[],
       'real field'=>'gender_id'
-    )
-  );
-  $data['civicrm_participant']['status_id']=array(
+    ]
+  ];
+  $data['civicrm_participant']['status_id']=[
     'title'=> 'Civicrm Participant Status',
     'help'=> 'Civicrm Participant Status',
-    'field'=>array(
+    'field'=>[
       'id'=>'civicrm_pseudoconstant',
       'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>array(
+      'pseudo arguments'=>[
         'participant',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'status_id',
-        ),
-      ),
+        ],
+      ],
       'real field'=>'status_id'
-    ),
-    'filter'=>array(
+    ],
+    'filter'=>[
       'id'=>'civicrm_in_operator',
       'options callback'=>'_civicrm_views_get_field_options',
-      'options arguments'=>array(
+      'options arguments'=>[
         'participant',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'status_id',
-        ),
-      ),
+        ],
+      ],
       'real field'=>'status_id'
-    )
-  );
-  $data['civicrm_activity']['status_id']=array(
+    ]
+  ];
+  $data['civicrm_activity']['status_id']=[
     'title'=> 'Civicrm Activity Status',
     'help'=> 'Civicrm Activity Status',
-    'field'=>array(
+    'field'=>[
       'id'=>'civicrm_pseudoconstant',
       'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>array(
+      'pseudo arguments'=>[
         'activity',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'status_id',
-        ),
-      ),
+        ],
+      ],
       'real field'=>'status_id'
-    ),
-    'filter'=>array(
+    ],
+    'filter'=>[
       'id'=>'civicrm_in_operator',
       'options callback'=>'_civicrm_views_get_field_options',
-      'options arguments'=>array(
+      'options arguments'=>[
         'activity',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'status_id',
-        ),
-      ),
+        ],
+      ],
       'real field'=>'status_id'
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'id' => 'civicrm_custom_label',
       'label callback'=>'_civicrm_views_get_field_options',
-      'label arguments'=>array(
+      'label arguments'=>[
         'activity',
         'getoptions',
-        array(
+        [
           'version' => 3,
           'field' => 'status_id',
-        ),
-      ),
-    ),
-  );
+        ],
+      ],
+    ],
+  ];
 }
 
 // function _civicrm_views_add_extra_fields($data){
@@ -588,7 +588,7 @@ function _civicrm_views_add_pseudoconstant(&$data){
  * This is ordered alphabetically by array key.
  */
 function _civicrm_views_add_relationships(&$data) {
-  $data['civicrm_contact']['employer_id_contact']['relationship'] = array(
+  $data['civicrm_contact']['employer_id_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'employer_id',
     'base' => 'civicrm_contact',
@@ -596,8 +596,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Employer'),
     'label' => t('CiviCRM Employer (from Contact.employer_id'),
     'help' => t('CiviCRM Employer (from Contact.employer_id'),
-  );
-  $data['civicrm_contact']['id_address']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_address']['relationship'] = [
     'id' => 'civicrm_location',
     'field' => 'id',
     'base' => 'civicrm_address',
@@ -605,8 +605,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Addresses'),
     'label' => t('CiviCRM Addresses (from Contact.id)'),
     'help' => t('CiviCRM Addresses (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_contribution']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_contribution']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_contribution',
@@ -614,23 +614,23 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Contributions'),
     'label' => t('CiviCRM Contributions (from Contact.id)'),
     'help' => t('CiviCRM Contributions (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_entity_tag']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_entity_tag']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_entity_tag',
     'base field' => 'entity_id',
-    'extra' => array(
-      array(
+    'extra' => [
+      [
         'field' => 'entity_table',
         'value' => 'civicrm_contact',
-      ),
-    ),
+      ],
+    ],
     'title' => t('CiviCRM Tags'),
     'label' => t('CiviCRM Tags (from Contact.id)'),
     'help' => t('CiviCRM Tags (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_email']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_email']['relationship'] = [
     'id' => 'civicrm_location',
     'field' => 'id',
     'base' => 'civicrm_email',
@@ -638,8 +638,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Emails'),
     'label' => t('CiviCRM Emails (from Contact.id)'),
     'help' => t('CiviCRM Emails (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_group_contact']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_group_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_group_contact',
@@ -647,8 +647,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Groups'),
     'label' => t('CiviCRM Groups (from Contact.id)'),
     'help' => t('CiviCRM Groups (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_membership']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_membership']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_membership',
@@ -656,8 +656,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Memberships'),
     'label' => t('CiviCRM Memberships (from Contact.id)'),
     'help' => t('CiviCRM Memberships (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_participant']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_participant']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_participant',
@@ -665,8 +665,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Participants'),
     'label' => t('CiviCRM Participants (from Contact.id)'),
     'help' => t('CiviCRM Participants (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_phone']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_phone']['relationship'] = [
     'id' => 'civicrm_location',
     'field' => 'id',
     'base' => 'civicrm_phone',
@@ -674,8 +674,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Phones'),
     'label' => t('CiviCRM Phones (from Contact.id)'),
     'help' => t('CiviCRM Phones (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_relationship_a']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_relationship_a']['relationship'] = [
     'id' => 'civicrm_relationship',
     'field' => 'id',
     'base' => 'civicrm_relationship',
@@ -683,8 +683,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Relationship as Contact A'),
     'label' => t('CiviCRM Relationship as Contact A (from Contact.id)'),
     'help' => t('CiviCRM Relationship as Contact A (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_relationship_b']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_relationship_b']['relationship'] = [
     'id' => 'civicrm_relationship',
     'field' => 'id',
     'base' => 'civicrm_relationship',
@@ -692,8 +692,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Relationship as Contact B'),
     'label' => t('CiviCRM Relationships as Contact B (from Contact.id)'),
     'help' => t('CiviCRM Relationships as Contact B (from Contact.id)'),
-  );
-  $data['civicrm_contact']['id_uf_match']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['id_uf_match']['relationship'] = [
     'id' => 'civicrm_uf_match',
     'field' => 'id',
     'base' => 'civicrm_uf_match',
@@ -701,8 +701,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('Drupal Users'),
     'label' => t('Drupal Users (from Contact.id)'),
     'help' => t('Drupal Users (from Contact.id)'),
-  );
-  $data['civicrm_contact']['primary_contact_id_contact']['relationship'] = array(
+  ];
+  $data['civicrm_contact']['primary_contact_id_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'primary_contact_id',
     'base' => 'civicrm_contact',
@@ -710,24 +710,24 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Primary Contact'),
     'label' => t('CiviCRM Primary Contact (from Contact.primary_contact_id'),
     'help' => t('CiviCRM Primary Contact (from Contact.primary_contact_id'),
-  );
-  $data['civicrm_entity_tag']['entity_id_contact']['relationship'] = array(
+  ];
+  $data['civicrm_entity_tag']['entity_id_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'entity_id',
     'base' => 'civicrm_contact',
     'base field' => 'id',
-    'extra' => array(
-      array(
+    'extra' => [
+      [
         'table' => 'civicrm_entity_tag',
         'field' => 'entity_table',
         'value' => 'civicrm_contact',
-      ),
-    ),
+      ],
+    ],
     'title' => t('CiviCRM Contacts'),
     'label' => t('CiviCRM Contacts (from Tag.entity_id)'),
     'help' => t('CiviCRM Contacts (from Tag.entity_id)'),
-  );
-  $data['civicrm_event']['id_participant']['relationship'] = array(
+  ];
+  $data['civicrm_event']['id_participant']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_participant',
@@ -735,8 +735,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Participants'),
     'label' => t('CiviCRM Participants (from Event.id)'),
     'help' => t('CiviCRM Participants (from Event.id)'),
-  );
-  $data['civicrm_group']['id_group_contact']['relationship'] = array(
+  ];
+  $data['civicrm_group']['id_group_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_group_contact',
@@ -744,8 +744,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Group Contacts'),
     'label' => t('CiviCRM Group Contacts (from Group.id)'),
     'help' => t('CiviCRM Group Contacts (from Group.id)'),
-  );
-  $data['civicrm_relationship']['contact_id_a_contact']['relationship'] = array(
+  ];
+  $data['civicrm_relationship']['contact_id_a_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'contact_id_a',
     'base' => 'civicrm_contact',
@@ -753,8 +753,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Contact A'),
     'label' => t('CiviCRM Contact A (from Relationship.contact_id_a)'),
     'help' => t('CiviCRM Contact A (from Relationship.contact_id_a)'),
-  );
-  $data['civicrm_relationship']['contact_id_b_contact']['relationship'] = array(
+  ];
+  $data['civicrm_relationship']['contact_id_b_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'contact_id_b',
     'base' => 'civicrm_contact',
@@ -762,8 +762,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('CiviCRM Contact B'),
     'label' => t('CiviCRM Contact B (from Relationship.contact_id_b)'),
     'help' => t('CiviCRM Contact B (from Relationship.contact_id_b)'),
-  );
-  $data['civicrm_membership_payment']['id_membership']['relationship'] = array(
+  ];
+  $data['civicrm_membership_payment']['id_membership']['relationship'] = [
     'id' => 'standard',
     'field' => 'membership_id',
     'base' => 'civicrm_membership',
@@ -771,8 +771,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('Membership (from Contribution)'),
     'label' => t('Membership (from Contribution)'),
     'help' => t('Membership (from Contribution)'),
-  );
-  $data['civicrm_participant_payment']['id_participant']['relationship'] = array(
+  ];
+  $data['civicrm_participant_payment']['id_participant']['relationship'] = [
     'id' => 'standard',
     'field' => 'participant_id',
     'base' => 'civicrm_participant',
@@ -780,8 +780,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('Participant (from Contribution)'),
     'label' => t('Participant (from Contribution)'),
     'help' => t('Participant (from Contribution)'),
-  );
-  $data['civicrm_activity']['id_civicrm_activity_target']['relationship'] = array(
+  ];
+  $data['civicrm_activity']['id_civicrm_activity_target']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_activity_target',
@@ -789,8 +789,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('Activity ID (from civicrm_activity_target.activity_id)'),
     'label' => t('Activity ID (from civicrm_activity_target.activity_id)'),
     'help' => t('Activity ID (from civicrm_activity_target.activity_id)'),
-  );
-  $data['civicrm_activity']['id_civicrm_activity_assignee']['relationship'] = array(
+  ];
+  $data['civicrm_activity']['id_civicrm_activity_assignee']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_activity_assignment',
@@ -798,8 +798,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('Activity ID (from civicrm_activity_assignment.activity_id)'),
     'label' => t('Activity ID (from civicrm_activity_assignment.activity_id)'),
     'help' => t('Activity ID (from civicrm_activity_assignment.activity_id)'),
-  );
-  $data['civicrm_activity']['source_contact_id']['relationship'] = array(
+  ];
+  $data['civicrm_activity']['source_contact_id']['relationship'] = [
     'id' => 'standard',
     'field' => 'source_contact_id',
     'base' => 'civicrm_contact',
@@ -807,8 +807,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('source_contact_id (from civicrm_contact.id)'),
     'label' => t('source_contact_id (from civicrm_contact.id)'),
     'help' => t('source_contact_id (from civicrm_contact.id)'),
-  );
-  $data['civicrm_activity_target']['target_civicrm_contact']['relationship'] = array(
+  ];
+  $data['civicrm_activity_target']['target_civicrm_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'target_contact_id',
     'base' => 'civicrm_contact',
@@ -816,8 +816,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('target_contact_id (from civicrm_contact.id)'),
     'label' => t('target_contact_id (from civicrm_contact.id)'),
     'help' => t('target_contact_id (from civicrm_contact.id)'),
-  );
-  $data['civicrm_activity_assignment']['assignee_civicrm_contact']['relationship'] = array(
+  ];
+  $data['civicrm_activity_assignment']['assignee_civicrm_contact']['relationship'] = [
     'id' => 'standard',
     'field' => 'assignee_contact_id',
     'base' => 'civicrm_contact',
@@ -825,8 +825,8 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('assignee_contact_id (from civicrm_contact.id)'),
     'label' => t('assignee_contact_id (from civicrm_contact.id)'),
     'help' => t('assignee_contact_id (from civicrm_contact.id)'),
-  );
-  $data['civicrm_activity']['civicrm_activity_parent_id']['relationship'] = array(
+  ];
+  $data['civicrm_activity']['civicrm_activity_parent_id']['relationship'] = [
     'id' => 'standard',
     'field' => 'parent_id',
     'base' => 'civicrm_activity',
@@ -834,52 +834,52 @@ function _civicrm_views_add_relationships(&$data) {
     'title' => t('civicrm_activity_parent_id (from civicrm_activity.id)'),
     'label' => t('civicrm_activity_parent_id (from civicrm_activity.id)'),
     'help' => t('civicrm_activity_parent_id (from civicrm_activity.id)'),
-    );
-  $data['civicrm_contact']['id_entity_note']['relationship'] = array(
+    ];
+  $data['civicrm_contact']['id_entity_note']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_note',
     'base field' => 'entity_id',
-    'extra' => array(
-      array(
+    'extra' => [
+      [
         'field' => 'entity_table',
         'value' => 'civicrm_contact',
-      ),
-    ),
+      ],
+    ],
     'title' => t('CiviCRM Notes'),
     'label' => t('CiviCRM Notes (from Contact.id)'),
     'help' => t('CiviCRM Notes (from Contact.id)'),
-  );
-  $data['civicrm_contribution']['id_entity_note']['relationship'] = array(
+  ];
+  $data['civicrm_contribution']['id_entity_note']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_note',
     'base field' => 'entity_id',
-    'extra' => array(
-      array(
+    'extra' => [
+      [
         'field' => 'entity_table',
         'value' => 'civicrm_contribution',
-      ),
-    ),
+      ],
+    ],
     'title' => t('CiviCRM Notes'),
     'label' => t('CiviCRM Notes (from Contribution.id)'),
     'help' => t('CiviCRM Notes (from Contribution.id)'),
-  );
-  $data['civicrm_participant']['id_entity_note']['relationship'] = array(
+  ];
+  $data['civicrm_participant']['id_entity_note']['relationship'] = [
     'id' => 'standard',
     'field' => 'id',
     'base' => 'civicrm_note',
     'base field' => 'entity_id',
-    'extra' => array(
-      array(
+    'extra' => [
+      [
         'field' => 'entity_table',
         'value' => 'civicrm_participant',
-      ),
-    ),
+      ],
+    ],
     'title' => t('CiviCRM Notes'),
     'label' => t('CiviCRM Notes (from Participant.id)'),
     'help' => t('CiviCRM Notes (from Participant.id)'),
-  );
+  ];
 }
 
 /**
@@ -889,138 +889,138 @@ function _civicrm_views_add_relationships(&$data) {
  * This is ordered alphabetically by array key.
  */
 function _civicrm_views_add_implicit_joins(&$data) {
-  $data['civicrm_address']['table']['join'] = array(
-    'civicrm_contribution' => array(
+  $data['civicrm_address']['table']['join'] = [
+    'civicrm_contribution' => [
       'left_field' => 'address_id',
       'field' => 'id',
-    ),
-    'civicrm_event' => array(
+    ],
+    'civicrm_event' => [
       'left_field' => 'loc_block_id',
       'field' => 'id',
-    ),
-  );
-  $data['civicrm_contact']['table']['join'] = array(
-    'civicrm_activity_contact' => array(
+    ],
+  ];
+  $data['civicrm_contact']['table']['join'] = [
+    'civicrm_activity_contact' => [
       'left_field' => 'contact_id',
       'field' => 'id',
-    ),
-    'civicrm_contribution' => array(
+    ],
+    'civicrm_contribution' => [
       'left_field' => 'contact_id',
       'field' => 'id',
-    ),
-    'civicrm_group_contact' => array(
+    ],
+    'civicrm_group_contact' => [
       'left_field' => 'contact_id',
       'field' => 'id',
-    ),
-    'civicrm_membership' => array(
+    ],
+    'civicrm_membership' => [
       'left_field' => 'contact_id',
       'field' => 'id',
-    ),
-    'civicrm_participant' => array(
+    ],
+    'civicrm_participant' => [
       'left_field' => 'contact_id',
       'field' => 'id',
-    ),
-    'civicrm_uf_match' => array(
+    ],
+    'civicrm_uf_match' => [
       'left_field' => 'contact_id',
       'field' => 'id',
-    ),
-  );
-  $data['civicrm_group']['table']['join'] = array(
-    'civicrm_group_contact' => array(
+    ],
+  ];
+  $data['civicrm_group']['table']['join'] = [
+    'civicrm_group_contact' => [
       'left_field' => 'group_id',
       'field' => 'id',
-    ),
-  );
-  $data['civicrm_event']['table']['join'] = array(
-    'civicrm_participant' => array(
+    ],
+  ];
+  $data['civicrm_event']['table']['join'] = [
+    'civicrm_participant' => [
       'left_field' => 'event_id',
       'field' => 'id',
-    ),
-  );
-  $data['civicrm_membership_type']['table']['join'] = array(
-    'civicrm_membership' => array(
+    ],
+  ];
+  $data['civicrm_membership_type']['table']['join'] = [
+    'civicrm_membership' => [
       'left_field' => 'membership_type_id',
       'field' => 'id',
-    ),
-  );
-  $data['civicrm_relationship_type']['table']['join'] = array(
-    'civicrm_relationship' => array(
+    ],
+  ];
+  $data['civicrm_relationship_type']['table']['join'] = [
+    'civicrm_relationship' => [
       'left_field' => 'relationship_type_id',
       'field' => 'id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_membership_payment']['table']['join'] = array(
-    'civicrm_membership' => array(
+  $data['civicrm_membership_payment']['table']['join'] = [
+    'civicrm_membership' => [
       'left_field' => 'id',
       'field' => 'membership_id',
-    ),
-    'civicrm_contribution' => array(
+    ],
+    'civicrm_contribution' => [
       'left_field' => 'id',
       'field' => 'contribution_id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_participant_payment']['table']['join'] = array(
-    'civicrm_participant' => array(
+  $data['civicrm_participant_payment']['table']['join'] = [
+    'civicrm_participant' => [
       'left_field' => 'id',
       'field' => 'participant_id',
-    ),
-    'civicrm_contribution' => array(
+    ],
+    'civicrm_contribution' => [
       'left_field' => 'id',
       'field' => 'contribution_id',
-    ),
-  );
+    ],
+  ];
 
   // Only join to the users table if the civicrm tables are
   // in the same database.
   if (!\Drupal\Core\Database\Database::getConnectionInfo('civicrm')) {
-    $data['civicrm_uf_match']['table']['join'] = array(
-      'users' => array(
+    $data['civicrm_uf_match']['table']['join'] = [
+      'users' => [
         'left_field' => 'uid',
         'field' => 'uf_id',
-        'extra' => array(
-          array(
+        'extra' => [
+          [
             'field' => 'domain_id',
             'value' => \CRM_Core_Config::domainID(),
             'numerical' => TRUE,
-          ),
-        ),
-      ),
-    );
+          ],
+        ],
+      ],
+    ];
 
-    $data['civicrm_event']['table']['join']['users'] = array(
+    $data['civicrm_event']['table']['join']['users'] = [
       'left_table' => 'civicrm_uf_match',
       'left_field' => 'contact_id',
       'field' => 'created_id',
-    );
-    $data['civicrm_event']['table']['join']['users_field_data'] = array(
+    ];
+    $data['civicrm_event']['table']['join']['users_field_data'] = [
       'left_field' => 'uid',
       'field' => 'created_id',
-    );
+    ];
 
-    $data['civicrm_uf_match']['table']['join']['civicrm_participant'] = array(
+    $data['civicrm_uf_match']['table']['join']['civicrm_participant'] = [
       'left_field' => 'contact_id',
       'field' => 'contact_id',
-    );
-    $data['civicrm_participant']['table']['join']['users'] = array(
+    ];
+    $data['civicrm_participant']['table']['join']['users'] = [
       'left_table' => 'civicrm_uf_match',
       'left_field' => 'contact_id',
       'field' => 'contact_id',
-    );
-    $data['civicrm_participant']['table']['join']['users_field_data'] = array(
+    ];
+    $data['civicrm_participant']['table']['join']['users_field_data'] = [
       'left_field' => 'uid',
       'field' => 'contact_id',
-    );
-    $data['users']['table']['join']['civicrm_participant'] = array(
+    ];
+    $data['users']['table']['join']['civicrm_participant'] = [
       'left_table' => 'civicrm_uf_match',
       'left_field' => 'uf_id',
       'field' => 'uid',
-    );
-    $data['civicrm_uf_match']['table']['join']['civicrm_participant'] = array(
+    ];
+    $data['civicrm_uf_match']['table']['join']['civicrm_participant'] = [
       'left_field' => 'contact_id',
       'field' => 'contact_id',
-    );
+    ];
   }
 }
 
@@ -1049,48 +1049,48 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
 
   switch($type) {
     case CRM_Utils_Type::T_INT:
-      return array(
+      return [
         'id' => 'numeric',
-      );
+      ];
     case CRM_Utils_Type::T_FLOAT:
     case CRM_Utils_Type::T_MONEY:
-      return array(
+      return [
         'id' => 'numeric',
         'float' => true,
-      );
+      ];
     case CRM_Utils_Type::T_ENUM:
     case CRM_Utils_Type::T_STRING:
       if($field['data_type']=='File'){
-        return array(
+        return [
           'id' => 'civicrm_pseudoconstant',
           'pseudo info'=>$field,
-        );
+        ];
       }else{
-        return array(
+        return [
           'id' => 'civicrm_standard',
-        );
+        ];
       }
 
     case CRM_Utils_Type::T_TEXT:
     case CRM_Utils_Type::T_LONGTEXT:
       // @Todo: Override markup to allow configurable text formats
-      return array(
+      return [
         'id' => 'civicrm_markup',
-      );
+      ];
     case CRM_Utils_Type::T_BOOLEAN:
-      return array(
+      return [
         'id' => 'boolean',
-      );
+      ];
     case CRM_Utils_Type::T_URL:
-      return array(
+      return [
         'id' => 'url',
-      );
+      ];
     case CRM_Utils_Type::TWELVE:
     case CRM_Utils_Type::T_DATE:
     case CRM_Utils_Type::T_TIMESTAMP:
-      return array(
+      return [
         'id' => 'civicrm_date',
-      );
+      ];
     case 'pseudoconstant':
       if(preg_match('/^custom_(\d+)/',$field['name'],$match)){
         $entityName = 'contact';
@@ -1098,24 +1098,24 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
       else{
         $entityName = $entity['entity'];
       }
-      return array(
+      return [
         'id' => 'civicrm_pseudoconstant',
         'pseudo callback' => "_civicrm_views_get_field_options",
-        'pseudo arguments' => array(
+        'pseudo arguments' => [
           $entityName,
           'getoptions',
-          array(
+          [
             'version' => 3,
             'field' => $field['name'],
-          ),
-        ),
+          ],
+        ],
         'pseudo info'=>$field,
-      );
+      ];
 
     default:
-      return array(
+      return [
         'id' => 'standard',
-      );
+      ];
   }
 }
 
@@ -1142,9 +1142,9 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
 function _civicrm_views_field_to_sort_plugin($entity, $field) {
   switch($field['type']) {
     default:
-      return array(
+      return [
         'id' => 'standard',
-      );
+      ];
   }
 }
 
@@ -1173,45 +1173,45 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
 
   switch ($type) {
     case CRM_Utils_Type::T_BOOLEAN:
-      return array(
+      return [
         'id' => 'boolean',
-      );
+      ];
     case CRM_Utils_Type::T_INT:
     case CRM_Utils_Type::T_FLOAT:
     case CRM_Utils_Type::T_MONEY:
-      return array(
+      return [
         'id' => 'numeric',
-      );
+      ];
     case CRM_Utils_Type::T_ENUM:
     case CRM_Utils_Type::T_STRING:
     case CRM_Utils_Type::T_TEXT:
     case CRM_Utils_Type::T_LONGTEXT:
     case CRM_Utils_Type::T_URL:
     case CRM_Utils_Type::T_EMAIL:
-      return array(
+      return [
         'id' => 'string',
-      );
+      ];
     case CRM_Utils_Type::TWELVE:
     case CRM_Utils_Type::T_DATE:
     case CRM_Utils_Type::T_TIMESTAMP:
-      return array(
+      return [
         'id' => 'civicrm_date',
-      );
+      ];
     case 'pseudoconstant':
       if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
-        return array(
+        return [
           'id' => 'civicrm_custom_option',
-          'options arguments' => array(
+          'options arguments' => [
             'custom_field_id'=> $match[1]
-            ),
+            ],
           'pseudo info'=>$field,
-        );
+        ];
       }
 
     default:
-      return array(
+      return [
         'id' => 'standard',
-      );
+      ];
   }
 }
 
@@ -1225,31 +1225,31 @@ function _civicrm_views_field_to_argument_plugin($entity, $field) {
   switch ($type) {
     case CRM_Utils_Type::T_INT:
     case CRM_Utils_Type::T_FLOAT:
-      return array(
+      return [
         'id' => 'numeric',
-      );
+      ];
     case CRM_Utils_Type::T_ENUM:
     case CRM_Utils_Type::T_STRING:
     case CRM_Utils_Type::T_URL:
     case CRM_Utils_Type::T_EMAIL:
-      return $field['data_type']!='File'?array(
+      return $field['data_type']!='File'?[
         'id' => 'string',
-      ):null;
+      ]:null;
     case CRM_Utils_Type::TWELVE:
     case CRM_Utils_Type::T_DATE:
     case CRM_Utils_Type::T_TIMESTAMP:
-        return array(
+        return [
           'id' => 'civicrm_date',
-      );
+      ];
     case 'pseudoconstant':
       if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
-        return array(
+        return [
           'id' => 'civicrm_custom_multiple',
-          'options arguments' => array(
+          'options arguments' => [
             'custom_field_id'=> $match[1]
-          ),
+          ],
           'pseudo info'=>$field,
-        );
+        ];
       }
   }
 }
@@ -1262,10 +1262,10 @@ function _civicrm_views_get_custom_fields() {
 
   require_once 'api/v3/utils.php';
 
-  $custom_fields = array();
+  $custom_fields = [];
   $dao = \CRM_Core_DAO::executeQuery($query);
   while ($dao->fetch()) {
-    $custom_fields[] = array(
+    $custom_fields[] = [
       'title' => $dao->label,
       'group' => $dao->title,
       'table' => $dao->table_name,
@@ -1277,7 +1277,7 @@ function _civicrm_views_get_custom_fields() {
       'extends'=>$dao->extends,
       'data_type'=>$dao->data_type,
       'html_type'=>$dao->html_type
-    );
+    ];
   }
   return $custom_fields;
 }

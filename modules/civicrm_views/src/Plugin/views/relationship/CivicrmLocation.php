@@ -14,7 +14,7 @@ use Drupal\core\form\FormStateInterface;
  * @ViewsRelationship("civicrm_location")
  */
 class CivicrmLocation extends RelationshipPluginBase {
-  protected $locations = array();
+  protected $locations = [];
   protected $default_location = NULL;
 
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm) {
@@ -38,58 +38,58 @@ class CivicrmLocation extends RelationshipPluginBase {
   public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
     parent::init($view, $display, $options);
 
-    $this->definition['extra'] = array();
+    $this->definition['extra'] = [];
     if (!empty($this->options['location_type'])) {
-      $this->definition['extra'][] = array(
+      $this->definition['extra'][] = [
         'field' => 'location_type_id',
         'value' => (int) ($this->options['location_type'] == 'default' ? $this->default_location : $this->options['location_type']),
         'numeric' => TRUE,
-      );
+      ];
     }
     if (!empty($this->options['is_primary'])) {
-      $this->definition['extra'][] = array(
+      $this->definition['extra'][] = [
         'field' => 'is_primary',
         'value' => $this->options['is_primary'],
         'numeric' => TRUE,
-      );
+      ];
     }
     if (!empty($this->options['is_billing'])) {
-      $this->definition['extra'][] = array(
+      $this->definition['extra'][] = [
         'field' => 'is_billing',
         'value' => $this->options['is_billing'],
         'numeric' => TRUE,
-      );
+      ];
     }
   }
 
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['location_type'] = array('default' => 0);
-    $options['is_billing'] = array('default' => FALSE, 'bool' => TRUE);
-    $options['is_primary'] = array('default' => FALSE, 'bool' => TRUE);
+    $options['location_type'] = ['default' => 0];
+    $options['is_billing'] = ['default' => FALSE, 'bool' => TRUE];
+    $options['is_primary'] = ['default' => FALSE, 'bool' => TRUE];
     return $options;
   }
 
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['is_primary'] = array(
+    $form['is_primary'] = [
       '#type' => 'checkbox',
       '#title' => t('Is primary?'),
-      '#default_value' => isset($this->options['is_primary']) ? $this->options['is_primary'] : FALSE,
-    );
-    $form['is_billing'] = array(
+      '#default_value' => $this->options['is_primary'] ?? FALSE,
+    ];
+    $form['is_billing'] = [
       '#type' => 'checkbox',
       '#title' => t('Is billing?'),
-      '#default_value' => isset($this->options['is_billing']) ? $this->options['is_billing'] : FALSE,
-    );
-    $form['location_type'] = array(
+      '#default_value' => $this->options['is_billing'] ?? FALSE,
+    ];
+    $form['location_type'] = [
       '#type' => 'radios',
       '#title' => t('Location type'),
-      '#options' => array(
+      '#options' => [
         0 => t('Any'),
-        'default' => t('Default location (!default)', array('!default' => $this->locations[$this->default_location])),
-      ),
+        'default' => t('Default location (!default)', ['!default' => $this->locations[$this->default_location]]),
+      ],
       '#default_value' => isset($this->options['location_type']) ? (int) $this->options['location_type'] : 0,
-    );
+    ];
 
     foreach ($this->locations as $id => $location) {
       $form['location_type']['#options'][$id] = $location;

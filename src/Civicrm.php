@@ -48,7 +48,7 @@ class Civicrm {
     $forumLink      = "http://forum.civicrm.org/index.php/board,6.0.html";
 
     $errorMsgAdd = t("Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
-      array('!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink)
+      ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink]
     );
 
     $settingsFile = \Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php';
@@ -67,8 +67,8 @@ class Civicrm {
     $included = include_once 'CRM/Core/Config.php';
     if ($included == FALSE) {
       $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
-          array('!1' => $settingsFile)
-        ) . t("civicrm_root is currently set to: <em>!1</em>.", array('!1' => $civicrm_root)) . $errorMsgAdd;
+          ['!1' => $settingsFile]
+        ) . t("civicrm_root is currently set to: <em>!1</em>.", ['!1' => $civicrm_root]) . $errorMsgAdd;
       throw new ConfigException($msg);
     }
 
@@ -125,7 +125,7 @@ class Civicrm {
       $ctype = $default;
     }
 
-    if (!in_array($ctype, array('Individual', 'Organization', 'Household'))) {
+    if (!in_array($ctype, ['Individual', 'Organization', 'Household'])) {
       $ctype = $default;
     }
     return $ctype;

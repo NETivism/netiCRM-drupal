@@ -14,7 +14,7 @@ use Drupal\core\form\FormStateInterface;
  * @ViewsRelationship("civicrm_relationship")
  */
 class CivicrmRelationship extends RelationshipPluginBase {
-  protected $relationships = array();
+  protected $relationships = [];
 
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -46,44 +46,44 @@ class CivicrmRelationship extends RelationshipPluginBase {
   public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
     parent::init($view, $display, $options);
 
-    $this->definition['extra'] = array();
+    $this->definition['extra'] = [];
     if (!empty($this->options['is_active'])) {
-      $this->definition['extra'][] = array(
+      $this->definition['extra'][] = [
         'field' => 'is_active',
         'value' => TRUE,
-      );
+      ];
     }
     if (!empty($this->options['relationship_type']) && !array_key_exists(0, $this->options['relationship_type'])) {
-      $this->definition['extra'][] = array(
+      $this->definition['extra'][] = [
         'field' => 'relationship_type_id',
         'value' => $this->options['relationship_type'],
         'numeric' => TRUE,
-      );
+      ];
     }
   }
 
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['is_active'] = array('default' => TRUE, 'bool' => TRUE);
-    $options['relationship_type'] = array('default' => 0);
+    $options['is_active'] = ['default' => TRUE, 'bool' => TRUE];
+    $options['relationship_type'] = ['default' => 0];
     return $options;
   }
 
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['relationship_type'] = array(
+    $form['relationship_type'] = [
       '#type' => 'select',
       '#title' => 'Relationship type',
       '#multiple' => TRUE,
       '#options' => $this->relationships,
-      '#default_value' => isset($this->options['relationship_type']) ? $this->options['relationship_type'] : 0,
+      '#default_value' => $this->options['relationship_type'] ?? 0,
       '#required' => TRUE,
-    );
-    $form['is_active'] = array(
+    ];
+    $form['is_active'] = [
       '#type' => 'checkbox',
       '#title' => t('Ensure CiviCRM relationships are active?'),
-      '#default_value' => isset($this->options['is_active']) ? $this->options['is_active'] : TRUE,
+      '#default_value' => $this->options['is_active'] ?? TRUE,
       '#description' => t('Uncheck this to allow listing of expired or inactive relationships in addition to current relationships.'),
-    );
+    ];
 
     parent::buildOptionsForm($form, $form_state);
   }

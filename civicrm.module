@@ -358,24 +358,24 @@ function civicrm_cron(){
  * @Todo: set these fields are visible ONLY for the 'full' user display.
  */
 function civicrm_entity_extra_field_info() {
-  $extra['user']['user']['display']['civicrm_record'] = array(
+  $extra['user']['user']['display']['civicrm_record'] = [
     'label' => t('CiviCRM record link'),
     'description' => t('Link to user’s CiviCRM record.'),
     'weight' => 0,
     'visible' => FALSE,
-  );
-  $extra['user']['user']['display']['civicrm_dashboard'] = array(
+  ];
+  $extra['user']['user']['display']['civicrm_dashboard'] = [
     'label' => t('CiviCRM dashboard link'),
     'description' => t('Link to user’s CiviCRM dashboard.'),
     'weight' => 0,
     'visible' => FALSE,
-  );
-  $extra['user']['user']['display']['civicrm_profiles'] = array(
+  ];
+  $extra['user']['user']['display']['civicrm_profiles'] = [
     'label' => t('CiviCRM profile summaries'),
     'description' => t('A list CiviCRM profile summaries.'),
     'weight' => 0,
     'visible' => FALSE,
-  );
+  ];
 
   return $extra;
 }
@@ -438,9 +438,9 @@ function civicrm_user_view(array &$build, \Drupal\user\UserInterface $account, \
   // Add profile summaries.
   // @Todo Do we need to check permissions before viewing each profile?
   if (($conf = $display->getComponent('civicrm_profiles')) && $current_user->hasPermission('profile view')) {
-    $build['civicrm_profiles'] = array(
+    $build['civicrm_profiles'] = [
       '#weight' => $conf['weight'],
-    );
+    ];
 
     // We need the CiviCRM core Javascript.
 
@@ -478,7 +478,7 @@ function civicrm_user_view(array &$build, \Drupal\user\UserInterface $account, \
  */
 function _civicrm_get_profiles($contact_id) {
   \Drupal::service('civicrm')->initialize();
-  $profiles = array();
+  $profiles = [];
   $ctype = \CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $contact_id, 'contact_type');
 
   foreach (\CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account') as $id => $uf_group) {
@@ -510,12 +510,12 @@ function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
 
   // We need the CiviCRM core Javascript.
 
-  $form['civicrm_profile_register'] = array(
+  $form['civicrm_profile_register'] = [
     '#markup' => \Drupal\Core\Render\Markup::create($html),
     '#cache' => [
       'max-age' => 0,
     ],
-  );
+  ];
   $form['#validate'][] = '_civicrm_user_register_form_validate';
 }
 
@@ -551,16 +551,16 @@ function civicrm_on_user_page() {
  * Implements hook_theme().
  */
 function civicrm_theme() {
-  return array(
-    'civicrm_contact' => array(
+  return [
+    'civicrm_contact' => [
       'render element' => 'elements',
       'template' => 'civicrm-contact',
-    ),
-    'civicrm_user_profile' => array(
+    ],
+    'civicrm_user_profile' => [
       'render element' => 'elements',
       'template' => 'civicrm-user-profile',
-    )
-  );
+    ]
+  ];
 }
 
 /**
@@ -584,7 +584,7 @@ function civicrm_metatags_alter(&$metatags, &$context) {
     }
 
     // rebuild correct link
-    $items = array('og:url', 'canonical_url', 'shortlink');
+    $items = ['og:url', 'canonical_url', 'shortlink'];
     $link = "$secure://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     foreach($items as $item) {
       if (isset($metatags[$item])) {
@@ -593,7 +593,7 @@ function civicrm_metatags_alter(&$metatags, &$context) {
     }
 
     // unset wrong title, og image, etc.
-    $items = array('title', 'og:image');
+    $items = ['title', 'og:image'];
     foreach($items as $item) {
       if (isset($metatags[$item])) {
         unset($metatags[$item]);
@@ -646,7 +646,7 @@ cj( function( ) {
 });
 ";
         // this will add by CivicrmController
-        CRM_Utils_System::addJs(array('type' => 'inline'), $ckeditorInlineJs);
+        CRM_Utils_System::addJs(['type' => 'inline'], $ckeditorInlineJs);
       }
     }
   }

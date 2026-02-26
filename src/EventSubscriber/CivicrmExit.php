@@ -19,7 +19,7 @@ class CivicrmExit implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[KernelEvents::TERMINATE][] = array('beforeShutdown');
+    $events[KernelEvents::TERMINATE][] = ['beforeShutdown'];
     return $events;
   }
 

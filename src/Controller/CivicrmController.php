@@ -158,12 +158,12 @@ class CivicrmController extends ControllerBase {
 
     // We set the CiviCRM markup as safe and assume all XSSset (an other) issues have already
     // been taken care of.
-    $build = array(
+    $build = [
       '#markup' => Markup::create($content),
       '#cache' => [
         'max-age' => 0,
       ],
-    );
+    ];
 
     // Override default title value if one has been set in the course
     // of calling \CRM_Core_Invoke::invoke().

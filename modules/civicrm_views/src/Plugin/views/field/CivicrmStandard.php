@@ -21,9 +21,9 @@ class CivicrmStandard extends FieldPluginBase {
 
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['mask_output'] = array('default' => 'standard');
-    $options['mask_start'] = array('default' => '0');
-    $options['mask_end'] = array('default' => '0');
+    $options['mask_output'] = ['default' => 'standard'];
+    $options['mask_start'] = ['default' => '0'];
+    $options['mask_end'] = ['default' => '0'];
     return $options;
   }
 

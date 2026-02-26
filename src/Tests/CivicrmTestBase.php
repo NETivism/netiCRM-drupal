@@ -17,7 +17,7 @@ use Drupal\simpletest\WebTestBase;
 use Drupal\Core\Database\Database;
 
 abstract class CivicrmTestBase extends WebTestBase {
-  public static $modules = array('civicrm');
+  public static $modules = ['civicrm'];
 
   protected function setUp() {
     // If the civicrm_test database already exists, first drop it.

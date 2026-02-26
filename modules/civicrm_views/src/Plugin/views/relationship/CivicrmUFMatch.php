@@ -13,7 +13,7 @@ use Drupal\core\form\FormStateInterface;
  * @ViewsRelationship("civicrm_uf_match")
  */
 class CivicrmUFMatch extends RelationshipPluginBase {
-  protected $civicrm_domains = array();
+  protected $civicrm_domains = [];
   protected $civicrm_current_domain = 1;
 
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm) {
@@ -25,7 +25,7 @@ class CivicrmUFMatch extends RelationshipPluginBase {
 
     $this->civicrm_domains['current'] = t('Current domain');
     $this->civicrm_domains[0] = t('All domains');
-    $result = civicrm_api('domain', 'get', array('version' => 3));
+    $result = civicrm_api('domain', 'get', ['version' => 3]);
     if (empty($result['is_error'])) {
       foreach ($result['values'] as $value) {
         $this->civicrm_domains[$value['id']] = $value['name'];
@@ -46,31 +46,31 @@ class CivicrmUFMatch extends RelationshipPluginBase {
     parent::init($view, $display, $options);
 
     if (!empty($this->options['civicrm_domain'])) {
-      $this->definition['extra'] = array(
-        array(
+      $this->definition['extra'] = [
+        [
           'field' => 'domain_id',
           'value' => $this->options['civicrm_domain'] == 'current' ? $this->civicrm_current_domain : $this->options['civicrm_domain'],
           'numeric' => TRUE,
-        ),
-      );
+        ],
+      ];
     }
   }
 
   public function defineOptions() {
     $options = parent::defineOptions();
-    $options['civicrm_domain'] = array('default' => 'current');
+    $options['civicrm_domain'] = ['default' => 'current'];
     return $options;
   }
 
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['civicrm_domain'] = array(
+    $form['civicrm_domain'] = [
       '#type' => 'select',
       '#title' => 'Which domain of Drupal users do you want to join to?',
       '#description' => "CiviCRM can be run across multiple domains. Normally, leave this to 'current domain'.",
       '#options' => $this->civicrm_domains,
-      '#default_value' => isset($this->options['civicrm_domain']) ? $this->options['civicrm_domain'] : 'current',
+      '#default_value' => $this->options['civicrm_domain'] ?? 'current',
       '#required' => TRUE,
-    );
+    ];
 
     parent::buildOptionsForm($form, $form_state);
   }
