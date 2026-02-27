@@ -16,7 +16,7 @@ class CivicrmHelper {
    * @param $url
    * @return
    */
-  static function parseUrl($url) {
+  public static function parseUrl($url) {
     $processed = ['path' => '', 'route_name' => '', 'query' => []];
 
     // Remove leading '/' if it exists

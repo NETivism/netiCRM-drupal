@@ -12,7 +12,7 @@ class LocalTasks extends DeriverBase implements ContainerDeriverInterface {
     $civicrm->initialize();
   }
 
-  static public function create(ContainerInterface $container, $base_plugin_id) {
+  public static function create(ContainerInterface $container, $base_plugin_id) {
     return new static(
       $container->get('civicrm')
     );

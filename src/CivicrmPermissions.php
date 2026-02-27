@@ -9,7 +9,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class CivicrmPermissions implements ContainerInjectionInterface {
   use StringTranslationTrait;
 
-  static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container) {
     return new static();
   }
 
