@@ -24,7 +24,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
 
     $civicrm->initialize();
     $this->html_type=$this->definition['pseudo info']['html_type'];
-    if(key_exists('pseudo arguments',$this->definition)){
+    if(array_key_exists('pseudo arguments',$this->definition)){
       $this->pseudovalues = call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
     }
   }
@@ -46,7 +46,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
       $options['file_display_format'] = ['default' => 'url'];
     }
 
-    if(key_exists('pseudo arguments',$this->definition)){
+    if(array_key_exists('pseudo arguments',$this->definition)){
       $options['pseudoconstant_format'] = ['default' => 'raw'];
     }
 
@@ -73,7 +73,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
       ];
     }
 
-    if(key_exists('pseudo arguments',$this->definition)){
+    if(array_key_exists('pseudo arguments',$this->definition)){
       $form['pseudoconstant_format'] = [
         '#type' => 'radios',
         '#title' => t('Display format'),

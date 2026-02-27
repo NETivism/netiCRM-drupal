@@ -23,7 +23,7 @@ class CivicrmCustomOption extends CivicrmInOperator {
     if (isset($this->valueOptions)) {
       return $this->valueOptions;
     }
-    if(is_array($this->definition['options arguments']) && key_exists('custom_field_id', $this->definition['options arguments'])){
+    if(is_array($this->definition['options arguments']) && array_key_exists('custom_field_id', $this->definition['options arguments'])){
       $this->valueOptions=$this->getCustomFieldOptions($this->definition['options arguments']['custom_field_id']);
     }
 
