@@ -64,26 +64,26 @@
  *   An associative array describing your command(s).
  */
 function civicrm_drush_command() {
-  $items = array();
+  $items = [];
 
   // the key in the $items array is the name of the command.
-  $items['civicrm-api'] = array(
+  $items['civicrm-api'] = [
     'description' => 'CLI access to CiviCRM APIs. It can return pretty-printor json formatted data.',
     'examples' =>
-    array(
+    [
       'drush civicrm-api contact.create first_name=John last_name=Doe contact_type=Individual' => 'Create a new contact named John Doe',
       'drush civicrm-api contact.create id=1 --out=json' => 'Find/display a contact in JSON format',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'in' => 'Input type: "args" (command-line), "json" (STDIN)',
       'out' => 'Output type: "pretty" (STDOUT), "json" (STDOUT)',
-    ),
-    'aliases' => array('cvapi'),
-  );
-  $items['civicrm-install'] = array(
+    ],
+    'aliases' => ['cvapi'],
+  ];
+  $items['civicrm-install'] = [
     'description' => "Install a new instance of CiviCRM.",
     'options' =>
-    array(
+    [
       'dbuser' => 'MySQL username for your Drupal/CiviCRM database.',
       'dbpass' => 'MySQL password for your Drupal/CiviCRM database.',
       'dbhost' => 'MySQL host for your Drupal/CiviCRM database. Defaults to localhost.',
@@ -94,161 +94,161 @@ function civicrm_drush_command() {
       'langtarfile' => 'Path to your l10n tar.gz file.',
       'site_url' => 'Base Url for your drupal/CiviCRM website without http (e.g. mysite.com)',
       'ssl' => 'Using ssl for your drupal/CiviCRM website if set to on (e.g. --ssl=on)',
-    ),
-    'aliases' => array('cvi'),
-  );
-  $items['civicrm-ext-list'] = array(
+    ],
+    'aliases' => ['cvi'],
+  ];
+  $items['civicrm-ext-list'] = [
     'description' => "List of CiviCRM extensions enabled.",
-    'examples' => array(
+    'examples' => [
       'Standard example' => 'drush civicrm-ext-list',
-    ),
-    'aliases' => array('cel'),
-  );
-  $items['civicrm-ext-install'] = array(
+    ],
+    'aliases' => ['cel'],
+  ];
+  $items['civicrm-ext-install'] = [
     'description' => "Install a CiviCRM extension.",
-    'arguments' => array(
+    'arguments' => [
       'ename' => 'Extension name.',
-    ),
+    ],
     'required-arguments' => TRUE,
-    'examples' => array(
+    'examples' => [
       'Standard example' => 'drush civicrm-ext-install civimobile',
-    ),
-    'aliases' => array('cei'),
-  );
-  $items['civicrm-ext-disable'] = array(
+    ],
+    'aliases' => ['cei'],
+  ];
+  $items['civicrm-ext-disable'] = [
     'description' => "Disable a CiviCRM extension.",
-    'arguments' => array(
+    'arguments' => [
       'ename' => 'Extension name.',
-    ),
+    ],
     'required-arguments' => TRUE,
-    'examples' => array(
+    'examples' => [
       'Standard example' => 'drush civicrm-ext-disable civimobile',
-    ),
-    'aliases' => array('ced'),
-  );
-  $items['civicrm-ext-uninstall'] = array(
+    ],
+    'aliases' => ['ced'],
+  ];
+  $items['civicrm-ext-uninstall'] = [
     'description' => "Uninstall a CiviCRM extension.",
-    'arguments' => array(
+    'arguments' => [
       'ename' => 'Extension name.',
-    ),
+    ],
     'required-arguments' => TRUE,
-    'examples' => array(
+    'examples' => [
       'Standard example' => 'drush civicrm-ext-uninstall civimobile',
-    ),
-    'aliases' => array('ceui'),
-  );
+    ],
+    'aliases' => ['ceui'],
+  ];
 
-  $items['civicrm-upgrade-db'] = array(
+  $items['civicrm-upgrade-db'] = [
     'description' => "Execute the civicrm/upgrade?reset=1 process from the command line.",
-    'aliases' => array('cvupdb'),
-  );
-  $items['civicrm-update-cfg'] = array(
+    'aliases' => ['cvupdb'],
+  ];
+  $items['civicrm-update-cfg'] = [
     'description' => "Update config_backend to correct config settings, especially when the CiviCRM site has been cloned / migrated.",
     'examples' =>
-    array(
+    [
       'drush -l http://example.com/civicrm civicrm-update-cfg' =>
       'Update config_backend to correct config settings for civicrm installation on example.com site.',
-    ),
-    'aliases' => array('cvupcfg'),
-  );
-  $items['civicrm-enable-debug'] = array(
+    ],
+    'aliases' => ['cvupcfg'],
+  ];
+  $items['civicrm-enable-debug'] = [
     'description' => "Enable CiviCRM Debugging.",
-  );
-  $items['civicrm-upgrade'] = array(
+  ];
+  $items['civicrm-upgrade'] = [
     'description' => "Replace CiviCRM codebase with new specified tarfile and upgrade database by executing the CiviCRM upgrade process - civicrm/upgrade?reset=1.",
     'examples' =>
-    array(
+    [
       'drush civicrm-upgrade --tarfile=~/tarballs/civicrm-4.1.2-drupal.tar.gz' =>
       'Replace old CiviCRM codebase with new v4.1.2 and run upgrade process.',
-    ),
+    ],
     'options' =>
-    array(
+    [
       'tarfile' =>
       'Path of new CiviCRM tarfile, with which current CiviCRM codebase is to be replaced.',
       'backup-dir' =>
       'Specify a directory to backup current CiviCRM codebase and database into, defaults to a backup directory above your Drupal root.',
-    ),
-    'aliases' => array('cvup'),
-  );
-  $items['civicrm-restore'] = array(
+    ],
+    'aliases' => ['cvup'],
+  ];
+  $items['civicrm-restore'] = [
     'description' => 'Restore CiviCRM codebase and database back from the specified backup directory.',
     'examples' =>
-    array(
+    [
       'drush civicrm-restore --restore-dir=../backup/modules/20100309200249' =>
       'Replace current civicrm codebase with the $restore-dir/civicrm codebase, and reload the database with $restore-dir/civicrm.sql file',
-    ),
+    ],
     'options' =>
-    array(
+    [
       'restore-dir' =>
       'Path of directory having backed up CiviCRM codebase and database.',
       'backup-dir' =>
       'Specify a directory to backup current CiviCRM codebase and database into, defaults to a backup directory above your Drupal root.',
-    ),
-  );
-  $items['civicrm-rest'] = array(
+    ],
+  ];
+  $items['civicrm-rest'] = [
     'description' => "Rest interface for accessing CiviCRM APIs. It can return xml or json formatted data.",
     'examples' =>
-    array(
+    [
       "drush civicrm-rest --query='civicrm/contact/search&json=1&key=7decb879f28ac4a0c6a92f0f7889a0c9&api_key=7decb879f28ac4a0c6a92f0f7889a0c9'" =>
       'Use contact search api to return data in json format.',
-    ),
+    ],
     // TODO: This really makes more sense as an argument.
     'options' =>
-    array('query' => 'Query part of url. Refer CiviCRM wiki doc for more details.'),
-    'aliases' => array('cvr'),
-  );
-  $items['civicrm-sql-conf'] = array(
+    ['query' => 'Query part of url. Refer CiviCRM wiki doc for more details.'],
+    'aliases' => ['cvr'],
+  ];
+  $items['civicrm-sql-conf'] = [
     // explicit callback declaration and non-standard name to avoid collision with "sql-conf"
     'callback' => 'drush_civicrm_sqlconf',
     'description' => 'Print CiviCRM database connection details.',
-  );
-  $items['civicrm-sql-connect'] = array(
+  ];
+  $items['civicrm-sql-connect'] = [
     // explicit callback declaration and non-standard name to avoid collision with "sql-connect"
     'callback' => 'drush_civicrm_sqlconnect',
     'description' => 'A string for connecting to the CiviCRM DB.',
-  );
-  $items['civicrm-sql-dump'] = array(
+  ];
+  $items['civicrm-sql-dump'] = [
     // explicit callback declaration and non-standard name to avoid collision with "sql-dump"
     'callback' => 'drush_civicrm_sqldump',
     'description' => 'Exports the CiviCRM DB as SQL using mysqldump.',
-    'examples' => array(
+    'examples' => [
       'drush civicrm-sql-dump --result-file=../CiviCRM.sql' => 'Save SQL dump to the directory above Drupal root.',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'data-only' => 'Dump data without statements to create any of the schema.',
       'gzip' => 'Compress the dump using the gzip program which must be in your $PATH.',
       'result-file' => 'Save to a file.',
       'tables-list' => 'comma-separated list of tables to transfer.',
-    ),
-  );
-  $items['civicrm-sql-query'] = array(
+    ],
+  ];
+  $items['civicrm-sql-query'] = [
     // explicit callback declaration and non-standard name to avoid collision with "sql-query"
     'callback' => 'drush_civicrm_sqlquery',
     'description' => 'Execute a query against the CiviCRM database.',
-    'examples' => array(
+    'examples' => [
       'drush civicrm-sql-query "SELECT * FROM civicrm_contact WHERE id=1"' => 'Browse user record',
-    ),
-    'arguments' => array(
+    ],
+    'arguments' => [
       'query' => 'A SQL query. Mandatory.',
-    ),
-  );
-  $items['civicrm-sql-cli'] = array(
+    ],
+  ];
+  $items['civicrm-sql-cli'] = [
     // explicit callback declaration and non-standard name to avoid collision with "sql-cli"
     'callback' => 'drush_civicrm_sqlcli',
     'description' => "Open a SQL command-line interface using CiviCRM's credentials.",
-    'aliases' => array('cvsqlc'),
-  );
-  $items['civicrm-process-mail-queue'] = array(
+    'aliases' => ['cvsqlc'],
+  ];
+  $items['civicrm-process-mail-queue'] = [
     'description' => "Process pending CiviMail mailing jobs.",
     'examples' =>
-    array(
+    [
       'drush civicrm-process-mail-queue -u admin' =>
       'Process CiviMail queue with admin credentials.',
-    ),
-  );
-  $items['civicrm-member-records'] = array(
+    ],
+  ];
+  $items['civicrm-member-records'] = [
     'description' => "Run the CiviMember UpdateMembershipRecord cron (civicrm-member-records).",
-  );
+  ];
 
   return $items;
 }
@@ -338,7 +338,7 @@ function drush_civicrm_install() {
   // generate civicrm.settings.php file
   _civicrm_generate_settings_file($dbuser, $dbpass, $dbhost, $dbname, $modPath);
 
-  module_enable(array('civicrm'));
+  module_enable(['civicrm']);
 
   drush_log(dt("CiviCRM installed."), 'ok');
 }
@@ -417,10 +417,10 @@ function _civicrm_generate_settings_file($dbuser, $dbpass, $dbhost, $dbname, $mo
   $siteRoot   = drush_get_context('DRUSH_DRUPAL_SITE_ROOT', FALSE);
   $crmPath    = "$modPath/civicrm";
 
-  $files = array(
+  $files = [
     "$crmPath/templates/CRM/common/civicrm.settings.php.template",
     "$crmPath/templates/CRM/common/civicrm.settings.php.tpl"
-  );
+  ];
 
   $settingsTplFile = NULL;
   foreach ($files as $file) {
@@ -458,7 +458,7 @@ function _civicrm_generate_settings_file($dbuser, $dbpass, $dbhost, $dbname, $mo
     $cms = $v['cms'];
   }
 
-  $params = array(
+  $params = [
     'crmRoot' => $crmPath,
     'templateCompileDir' => "$drupalRoot/$siteRoot/files/civicrm/templates_c",
     'frontEnd' => 0,
@@ -473,7 +473,7 @@ function _civicrm_generate_settings_file($dbuser, $dbpass, $dbhost, $dbname, $mo
     'CMSdbHost' => $db_spec['host'],
     'CMSdbName' => $db_spec['database'],
     'siteKey' => md5(uniqid('', TRUE) . $baseUrl),
-  );
+  ];
   $str = file_get_contents($settingsTplFile);
   foreach ($params as $key => $value) {
     $str = str_replace('%%' . $key . '%%', $value, $str);
@@ -483,7 +483,7 @@ function _civicrm_generate_settings_file($dbuser, $dbpass, $dbhost, $dbname, $mo
   $configFile = "$drupalRoot/$siteRoot/civicrm.settings.php";
   civicrm_write_file($configFile, $str);
   @drush_op('chmod', "$configFile", 0644);
-  drush_log(dt("Settings file generated: !file", array('!file' => $configFile)), 'ok');
+  drush_log(dt("Settings file generated: !file", ['!file' => $configFile]), 'ok');
 }
 
 /**
@@ -538,13 +538,13 @@ function civicrm_drush_help($section) {
 function drush_civicrm_ext_list() {
   civicrm_initialize();
   try{
-    $result = civicrm_api('extension', 'get', array('version' => 3));
-    $rows = array(array(dt('App name'), dt('Status')));
+    $result = civicrm_api('extension', 'get', ['version' => 3]);
+    $rows = [[dt('App name'), dt('Status')]];
     foreach ($result['values'] as $k => $extension_data) {
-      $rows[] = array(
+      $rows[] = [
         $extension_data['key'],
         $extension_data['status'],
-      );
+      ];
     }
     unset($result);
     drush_print_table($rows, TRUE);
@@ -554,7 +554,7 @@ function drush_civicrm_ext_list() {
     $errorMessage = $e->getMessage();
     $errorCode = $e->getErrorCode();
     $errorData = $e->getExtraParams();
-    drush_log(dt("!error", array('!error' => $errorData), 'error'));
+    drush_log(dt("!error", ['!error' => $errorData], 'error'));
   }
 }
 
@@ -564,11 +564,11 @@ function drush_civicrm_ext_list() {
 function drush_civicrm_ext_install($extension_name) {
   civicrm_initialize();
   try{
-    $result = civicrm_api('extension', 'install', array('key' => $extension_name, 'version' => 3));
+    $result = civicrm_api('extension', 'install', ['key' => $extension_name, 'version' => 3]);
     if($result['values'] && $result['values'] == 1) {
-      drush_print(dt("Extension !ename installed.", array('!ename' => $extension_name)));
+      drush_print(dt("Extension !ename installed.", ['!ename' => $extension_name]));
     } else {
-      drush_log(t('Extension !ename could not be installed.', array('!ename' => $extension_name)), 'error');    
+      drush_log(t('Extension !ename could not be installed.', ['!ename' => $extension_name]), 'error');    
     }
   }
   catch (CiviCRM_API3_Exception $e) {
@@ -576,7 +576,7 @@ function drush_civicrm_ext_install($extension_name) {
     $errorMessage = $e->getMessage();
     $errorCode = $e->getErrorCode();
     $errorData = $e->getExtraParams();
-    drush_log(dt("!error", array('!error' => $errorData), 'error'));
+    drush_log(dt("!error", ['!error' => $errorData], 'error'));
   }
 }
 
@@ -586,11 +586,11 @@ function drush_civicrm_ext_install($extension_name) {
 function drush_civicrm_ext_disable($extension_name) {
   civicrm_initialize();
   try{
-    $result = civicrm_api('extension', 'disable', array('key' => $extension_name, 'version' => 3));
+    $result = civicrm_api('extension', 'disable', ['key' => $extension_name, 'version' => 3]);
     if($result['values'] && $result['values'] == 1) {
-      drush_print(dt("Extension !ename disabled.", array('!ename' => $extension_name)));
+      drush_print(dt("Extension !ename disabled.", ['!ename' => $extension_name]));
     } else {
-      drush_log(t('Extension !ename could not be disabled.', array('!ename' => $extension_name)), 'error');
+      drush_log(t('Extension !ename could not be disabled.', ['!ename' => $extension_name]), 'error');
     }
   }
   catch (CiviCRM_API3_Exception $e) {
@@ -598,7 +598,7 @@ function drush_civicrm_ext_disable($extension_name) {
     $errorMessage = $e->getMessage();
     $errorCode = $e->getErrorCode();
     $errorData = $e->getExtraParams();
-    drush_log(dt("!error", array('!error' => $errorData), 'error'));
+    drush_log(dt("!error", ['!error' => $errorData], 'error'));
   }
 }
 
@@ -608,11 +608,11 @@ function drush_civicrm_ext_disable($extension_name) {
 function drush_civicrm_ext_uninstall($extension_name) {
   civicrm_initialize();
   try{
-    $result = civicrm_api('extension', 'uninstall', array('key' => $extension_name, 'version' => 3));
+    $result = civicrm_api('extension', 'uninstall', ['key' => $extension_name, 'version' => 3]);
     if($result['values'] && $result['values'] == 1) {
-      drush_print(dt("Extension !ename uninstalled.", array('!ename' => $extension_name)));
+      drush_print(dt("Extension !ename uninstalled.", ['!ename' => $extension_name]));
     } else {
-      drush_log(t('Extension !ename could not be uninstalled.', array('!ename' => $extension_name)), 'error');    
+      drush_log(t('Extension !ename could not be uninstalled.', ['!ename' => $extension_name]), 'error');    
     }
   }
   catch (CiviCRM_API3_Exception $e) {
@@ -620,7 +620,7 @@ function drush_civicrm_ext_uninstall($extension_name) {
     $errorMessage = $e->getMessage();
     $errorCode = $e->getErrorCode();
     $errorData = $e->getExtraParams();
-    drush_log(dt("!error", array('!error' => $errorData), 'error'));
+    drush_log(dt("!error", ['!error' => $errorData], 'error'));
   }
 }
 
@@ -655,10 +655,10 @@ function drush_civicrm_upgrade_db_validate() {
     return drush_set_error('CIVICRM_VERSION_MISSING_CODE', dt('Version information missing in civicrm codebase.'));
   }
   elseif (version_compare($codeVer, $dbVer) > 0) {
-    drush_log(dt("Starting with v!dbVer -> v!codeVer upgrade ..", array('!dbVer' => $dbVer, '!codeVer' => $codeVer)));
+    drush_log(dt("Starting with v!dbVer -> v!codeVer upgrade ..", ['!dbVer' => $dbVer, '!codeVer' => $codeVer]));
   }
   elseif (version_compare($codeVer, $dbVer) < 0) {
-    return drush_set_error('CIVICRM_VERSION_UNEXPECTED', dt("Database is marked with an unexpected version '!dbVer' which is higher than that of codebase version '!codeVer'.", array('!dbVer' => $dbVer, '!codeVer' => $codeVer)));
+    return drush_set_error('CIVICRM_VERSION_UNEXPECTED', dt("Database is marked with an unexpected version '!dbVer' which is higher than that of codebase version '!codeVer'.", ['!dbVer' => $dbVer, '!codeVer' => $codeVer]));
   }
 
   return TRUE;
@@ -683,8 +683,8 @@ function drush_civicrm_upgrade_db() {
     $upgrade = new CRM_Upgrade_Page_Upgrade();
 
     // new since CiviCRM 4.1
-    if (is_callable(array(
-      $upgrade, 'setPrint'))) {
+    if (is_callable([
+      $upgrade, 'setPrint'])) {
       $upgrade->setPrint(TRUE);
     }
 
@@ -710,8 +710,8 @@ function drush_civicrm_update_cfg_validate() {
  * Implementation of command 'civicrm-update-cfg'
  */
 function drush_civicrm_update_cfg() {
-  $defaultValues = array();
-  $states = array('old', 'new');
+  $defaultValues = [];
+  $states = ['old', 'new'];
   for ($i = 1; $i <= 3; $i++) {
     foreach ($states as $state) {
       $name = "{$state}Val_{$i}";
@@ -760,7 +760,7 @@ function drush_civicrm_cacheclear() {
   variable_del('civicrm_class_loader');
 
   // Flush all caches using the API
-  $params = array();
+  $params = [];
 
   if (drush_get_option('triggers', FALSE)) {
     $params['triggers'] = 1;
@@ -773,7 +773,7 @@ function drush_civicrm_cacheclear() {
   $result = civicrm_api('System', 'flush', $params);
 
   if ($result['is_error']) {
-    drush_log(dt('An error occured: !message', array('!message' => $result['error_message'])), 'error');
+    drush_log(dt('An error occured: !message', ['!message' => $result['error_message']]), 'error');
     return;
   }
 
@@ -788,16 +788,16 @@ function drush_civicrm_enable_debug_validate() {
 }
 
 function drush_civicrm_enable_debug() {
-  $settings = array(
+  $settings = [
     'debug_enabled' => 1,
     'backtrace' => 1,
-  );
+  ];
 
   foreach ($settings as $key => $val) {
-    $result = civicrm_api('Setting', 'create', array('version' => 3, $key => $val));
+    $result = civicrm_api('Setting', 'create', ['version' => 3, $key => $val]);
 
     if ($result['is_error']) {
-      drush_log(dt('An error occured: !message', array('!message' => $result['error_message'])), 'error');
+      drush_log(dt('An error occured: !message', ['!message' => $result['error_message']]), 'error');
       return;
     }
   }
@@ -813,16 +813,16 @@ function drush_civicrm_disable_debug_validate() {
 }
 
 function drush_civicrm_disable_debug() {
-  $settings = array(
+  $settings = [
     'debug_enabled' => 0,
     'backtrace' => 0,
-  );
+  ];
 
   foreach ($settings as $key => $val) {
-    $result = civicrm_api('Setting', 'create', array('version' => 3, $key => $val));
+    $result = civicrm_api('Setting', 'create', ['version' => 3, $key => $val]);
 
     if ($result['is_error']) {
-      drush_log(dt('An error occured: !message', array('!message' => $result['error_message'])), 'error');
+      drush_log(dt('An error occured: !message', ['!message' => $result['error_message']]), 'error');
       return;
     }
   }
@@ -868,13 +868,13 @@ function drush_civicrm_upgrade() {
 
   drush_print(dt("\nThe upgrade process involves - "));
   drush_print(dt("1. Backing up current CiviCRM code as => !path",
-      array('!path' => "$backup_dir/modules/$date/$backup_file")
+      ['!path' => "$backup_dir/modules/$date/$backup_file"]
     ));
   drush_print(dt("2. Backing up database as => !path",
-      array('!path' => "$backup_dir/modules/$date/$backup_file.sql")
+      ['!path' => "$backup_dir/modules/$date/$backup_file.sql"]
     ));
   drush_print(dt("3. Unpacking tarfile to => !path",
-      array('!path' => "$project_path")
+      ['!path' => "$project_path"]
     ));
   drush_print(dt("4. Executing civicrm/upgrade?reset=1 just as a browser would.\n"));
   if (!drush_confirm(dt('Do you really want to continue?'))) {
@@ -889,7 +889,7 @@ function drush_civicrm_upgrade() {
   $backup_target = $backup_dir . '/' . $backup_file;
   if (!drush_op('rename', $civicrm_root, $backup_target)) {
     return drush_set_error('CIVICRM_BACKUP_FAILED', dt('Failed to backup CiviCRM project directory !source to !backup_target',
-        array('!source' => $civicrm_root, '!backup_target' => $backup_target)
+        ['!source' => $civicrm_root, '!backup_target' => $backup_target]
       ));
   }
   drush_log(dt("\n1. Code backed up."), 'ok');
@@ -962,12 +962,12 @@ function drush_civicrm_restore() {
   // get confirmation from user -
   $db_spec = _drush_sql_get_db_spec();
   drush_print(dt("\nProcess involves :"));
-  drush_print(dt("1. Restoring '\$restore-dir/civicrm' directory to '!toDir'.", array('!toDir' => $civicrm_root_base)));
-  drush_print(dt("2. Dropping and creating '!db' database.", array('!db' => $db_spec['database'])));
+  drush_print(dt("1. Restoring '\$restore-dir/civicrm' directory to '!toDir'.", ['!toDir' => $civicrm_root_base]));
+  drush_print(dt("2. Dropping and creating '!db' database.", ['!db' => $db_spec['database']]));
   drush_print(dt("3. Loading '\$restore-dir/civicrm.sql' file into the database."));
   drush_print();
   drush_print(dt("Note: Before restoring a backup will be taken in '!path' directory.",
-      array('!path' => "$restore_backup_dir/modules/restore")
+      ['!path' => "$restore_backup_dir/modules/restore"]
     ));
   drush_print();
   if (!drush_confirm(dt('Do you really want to continue?'))) {
@@ -987,12 +987,12 @@ function drush_civicrm_restore() {
   drush_log(dt('Restoring civicrm codebase ..'));
   if (is_dir($civicrm_root) && !drush_op('rename', $civicrm_root, $restore_backup_dir . '/civicrm')) {
     return drush_set_error('CIVICRM_RESTORE_CODE_FAILED', dt("Failed to take backup for '!destination' directory",
-        array('!destination' => $civicrm_root)
+        ['!destination' => $civicrm_root]
       ));
   }
   if (!drush_op('rename', $code_dir, $civicrm_root)) {
     return drush_set_error('CIVICRM_RESTORE_DESTINATION_FAILED', dt("Failed to restore civicrm directory '!source' to '!dest'",
-        array('!source' => $code_dir, '!dest' => $civicrm_root_base)
+        ['!source' => $code_dir, '!dest' => $civicrm_root_base]
       ));
   }
   drush_log(dt('Codebase restored.'), 'ok');
@@ -1004,14 +1004,14 @@ function drush_civicrm_restore() {
   drush_log(dt('Database backed up.'), 'ok');
 
   $exec = 'mysql' . _drush_sql_get_credentials() . ' -e ';
-  drush_log(dt("\nDropping database '!db' ..", array('!db' => $db_spec['database'])));
+  drush_log(dt("\nDropping database '!db' ..", ['!db' => $db_spec['database']]));
   if (drush_op('system', $exec . '"DROP DATABASE IF EXISTS ' . $db_spec['database'] . '"')) {
-    return drush_set_error('CIVICRM_RESTORE_DATABASE_DROP_FAILED', dt('Could not drop database: @name', array('@name' => $db_spec['database'])));
+    return drush_set_error('CIVICRM_RESTORE_DATABASE_DROP_FAILED', dt('Could not drop database: @name', ['@name' => $db_spec['database']]));
   }
   drush_log(dt('Database dropped.'), 'ok');
   $exec = str_replace($db_spec['database'], '', $exec);
   if (drush_op('system', $exec . '"CREATE DATABASE ' . $db_spec['database'] . '"')) {
-    return drush_set_error('CIVICRM_RESTORE_DATABASE_CREATE_FAILED', dt('Could not create new database: @name', array('@name' => $db_spec['database'])));
+    return drush_set_error('CIVICRM_RESTORE_DATABASE_CREATE_FAILED', dt('Could not create new database: @name', ['@name' => $db_spec['database']]));
   }
   drush_log(dt('Database created.'), 'ok');
 
@@ -1039,7 +1039,7 @@ function drush_civicrm_restore() {
  * ?? for command 'civicrm-civimail'
  */
 function drush_civicrm_civimail_cron() {
-  civicrm_api('Mailing', 'Process', array('version' => 3));
+  civicrm_api('Mailing', 'Process', ['version' => 3]);
 }
 
 /**
@@ -1053,12 +1053,12 @@ function drush_civicrm_member_records() {
   $_REQUEST['key']  = drush_get_option('civicrm_sitekey', NULL);
 
   global $argv;
-  $argv = array(
+  $argv = [
     0 => "drush",
     1 => "-u" . $_REQUEST['name'],
     2 => "-p" . $_REQUEST['pass'],
     3 => "-s" . drush_get_option('uri', FALSE),
-  );
+  ];
 
   if (!defined('CIVICRM_CONFDIR')) {
     define('CIVICRM_CONFDIR', drush_get_context('DRUSH_DRUPAL_ROOT') . '/sites/');
@@ -1323,7 +1323,7 @@ function _civicrm_get_crmpath() {
  * Implementation of command 'civicrm-api'
  */
 function drush_civicrm_api() {
-  $DEFAULTS = array('version' => 3);
+  $DEFAULTS = ['version' => 3];
 
   $args = func_get_args();
   list($entity, $action) = explode('.', $args[0]);
@@ -1350,7 +1350,7 @@ function drush_civicrm_api() {
       break;
 
     default:
-      drush_set_error(dt('Unknown format: @format', array('@format' => $format)));
+      drush_set_error(dt('Unknown format: @format', ['@format' => $format]));
       break;
   }
 
@@ -1373,7 +1373,7 @@ function drush_civicrm_api() {
       break;
 
     default:
-      return drush_set_error('CIVICRM_UNKNOWN_FORMAT', dt('Unknown format: @format', array('@format' => $format)));
+      return drush_set_error('CIVICRM_UNKNOWN_FORMAT', dt('Unknown format: @format', ['@format' => $format]));
   }
 }
 

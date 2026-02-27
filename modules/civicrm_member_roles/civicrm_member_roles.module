@@ -17,59 +17,59 @@ function civicrm_member_roles_menu() {
   if (!civicrm_initialize()) {
     return;
   }
-  $items = array();
-  $items['admin/config/civicrm/civicrm_member_roles'] = array(
+  $items = [];
+  $items['admin/config/civicrm/civicrm_member_roles'] = [
     'title' => t('CiviMember Roles Sync'),
     'description' => t('Add/remove association rules and configure settings. Also perform manual synchronization.'),
     'page callback' => 'civicrm_member_roles_show_rules',
     'access callback' => 'user_access',
-    'access arguments' => array('access civicrm member role setting'),
+    'access arguments' => ['access civicrm member role setting'],
     'type' => MENU_NORMAL_ITEM,
-  );
+  ];
 
-  $items['admin/config/civicrm/civicrm_member_roles/show_rules'] = array(
+  $items['admin/config/civicrm/civicrm_member_roles/show_rules'] = [
     'title' => t('List Association Rule(s)'),
     'access callback' => 'user_access',
-    'access arguments' => array('access civicrm member role setting'),
+    'access arguments' => ['access civicrm member role setting'],
     'weight' => -5,
     'type' => MENU_DEFAULT_LOCAL_TASK,
-  );
+  ];
 
-  $items['admin/config/civicrm/civicrm_member_roles/add_rule'] = array(
+  $items['admin/config/civicrm/civicrm_member_roles/add_rule'] = [
     'title' => t('Add Association Rule'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('civicrm_member_roles_add_rule_form'),
+    'page arguments' => ['civicrm_member_roles_add_rule_form'],
     'access callback' => 'user_access',
-    'access arguments' => array('access civicrm member role setting'),
+    'access arguments' => ['access civicrm member role setting'],
     'type' => MENU_LOCAL_TASK,
-  );
+  ];
 
-  $items['admin/config/civicrm/civicrm_member_roles/add_rule/%rule_id'] = array(
+  $items['admin/config/civicrm/civicrm_member_roles/add_rule/%rule_id'] = [
     'title' => t('Add Association Rule'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('civicrm_member_roles_add_rule_form', 1),
+    'page arguments' => ['civicrm_member_roles_add_rule_form', 1],
     'access callback' => 'user_access',
-    'access arguments' => array('access civicrm member role setting'),
+    'access arguments' => ['access civicrm member role setting'],
     'type' => MENU_LOCAL_TASK,
-  );
+  ];
 
-  $items['admin/config/civicrm/civicrm_member_roles/configure'] = array(
+  $items['admin/config/civicrm/civicrm_member_roles/configure'] = [
     'title' => t('Configure'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('civicrm_member_roles_configure'),
+    'page arguments' => ['civicrm_member_roles_configure'],
     'access callback' => 'user_access',
-    'access arguments' => array('access civicrm member role setting'),
+    'access arguments' => ['access civicrm member role setting'],
     'type' => MENU_LOCAL_TASK,
-  );
+  ];
 
-  $items['admin/config/civicrm/civicrm_member_roles/manual_sync'] = array(
+  $items['admin/config/civicrm/civicrm_member_roles/manual_sync'] = [
     'title' => t('Manually Synchronize'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('civicrm_member_roles_manual_sync'),
+    'page arguments' => ['civicrm_member_roles_manual_sync'],
     'access callback' => 'user_access',
-    'access arguments' => array('access civicrm member role setting'),
+    'access arguments' => ['access civicrm member role setting'],
     'type' => MENU_LOCAL_TASK,
-  );
+  ];
 
   return $items;
 }
@@ -78,12 +78,12 @@ function civicrm_member_roles_menu() {
  * Implementation of hook_permission().
  */
 function civicrm_member_roles_permission() {
-  return array(
+  return [
     'access civicrm member role setting' =>
-    array('title' => t('Access CiviCRM member role setting'),
+    ['title' => t('Access CiviCRM member role setting'),
       'description' => t('Access Civicrm member roles synchronization.'),
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -133,7 +133,7 @@ function civicrm_member_roles_show_rules($action = NULL, $id = NULL) {
     if (is_numeric($id)) {
       $delete = db_delete('civicrm_member_roles_rules')->condition('rule_id', $id)->execute();
       if ($delete) {
-        drupal_set_message(t('Rule ID !1 was successfully deleted.', array('!1' => $id)));
+        drupal_set_message(t('Rule ID !1 was successfully deleted.', ['!1' => $id]));
       }
       else {
         drupal_set_message(t('There was an error deleting the association rule. Please check your database settings and try again. If you continue to get this error message then try to reinstall CiviMember Roles Sync.'), $type = 'error');
@@ -146,13 +146,13 @@ function civicrm_member_roles_show_rules($action = NULL, $id = NULL) {
   $roles  = user_roles(TRUE);
 
   //Begin building main output table.
-  $header = array('rid' => t('Rule ID'),
+  $header = ['rid' => t('Rule ID'),
     'rule_name' => t('Rule Name ("CiviMember Membership Type" --> "Drupal Role")'),
     'current_code' => t('Current Codes'),
     'expired_code' => t('Expired Codes'),
     'options' => t('Operation'),
-  );
-  $data = array();
+  ];
+  $data = [];
 
   $rules = db_select('civicrm_member_roles_rules', 'cmr')->fields('cmr')->orderBy('rule_id', 'ASC')->execute()->fetchAll();
   foreach ($rules as $result) {
@@ -167,22 +167,22 @@ function civicrm_member_roles_show_rules($action = NULL, $id = NULL) {
       $expired .= $status[$value] . ", ";
     }
 
-    $data[] = array(
+    $data[] = [
       'rid' => check_plain($result->rule_id),
       'rule_name' => check_plain($type[$result->type_id] . " --> " . $roles[$result->rid]),
       'current_code' => check_plain(trim($current, ", ")),
       'expired_code' => check_plain(trim($expired, ", ")),
       'options' => l(t('edit'), 'admin/config/civicrm/civicrm_member_roles/add_rule' . '/' . check_plain($result->rule_id)) . '&nbsp;&nbsp;' . l(t('delete'), 'admin/config/civicrm/civicrm_member_roles/delete' . '/' . check_plain($result->rule_id)),
-    );
+    ];
   }
 
   if (!empty($data)) {
-    $output['data'] = array(
+    $output['data'] = [
       '#prefix' => t("Use the 'Add Association Rule' form to add new rules.") . '<br/><br/>',
       '#theme' => 'table',
       '#header' => $header,
       '#rows' => $data,
-    );
+    ];
   }
   else {
     $output = t("There are no rules currently set. Use the 'Add Association Rule' form to add one.");
@@ -198,15 +198,15 @@ function civicrm_member_roles_show_rules($action = NULL, $id = NULL) {
  * @see civicrm_member_roles_manual_sync_submit()
  */
 function civicrm_member_roles_manual_sync() {
-  $form = array();
-  $form['manual_sync'] = array(
+  $form = [];
+  $form['manual_sync'] = [
     '#type' => 'fieldset',
     '#title' => t('Manual Synchronization:'),
-  );
-  $form['manual_sync']['manual_sync_submit'] = array(
+  ];
+  $form['manual_sync']['manual_sync_submit'] = [
     '#type' => 'submit',
     '#value' => t('Synchronize CiviMember Membership Types to Drupal Roles now'),
-  );
+  ];
 
   return $form;
 }
@@ -232,23 +232,23 @@ function civicrm_member_roles_manual_sync_submit($form, &$form_state) {
  * @ingroup forms
  */
 function civicrm_member_roles_configure() {
-  $form = array();
-  $form['settings'] = array(
+  $form = [];
+  $form['settings'] = [
     '#type' => 'fieldset',
     '#title' => t('Settings'),
-  );
-  $form['settings']['civicrm_member_roles_sync_method'] = array(
+  ];
+  $form['settings']['civicrm_member_roles_sync_method'] = [
     '#type' => 'radios',
     '#title' => t('Automatic Synchronization Method'),
     '#description' => t('Select which method CiviMember Roles Sync will use to automatically synchronize Memberships and Roles. If you choose user login/logout, you will have to run an initial "Manual Synchronization" after you create a new rule for it to be applied to all users and contacts. Leave the default setting if you are unsure which method to use.'),
     '#default_value' => variable_get('civicrm_member_roles_sync_method', 0),
-    '#options' => array(
+    '#options' => [
       0 => t('Synchronize whenever a user logs in or logs out. This action is performed only on the user logging in or out.'),
       1 => t('Synchronize when Drupal cron is ran. This action will be performed on all users and contacts.'),
       3 => t('Synchronize when membership is updated.'),
       2 => t('Disable automatic synchronization. You will have to use the "Manually Synchronize" form to synchronize memberships and roles yourself.'),
-    ),
-  );
+    ],
+  ];
 
   return system_settings_form($form);
 }
@@ -273,50 +273,50 @@ function civicrm_member_roles_add_rule_form($form = NULL, $form_state = NULL, $i
   unset($roles[2]);
 
   //Begin add form
-  $form = array();
-  $form['add_rule'] = array(
+  $form = [];
+  $form['add_rule'] = [
     '#type' => 'fieldset',
     '#title' => t('Association Rule'),
     '#description' => t('Choose a CiviMember Membership Type and a Drupal Role below. This will associate that Membership with the Role. If you would like the have the same Membership be associated with more than one role, you will need to add a second association rule after you have completed this one.'),
     '#tree' => TRUE,
-    '#parents' => array('add_rule'),
-  );
-  $form['add_rule']['select_membership'] = array(
+    '#parents' => ['add_rule'],
+  ];
+  $form['add_rule']['select_membership'] = [
     '#type' => 'select',
     '#title' => t('Select a CiviMember Membership Type'),
     '#options' => $membership_options,
     '#required' => TRUE,
-  );
-  $form['add_rule']['select_role'] = array(
+  ];
+  $form['add_rule']['select_role'] = [
     '#type' => 'select',
     '#title' => t('Select a Drupal Role'),
     '#options' => $roles,
     '#required' => TRUE,
-  );
-  $form['status_code'] = array(
+  ];
+  $form['status_code'] = [
     '#type' => 'fieldset',
     '#title' => t('CiviMember Status Rules'),
     '#description' => t('Select which CiviMember Status Rules will be used for "Current" and "Expired" status. A "Current" status rule will add the above role to a user account. An "Expired" status rule will remove the above role from a user account.'),
     '#tree' => TRUE,
-  );
-  $form['status_code']['current'] = array(
+  ];
+  $form['status_code']['current'] = [
     '#type' => 'checkboxes',
     '#title' => t('Current Status'),
     '#description' => t('Select all CiviMember Status Rule(s) that represent current status.'),
     '#options' => $status_options,
     '#required' => TRUE,
-  );
-  $form['status_code']['expired'] = array(
+  ];
+  $form['status_code']['expired'] = [
     '#type' => 'checkboxes',
     '#title' => t('Expired Status'),
     '#description' => t('Select all CiviMember Status Rule(s) that represent expired status.'),
     '#options' => $status_options,
     '#required' => TRUE,
-  );
-  $form['submit'] = array(
+  ];
+  $form['submit'] = [
     '#type' => 'submit',
     '#value' => t('Add association rule'),
-  );
+  ];
 
   //Begin edit form
   if (!empty($id) && is_numeric($id)) {
@@ -340,7 +340,7 @@ function civicrm_member_roles_add_rule_form($form = NULL, $form_state = NULL, $i
     $form['add_rule']['select_role']['#default_value'] = $default_values->rid;
     $form['status_code']['current']['#default_value'] = $codes['current'];
     $form['status_code']['expired']['#default_value'] = $codes['expired'];
-    $form['edit_flag'] = array('#type' => 'hidden', '#value' => check_plain($id));
+    $form['edit_flag'] = ['#type' => 'hidden', '#value' => check_plain($id)];
     $form['submit']['#value'] = t('Edit association rule');
   }
 
@@ -405,9 +405,9 @@ function civicrm_member_roles_add_rule_form_submit($form, &$form_state) {
     return;
   }
   //Build array of status rules in order to serialize into the database
-  $codes            = array('current', 'expired');
-  $codes['current'] = array();
-  $codes['expired'] = array();
+  $codes            = ['current', 'expired'];
+  $codes['current'] = [];
+  $codes['expired'] = [];
 
   foreach ($form_state['values']['status_code']['current'] as $key => $value) {
     if ($form_state['values']['status_code']['expired'][$key] > 0) {
@@ -420,22 +420,22 @@ function civicrm_member_roles_add_rule_form_submit($form, &$form_state) {
 
   //If edit_flag is set then process as an edit form, if not then process as an add form.
   if (isset($form_state['values']['edit_flag'])) {
-    $edit_rule = db_update('civicrm_member_roles_rules')->fields(array(
+    $edit_rule = db_update('civicrm_member_roles_rules')->fields([
         'rid' => (int) $form_state['values']['add_rule']['select_role'],
         'type_id' => (int) $form_state['values']['add_rule']['select_membership'],
         'status_codes' => serialize($codes),
-      ))->condition('rule_id', (int)$form_state['values']['edit_flag'])->execute();
+      ])->condition('rule_id', (int)$form_state['values']['edit_flag'])->execute();
 
     if ($edit_rule) {
       drupal_set_message(t('Your association rule has been edited.'));
     }
   }
   else {
-    $add_rule = db_insert('civicrm_member_roles_rules')->fields(array(
+    $add_rule = db_insert('civicrm_member_roles_rules')->fields([
         'rid' => (int) $form_state['values']['add_rule']['select_role'],
         'type_id' => (int) $form_state['values']['add_rule']['select_membership'],
         'status_codes' => serialize($codes),
-      ))->execute();
+      ])->execute();
     if ($add_rule) {
       drupal_set_message(t('Your association rule has been added.'));
     }
@@ -458,12 +458,12 @@ function _civicrm_member_roles_sync($ext_uid = NULL, $cid = NULL) {
   if (empty($rules) || $rules === FALSE) {
     return FALSE;
   }
-  $memberroles = $rid = array();
+  $memberroles = $rid = [];
   foreach ($rules as $ruleValues) {
-    $memberroles[$ruleValues->type_id][] = array(
+    $memberroles[$ruleValues->type_id][] = [
         'rid' => $ruleValues->rid,
         'codes' => unserialize($ruleValues->status_codes),
-    );
+    ];
     $rid[] = $ruleValues->rid;
   }
   //Find all contacts that have membership rules (or just use $ext_uid)
@@ -476,23 +476,23 @@ function _civicrm_member_roles_sync($ext_uid = NULL, $cid = NULL) {
     //obviously a better fix would be for it to chunk & save where it is up to
     $params = CRM_Core_DAO::$_nullArray;
     $errorMsg = 'unknown error';
-    $errorParams = array();
+    $errorParams = [];
   }
   else {
     if (!empty($ext_uid)) {
       //Let's get the UID's Contact ID so we only grab one record from the CiviCRM DB.
       $uid      = $ext_uid;
       $sql      = "SELECT contact_id FROM civicrm_uf_match WHERE uf_id = %1";
-      $params   = array(1 => array($uid, "Integer"));
+      $params   = [1 => [$uid, "Integer"]];
       $errorMsg = 'The uid: @uid did not have a CiviCRM Contact ID.';
-      $errorParams = array('@uid' => (int) $ext_uid);
+      $errorParams = ['@uid' => (int) $ext_uid];
     }
     else {
       // Seems silly to add this query, but the while loop below needs result set.
       $sql      = "SELECT id AS contact_id FROM civicrm_contact WHERE id = %1";
-      $params   = array(1 => array($cid, "Integer"));
+      $params   = [1 => [$cid, "Integer"]];
       $errorMsg = 'Unable to get CiviCRM Contact ID @cid.';
-      $errorParams = array('@uid' => (int) $cid);
+      $errorParams = ['@uid' => (int) $cid];
     }
   }
   $contacts = CRM_Core_DAO::executeQuery($sql, $params);
@@ -514,15 +514,15 @@ function _civicrm_member_roles_sync($ext_uid = NULL, $cid = NULL) {
     }
 
     //Get all memberships of contact
-    $memParams = array(
+    $memParams = [
       'contact_id' => $cid,
       'version' => 3,
-    );
+    ];
     $memberships = civicrm_api('membership', 'get', $memParams);
 
     $contactMemberships = CRM_Utils_Array::value('values', $memberships);
-    $addRoles           = array();
-    $expRoles           = array();
+    $addRoles           = [];
+    $expRoles           = [];
 
     $roleCondition = is_array($rid) ? 'IN' : '=';
 
@@ -562,7 +562,7 @@ function _civicrm_member_roles_sync($ext_uid = NULL, $cid = NULL) {
             }
 
             // Overwrite the user's roles to the ones we've set
-            user_save($account, array('roles' => $rolesRetain));
+            user_save($account, ['roles' => $rolesRetain]);
           }
         }
       }
@@ -590,13 +590,13 @@ function _civicrm_member_roles_get_data($type) {
 
     default:
       $sql = '';
-      drupal_set_message(t('Invalid parameter was given to _civicrm_member_roles_get_data(). Param: "!1".', array('!1' => $type)));
+      drupal_set_message(t('Invalid parameter was given to _civicrm_member_roles_get_data(). Param: "!1".', ['!1' => $type]));
       break;
   }
 
   $dao = CRM_Core_DAO::executeQuery($sql);
 
-  $result = array();
+  $result = [];
   while ($dao->fetch()) {
     $result[$dao->id] = $dao->name;
   }

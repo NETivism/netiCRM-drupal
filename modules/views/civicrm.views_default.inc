@@ -56,10 +56,10 @@ function civicrm_views_default_views() {
     $handler->display->display_options['style_options']['theme_style'] = '1';
     $handler->display->display_options['style_options']['max_items'] = '0';
     $handler->display->display_options['row_plugin'] = 'civicrm_event_calendar';
-    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = array(
+    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = [
       'article' => '#ffffff',
       'page' => '#ffffff',
-    );
+    ];
 
     /* Field: CiviCRM Events: Title */
     $handler->display->display_options['fields']['title']['id'] = 'title';
@@ -122,9 +122,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['start_date']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['start_date']['granularity'] = 'year';
     $handler->display->display_options['arguments']['start_date']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['start_date']['date_fields'] = array(
+    $handler->display->display_options['arguments']['start_date']['date_fields'] = [
       'civicrm_event.start_date' => 'civicrm_event.start_date',
-    );
+    ];
 
     /* Filter criterion: CiviCRM Events: Is Active */
     $handler->display->display_options['filters']['is_active']['id'] = 'is_active';
@@ -157,10 +157,10 @@ function civicrm_views_default_views() {
     $handler->display->display_options['defaults']['style_options'] = FALSE;
     $handler->display->display_options['defaults']['row_plugin'] = FALSE;
     $handler->display->display_options['row_plugin'] = 'civicrm_event_calendar';
-    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = array(
+    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = [
       'article' => '#ffffff',
       'page' => '#ffffff',
-    );
+    ];
     $handler->display->display_options['defaults']['row_options'] = FALSE;
     $handler->display->display_options['defaults']['arguments'] = FALSE;
 
@@ -172,9 +172,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['start_date']['default_argument_skip_url'] = 0;
     $handler->display->display_options['arguments']['start_date']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['start_date']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['start_date']['date_fields'] = array(
+    $handler->display->display_options['arguments']['start_date']['date_fields'] = [
       'civicrm_event.start_date' => 'civicrm_event.start_date',
-    );
+    ];
     $handler->display->display_options['path'] = 'events/month';
 
     /* Display: Week */
@@ -195,10 +195,10 @@ function civicrm_views_default_views() {
     $handler->display->display_options['defaults']['style_options'] = FALSE;
     $handler->display->display_options['defaults']['row_plugin'] = FALSE;
     $handler->display->display_options['row_plugin'] = 'civicrm_event_calendar';
-    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = array(
+    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = [
       'article' => '#ffffff',
       'page' => '#ffffff',
-    );
+    ];
     $handler->display->display_options['defaults']['row_options'] = FALSE;
     $handler->display->display_options['defaults']['arguments'] = FALSE;
 
@@ -211,9 +211,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['start_date']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['start_date']['granularity'] = 'week';
     $handler->display->display_options['arguments']['start_date']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['start_date']['date_fields'] = array(
+    $handler->display->display_options['arguments']['start_date']['date_fields'] = [
       'civicrm_event.start_date' => 'civicrm_event.start_date',
-    );
+    ];
     $handler->display->display_options['path'] = 'events/week';
 
     /* Display: Day */
@@ -234,10 +234,10 @@ function civicrm_views_default_views() {
     $handler->display->display_options['defaults']['style_options'] = FALSE;
     $handler->display->display_options['defaults']['row_plugin'] = FALSE;
     $handler->display->display_options['row_plugin'] = 'civicrm_event_calendar';
-    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = array(
+    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = [
       'article' => '#ffffff',
       'page' => '#ffffff',
-    );
+    ];
     $handler->display->display_options['defaults']['row_options'] = FALSE;
     $handler->display->display_options['defaults']['arguments'] = FALSE;
 
@@ -250,9 +250,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['start_date']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['start_date']['granularity'] = 'day';
     $handler->display->display_options['arguments']['start_date']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['start_date']['date_fields'] = array(
+    $handler->display->display_options['arguments']['start_date']['date_fields'] = [
       'civicrm_event.start_date' => 'civicrm_event.start_date',
-    );
+    ];
     $handler->display->display_options['path'] = 'events/day';
 
     /* Display: Year */
@@ -273,10 +273,10 @@ function civicrm_views_default_views() {
     $handler->display->display_options['defaults']['style_options'] = FALSE;
     $handler->display->display_options['defaults']['row_plugin'] = FALSE;
     $handler->display->display_options['row_plugin'] = 'civicrm_event_calendar';
-    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = array(
+    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = [
       'article' => '#ffffff',
       'page' => '#ffffff',
-    );
+    ];
     $handler->display->display_options['defaults']['row_options'] = FALSE;
     $handler->display->display_options['defaults']['arguments'] = FALSE;
 
@@ -289,9 +289,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['start_date']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['start_date']['granularity'] = 'year';
     $handler->display->display_options['arguments']['start_date']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['start_date']['date_fields'] = array(
+    $handler->display->display_options['arguments']['start_date']['date_fields'] = [
       'civicrm_event.start_date' => 'civicrm_event.start_date',
-    );
+    ];
     $handler->display->display_options['path'] = 'events/year';
 
     /* Display: Block */
@@ -307,10 +307,10 @@ function civicrm_views_default_views() {
     $handler->display->display_options['defaults']['style_options'] = FALSE;
     $handler->display->display_options['defaults']['row_plugin'] = FALSE;
     $handler->display->display_options['row_plugin'] = 'civicrm_event_calendar';
-    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = array(
+    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = [
       'article' => '#ffffff',
       'page' => '#ffffff',
-    );
+    ];
     $handler->display->display_options['defaults']['row_options'] = FALSE;
     $handler->display->display_options['defaults']['arguments'] = FALSE;
 
@@ -322,9 +322,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['start_date']['default_argument_skip_url'] = 0;
     $handler->display->display_options['arguments']['start_date']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['start_date']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['start_date']['date_fields'] = array(
+    $handler->display->display_options['arguments']['start_date']['date_fields'] = [
       'civicrm_event.start_date' => 'civicrm_event.start_date',
-    );
+    ];
 
     /* Display: Upcoming */
     $handler = $view->new_display('block', 'Upcoming', 'block_2');
@@ -338,7 +338,7 @@ function civicrm_views_default_views() {
     $handler->display->display_options['row_options']['default_field_elements'] = 1;
     $handler->display->display_options['defaults']['row_options'] = FALSE;
     $handler->display->display_options['defaults']['arguments'] = FALSE;
-    $translatables['test_events'] = array(
+    $translatables['test_events'] = [
       t('Master'),
       t('CiviCRM Events'),
       t('more'),
@@ -359,7 +359,7 @@ function civicrm_views_default_views() {
       t('Block'),
       t('Upcoming'),
       t('Upcoming Events'),
-    );
+    ];
     $views[] = $view;
 
     $view = new view();
@@ -394,10 +394,10 @@ function civicrm_views_default_views() {
     $handler->display->display_options['style_options']['theme_style'] = '1';
     $handler->display->display_options['style_options']['max_items'] = '0';
     $handler->display->display_options['row_plugin'] = 'civicrm_event_calendar';
-    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = array(
+    $handler->display->display_options['row_options']['colors']['calendar_colors_type'] = [
       'article' => '#ffffff',
       'page' => '#ffffff',
-    );
+    ];
 
     /* Relationship: CiviCRM Activity Assignments: Assignee Contact ID */
     $handler->display->display_options['relationships']['assignee_contact_id']['id'] = 'assignee_contact_id';
@@ -450,9 +450,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['activity_date_time']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['activity_date_time']['granularity'] = 'year';
     $handler->display->display_options['arguments']['activity_date_time']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = array(
+    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = [
       'civicrm_activity.activity_date_time' => 'civicrm_activity.activity_date_time',
-    );
+    ];
 
     /* Contextual filter: CiviCRM Contacts: Contact ID */
     $handler->display->display_options['arguments']['id']['id'] = 'id';
@@ -475,10 +475,10 @@ function civicrm_views_default_views() {
     $handler->display->display_options['filters']['activity_type']['id'] = 'activity_type';
     $handler->display->display_options['filters']['activity_type']['table'] = 'civicrm_activity';
     $handler->display->display_options['filters']['activity_type']['field'] = 'activity_type';
-    $handler->display->display_options['filters']['activity_type']['value'] = array(
+    $handler->display->display_options['filters']['activity_type']['value'] = [
       1 => '1',
       2 => '2',
-    );
+    ];
     $handler->display->display_options['filters']['activity_type']['group'] = 1;
 
     /* Display: Month */
@@ -510,9 +510,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['activity_date_time']['exception']['title'] = 'All';
     $handler->display->display_options['arguments']['activity_date_time']['add_delta'] = 'yes';
     $handler->display->display_options['arguments']['activity_date_time']['use_fromto'] = 'no';
-    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = array(
+    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = [
       'civicrm_activity.activity_date_time' => 'civicrm_activity.activity_date_time',
-    );
+    ];
 
     /* Contextual filter: CiviCRM Contacts: Contact ID */
     $handler->display->display_options['arguments']['id']['id'] = 'id';
@@ -563,9 +563,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['activity_date_time']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['activity_date_time']['granularity'] = 'week';
     $handler->display->display_options['arguments']['activity_date_time']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = array(
+    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = [
       'civicrm_activity.activity_date_time' => 'civicrm_activity.activity_date_time',
-    );
+    ];
 
     /* Contextual filter: CiviCRM Contacts: Contact ID */
     $handler->display->display_options['arguments']['id']['id'] = 'id';
@@ -619,9 +619,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['activity_date_time']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['activity_date_time']['granularity'] = 'day';
     $handler->display->display_options['arguments']['activity_date_time']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = array(
+    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = [
       'civicrm_activity.activity_date_time' => 'civicrm_activity.activity_date_time',
-    );
+    ];
 
     /* Contextual filter: CiviCRM Contacts: Contact ID */
     $handler->display->display_options['arguments']['id']['id'] = 'id';
@@ -672,9 +672,9 @@ function civicrm_views_default_views() {
     $handler->display->display_options['arguments']['activity_date_time']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['activity_date_time']['granularity'] = 'year';
     $handler->display->display_options['arguments']['activity_date_time']['add_delta'] = 'yes';
-    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = array(
+    $handler->display->display_options['arguments']['activity_date_time']['date_fields'] = [
       'civicrm_activity.activity_date_time' => 'civicrm_activity.activity_date_time',
-    );
+    ];
 
     /* Contextual filter: CiviCRM Contacts: Contact ID */
     $handler->display->display_options['arguments']['id']['id'] = 'id';
@@ -770,21 +770,21 @@ function civicrm_views_default_views() {
     $handler->display->display_options['filters']['activity_type']['id'] = 'activity_type';
     $handler->display->display_options['filters']['activity_type']['table'] = 'civicrm_activity';
     $handler->display->display_options['filters']['activity_type']['field'] = 'activity_type';
-    $handler->display->display_options['filters']['activity_type']['value'] = array(
+    $handler->display->display_options['filters']['activity_type']['value'] = [
       1 => '1',
       2 => '2',
-    );
+    ];
     $handler->display->display_options['filters']['activity_type']['group'] = 1;
 
     /* Filter criterion: CiviCRM Activities: Activity Status */
     $handler->display->display_options['filters']['status']['id'] = 'status';
     $handler->display->display_options['filters']['status']['table'] = 'civicrm_activity';
     $handler->display->display_options['filters']['status']['field'] = 'status';
-    $handler->display->display_options['filters']['status']['value'] = array(
+    $handler->display->display_options['filters']['status']['value'] = [
       1 => '1',
-    );
+    ];
     $handler->display->display_options['filters']['status']['group'] = 1;
-    $translatables['civicrm_my_activities'] = array(
+    $translatables['civicrm_my_activities'] = [
       t('Master'),
       t('CiviCRM My Activities Calendar'),
       t('More'),
@@ -806,7 +806,7 @@ function civicrm_views_default_views() {
       t('Block'),
       t('Scheduled'),
       t('Scheduled Activities'),
-    );
+    ];
 
     $views[] = $view;
   }

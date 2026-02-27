@@ -29,50 +29,50 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_address extends civicrm_handler_field_location {
-  static $_locationOps;
-  function construct() {
+  public static $_locationOps;
+  public function construct() {
     parent::construct();
     if (!self::$_locationOps) {
       if (!civicrm_initialize()) {
         return;
       }
-      self::$_locationOps = array(0 => 'AND', 1 => 'OR');
+      self::$_locationOps = [0 => 'AND', 1 => 'OR'];
     }
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['is_billing'] = array('default' => '');
+    $options['is_billing'] = ['default' => ''];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    $form['is_billing'] = array(
+    $form['is_billing'] = [
       '#type' => 'checkbox',
       '#title' => 'Show only Billing Address record?',
-      '#options' => array(0 => 'No', 1 => 'Yes'),
+      '#options' => [0 => 'No', 1 => 'Yes'],
       '#description' => t('Check above box if you want only the <strong>Billing Address</strong> record displayed.'),
       '#default_value' => $this->options['is_billing'],
       '#fieldset' => 'location_choices',
-    );
+    ];
   }
 
-  function ensure_my_table() {
+  public function ensure_my_table() {
     if (!isset($this->table_alias)) {
       if (!method_exists($this->query, 'ensure_table')) {
         vpr_trace();
         exit;
       }
-      $extra = array();
+      $extra = [];
       $extra = parent::location_extras();
       if (isset($this->options['is_billing']) && $this->options['is_billing']) {
-        $extra[] = array(
+        $extra[] = [
           'value' => $this->options['is_billing'],
           'numeric' => TRUE,
           'field' => 'is_billing',
           'operator' => '=',
-        );
+        ];
       }
       if (isset($extra) && !empty($extra)) {
         $join              = $this->get_join();

@@ -14,7 +14,7 @@ class CivicrmEntityMetadataController extends EntityDefaultMetadataController {
    */
   protected function convertSchema() {
     if(empty($this->info['base table'])){
-      return array();
+      return [];
     }
     return civicrm_entity_metadata_convert_schema($this->info['base table']);
   }
@@ -31,16 +31,16 @@ class CivicrmEntityMetadataController extends EntityDefaultMetadataController {
  */
 function civicrm_entity_metadata_convert_schema($table) {
   $schema = civicrm_entity_get_schema($table);
-  $properties = array();
+  $properties = [];
   foreach ($schema['fields'] as $name => $info) {
     if ($type = _entity_metadata_convert_schema_type($info['type'])) {
-      $properties[$name] = array(
+      $properties[$name] = [
         'type' => $type,
         'label' => drupal_ucfirst($name),
         'schema field' => $name,
         // As we cannot know about any setter access, leave out the setter
         // callback. For getting usually no further access callback is needed.
-      );
+      ];
       if ($info['type'] == 'serial') {
         $properties[$name]['validation callback'] = 'entity_metadata_validate_integer_positive';
       }

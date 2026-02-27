@@ -41,32 +41,32 @@ class civicrm_handler_field_link_pcp extends views_handler_field {
   /**
    * Constructor to provide additional field to add.
    */
-  function construct() {
+  public function construct() {
     parent::construct();
     $this->additional_fields['id'] = 'id';
     $this->additional_fields['contribution_page_id'] = 'contribution_page_id';
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['link_to_civicrm_pcp'] = array('default' => 'view');
+    $options['link_to_civicrm_pcp'] = ['default' => 'view'];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    $form['link_to_civicrm_pcp'] = array(
+    $form['link_to_civicrm_pcp'] = [
       '#type' => 'select',
       '#title' => t('Choose which kind of link to create'),
-      '#options' => array(
+      '#options' => [
         'view' => t('Link to View Personal Campaign Page'),
         'contribute' => t('Link to Make Contribution via Personal Campaign Page'),
-      ),
+      ],
       '#default_value' => $this->options['link_to_civicrm_pcp'],
-    );
+    ];
   }
 
-  function render_link($data, $values) {
+  public function render_link($data, $values) {
 
     $link_choice = $this->options['link_to_civicrm_pcp'];
 
@@ -106,12 +106,12 @@ class civicrm_handler_field_link_pcp extends views_handler_field {
     }
   }
 
-  function query() {
+  public function query() {
     $this->ensure_my_table();
     $this->add_additional_fields();
   }
 
-  function render($values) {
+  public function render($values) {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }

@@ -32,9 +32,9 @@
  *
  */
 class civicrm_handler_field_country extends civicrm_handler_field_address {
-  static $_countries;
-  static $_countries_full;
-  function construct() {
+  public static $_countries;
+  public static $_countries_full;
+  public function construct() {
     parent::construct();
     if (!self::$_countries) {
       if (!civicrm_initialize()) {
@@ -46,7 +46,7 @@ class civicrm_handler_field_country extends civicrm_handler_field_address {
     }
   }
 
-  function render($values) {
+  public function render($values) {
     $sid = $values->{$this->field_alias};
     if (empty($sid) ||
       (int ) $sid <= 0
@@ -62,21 +62,21 @@ class civicrm_handler_field_country extends civicrm_handler_field_address {
     }
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['country_display'] = array('default' => '');
+    $options['country_display'] = ['default' => ''];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    $form['country_display'] = array(
+    $form['country_display'] = [
       '#type' => 'radios',
       '#title' => 'Type of display for country field',
-      '#options' => array(1 => 'Display two letter country code', 2 => 'Display full country name'),
+      '#options' => [1 => 'Display two letter country code', 2 => 'Display full country name'],
       '#description' => t('Display full or abbreviated country name'),
       '#default_value' => $this->options['country_display'],
-    );
+    ];
   }
 }
 

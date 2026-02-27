@@ -8,267 +8,267 @@
  * Implements hook_field_default_fields().
  */
 function civicrm_event_og_config_sample_field_default_fields() {
-  $fields = array();
+  $fields = [];
 
   // Exported field: 'node-og_event-body'.
-  $fields['node-og_event-body'] = array(
-    'field_config' => array(
+  $fields['node-og_event-body'] = [
+    'field_config' => [
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
-      'entity_types' => array(
+      'entity_types' => [
         0 => 'node',
-      ),
+      ],
       'field_name' => 'body',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
+      'foreign keys' => [
+        'format' => [
+          'columns' => [
             'format' => 'format',
-          ),
+          ],
           'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
+        ],
+      ],
+      'indexes' => [
+        'format' => [
           0 => 'format',
-        ),
-      ),
+        ],
+      ],
       'locked' => '0',
       'module' => 'text',
-      'settings' => array(
-      ),
+      'settings' => [
+      ],
       'translatable' => '0',
       'type' => 'text_with_summary',
-    ),
-    'field_instance' => array(
+    ],
+    'field_instance' => [
       'bundle' => 'og_event',
       'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
-      'display' => array(
-        'default' => array(
+      'display' => [
+        'default' => [
           'label' => 'hidden',
           'module' => 'text',
-          'settings' => array(),
+          'settings' => [],
           'type' => 'text_default',
           'weight' => '1',
-        ),
-        'entityreference_view_widget' => array(
+        ],
+        'entityreference_view_widget' => [
           'label' => 'above',
-          'settings' => array(),
+          'settings' => [],
           'type' => 'hidden',
           'weight' => 0,
-        ),
-        'teaser' => array(
+        ],
+        'teaser' => [
           'label' => 'hidden',
           'module' => 'text',
-          'settings' => array(
+          'settings' => [
             'trim_length' => 600,
-          ),
+          ],
           'type' => 'text_summary_or_trimmed',
           'weight' => 1,
-        ),
-      ),
+        ],
+      ],
       'entity_type' => 'node',
       'field_name' => 'body',
       'label' => 'Body',
       'required' => FALSE,
-      'settings' => array(
+      'settings' => [
         'display_summary' => TRUE,
         'text_processing' => 1,
         'user_register_form' => FALSE,
-      ),
-      'widget' => array(
+      ],
+      'widget' => [
         'module' => 'text',
-        'settings' => array(
+        'settings' => [
           'rows' => 20,
           'summary_rows' => 5,
-        ),
+        ],
         'type' => 'text_textarea_with_summary',
         'weight' => '1',
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported field: 'node-og_event-field_civicrm_event'.
-  $fields['node-og_event-field_civicrm_event'] = array(
-    'field_config' => array(
+  $fields['node-og_event-field_civicrm_event'] = [
+    'field_config' => [
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
-      'entity_types' => array(),
+      'entity_types' => [],
       'field_name' => 'field_civicrm_event',
-      'foreign keys' => array(
-        'node' => array(
-          'columns' => array(
+      'foreign keys' => [
+        'node' => [
+          'columns' => [
             'target_id' => 'nid',
-          ),
+          ],
           'table' => 'node',
-        ),
-      ),
-      'indexes' => array(
-        'target_id' => array(
+        ],
+      ],
+      'indexes' => [
+        'target_id' => [
           0 => 'target_id',
-        ),
-      ),
+        ],
+      ],
       'locked' => '0',
       'module' => 'entityreference',
-      'settings' => array(
+      'settings' => [
         'handler' => 'base',
-        'handler_settings' => array(
-          'behaviors' => array(
-            'views-select-list' => array(
+        'handler_settings' => [
+          'behaviors' => [
+            'views-select-list' => [
               'status' => 0,
-            ),
-          ),
-          'sort' => array(
+            ],
+          ],
+          'sort' => [
             'type' => 'none',
-          ),
-          'target_bundles' => array(),
-        ),
+          ],
+          'target_bundles' => [],
+        ],
         'target_type' => 'civicrm_event',
-      ),
+      ],
       'translatable' => '0',
       'type' => 'entityreference',
-    ),
-    'field_instance' => array(
+    ],
+    'field_instance' => [
       'bundle' => 'og_event',
       'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
-      'display' => array(
-        'default' => array(
+      'display' => [
+        'default' => [
           'label' => 'above',
           'module' => 'entityreference',
-          'settings' => array(
+          'settings' => [
             'link' => FALSE,
-          ),
+          ],
           'type' => 'entityreference_label',
           'weight' => '5',
-        ),
-        'entityreference_view_widget' => array(
+        ],
+        'entityreference_view_widget' => [
           'label' => 'above',
-          'settings' => array(),
+          'settings' => [],
           'type' => 'hidden',
           'weight' => 0,
-        ),
-        'teaser' => array(
+        ],
+        'teaser' => [
           'label' => 'above',
-          'settings' => array(),
+          'settings' => [],
           'type' => 'hidden',
           'weight' => 0,
-        ),
-      ),
+        ],
+      ],
       'entity_type' => 'node',
       'field_name' => 'field_civicrm_event',
       'label' => 'CiviCRM Event',
       'required' => FALSE,
-      'settings' => array(
+      'settings' => [
         'user_register_form' => FALSE,
-      ),
-      'widget' => array(
+      ],
+      'widget' => [
         'module' => 'entityreference',
-        'settings' => array(
+        'settings' => [
           'match_operator' => 'CONTAINS',
           'path' => '',
           'size' => 60,
-        ),
+        ],
         'type' => 'entityreference_autocomplete',
         'weight' => '3',
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported field: 'node-og_event-group_group'.
-  $fields['node-og_event-group_group'] = array(
-    'field_config' => array(
+  $fields['node-og_event-group_group'] = [
+    'field_config' => [
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
-      'entity_types' => array(),
+      'entity_types' => [],
       'field_name' => 'group_group',
-      'foreign keys' => array(),
-      'indexes' => array(
-        'value' => array(
+      'foreign keys' => [],
+      'indexes' => [
+        'value' => [
           0 => 'value',
-        ),
-      ),
+        ],
+      ],
       'locked' => '0',
       'module' => 'list',
       'no_ui' => TRUE,
-      'settings' => array(
-        'allowed_values' => array(
+      'settings' => [
+        'allowed_values' => [
           0 => 'Not a group type',
           1 => 'Group type',
-        ),
+        ],
         'allowed_values_function' => '',
-      ),
+      ],
       'translatable' => '0',
       'type' => 'list_boolean',
-    ),
-    'field_instance' => array(
+    ],
+    'field_instance' => [
       'bundle' => 'og_event',
-      'default_value' => array(
-        0 => array(
+      'default_value' => [
+        0 => [
           'value' => 1,
-        ),
-      ),
+        ],
+      ],
       'deleted' => '0',
       'description' => 'Determine if this is an OG group.',
-      'display' => array(
-        'default' => array(
+      'display' => [
+        'default' => [
           'label' => 'above',
           'module' => 'og_ui',
-          'settings' => array(
+          'settings' => [
             'field_name' => FALSE,
-          ),
+          ],
           'type' => 'og_group_subscribe',
           'weight' => 6,
-        ),
-        'entityreference_view_widget' => array(
+        ],
+        'entityreference_view_widget' => [
           'label' => 'above',
-          'settings' => array(),
+          'settings' => [],
           'type' => 'hidden',
           'weight' => 0,
-        ),
-        'teaser' => array(
+        ],
+        'teaser' => [
           'label' => 'above',
-          'settings' => array(),
+          'settings' => [],
           'type' => 'hidden',
           'weight' => 0,
-        ),
-      ),
+        ],
+      ],
       'display_label' => 1,
       'entity_type' => 'node',
       'field_name' => 'group_group',
       'label' => 'Group',
       'required' => FALSE,
-      'settings' => array(
+      'settings' => [
         'user_register_form' => FALSE,
-      ),
-      'view modes' => array(
-        'full' => array(
+      ],
+      'view modes' => [
+        'full' => [
           'custom settings' => FALSE,
           'label' => 'Full',
           'type' => 'og_group_subscribe',
-        ),
-        'teaser' => array(
+        ],
+        'teaser' => [
           'custom settings' => FALSE,
           'label' => 'Teaser',
           'type' => 'og_group_subscribe',
-        ),
-      ),
-      'widget' => array(
+        ],
+      ],
+      'widget' => [
         'module' => 'options',
-        'settings' => array(
+        'settings' => [
           'display_label' => 0,
           'og_hide' => TRUE,
-        ),
+        ],
         'type' => 'options_onoff',
         'weight' => 0,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Translatables
   // Included for use with string extractors like potx.

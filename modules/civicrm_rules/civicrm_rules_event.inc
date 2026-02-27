@@ -33,111 +33,111 @@
  *
  */
 function civicrm_rules_get_event() {
-  $defaults = array(
+  $defaults = [
     'access callback' => 'civicrm_rules_rules_integration_access',
     'module' => 'civicrm',
-  );
+  ];
 
-  $events = array(
+  $events = [
     'contact_create' =>
-    array(
+    [
       'label' => t('Contact has been created'),
       'group' => 'CiviCRM Contact',
       'variables' => civicrm_rules_rules_events_variables(t('created contact')),
-    ),
+    ],
     'contact_edit' =>
-    array(
+    [
       'label' => t('Contact has been updated'),
       'group' => 'CiviCRM Contact',
       'variables' => civicrm_rules_rules_events_variables(t('update contact')),
-    ),
+    ],
     'contact_view' =>
-    array(
+    [
       'label' => t('Contact has been viewed'),
       'group' => 'CiviCRM Contact',
       'variables' => civicrm_rules_rules_events_variables(t('viewed contact')),
-    ),
+    ],
     'contact_delete' =>
-    array(
+    [
       'label' => t('Contact has been deleted'),
       'group' => 'CiviCRM Contact',
       'variables' => civicrm_rules_rules_events_variables(t('deleted contact')),
-    ),
+    ],
     'mailing_create' =>
-    array(
+    [
       'label' => t('Mailing has been created'),
       'group' => 'CiviCRM Mailing',
       'variables' => civicrm_rules_rules_events_variables(t('created mailing'), 'mailing'),
-    ),
+    ],
     'mailing_edit' =>
-    array(
+    [
       'label' => t('Mailing has been updated'),
       'group' => 'CiviCRM Mailing',
       'variables' => civicrm_rules_rules_events_variables(t('updated mailing'), 'mailing'),
-    ),
+    ],
     'mailing_uploaded' =>
-    array(
+    [
       'label' => t('Mailing content has been uploaded'),
       'group' => 'CiviCRM Mailing',
       'variables' => civicrm_rules_rules_events_variables(t('mailing content uploaded'), 'mailing'),
-    ),
+    ],
     'mailing_scheduled' =>
-    array(
+    [
       'label' => t('Mailing has been scheduled'),
       'group' => 'CiviCRM Mailing',
       'variables' => civicrm_rules_rules_events_variables(t('scheduled mailing'), 'mailing'),
-    ),
+    ],
     'mailing_approved' =>
-    array(
+    [
       'label' => t('Mailing has been approved/rejected'),
       'group' => 'CiviCRM Mailing',
       'variables' => civicrm_rules_rules_events_variables(t('approved mailing'), 'mailing'),
-    ),
+    ],
     'mailing_inform' =>
-    array(
+    [
       'label' => t('Inform scheduler about the mailing'),
       'group' => 'CiviCRM Mailing',
       'variables' => civicrm_rules_rules_events_variables(t('inform mailing'), 'mailing'),
-    ),
+    ],
     'mailing_queued' =>
-    array(
+    [
       'label' => t('Mailing has been queued'),
       'group' => 'CiviCRM Mailing',
       'variables' => civicrm_rules_rules_events_variables(t('queued mailing'), 'mailing'),
-    ),
-    'mailing_complete' => array(
+    ],
+    'mailing_complete' => [
       'label' => t('Mailing has been completed'),
       'group' => 'CiviCRM Mailing',
       'variables' => civicrm_rules_rules_events_variables(t('completed mailing'), 'mailing'),
-    ),
-  );
+    ],
+  ];
 
-  $validObjects = variable_get('civicrm_rules_post_entities', array());
+  $validObjects = variable_get('civicrm_rules_post_entities', []);
 
   if (is_array($validObjects)) {
     foreach ($validObjects as $entity => $enabled) {
       if (!$enabled == 0) {
         //todo consider building the entity name into the argument rather than calling the same argument for each
-        $events['civicrm_' . $entity . '_create'] = $defaults + array(
-          'label' => t("%entity has been created", array('%entity' => $entity)),
+        $events['civicrm_' . $entity . '_create'] = $defaults + [
+          'label' => t("%entity has been created", ['%entity' => $entity]),
           'group' => 'CiviCRM ' . $entity,
-          'variables' => civicrm_rules_rules_events_variables(t('Created %entity', array('%entity' => $entity)), $entity),
-        );
-        $events['civicrm_' . $entity . '_edit'] = $defaults + array(
+          'variables' => civicrm_rules_rules_events_variables(t('Created %entity', ['%entity' => $entity]), $entity),
+        ];
+        $events['civicrm_' . $entity . '_edit'] = $defaults + [
           'group' => 'CiviCRM ' . $entity,
-          'label' => t("%entity has been updated", array('%entity' => $entity)),
-          'variables' => civicrm_rules_rules_events_variables(t('Updated %entity', array('%entity' => $entity)), $entity),
-        );
-        $events['civicrm_' . $entity . '_view'] = $defaults + array(
+          'label' => t("%entity has been updated", ['%entity' => $entity]),
+          'variables' => civicrm_rules_rules_events_variables(t('Updated %entity', ['%entity' => $entity]), $entity),
+        ];
+        $events['civicrm_' . $entity . '_view'] = $defaults + [
           'group' => 'CiviCRM ' . $entity,
-          'label' => t("%entity has been viewed", array('%entity' => $entity)),
-          'variables' => civicrm_rules_rules_events_variables(t('Viewed %entity', array('%entity' => $entity)), $entity),
-        );
-        $events['civicrm_' . $entity . '_delete'] = $defaults + array(
+          'label' => t("%entity has been viewed", ['%entity' => $entity]),
+          'variables' => civicrm_rules_rules_events_variables(t('Viewed %entity', ['%entity' => $entity]), $entity),
+        ];
+        $events['civicrm_' . $entity . '_delete'] = $defaults + [
           'group' => 'CiviCRM ' . $entity,
-          'label' => t("%entity has been deleted", array('%entity' => $entity)),
-          'variables' => civicrm_rules_rules_events_variables(t('Deleted %entity', array('%entity' => $entity)), $entity),
-        );
+          'label' => t("%entity has been deleted", ['%entity' => $entity]),
+          'variables' => civicrm_rules_rules_events_variables(t('Deleted %entity', ['%entity' => $entity]), $entity),
+        ];
       }
     }
   }
@@ -151,35 +151,35 @@ function civicrm_rules_get_event() {
 
 function civicrm_rules_rules_events_variables($label, $type = 'contact') {
 
-  $default = array(
-    $type => array('type' => $type,
+  $default = [
+    $type => ['type' => $type,
       'label' => $label,
-    ));
+    ]];
 
   if ($type == 'event') {
-    return $default + array(
-      'cms_user' => array(
+    return $default + [
+      'cms_user' => [
         'type' => 'user',
         'label' => t('User that created the event'),
         'handler' => 'civicrm_rules_events_argument_civicrm_event',
-      ),
-    );
+      ],
+    ];
   }
 
   if ($type == 'participant') {
 
-    return $default + array(
-      'event_node' => array(
+    return $default + [
+      'event_node' => [
         'type' => 'node',
         'label' => t('Node related to the event'),
         'handler' => 'civicrm_rules_events_argument_civicrm_eventnode',
-      ),
-      'cms_user' => array(
+      ],
+      'cms_user' => [
         'type' => 'user',
         'label' => t('User that registered for the event'),
         'handler' => 'civicrm_rules_events_argument_civicrm_contactID_load_user',
-      ),
-    );
+      ],
+    ];
   }
 
   return $default;

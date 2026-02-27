@@ -113,7 +113,7 @@ function civicrm_user_update(&$edit, &$user, $category) {
     }
 
     // reset navigation on user role change
-    $editRoles     = array_keys(CRM_Utils_Array::value('roles', $edit, array()));
+    $editRoles     = array_keys(CRM_Utils_Array::value('roles', $edit, []));
     $orginRoles    = array_keys($user->original->roles);
     $editRoleDiff  = array_diff($editRoles, $orginRoles);
     $orginRoleDiff = array_diff($orginRoles, $editRoles);
@@ -141,19 +141,19 @@ function civicrm_user_categories() {
     return;
   }
 
-  $allUFGroups = CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, TRUE, CRM_Core_Permission::VIEW, array('id', 'name', 'title', 'is_active'));
-  $ufGroups = array();
+  $allUFGroups = CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, TRUE, CRM_Core_Permission::VIEW, ['id', 'name', 'title', 'is_active']);
+  $ufGroups = [];
 
   $weight = 100;
   foreach ($allUFGroups as $key => $value) {
     if ($value['is_active']) {
-      $ufGroups[] = array(
+      $ufGroups[] = [
         'name' => $value['name'],
         'title' => $value['title'],
         'weight' => $weight,
         'access callback' => '_civicrm_categories_access',
-        'access arguments' => array("$key"),
-      );
+        'access arguments' => ["$key"],
+      ];
       $weight += 10;
     }
   }
@@ -184,7 +184,7 @@ function civicrm_user_view($user, $view_mode) {
   '<div class="user-page-link" id="user-page-dashboard"><i class="zmdi zmdi-accounts-list-alt"></i> ' .
   l(ts("View Contact Dashboard"),
     'civicrm/user',
-    array('query' => array('reset' => 1, 'id' => $userID ))
+    ['query' => ['reset' => 1, 'id' => $userID ]]
     ) .
   '</div>';
     }
@@ -193,7 +193,7 @@ function civicrm_user_view($user, $view_mode) {
   '<div class="user-page-link" id="user-page-contact" ><i class="zmdi zmdi-view-dashboard"></i> ' .
   l(ts("View Contact Record"),
     'civicrm/contact/view',
-    array('query' => array('reset' => 1, 'cid' => $userID ))
+    ['query' => ['reset' => 1, 'cid' => $userID ]]
     ) .
   '</div>';
     }
@@ -211,10 +211,10 @@ function civicrm_user_view($user, $view_mode) {
     $weight = 100;
 
     if ($contactURL) {
-      $user->content['urls'] = array(
+      $user->content['urls'] = [
         '#markup' => $contactURL,
         '#weight' => $weight,
-      );
+      ];
     }
     foreach ($ufGroups as $groupId => $group) {
       $fieldType = CRM_Core_BAO_UFField::getProfileType($groupId);
@@ -231,23 +231,23 @@ function civicrm_user_view($user, $view_mode) {
       // CRM-3537: profile edit link
       $editURL = '';
       if (user_edit_access($user)) {
-        $editURL = '<div class="crm-section"><span class="user-page-link content" id="user-page-profile-' . $group['name'] . '" ><i class="zmdi zmdi-edit"></i>' . l(ts("Edit %1", array(1 => $group['title'])),
+        $editURL = '<div class="crm-section"><span class="user-page-link content" id="user-page-profile-' . $group['name'] . '" ><i class="zmdi zmdi-edit"></i>' . l(ts("Edit %1", [1 => $group['title']]),
           "user/{$user->uid}/edit/" . $group['name']
         ) . '</span></div>';
       }
 
       if ($pageContent) {
-        $user->content[$group['name']] = array(
+        $user->content[$group['name']] = [
           '#title' => $group['title'],
           '#type' => 'user_profile_category',
           '#weight' => $weight,
-        );
-        $user->content[$group['name']][$group['title']] = array(
+        ];
+        $user->content[$group['name']][$group['title']] = [
           '#type' => 'user_profile_item',
           '#title' => NULL,
           '#value' =>  $pageContent.$editURL,
           '#markup' => $pageContent.$editURL,
-        );
+        ];
 
         $weight += 10;
       }
@@ -277,7 +277,7 @@ function civicrm_validate_user_forms($form, &$form_state) {
     return;
   }
   // we ignore this
-  $edit = array();
+  $edit = [];
   // this as well
   $category = FALSE;
   global $user;

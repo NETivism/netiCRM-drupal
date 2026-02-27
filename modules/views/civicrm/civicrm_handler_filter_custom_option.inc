@@ -28,14 +28,14 @@
    * @author Matt Chapman <Matt@NinjitsuWeb.com>
    */
 class civicrm_handler_filter_custom_option extends views_handler_filter_in_operator {
-  function construct() {
+  public function construct() {
     parent::construct();
     if (!civicrm_initialize()) {
       return;
     }
   }
 
-  function get_value_options() {
+  public function get_value_options() {
     if (!isset($this->value_options)) {
       // extract the field id from the name
       if (preg_match('/_(\d+)$/', $this->real_field, $match)) {
@@ -50,7 +50,7 @@ class civicrm_handler_filter_custom_option extends views_handler_filter_in_opera
     }
   }
 
-  function op_simple() {
+  public function op_simple() {
     if (empty($this->value)) {
       return;
     }

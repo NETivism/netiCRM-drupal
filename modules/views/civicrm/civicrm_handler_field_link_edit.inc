@@ -30,11 +30,11 @@
  */
 class civicrm_handler_field_link_edit extends civicrm_handler_field_link {
   // An example of field level access control.
-  function access() {
+  public function access() {
     return user_access('access CiviCRM');
   }
 
-  function render($values) {
+  public function render($values) {
     $text = !empty($this->options['text']) ? $this->options['text'] : t('edit');
     $id = $values->id;
     return civicrm_views_href($text,

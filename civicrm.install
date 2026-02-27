@@ -127,7 +127,7 @@ function _civicrm_init_setting(){
       if ($db['host'] == '127.0.0.1') {
         $db['host'] = 'localhost'; // use mysql socket instead
       }
-      $params = array();
+      $params = [];
       $params['%%baseURL%%'] = base_path();
       $params['%%cms%%'] = 'Drupal';
       $params['%%CMSdbUser%%'] = addslashes($db['username']);

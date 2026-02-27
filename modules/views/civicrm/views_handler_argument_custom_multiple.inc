@@ -12,54 +12,54 @@
  * @ingroup views_argument_handlers
  */
 class views_handler_argument_custom_multiple extends views_handler_argument {
-  function init(&$view, &$options) {
+  public function init(&$view, &$options) {
     parent::init($view, $options);
     if (!empty($this->definition['many to one'])) {
       $this->helper = new views_many_to_one_helper($this);
 
       // Ensure defaults for these, during summaries and stuff:
       $this->operator = 'or';
-      $this->value = array();
+      $this->value = [];
     }
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
 
-    $options['glossary'] = array('default' => FALSE, 'bool' => TRUE);
-    $options['limit'] = array('default' => 0);
-    $options['case'] = array('default' => 'none');
-    $options['path_case'] = array('default' => 'none');
-    $options['transform_dash'] = array('default' => FALSE, 'bool' => TRUE);
-    $options['break_phrase'] = array('default' => FALSE, 'bool' => TRUE);
+    $options['glossary'] = ['default' => FALSE, 'bool' => TRUE];
+    $options['limit'] = ['default' => 0];
+    $options['case'] = ['default' => 'none'];
+    $options['path_case'] = ['default' => 'none'];
+    $options['transform_dash'] = ['default' => FALSE, 'bool' => TRUE];
+    $options['break_phrase'] = ['default' => FALSE, 'bool' => TRUE];
 
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
     // allow + for or, , for and
-    $form['break_phrase'] = array(
+    $form['break_phrase'] = [
       '#type' => 'checkbox',
       '#title' => t('Allow multiple values'),
       '#description' => t('If selected, users can enter multiple values in the form of 1+2+3 (for OR) or 1,2,3 (for AND).'),
       '#default_value' => !empty($this->options['break_phrase']),
       '#fieldset' => 'more',
-    );
+    ];
   }
 
   /**
    * Build the query based upon the formula
    */
-  function query($group_by = FALSE) {
+  public function query($group_by = FALSE) {
     $argument = $this->argument;
 
     if (!empty($this->options['break_phrase'])) {
       views_break_phrase_string($argument, $this);
     }
     else {
-      $this->value = array($argument);
+      $this->value = [$argument];
       $this->operator = 'or';
     }
 
@@ -73,7 +73,7 @@ class views_handler_argument_custom_multiple extends views_handler_argument {
     $formula = FALSE;
     $field = "$this->table_alias.$this->real_field";
     $placeholder = $this->placeholder();
-    $conditions = $placeholders = array();
+    $conditions = $placeholders = [];
     if (count($this->value)) {
       $count = 0;
       foreach($this->value as $value) {

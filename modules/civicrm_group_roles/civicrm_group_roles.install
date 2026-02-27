@@ -36,7 +36,7 @@
 function civicrm_group_roles_install() {
 
   $here = l(t('here'), 'admin/config/civicrm/civicrm_group_roles/add_rule');
-  drupal_set_message(t('CiviGroup Roles Sync installed. You will need to specify sync rules !1.', array('!1' => $here)));
+  drupal_set_message(t('CiviGroup Roles Sync installed. You will need to specify sync rules !1.', ['!1' => $here]));
 }
 
 /**
@@ -50,24 +50,24 @@ function civicrm_group_roles_enable() {
  * Implementation of hook_schema().
  */
 function civicrm_group_roles_schema() {
-  $schema['civicrm_group_roles_rules'] = array(
-    'fields' => array(
-      'id' => array(
+  $schema['civicrm_group_roles_rules'] = [
+    'fields' => [
+      'id' => [
         'type' => 'serial',
-      ),
-      'role_id' => array(
+      ],
+      'role_id' => [
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-      ),
-      'group_id' => array(
+      ],
+      'group_id' => [
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-      ),
-    ),
-    'primary key' => array('id'),
-  );
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
 
   return $schema;
 }

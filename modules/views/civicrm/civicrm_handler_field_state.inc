@@ -29,9 +29,9 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_state extends civicrm_handler_field_address {
-  static $_states;
-  static $_states_full;
-  function construct() {
+  public static $_states;
+  public static $_states_full;
+  public function construct() {
     parent::construct();
     if (!self::$_states || !self::$_states_full) {
       if (!civicrm_initialize()) {
@@ -43,7 +43,7 @@ class civicrm_handler_field_state extends civicrm_handler_field_address {
     }
   }
 
-  function render($values) {
+  public function render($values) {
     $sid = $values->{$this->field_alias};
     if (empty($sid) ||
       (int ) $sid <= 0
@@ -59,21 +59,21 @@ class civicrm_handler_field_state extends civicrm_handler_field_address {
     }
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['prov_display'] = array('default' => '');
+    $options['prov_display'] = ['default' => ''];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    $form['prov_display'] = array(
+    $form['prov_display'] = [
       '#type' => 'radios',
       '#title' => 'Display complete name or abbreviation',
-      '#options' => array(1 => 'Display state/province abbreviations', 2 => 'Display full state/province name'),
+      '#options' => [1 => 'Display state/province abbreviations', 2 => 'Display full state/province name'],
       '#description' => t('Display full or abbreviated province name'),
       '#default_value' => $this->options['prov_display'],
-    );
+    ];
   }
 }
 

@@ -60,89 +60,89 @@ The content of the email is:
     $settings['subject'] = 'New Email: {mailing.subject}';
   }
 
-  $defaults = array(
-    'parameter' => array('contact' => array('type' => 'contact',
+  $defaults = [
+    'parameter' => ['contact' => ['type' => 'contact',
         'label' => t('Contact'),
         'save' => TRUE,
-      ),
-      'civicrm_group' => array(
+      ],
+      'civicrm_group' => [
         'type' => 'list<integer>',
         'label' => t('CiviCRM Groups'),
         'options list' => 'civicrm_rules_options_list',
-      ),
-    ),
+      ],
+    ],
     'group' => t('CiviCRM Contact'),
     'access callback' => 'civicrm_rules_rules_admin_access',
-  );
+  ];
 
-  $items['add_to_group'] = $defaults + array('label' => t('Add Contact to CiviCRM Group'),
+  $items['add_to_group'] = $defaults + ['label' => t('Add Contact to CiviCRM Group'),
     'base' => 'civicrm_rules_rules_action_add_to_group',
-  );
-  $items['remove_from_group'] = $defaults + array('label' => t('Remove Contact from CiviCRM Group'),
+  ];
+  $items['remove_from_group'] = $defaults + ['label' => t('Remove Contact from CiviCRM Group'),
     'base' => 'civicrm_rules_rules_action_remove_from_group',
-  );
+  ];
 
-  $defaults = array(
-    'parameter' => array('to' => array('type' => 'text',
+  $defaults = [
+    'parameter' => ['to' => ['type' => 'text',
         'label' => t('To'),
         'description' => t('The e-mail address or addresses where the message will be sent to. The formatting of this string must comply with RFC 2822.'),
-      ),
-      'subject' => array(
+      ],
+      'subject' => [
         'type' => 'text',
         'label' => t('Subject'),
         'description' => t("The mail's subject."),
-      ),
-      'message' => array(
+      ],
+      'message' => [
         'type' => 'text',
         'label' => t('Message'),
         'description' => t("The mail's message body."),
-      ),
-      'from' => array(
+      ],
+      'from' => [
         'type' => 'text',
         'label' => t('From'),
         'description' => t("The mail's from address. Leave it empty to use the site-wide configured address."),
         'optional' => TRUE,
-      ),
-    ),
+      ],
+    ],
     'group' => t('CiviCRM Contact'),
     'access callback' => 'civicrm_rules_rules_admin_access',
-  );
+  ];
 
-  $items['contact_send_email'] = $defaults + array('label' => t('Send Email'),
+  $items['contact_send_email'] = $defaults + ['label' => t('Send Email'),
     'base' => 'civicrm_rules_rules_action_contact_send_email',
-  );
+  ];
 
-  $defaults = array(
-    'parameter' => array('to' => array('type' => 'text',
+  $defaults = [
+    'parameter' => ['to' => ['type' => 'text',
         'label' => t('To'),
         'description' => t('The e-mail address or addresses where the message will be sent to. The formatting of this string must comply with RFC 2822.'),
-      ),
-      'subject' => array(
+      ],
+      'subject' => [
         'type' => 'text',
         'label' => t('Subject'),
         'description' => t("The mail's subject."),
         'default value' => $settings['subject'],
-      ),
-      'message' => array(
+      ],
+      'message' => [
         'type' => 'text',
         'label' => t('Message'),
         'description' => t("The mail's message body."),
         'default value' => $settings['message'],
-      ),
-      'from' => array(
+      ],
+      'from' => [
         'type' => 'text',
         'label' => t('From'),
         'description' => t("The mail's from address. Leave it empty to use the site-wide configured address."),
         'default value' => $settings['from'],
         'optional' => TRUE,
-      ),
-    ),
+      ],
+    ],
     'group' => t('CiviCRM Mailing'),
-  );
+  ];
 
-  $items['mailing_send_email'] = $defaults + array('label' => t('Send Email'),
+  $items['mailing_send_email'] = $defaults + ['label' => t('Send Email'),
     'base' => 'civicrm_rules_rules_action_mailing_send_email',
-  );
+  ];
   return $items;
 }
 

@@ -33,42 +33,42 @@
  *
  */
 class civicrm_handler_field_event_available_places extends views_handler_field {
-  function construct() {
+  public function construct() {
     parent::construct();
     civicrm_initialize();
     require_once('api/v3/Event.php');
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['max_participant_type'] = array(
+    $options['max_participant_type'] = [
       'default' => 'number',
-    );
+    ];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
-    $form['max_participant_type'] = array(
+  public function options_form(&$form, &$form_state) {
+    $form['max_participant_type'] = [
       '#type' => 'select',
       '#title' => 'Value Type',
       '#default_value' => $this->options['max_participant_type'],
-      '#options' => array(
+      '#options' => [
         'number' => 'Max Participants Limit',
         'available_places' => 'Available Places',
         'is_full' => 'Is Full',
-      ),
-    );
+      ],
+    ];
     parent::options_form($form, $form_state);
   }
 
-  function get_value($values, $field = NULL) {
+  public function get_value($values, $field = NULL) {
     $type = !empty($this->options['max_participant_type']) ? $this->options['max_participant_type'] : 'number';
     switch ($type) {
       case 'available_places':
       case 'is_full':
         if (!empty($values->id)) {
           $event_id = $values->id;
-          $events = array();
+          $events = [];
           _civicrm_api3_event_getisfull($events, $event_id);
           $event = $events[$event_id];
           return !empty($event[$type]) ? (int) $event[$type] : 0;
@@ -80,7 +80,7 @@ class civicrm_handler_field_event_available_places extends views_handler_field {
     }
   }
 
-  function render($values) {
+  public function render($values) {
     $value = $this->get_value($values);
     $type = !empty($this->options['max_participant_type']) ? $this->options['max_participant_type'] : 'number';
     switch ($type) {

@@ -29,18 +29,18 @@
    * based on civicrm_handler_filter_custom_option and civicrm_handler_filter_state
    */
 class civicrm_handler_filter_state_multi extends views_handler_filter_in_operator {
-  function construct() {
+  public function construct() {
     parent::construct();
     if (!civicrm_initialize()) {
       return;
     }
   }
 
-  function get_value_options() {
+  public function get_value_options() {
     if (!isset($this->value_options)) {
       require_once 'CRM/Core/PseudoConstant.php';
       $states = CRM_Core_PseudoConstant::stateProvince();
-      $options = array();
+      $options = [];
       if (is_array($states)) {
         foreach ($states as $id => $name) {
           $options[$id] = $name;
@@ -50,7 +50,7 @@ class civicrm_handler_filter_state_multi extends views_handler_filter_in_operato
     }
   }
 
-  function op_simple() {
+  public function op_simple() {
     if (empty($this->value)) {
       return;
     }

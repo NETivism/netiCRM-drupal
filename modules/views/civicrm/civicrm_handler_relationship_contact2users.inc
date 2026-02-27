@@ -33,15 +33,15 @@ class civicrm_handler_relationship_contact2users extends views_handler_relations
   /**
    * Called to implement a relationship in a query.
    */
-  function query() {
+  public function query() {
 
     $join = new views_join();
-    $join->definition = array(
+    $join->definition = [
       'left_table' => 'civicrm_contact',
       'left_field' => 'id',
       'table' => 'civicrm_uf_match',
       'field' => 'contact_id',
-    );
+    ];
 
     if (!empty($this->options['required'])) {
       $join->definition['type'] = 'INNER';
@@ -55,12 +55,12 @@ class civicrm_handler_relationship_contact2users extends views_handler_relations
 
     // Then, create a relationship on that table:
     $join = new views_join();
-    $join->definition = array(
+    $join->definition = [
       'left_table' => $this->first_join,
       'left_field' => 'uf_id',
       'table' => 'users',
       'field' => 'uid',
-    );
+    ];
 
     if (!empty($this->options['required'])) {
       $join->definition['type'] = 'INNER';

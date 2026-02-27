@@ -42,9 +42,9 @@
  */
 function _civicrm_get_groups() {
   civicrm_initialize();
-  $groupInformation = civicrm_api('group', 'get', array('version' => 3));
+  $groupInformation = civicrm_api('group', 'get', ['version' => 3]);
 
-  $groups = array();
+  $groups = [];
   foreach ($groupInformation['values'] as $values) {
     $groups[$values['id']] = $values['title'];
   }
@@ -57,11 +57,11 @@ function _civicrm_get_groups() {
  */
 function _civicrm_rules_group_contact($contactId, $groupId, $action = 'create') {
   civicrm_initialize();
-  $params = array(
+  $params = [
     'contact_id' => $contactId,
     'group_id' => $groupId,
     'version' => 3,
-  );
+  ];
   // This used to be civicrm_group_contact_common($params, $action);
   civicrm_api('group_contact', $action, $params);
 }
@@ -110,7 +110,7 @@ function civicrm_rules_get_options($type) {
     return;
   }
 
-  $result = civicrm_api('OptionValue', 'get', array('version' => 3, 'option_group_name' => $type));
+  $result = civicrm_api('OptionValue', 'get', ['version' => 3, 'option_group_name' => $type]);
   foreach ($result['values'] as $options) {
     $values[$options['value']] = $options['label'];
   }

@@ -48,7 +48,7 @@ class Engage_Report_Form_List extends CRM_Report_Form {
      * Please note these values 'll need to be adjusted if custom field labels are modified.
      *
      */
-  CONST CF_CONSTITUENT_TYPE_NAME = 'constituent_type', CF_OTHER_NAME_NAME = 'other_name', CG_VOTER_INFO_TABLE = 'civicrm_value_voter_info', CF_PARTY_REG_NAME = 'party_registration', CF_VOTER_HISTORY_NAME = 'voter_history', CG_DEMOGROPHICS_TABLE = 'civicrm_value_demographics';
+  public CONST CF_CONSTITUENT_TYPE_NAME = 'constituent_type', CF_OTHER_NAME_NAME = 'other_name', CG_VOTER_INFO_TABLE = 'civicrm_value_voter_info', CF_PARTY_REG_NAME = 'party_registration', CF_VOTER_HISTORY_NAME = 'voter_history', CG_DEMOGROPHICS_TABLE = 'civicrm_value_demographics';
 
   /**
    *  Address information needed in output
@@ -159,13 +159,13 @@ class Engage_Report_Form_List extends CRM_Report_Form {
    *  Available party registration options
    *  @var string[]
    */
-  protected $_partyRegs = array();
+  protected $_partyRegs = [];
 
   /**
    *  Column in $_voterInfoTable with voter history information
    *  @var string
    */
-  protected $_vhCol; function __construct() {
+  protected $_vhCol; public function __construct() {
     // Find the invidual constituent table (varies between versions)
     $query = "SELECT table_name FROM civicrm_custom_group g" . " JOIN civicrm_custom_field f ON g.id = f.custom_group_id" . " WHERE column_name='" . self::CF_CONSTITUENT_TYPE_NAME . "' AND" . " ( g.table_name = 'civicrm_value_core_info' OR g.table_name " . " = 'civicrm_value_constituent_info' )";
     $dao = CRM_Core_DAO::executeQuery($query);
@@ -207,7 +207,7 @@ class Engage_Report_Form_List extends CRM_Report_Form {
     //  Get contactType option values
     //  There are two custom groups named 'Contact Type'
     //  so there isn't a very good way to do this.
-    $this->_contactType = array('' => '');
+    $this->_contactType = ['' => ''];
     $query = "
 SELECT ov.label, ov.value FROM civicrm_option_value ov
 WHERE ov.option_group_id = (
@@ -261,7 +261,7 @@ WHERE custom_group_id={$coreInfoTableID} AND column_name='" . self::CF_CONSTITUE
 
 
     //  Get language option values, English on top
-    $this->_languages = array('' => '');
+    $this->_languages = ['' => ''];
     $query = "
 SELECT ov.label, ov.value FROM civicrm_option_value ov
 WHERE ov.option_group_id = (
@@ -284,7 +284,7 @@ ORDER BY ov.label
     parent::__construct();
   }
 
-  function setDefaultValues($freeze = TRUE) {
+  public function setDefaultValues($freeze = TRUE) {
     $defaults = parent::setDefaultValues($freeze);
     $defaults['report_header'] = '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -347,22 +347,22 @@ ORDER BY ov.label
     return $defaults;
   }
 
-  function preProcess() {
+  public function preProcess() {
     parent::preProcess();
   }
 
-  function getOperationPair($type = "string", $fieldName = NULL) {
+  public function getOperationPair($type = "string", $fieldName = NULL) {
     if ($fieldName == 'gid' && $type == CRM_Report_Form::OP_MULTISELECT) {
-      return array('in' => ts('Is one of'),
+      return ['in' => ts('Is one of'),
         'mand' => ts('Is equal to'),
-      );
+      ];
     }
     else {
       return parent::getOperationPair($type);
     }
   }
 
-  function engageWhereGroupClause($clause) {
+  public function engageWhereGroupClause($clause) {
     $smartGroupQuery = "";
     require_once 'CRM/Contact/DAO/Group.php';
     require_once 'CRM/Contact/BAO/SavedSearch.php';
@@ -417,10 +417,10 @@ ORDER BY ov.label
     }
   }
 
-  function select() {
-    $select = array();
+  public function select() {
+    $select = [];
     //var_dump($this->_params);
-    $this->_columnHeaders = array();
+    $this->_columnHeaders = [];
     foreach ($this->_columns as $tableName => $table) {
       if (array_key_exists('fields', $table)) {
         foreach ($table['fields'] as $fieldName => $field) {
@@ -526,7 +526,7 @@ ORDER BY ov.label
    *  Convert a string of fields separated by \x01 to a
    *  string of fields separated by commas
    */
-  function hexOne2str($hexOne) {
+  public function hexOne2str($hexOne) {
     $hexOneArray = explode("\x01", $hexOne);
     foreach ($hexOneArray as $key => $value) {
       if (empty($value)) {
@@ -540,9 +540,9 @@ ORDER BY ov.label
    *  Convert MySQL YYYY-MM-DD HH:MM:SS date of birth timestamp to
    *  current age
    */
-  function dob2age($myTimestamp) {
+  public function dob2age($myTimestamp) {
     //  Separate parts of DOB timestamp
-    $matches = array();
+    $matches = [];
     preg_match('/(\d\d\d\d)-(\d\d)-(\d\d)/',
       $myTimestamp, $matches
     );

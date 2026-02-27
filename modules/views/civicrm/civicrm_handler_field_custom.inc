@@ -29,12 +29,12 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_custom extends views_handler_field {
-  function construct() {
+  public function construct() {
     parent::construct();
     civicrm_initialize();
   }
 
-  function render($values) {
+  public function render($values) {
     $value = $values->{$this->field_alias};
     if (!is_null($value)) {
       // extract the field id from the name

@@ -58,7 +58,7 @@ function civicrm_engage_civicrm_buildForm($formName, &$form) {
     $groupTree = CRM_Core_BAO_CustomGroup::formatGroupTree($groupTree, 1, $form);
 
     if (isset($groupTree) && is_array($groupTree)) {
-      $defaults = array();
+      $defaults = [];
       CRM_Core_BAO_CustomGroup::setDefaults($groupTree, $defaults);
       $form->setDefaults($defaults);
 
@@ -72,19 +72,19 @@ function civicrm_engage_civicrm_alterReportVar($varType, &$var, &$form) {
   if ( $formName == 'CRM_Report_Form_Campaign_SurveyDetails' ) {
     if ( $varType == 'columns' ) {
       $var['civicrm_contribution'] =
-        array(
+        [
               'dao' => 'CRM_Contribute_DAO_Contribution',
               'fields' =>
-              array(
+              [
                     'receive_date' =>
-                    array('title' => ts('Latest Contribution Date'),
-                          ),
+                    ['title' => ts('Latest Contribution Date'),
+                          ],
                     'total_amount' =>
-                    array('title' => ts('Latest Contribution Amount'),
-                          ),
-                    ),
+                    ['title' => ts('Latest Contribution Amount'),
+                          ],
+                    ],
               'grouping' => 'survey-activity-fields',
-              );
+              ];
     } else if ( $varType == 'sql' ) {
       $params = $form->getVar( '_params' );
       if ( CRM_Utils_Array::value('receive_date', $params['fields']) || CRM_Utils_Array::value('total_amount', $params['fields']) ) {
@@ -195,12 +195,12 @@ function civicrm_engage_civicrm_config(&$config) {
   $templateDir = $engageRoot . 'templates' . DIRECTORY_SEPARATOR;
   $template = CRM_Core_Smarty::singleton();
   if (is_array($template->template_dir)) {
-    $template->template_dir = array_merge(array($templateDir),
+    $template->template_dir = array_merge([$templateDir],
       $template->template_dir
     );
   }
   else {
-    $template->template_dir = array($templateDir, $template->template_dir);
+    $template->template_dir = [$templateDir, $template->template_dir];
   }
 }
 
@@ -208,42 +208,42 @@ function civicrm_engage_civicrm_config(&$config) {
  * Implementation of hook_perm().
  */
 function civicrm_engage_permission() {
-  return array(
+  return [
     'access civiengage settings' =>
-    array('title' => t('Access CiviCRM engage setting'),
+    ['title' => t('Access CiviCRM engage setting'),
       'description' => t('Access CiviCRM engage setting.'),
-    ),
-  );
+    ],
+  ];
 }
 
 function civicrm_engage_menu() {
 
-  $items['admin/config/civicrm/civicrm_engage'] = array(
+  $items['admin/config/civicrm/civicrm_engage'] = [
     'title' => t('Civicrm engage settings'),
     'description' => t('CiviCRM Engage Configuration'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('civicrm_engage_admin_settings'),
-    'access arguments' => array('access civiengage settings'),
+    'page arguments' => ['civicrm_engage_admin_settings'],
+    'access arguments' => ['access civiengage settings'],
     'file' => 'civicrm_engage.admin.inc',
-  );
-  $items['admin/config/civicrm/civicrm_engage/settings'] = array(
+  ];
+  $items['admin/config/civicrm/civicrm_engage/settings'] = [
     'title' => t('Civicrm engage settings'),
     'description' => t('CiviCRM Engage Configuration'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('civicrm_engage_admin_settings'),
-    'access arguments' => array('access civiengage settings'),
+    'page arguments' => ['civicrm_engage_admin_settings'],
+    'access arguments' => ['access civiengage settings'],
     'file' => 'civicrm_engage.admin.inc',
     'type' => MENU_DEFAULT_LOCAL_TASK,
-  );
-  $items['admin/config/civicrm/civicrm_engage/load-data'] = array(
+  ];
+  $items['admin/config/civicrm/civicrm_engage/load-data'] = [
     'title' => t('Civicrm engage load default data'),
     'description' => t('CiviCRM Engage Load Data'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('civicrm_engage_admin_load_data'),
-    'access arguments' => array('access civiengage settings'),
+    'page arguments' => ['civicrm_engage_admin_load_data'],
+    'access arguments' => ['access civiengage settings'],
     'file' => 'civicrm_engage.admin.inc',
     'type' => MENU_LOCAL_TASK,
-  );
+  ];
   return $items;
 }
 

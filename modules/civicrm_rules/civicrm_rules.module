@@ -49,15 +49,15 @@ function civicrm_rules_civicrm_post($op, $objectName, $objectId, &$objectRef) {
   }
 
   if (in_array($objectName,
-      array('Individual', 'Household', 'Organization')
+      ['Individual', 'Household', 'Organization']
     )) {
     $objectName = 'Contact';
   }
 
   // process only contacts for now
   $validObjects = array_merge(
-    variable_get('civicrm_rules_post_entities', array()),
-    array('contact' => 'contact')
+    variable_get('civicrm_rules_post_entities', []),
+    ['contact' => 'contact']
   );
 
   if (!in_array(strtolower($objectName), $validObjects, true)) {
@@ -66,7 +66,7 @@ function civicrm_rules_civicrm_post($op, $objectName, $objectId, &$objectRef) {
 
   $eventObject = strtolower($objectName);
   if (!in_array($eventObject, $validObjects) &&
-    !in_array($eventObject, array('contact'))
+    !in_array($eventObject, ['contact'])
   ) {
     return;
   }
@@ -102,7 +102,7 @@ function civicrm_rules_civicrm_pageRun(&$page) {
   }
 
   // process only contacts for now
-  $validObjects = array('CRM_Contact_Page_View_Summary');
+  $validObjects = ['CRM_Contact_Page_View_Summary'];
 
   $className = get_class($page);
   if (!in_array($className, $validObjects)) {
@@ -196,25 +196,25 @@ FROM   civicrm_mailing
  * Implementation of hook_permission().
  */
 function civicrm_rules_permission() {
-  return array(
+  return [
     'access civicrm rules settings' =>
-    array('title' => t('Access CiviCRM Rules Settings'),
+    ['title' => t('Access CiviCRM Rules Settings'),
       'description' => t('Access CiviCRM Rules Settings.'),
-    ),
-  );
+    ],
+  ];
 }
 
 function civicrm_rules_menu() {
 
-  $items['admin/config/civicrm/rules'] = array(
+  $items['admin/config/civicrm/rules'] = [
     'title' => t('CiviCRM Rules settings'),
     'description' => t('CiviCRM Rules Configuration'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('civicrm_rules_admin_settings'),
-    'access arguments' => array('access civicrm rules settings'),
+    'page arguments' => ['civicrm_rules_admin_settings'],
+    'access arguments' => ['access civicrm rules settings'],
     'file' => 'civicrm_rules_admin_form.inc',
     'type' => MENU_NORMAL_ITEM,
-  );
+  ];
   return $items;
 }
 

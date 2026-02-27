@@ -31,7 +31,7 @@
  *
  */
 class civicrm_handler_field_file extends views_handler_field {
-  function construct() {
+  public function construct() {
     parent::construct();
     if (!civicrm_initialize()) {
       return;
@@ -41,12 +41,12 @@ class civicrm_handler_field_file extends views_handler_field {
     require_once 'api/api.php';
   }
 
-  function query() {
+  public function query() {
     $this->ensure_my_table();
     $this->add_additional_fields();
   }
 
-  function render($values) {
+  public function render($values) {
     if ($this->table_alias === 'civicrm_pcp') {
       $pcpId = $values->{$this->real_field};
       $images = CRM_Contribute_BAO_PCP::getPcpImages($pcpId);
@@ -57,11 +57,11 @@ class civicrm_handler_field_file extends views_handler_field {
       return NULL;
     }
     elseif ($file_id = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_EntityFile', $id, 'file_id', 'entity_id')) {
-      $params = array(
+      $params = [
         'id' => $file_id,
         'file_type_id' => NULL,
         'version' => 3,
-      );
+      ];
       $file = civicrm_api('File', 'get', $params);
 
       if (!civicrm_error($file)) {

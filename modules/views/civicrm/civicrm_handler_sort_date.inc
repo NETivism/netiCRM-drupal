@@ -33,7 +33,7 @@ class civicrm_handler_sort_date extends views_handler_sort_date {
    * Called to add the sort to a query.
    * Overridden to pass the field type
    */
-  function query() {
+  public function query() {
     $this->ensure_my_table();
     switch ($this->options['granularity']) {
       case 'second':

@@ -46,775 +46,775 @@ function _civicrm_mail_data(&$data, $enabled) {
 
   $data['civicrm_mailing']['table']['group'] = t('CiviCRM Mailings');
 
-  $data['civicrm_mailing']['table']['base'] = array(
+  $data['civicrm_mailing']['table']['base'] = [
     // Governs the whole mozilla
     'field' => 'id',
     'title' => t('CiviCRM Mailings'),
     'help' => t("View displays CiviCRM Mailing Results."),
-  );
+  ];
 
-  $data['civicrm_mailing_event_queue']['table']['join'] = array(
+  $data['civicrm_mailing_event_queue']['table']['join'] = [
     // Directly links to contact table - link A
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_job',
       'left_field' => 'id',
       'field' => 'job_id',
-    ),
-  );
+    ],
+  ];
 
 
 
   //CiviCRM Mailing - FIELDS
   // expose the ID to Views to allow users to drill down to a specific mailing.
-  $data['civicrm_mailing']['id'] = array(
+  $data['civicrm_mailing']['id'] = [
     'title' => t('ID'),
     'help' => t('The mailing\'s ID in the database.'),
-    'argument' => array(
+    'argument' => [
       'handler' => 'views_handler_argument_numeric',
-    ),
-    'field' => array(
+    ],
+    'field' => [
       'handler' => 'views_handler_field',
-    ),
-  );
+    ],
+  ];
 
   //Mailing Name
-  $data['civicrm_mailing']['name'] = array(
+  $data['civicrm_mailing']['name'] = [
     'title' => t('Name'),
     'help' => t('Title of the mailing'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
       'pseudo class' => 'CRM_Mailing_PseudoConstant',
       'pseudo method' => 'completed',
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_pseudo_constant',
       'allow empty' => TRUE,
       'pseudo class' => 'CRM_Mailing_PseudoConstant',
       'pseudo method' => 'completed',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
   //Mailing Subject line
-  $data['civicrm_mailing']['subject'] = array(
+  $data['civicrm_mailing']['subject'] = [
     'title' => t('Subject Line'),
     'help' => t('Subject Line of the mailing'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
   //Mailing Body plaintext
-  $data['civicrm_mailing']['body_text'] = array(
+  $data['civicrm_mailing']['body_text'] = [
     'title' => t('Body - Text'),
     'help' => t('Plaintext mailing message'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
   //Mailing Body HTML
-  $data['civicrm_mailing']['body_html'] = array(
+  $data['civicrm_mailing']['body_html'] = [
     'title' => t('Body - HTML'),
     'help' => t('HTML mailing message'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_markup',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
   //Mailing From e-mail
-  $data['civicrm_mailing']['from_email'] = array(
+  $data['civicrm_mailing']['from_email'] = [
     'title' => t('From Email'),
     'help' => t('From Email of the mailing'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
   //Mailing reply to e-mail
-  $data['civicrm_mailing']['replyto_email'] = array(
+  $data['civicrm_mailing']['replyto_email'] = [
     'title' => t('Reply to Email'),
     'help' => t('Reply Email of the mailing'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
   //Does the mailng track click throughs
-  $data['civicrm_mailing']['url_tracking'] = array(
+  $data['civicrm_mailing']['url_tracking'] = [
     'title' => t('Track URLs?'),
     'help' => t('Does the mailing track click throughs?'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_boolean',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_boolean_operator',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
   //Does the e-mail track opens
-  $data['civicrm_mailing']['open_tracking'] = array(
+  $data['civicrm_mailing']['open_tracking'] = [
     'title' => t('Track Opens?'),
     'help' => t('Does the mailing track Open Rate?'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_boolean',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_boolean_operator',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
   //has mailing been sent
-  $data['civicrm_mailing']['is_completed'] = array(
+  $data['civicrm_mailing']['is_completed'] = [
     'title' => t('Complete?'),
     'help' => t('Is the mailing completely sent?'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_boolean',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_boolean_operator',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
   //is this mailing public
-  $data['civicrm_mailing']['visibility'] = array(
+  $data['civicrm_mailing']['visibility'] = [
     'title' => t('Visibility'),
     'help' => t('Is this mailing public or not?'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_visibility',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
   // Link to Campaign Table
   if (isset($enabled['CiviCampaign'])) {
-    $data['civicrm_mailing']['campaign_id'] = array(
+    $data['civicrm_mailing']['campaign_id'] = [
       'title' => t('Campaign'),
       'help' => t('Mailing -> Campaign'),
-      'relationship' => array(
+      'relationship' => [
         'base' => 'civicrm_campaign',
         'field' => 'id',
         'handler' => 'views_handler_relationship',
         'label' => t('Mailing -> Campaign'),
-      ),
-    );
+      ],
+    ];
   }
 
   // mailing_component table aliased as mailing_header
   $data['civicrm_mailing_header']['table']['group'] = ts('CiviCRM Mailings');
 
-  $data['civicrm_mailing_header']['table']['join'] = array(
+  $data['civicrm_mailing_header']['table']['join'] = [
     // link to civicrm_mailing
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_field' => 'header_id',
       'table' => 'civicrm_mailing_component',
       'field' => 'id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_header']['body_html'] = array(
+  $data['civicrm_mailing_header']['body_html'] = [
     'title' => t('Mailing Header - HTML'),
     'help' => t('The HTML header for this mailing.'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_markup',
       'click sortable' => FALSE,
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_header']['body_text'] = array(
+  $data['civicrm_mailing_header']['body_text'] = [
     'title' => t('Mailing Header - Plaintext'),
     'help' => t('The plaintext header for this mailing.'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => FALSE,
-    ),
-  );
+    ],
+  ];
 
 
   // mailing_component table aliased as mailing_footer
   $data['civicrm_mailing_footer']['table']['group'] = ts('CiviCRM Mailings');
 
-  $data['civicrm_mailing_footer']['table']['join'] = array(
+  $data['civicrm_mailing_footer']['table']['join'] = [
     // link to civicrm_mailing
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_field' => 'footer_id',
       'table' => 'civicrm_mailing_component',
       'field' => 'id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_footer']['body_html'] = array(
+  $data['civicrm_mailing_footer']['body_html'] = [
     'title' => t('Mailing Footer - HTML'),
     'help' => t('The HTML footer for this mailing.'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_markup',
       'click sortable' => FALSE,
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_footer']['body_text'] = array(
+  $data['civicrm_mailing_footer']['body_text'] = [
     'title' => t('Mailing Footer - Plaintext'),
     'help' => t('The plaintext footer for this mailing.'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => FALSE,
-    ),
-  );
+    ],
+  ];
 
 
   //Mailing Job table
   $data['civicrm_mailing_job']['table']['group'] = ts('CiviCRM Mailing Job');
 
-  $data['civicrm_mailing_job']['table']['join'] = array(
+  $data['civicrm_mailing_job']['table']['join'] = [
     // link to civicrm_mailing
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_field' => 'id',
       'field' => 'mailing_id',
-    ),
-  );
+    ],
+  ];
 
   //When is the mailing sceduled to go out
-  $data['civicrm_mailing_job']['scheduled_date'] = array(
+  $data['civicrm_mailing_job']['scheduled_date'] = [
     'title' => t('Scheduled Date'),
     'help' => t('The Mailing\'s Scheduled Date'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_date',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
       'is date' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
+    ],
+  ];
 
-  civicrm_views_add_date_arguments($data['civicrm_mailing_job'], array(
+  civicrm_views_add_date_arguments($data['civicrm_mailing_job'], [
     'title' => 'Scheduled Date',
       'name' => 'scheduled_date',
-    ));
+    ]);
   //When did the mailing start to send
-  $data['civicrm_mailing_job']['start_date'] = array(
+  $data['civicrm_mailing_job']['start_date'] = [
     'title' => t('Start Date'),
     'help' => t('The Mailing\'s Start Date'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
       'is date' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
+    ],
+  ];
 
-  civicrm_views_add_date_arguments($data['civicrm_mailing_job'], array(
+  civicrm_views_add_date_arguments($data['civicrm_mailing_job'], [
     'title' => 'Start Date',
       'name' => 'start_date',
-    ));
+    ]);
   //Mailing finish date
-  $data['civicrm_mailing_job']['end_date'] = array(
+  $data['civicrm_mailing_job']['end_date'] = [
     'title' => t('End Date'),
     'help' => t('The Mailing\'s End Date'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
       'is date' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
+    ],
+  ];
 
-  civicrm_views_add_date_arguments($data['civicrm_mailing_job'], array(
+  civicrm_views_add_date_arguments($data['civicrm_mailing_job'], [
     'title' => 'End Date',
       'name' => 'end_date',
-    ));
+    ]);
 
 
   //Is this a test mailing
-  $data['civicrm_mailing_job']['is_test'] = array(
+  $data['civicrm_mailing_job']['is_test'] = [
     'title' => t('Is Test?'),
     'help' => t('Is this the test mailing?'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_boolean',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_boolean_operator',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
   //Mailing table that tracks who forwarded the e-mail
   $data['civicrm_mailing_event_forward']['table']['group'] = ts('CiviCRM Mailing Forwards');
 
-  $data['civicrm_mailing_event_forward']['table']['join'] = array(
+  $data['civicrm_mailing_event_forward']['table']['join'] = [
     // links through civicrm_mail_event_queue
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_event_queue',
       'left_field' => 'id',
       'field' => 'event_queue_id',
-    ),
-  );
+    ],
+  ];
   //time stamp of eash individual forward
-  $data['civicrm_mailing_event_forward']['time_stamp'] = array(
+  $data['civicrm_mailing_event_forward']['time_stamp'] = [
     'title' => t('Date forwaded'),
     'help' => t('Date user forwarded the e-mail'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_date',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
+    ],
+  ];
   //Tracks who click through, traces each individual click through
   $data['civicrm_mailing_event_trackable_url_open']['table']['group'] = ts('CiviCRM Mailing Click Throughs');
 
-  $data['civicrm_mailing_event_trackable_url_open']['table']['join'] = array(
+  $data['civicrm_mailing_event_trackable_url_open']['table']['join'] = [
     // link to civicrm_mailing through civicrm_mailing_event_queue
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_event_queue',
       'left_field' => 'id',
       'field' => 'event_queue_id',
-    ),
-  );
+    ],
+  ];
   //timestamp of click through
-  $data['civicrm_mailing_event_trackable_url_open']['time_stamp'] = array(
+  $data['civicrm_mailing_event_trackable_url_open']['time_stamp'] = [
     'title' => t('Date of click through'),
     'help' => t('Date user clicked a link in the e-mail'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_date',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
+    ],
+  ];
   //ID of click through event
-  $data['civicrm_mailing_event_trackable_url_open']['id'] = array(
+  $data['civicrm_mailing_event_trackable_url_open']['id'] = [
     'title' => t('Mailing click through ID'),
     'help' => t('The numeric ID click through record'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_numeric',
       'numeric' => TRUE,
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
   //Track the click through's URL
   $data['civicrm_mailing_trackable_url']['table']['group'] = ts('CiviCRM Mailing Click Throughs URL');
 
-  $data['civicrm_mailing_trackable_url']['table']['join'] = array(
+  $data['civicrm_mailing_trackable_url']['table']['join'] = [
     // link to civicrm_mailing through civicrm_mailing_event_queue
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_event_trackable_url_open',
       'left_field' => 'trackable_url_id',
       'field' => 'id',
-    ),
-  );
-  $data['civicrm_mailing_trackable_url']['url'] = array(
+    ],
+  ];
+  $data['civicrm_mailing_trackable_url']['url'] = [
     'title' => t('URL'),
     'help' => t('What URL was clicked'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_url',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
 
 
   $data['civicrm_mailing_event_bounce']['table']['group'] = ts('CiviCRM Mailing Bounced');
 
-  $data['civicrm_mailing_event_bounce']['table']['join'] = array(
+  $data['civicrm_mailing_event_bounce']['table']['join'] = [
     // link to civicrm_mailing through civicrm_mailing_event_queue
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_event_queue',
       'left_field' => 'id',
       'field' => 'event_queue_id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_event_bounce']['time_stamp'] = array(
+  $data['civicrm_mailing_event_bounce']['time_stamp'] = [
     'title' => t('Date of bounce'),
     'help' => t('Date user e-mail bounced'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_date',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
-  $data['civicrm_mailing_event_bounce']['id'] = array(
+    ],
+  ];
+  $data['civicrm_mailing_event_bounce']['id'] = [
     'title' => t('Mailing bounced ID'),
     'help' => t('The numeric ID of the bounce record'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_numeric',
       'numeric' => TRUE,
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_event_bounce']['bounce_reason'] = array(
+  $data['civicrm_mailing_event_bounce']['bounce_reason'] = [
     'title' => t('Reason'),
     'help' => t('Reason the e-mail bounced'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
   $data['civicrm_mailing_event_delivered']['table']['group'] = ts('CiviCRM Mailing  Delivered');
 
-  $data['civicrm_mailing_event_delivered']['table']['join'] = array(
+  $data['civicrm_mailing_event_delivered']['table']['join'] = [
     // link to civicrm_mailing through civicrm_mailing_event_queue
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_event_queue',
       'left_field' => 'id',
       'field' => 'event_queue_id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_event_delivered']['time_stamp'] = array(
+  $data['civicrm_mailing_event_delivered']['time_stamp'] = [
     'title' => t('Date of delivery'),
     'help' => t('Date user e-mail delivered'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_date',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
-  $data['civicrm_mailing_event_delivered']['id'] = array(
+    ],
+  ];
+  $data['civicrm_mailing_event_delivered']['id'] = [
     'title' => t('Mailing delivered ID'),
     'help' => t('The numeric ID of the delivery record'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_numeric',
       'numeric' => TRUE,
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
 
   $data['civicrm_mailing_event_opened']['table']['group'] = ts('CiviCRM Mailing Opened');
 
-  $data['civicrm_mailing_event_opened']['table']['join'] = array(
+  $data['civicrm_mailing_event_opened']['table']['join'] = [
     // link to civicrm_mailing through civicrm_mailing_event_queue
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_event_queue',
       'left_field' => 'id',
       'field' => 'event_queue_id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_event_opened']['time_stamp'] = array(
+  $data['civicrm_mailing_event_opened']['time_stamp'] = [
     'title' => t('Date e-mail opened'),
     'help' => t('Date e-mail opened'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_date',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
-  $data['civicrm_mailing_event_opened']['id'] = array(
+    ],
+  ];
+  $data['civicrm_mailing_event_opened']['id'] = [
     'title' => t('Mailing opened ID'),
     'help' => t('The numeric ID of the opened record'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_numeric',
       'numeric' => TRUE,
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
 
   $data['civicrm_mailing_event_reply']['table']['group'] = ts('CiviCRM Mailing Replied');
 
-  $data['civicrm_mailing_event_reply']['table']['join'] = array(
+  $data['civicrm_mailing_event_reply']['table']['join'] = [
     // link to civicrm_mailing through civicrm_mailing_event_queue
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_event_queue',
       'left_field' => 'id',
       'field' => 'event_queue_id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_event_reply']['time_stamp'] = array(
+  $data['civicrm_mailing_event_reply']['time_stamp'] = [
     'title' => t('Date of reply'),
     'help' => t('Date user replied'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_date',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
-  $data['civicrm_mailing_event_reply']['id'] = array(
+    ],
+  ];
+  $data['civicrm_mailing_event_reply']['id'] = [
     'title' => t('Mailing reply ID'),
     'help' => t('The numeric ID of the reply record'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_numeric',
       'numeric' => TRUE,
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
 
   $data['civicrm_mailing_event_unsubscribe']['table']['group'] = ts('CiviCRM Mailing Unsubscribe');
 
-  $data['civicrm_mailing_event_unsubcribe']['table']['join'] = array(
+  $data['civicrm_mailing_event_unsubcribe']['table']['join'] = [
     // link to civicrm_mailing through civicrm_mailing_event_queue
-    'civicrm_mailing' => array(
+    'civicrm_mailing' => [
       'left_table' => 'civicrm_mailing_event_queue',
       'left_field' => 'id',
       'field' => 'event_queue_id',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_event_unsubscribe']['time_stamp'] = array(
+  $data['civicrm_mailing_event_unsubscribe']['time_stamp'] = [
     'title' => t('Date of unsubscribe'),
     'help' => t('Date user unsubscribed'),
-    'field' => array(
+    'field' => [
       'handler' => 'civicrm_handler_field_datetime',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_date',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'civicrm_handler_filter_datetime',
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'civicrm_handler_sort_date',
-    ),
-  );
+    ],
+  ];
 
-  $data['civicrm_mailing_event_unsubscribe']['id'] = array(
+  $data['civicrm_mailing_event_unsubscribe']['id'] = [
     'title' => t('Mailing unsubscribeded ID'),
     'help' => t('The numeric ID of the unsubscribe record'),
-    'field' => array(
+    'field' => [
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
-    ),
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_numeric',
       'numeric' => TRUE,
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
       'allow empty' => TRUE,
-    ),
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 }
 

@@ -29,10 +29,10 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_location extends civicrm_handler_field {
-  static $_locationTypes;
-  static $_locationOps;
-  static $location_op;
-  function construct() {
+  public static $_locationTypes;
+  public static $_locationOps;
+  public static $location_op;
+  public function construct() {
     parent::construct();
     if (!self::$_locationTypes) {
       if (!civicrm_initialize()) {
@@ -40,70 +40,70 @@ class civicrm_handler_field_location extends civicrm_handler_field {
       }
       require_once 'CRM/Core/PseudoConstant.php';
       self::$_locationTypes = CRM_Core_PseudoConstant::locationType();
-      self::$_locationOps = array(0 => 'AND', 1 => 'OR');
+      self::$_locationOps = [0 => 'AND', 1 => 'OR'];
     }
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['location_type'] = array('default' => 0);
-    $options['location_op'] = array('default' => 0);
-    $options['is_primary'] = array('default' => '');
+    $options['location_type'] = ['default' => 0];
+    $options['location_op'] = ['default' => 0];
+    $options['is_primary'] = ['default' => ''];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
-    $locationOptions = array(0 => 'Any');
+    $locationOptions = [0 => 'Any'];
     foreach (self::$_locationTypes as $id => $type) {
       $locationOptions[$id] = $type;
     }
     $label = $this->label();
-    $form['label'] = array(
+    $form['label'] = [
       '#type' => 'textfield',
       '#title' => t('Label'),
       '#default_value' => $label,
-      '#dependency' => array(
-        'edit-options-custom-label' => array(1),
-      ),
+      '#dependency' => [
+        'edit-options-custom-label' => [1],
+      ],
       '#weight' => -102,
-    );
-    $form['location_choices'] = array(
+    ];
+    $form['location_choices'] = [
       '#type' => 'fieldset',
       '#title' => t('CiviCRM Location Display Options'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#description' => '<strong>Note:</strong> it is possible to choose display options that result in nothing being displayed for this field',
       '#weight' => 1,
-    );
-    $form['location_op'] = array(
+    ];
+    $form['location_op'] = [
       '#type' => 'select',
       '#title' => 'And/Or',
       '#options' => self::$_locationOps,
       '#description' => t('Display option are joined by And/Or?'),
       '#default_value' => $this->options['location_op'],
       '#fieldset' => 'location_choices',
-    );
-    $form['location_type'] = array(
+    ];
+    $form['location_type'] = [
       '#type' => 'radios',
       '#title' => 'Location type for this field',
       '#options' => $locationOptions,
       '#description' => t('Location type to be displayed for this field'),
       '#default_value' => $this->options['location_type'],
       '#fieldset' => 'location_choices',
-    );
-    $form['is_primary'] = array(
+    ];
+    $form['is_primary'] = [
       '#type' => 'checkbox',
       '#title' => 'Show only Primary record?',
-      '#options' => array(0 => 'No', 1 => 'Yes'),
+      '#options' => [0 => 'No', 1 => 'Yes'],
       '#description' => t('Check above box if you want only the <strong>Primary</strong> record displayed.'),
       '#default_value' => $this->options['is_primary'],
       '#fieldset' => 'location_choices',
-    );
+    ];
   }
 
-  function ensure_my_table() {
+  public function ensure_my_table() {
     if (!isset($this->table_alias)) {
       if (!method_exists($this->query, 'ensure_table')) {
         vpr_trace();
@@ -126,23 +126,23 @@ class civicrm_handler_field_location extends civicrm_handler_field {
     return $this->table_alias;
   }
 
-  function location_extras() {
-    $extra = array();
+  public function location_extras() {
+    $extra = [];
     if (!empty($this->options['location_type'])) {
-      $extra[] = array(
+      $extra[] = [
         'value' => $this->options['location_type'],
         'numeric' => TRUE,
         'field' => 'location_type_id',
         'operator' => '=',
-      );
+      ];
     }
     if (!empty($this->options['is_primary'])) {
-      $extra[] = array(
+      $extra[] = [
         'value' => $this->options['is_primary'],
         'numeric' => TRUE,
         'field' => 'is_primary',
         'operator' => '=',
-      );
+      ];
     }
     return $extra;
   }

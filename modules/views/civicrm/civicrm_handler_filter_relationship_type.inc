@@ -33,8 +33,8 @@
  *
  */
 class civicrm_handler_filter_relationship_type extends views_handler_filter_in_operator {
-  static $_relationshipType;
-  function construct() {
+  public static $_relationshipType;
+  public function construct() {
     parent::construct();
     if (!self::$_relationshipType) {
       if (!civicrm_initialize()) {
@@ -47,7 +47,7 @@ class civicrm_handler_filter_relationship_type extends views_handler_filter_in_o
       // 'label_a_b', 'label_b_a', 'contact_type_a' and 'contact_type_b'.
       // We keep just 'label_a_b' for simplicity.
 
-      $options = array();
+      $options = [];
       foreach ($relationshipType_array as $id => $value_array) {
         $options[$id] = $value_array['name_a_b'];
       }
@@ -56,10 +56,10 @@ class civicrm_handler_filter_relationship_type extends views_handler_filter_in_o
     }
   }
 
-  function get_value_options() {
+  public function get_value_options() {
     if (!isset($this->value_options)) {
       $this->value_title = t('Relationship Type');
-      $options = array();
+      $options = [];
       foreach (self::$_relationshipType as $id => $name) {
         $options[$id] = $name;
       }

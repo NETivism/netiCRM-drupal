@@ -20,31 +20,31 @@ define('WEBFROM_CIVICRM_WEBFORM_VERSION', '4');
  * Implements hook_menu().
  */
 function webform_civicrm_menu() {
-  $items = array();
-  $items['node/%webform_menu/civicrm'] = array(
+  $items = [];
+  $items['node/%webform_menu/civicrm'] = [
     'title' => 'CiviCRM',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('wf_crm_configure_form', 1),
+    'page arguments' => ['wf_crm_configure_form', 1],
     'access callback' => 'wf_crm_admin_access',
-    'access arguments' => array(1),
+    'access arguments' => [1],
     'file' => 'includes/wf_crm_admin_form.inc',
     'weight' => 3,
     'type' => MENU_LOCAL_TASK,
-  );
-  $items['webform-civicrm/js/%'] = array(
+  ];
+  $items['webform-civicrm/js/%'] = [
     'page callback' => 'wf_crm_ajax',
     'file' => 'includes/wf_crm_webform_ajax.inc',
     'access callback' => TRUE,
-    'page arguments' => array(2),
+    'page arguments' => [2],
     'type' => MENU_CALLBACK,
-  );
-  $items['webform-civicrm/help/%'] = array(
+  ];
+  $items['webform-civicrm/help/%'] = [
     'page callback' => 'wf_crm_admin_help',
     'file' => 'includes/wf_crm_admin_help.inc',
-    'access arguments' => array('access CiviCRM'),
-    'page arguments' => array(2),
+    'access arguments' => ['access CiviCRM'],
+    'page arguments' => [2],
     'type' => MENU_CALLBACK,
-  );
+  ];
   return $items;
 }
 
@@ -99,7 +99,7 @@ function webform_civicrm_form_alter(&$form, &$form_state, $form_id) {
  * @param array $nodes
  */
 function webform_civicrm_node_load($nodes, $types) {
-  $db = db_query('SELECT * FROM {webform_civicrm_forms} WHERE nid IN(:nids)', array(':nids' => array_keys($nodes)));
+  $db = db_query('SELECT * FROM {webform_civicrm_forms} WHERE nid IN(:nids)', [':nids' => array_keys($nodes)]);
   foreach ($db as $settings) {
     $node = &$nodes[$settings->nid];
     $settings->data = unserialize($settings->data);
@@ -156,20 +156,20 @@ function webform_civicrm_node_delete($node) {
  * @return array
  */
 function webform_civicrm_theme() {
-  $theme = array(
-    'webform_civicrm_options_table' => array(
+  $theme = [
+    'webform_civicrm_options_table' => [
       'render element' => 'element',
       'file' => 'includes/wf_crm_admin_form.inc',
-    ),
-    'display_civicrm_contact' => array(
+    ],
+    'display_civicrm_contact' => [
       'render element' => 'element',
       'file' => 'includes/contact_component.inc',
-    ),
-    'static_contact_element' => array(
+    ],
+    'static_contact_element' => [
       'render element' => 'element',
       'file' => 'includes/contact_component.inc',
-    ),
-  );
+    ],
+  ];
   return $theme;
 }
 
@@ -179,16 +179,16 @@ function webform_civicrm_theme() {
  * @return array
  */
 function webform_civicrm_webform_component_info() {
-  return array(
-    'civicrm_contact' => array(
+  return [
+    'civicrm_contact' => [
       'label' => t('CiviCRM Contact'),
       'description' => t('Choose existing contact.'),
-      'features' => array(
+      'features' => [
         'email_name' => TRUE,
-      ),
+      ],
       'file' => 'includes/contact_component.inc',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -243,7 +243,7 @@ function webform_civicrm_webform_submission_load(&$submissions) {
     return;
   }
   $db = db_query('SELECT * FROM {webform_civicrm_submissions} WHERE sid IN (' . implode(',', array_keys($submissions)) . ')');
-  $contacts = array();
+  $contacts = [];
   foreach ($db as $row) {
     $sid = $row->sid;
     unset($row->sid);
@@ -280,7 +280,7 @@ function webform_civicrm_webform_submission_load(&$submissions) {
  */
 function webform_civicrm_webform_submission_render_alter(&$sub) {
   if (!empty($sub['#submission']->civicrm['display_name']) && empty($sub['#email']) && $sub['#format'] == 'html') {
-    drupal_set_title(t('Submission #!num by @name', array('!num' => $sub['#submission']->sid, '@name' => $sub['#submission']->civicrm['display_name'])));
+    drupal_set_title(t('Submission #!num by @name', ['!num' => $sub['#submission']->sid, '@name' => $sub['#submission']->civicrm['display_name']]));
   }
 }
 
@@ -289,32 +289,32 @@ function webform_civicrm_webform_submission_render_alter(&$sub) {
  * Add links to view contact & activity.
  */
 function webform_civicrm_webform_submission_actions($node, $submission) {
-  $actions = array();
+  $actions = [];
   if (!empty($node->webform_civicrm)
   && !empty($submission->civicrm)
   && webform_results_access($node)
   && user_access('access CiviCRM')) {
     $data = $submission->civicrm;
     if (!empty($data['display_name'])) {
-      $actions['civicrm_action contact_view'] = array(
-        'title' => t('View @name', array('@name' => $data['display_name'])),
+      $actions['civicrm_action contact_view'] = [
+        'title' => t('View @name', ['@name' => $data['display_name']]),
         'href' => 'civicrm/contact/view',
-        'query' => array('reset' => 1, 'cid' => $data['contact_id'][1]),
-      );
+        'query' => ['reset' => 1, 'cid' => $data['contact_id'][1]],
+      ];
     }
     if (!empty($data['activity_id'])) {
-      $actions['civicrm_action activity_view'] = array(
+      $actions['civicrm_action activity_view'] = [
         'title' => t('View Activity'),
         'href' => 'civicrm/activity',
-        'query' => array('action' => 'view', 'reset' => 1, 'cid' => $data['contact_id'][1], 'id' => $data['activity_id']),
-      );
+        'query' => ['action' => 'view', 'reset' => 1, 'cid' => $data['contact_id'][1], 'id' => $data['activity_id']],
+      ];
     }
     if (!empty($data['contribution_id'])) {
-      $actions['civicrm_action contribution_view'] = array(
+      $actions['civicrm_action contribution_view'] = [
         'title' => t('View Contribution'),
         'href' => 'civicrm/contact/view/contribution',
-        'query' => array('action' => 'view', 'reset' => 1, 'cid' => $data['contact_id'][1], 'id' => $data['contribution_id']),
-      );
+        'query' => ['action' => 'view', 'reset' => 1, 'cid' => $data['contact_id'][1], 'id' => $data['contribution_id']],
+      ];
     }
   }
   return $actions;
@@ -328,13 +328,13 @@ function webform_civicrm_civicrm_merge($type, $data, $new_id = NULL, $old_id = N
   if (!empty($new_id) && !empty($old_id) && $type == 'sqls') {
     // Update civicrm submissions table
     db_update('webform_civicrm_submissions')
-    ->expression('contact_id', 'REPLACE(contact_id, :old, :new)', array(':old' => '-' . $old_id . '-', ':new' => '-' . $new_id . '-'))
+    ->expression('contact_id', 'REPLACE(contact_id, :old, :new)', [':old' => '-' . $old_id . '-', ':new' => '-' . $new_id . '-'])
     ->condition('contact_id', '%-' . $old_id . '-%', 'LIKE')
     ->execute();
     // Update contact reference field data
     db_query("UPDATE {webform_submitted_data} d, {webform_component} c SET d.data = :new
       WHERE d.data = :old AND d.cid = c.cid AND d.nid = c.nid AND c.type = 'civicrm_contact'",
-      array(':new' => $new_id, ':old' => $old_id)
+      [':new' => $new_id, ':old' => $old_id]
     );
   }
 }
@@ -346,7 +346,7 @@ function webform_civicrm_civicrm_merge($type, $data, $new_id = NULL, $old_id = N
 function webform_civicrm_civicrm_post($op, $type, $id, $obj) {
   if ($type === 'Activity' && $op === 'delete') {
     db_update('webform_civicrm_submissions')
-    ->fields(array('activity_id' => 0))
+    ->fields(['activity_id' => 0])
     ->condition('activity_id', $id)
     ->execute();
   }
@@ -363,7 +363,7 @@ function wf_crm_configure_form_ajax($form, $form_state) {
  * Implements hook_admin_paths().
  */
 function webform_civicrm_admin_paths() {
-  return array('node/*/civicrm' => TRUE);
+  return ['node/*/civicrm' => TRUE];
 }
 
 /**
@@ -400,7 +400,7 @@ function webform_civicrm_preprocess_webform_results_submissions(&$vars){
   if (count($vars['table']['#rows']) && !empty($vars['node']->webform_civicrm)) {
     $access = user_access('access CiviCRM');
     $temp = $vars['table']['#header'];
-    $vars['table']['#header'] = array();
+    $vars['table']['#header'] = [];
     // Move name to position 2
     foreach ($temp as $k => $v) {
       $vars['table']['#header'][] = $v;
@@ -415,12 +415,12 @@ function webform_civicrm_preprocess_webform_results_submissions(&$vars){
         $data = $vars['submissions'][$sid]->civicrm;
         if (($name = $data['display_name']) !== '') {
           if ($access) {
-            $name = l($name, 'civicrm/contact/view', array('query' => array('reset' => 1, 'cid' => $data['contact_id'][1]), 'alias' => TRUE));
+            $name = l($name, 'civicrm/contact/view', ['query' => ['reset' => 1, 'cid' => $data['contact_id'][1]], 'alias' => TRUE]);
           }
         }
       }
       $temp = $row;
-      $row = array();
+      $row = [];
       // Move name to position 2
       foreach ($temp as $k => $v) {
         $row[] = $v;
@@ -498,10 +498,10 @@ function wf_crm_contact_clone($form, $form_state) {
   $settings['data']['contact'][$new] = $settings['data']['contact'][$old];
   // Set label
   $settings['data']['contact'][$new]['contact'][1]['webform_label'] = $form_state['input']['name'];
-  $storage = array(
-    'old' => array("civicrm_{$old}_contact_"),
-    'new' => array("civicrm_{$new}_contact_"),
-  );
+  $storage = [
+    'old' => ["civicrm_{$old}_contact_"],
+    'new' => ["civicrm_{$new}_contact_"],
+  ];
   // Clone participant if registering separately
   if (wf_crm_aval($settings['data'], 'participant_reg_type') == 'separate') {
     $settings['data']['participant'][$new] = $settings['data']['participant'][$old];
@@ -531,7 +531,7 @@ function wf_crm_validate($form, &$form_state) {
  * @see webform_civicrm_requirements() in .install
  */
 function _webform_civicrm_status() {
-  $status = array();
+  $status = [];
   $status['webform_civicrm'] = FALSE;
 
   $path = drupal_get_path('module', 'civicrm') . '/civicrm.info';

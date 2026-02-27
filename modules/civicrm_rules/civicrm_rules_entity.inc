@@ -34,31 +34,31 @@
  */
 function civicrm_rules_get_entity() {
 
-  return array(
-    'contact' => array(
+  return [
+    'contact' => [
       'label' => t('Contact'),
       'class' => 'rules_data_type_contact',
       'savable' => FALSE,
       'identifiable' => TRUE,
-    ),
-    'mailing' => array(
+    ],
+    'mailing' => [
       'label' => t('Mailing'),
       'class' => 'rules_data_type_mailing',
       'savable' => FALSE,
       'identifiable' => TRUE,
-    ),
-    'event' => array(
+    ],
+    'event' => [
       'label' => t('Event'),
       'class' => 'rules_data_type_event',
       'savable' => FALSE,
       'identifiable' => TRUE,
-    ),
-    'participant' => array(
+    ],
+    'participant' => [
       'label' => t('Participant'),
       'class' => 'rules_data_type_participant',
       'savable' => FALSE,
       'identifiable' => TRUE,
-    ),
-  );
+    ],
+  ];
 }
 

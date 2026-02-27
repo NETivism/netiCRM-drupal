@@ -32,8 +32,8 @@
  *
  */
 class civicrm_handler_filter_prefix extends views_handler_filter_in_operator {
-  static $_individualPrefix;
-  function construct() {
+  public static $_individualPrefix;
+  public function construct() {
     parent::construct();
     if (!self::$_individualPrefix) {
       if (!civicrm_initialize()) {
@@ -44,10 +44,10 @@ class civicrm_handler_filter_prefix extends views_handler_filter_in_operator {
     }
   }
 
-  function get_value_options() {
+  public function get_value_options() {
     if (!isset($this->value_options)) {
       $this->value_title = t('Prefix');
-      $options = array();
+      $options = [];
       foreach (self::$_individualPrefix as $id => $name) {
         $options[$id] = $name;
       }

@@ -9,14 +9,14 @@ module_load_include('inc', 'webform_civicrm', 'includes/utils');
 
 abstract class wf_crm_webform_base {
   protected $node;
-  protected $settings = array();
-  protected $enabled = array();
-  protected $data = array();
-  protected $id = array();
-  protected $events = array();
+  protected $settings = [];
+  protected $enabled = [];
+  protected $data = [];
+  protected $id = [];
+  protected $events = [];
   protected $contribution_page;
-  protected $line_items = array();
-  protected $membership_types = array();
+  protected $line_items = [];
+  protected $membership_types = [];
 
   /**
    * Fetch all relevant data for a given contact
@@ -29,20 +29,20 @@ abstract class wf_crm_webform_base {
    *
    * @return array of contact data
    */
-  protected function loadContact($c, $exclude = array()) {
-    $info = array();
+  protected function loadContact($c, $exclude = []) {
+    $info = [];
     $cid = $this->id['cid'][$c];
     $contact = $this->data['contact'][$c];
     $prefix = 'civicrm_' . $c . '_contact_1_';
-    foreach (array('contact', 'address', 'email', 'phone', 'website') as $ent) {
+    foreach (['contact', 'address', 'email', 'phone', 'website'] as $ent) {
       if ((!empty($contact['number_of_' . $ent]) && !in_array($ent, $exclude)) || $ent == 'contact') {
-        $params = array('contact_id' => $cid);
+        $params = ['contact_id' => $cid];
         if ($ent != 'contact' && $ent != 'website') {
           $params['options']['sort'] = 'is_primary DESC';
         }
         $result = wf_civicrm_api($ent, 'get', $params);
         if (!empty($result['values'])) {
-          $result = array_merge(array(0), array_values($result['values']));
+          $result = array_merge([0], array_values($result['values']));
           unset($result[0]);
           if ($ent == 'contact' && isset($this->enabled[$prefix . 'contact_privacy'])) {
             // Privacy fields
@@ -81,7 +81,7 @@ abstract class wf_crm_webform_base {
     }
     // Retrieve group and tag data
     if (!in_array('other', $exclude)) {
-      $api = array('tag' => 'entity_tag', 'group' => 'group_contact');
+      $api = ['tag' => 'entity_tag', 'group' => 'group_contact'];
       foreach (array_keys($this->enabled) as $fid) {
         // This way we support multiple tag fields (for tagsets)
         if (strpos($fid, $prefix . 'other') !== FALSE) {
@@ -89,7 +89,7 @@ abstract class wf_crm_webform_base {
           list(, , , , , $field) = explode('_', $fid, 6);
           // Cheap way to avoid fetching the same data twice from the api
           if (!is_array($api[$ent])) {
-            $api[$ent] = wf_civicrm_api($api[$ent], 'get', array('contact_id' => $cid));
+            $api[$ent] = wf_civicrm_api($api[$ent], 'get', ['contact_id' => $cid]);
           }
           foreach (wf_crm_aval($api[$ent], 'values') as $val) {
             $info['other'][1][$field][] = $val[$ent . '_id'];
@@ -101,7 +101,7 @@ abstract class wf_crm_webform_base {
     if (!in_array('relationship', $exclude) && !empty($contact['number_of_relationship'])) {
       $this->enabled = wf_crm_enabled_fields($this->node);
       for ($r = 1; $r <= $contact['number_of_relationship']; ++$r) {
-        $types = array();
+        $types = [];
         $prefix = "civicrm_{$c}_contact_{$r}_relationship_";
         if (!empty($this->id['cid'][$r])) {
           if (!empty($contact['relationship'][$r]['relationship_type_id']) && $contact['relationship'][$r]['relationship_type_id'] != 'create_civicrm_webform_element') {
@@ -118,7 +118,7 @@ abstract class wf_crm_webform_base {
           $len = strlen($prefix . 'custom_');
           foreach ($this->enabled as $k => $v) {
             if (substr($k, 0, $len) == $prefix . 'custom_') {
-              $custom = wf_civicrm_api('custom_value', 'get', array('entity_id' => $rel['id'], 'entity_table' => 'Relationship'));
+              $custom = wf_civicrm_api('custom_value', 'get', ['entity_id' => $rel['id'], 'entity_table' => 'Relationship']);
               foreach ($custom['values'] as $k => $v) {
                 if (isset($v[0])) {
                   $info['relationship'][$r]["custom_$k"] = $v[0];
@@ -145,9 +145,9 @@ abstract class wf_crm_webform_base {
    * @return array
    */
   protected function getRelationship($r_types, $cid1, $cid2) {
-    $found = array();
+    $found = [];
     if ($r_types && $cid1 && $cid2) {
-      $types = array();
+      $types = [];
       foreach ($r_types as $r_type) {
         list($type, $side) = explode('_', $r_type);
         $types[$type] = $type;
@@ -188,7 +188,7 @@ abstract class wf_crm_webform_base {
    *
    * @return array
    */
-  protected function getExposedOptions($field_key, $exclude = array()) {
+  protected function getExposedOptions($field_key, $exclude = []) {
     if ($field_key && isset($this->enabled[$field_key])) {
       $field = $this->node->webform['components'][$this->enabled[$field_key]];
       if ($field['type'] == 'select') {
@@ -206,7 +206,7 @@ abstract class wf_crm_webform_base {
         return $exposed;
       }
     }
-    return array();
+    return [];
   }
 
   /**
@@ -259,7 +259,7 @@ abstract class wf_crm_webform_base {
     $params = $this->data['case'][1];
     // Look for case id passed in url
     if (!empty($_GET['caseid']) && is_numeric($_GET['caseid'])) {
-      $result = wf_civicrm_api('case', 'get', array('case_id' => $_GET['caseid']));
+      $result = wf_civicrm_api('case', 'get', ['case_id' => $_GET['caseid']]);
       if (isset($result['values'][$_GET['caseid']])) {
         $case = $result['values'][$_GET['caseid']];
         // Verify that case is correct type and user has access to this case
@@ -268,7 +268,7 @@ abstract class wf_crm_webform_base {
           if (user_access('access all cases and activities')) {
             return $case;
           }
-          $case_cids = array();
+          $case_cids = [];
           foreach ($case['contacts'] as $contact) {
             $case_cids[] = $contact['contact_id'];
           }
@@ -288,8 +288,8 @@ abstract class wf_crm_webform_base {
           $client_id = wf_crm_aval($ids, "cid:$client_id");
         }
         if ($client_id) {
-          $result = wf_civicrm_api('case', 'get', array('client_id' => $client_id));
-          foreach (wf_crm_aval($result, 'values', array()) as $case) {
+          $result = wf_civicrm_api('case', 'get', ['client_id' => $client_id]);
+          foreach (wf_crm_aval($result, 'values', []) as $case) {
             if (empty($case['is_deleted']) && in_array($case['status_id'], $params['existing_case_status'])) {
               $case_types = $case['case_type_id'];
               if (is_string($case_types)) {
@@ -312,15 +312,15 @@ abstract class wf_crm_webform_base {
    */
   protected function findMemberships($cid) {
     static $status_types;
-    $existing = wf_crm_apivalues('membership', 'get', array('contact_id' => $cid));
+    $existing = wf_crm_apivalues('membership', 'get', ['contact_id' => $cid]);
     if (!$existing) {
-      return array();
+      return [];
     }
     if (!$status_types) {
       $status_types = wf_crm_apivalues('membership_status', 'get');
     }
     // Attempt to order memberships by most recent and active
-    $active = $expired = array();
+    $active = $expired = [];
     foreach ($existing as $membership) {
       $membership['is_active'] = $status_types[$membership['status_id']]['is_current_member'];
       $membership['status'] = $status_types[$membership['status_id']]['label'];
@@ -379,7 +379,7 @@ abstract class wf_crm_webform_base {
    * @return array
    */
   protected function getCustomData($entity_id, $entity_type = NULL, $normalize = TRUE) {
-    static $parents = array();
+    static $parents = [];
     if (empty($parents)) {
       // Create matching table to sort fields by group
       foreach (wf_crm_get_fields() as $key => $value) {
@@ -389,16 +389,16 @@ abstract class wf_crm_webform_base {
         }
       }
     }
-    $params = array('entityID' => $entity_id);
+    $params = ['entityID' => $entity_id];
     if ($entity_type) {
       $params['entityType'] = ucfirst($entity_type);
     }
     $result = CRM_Core_BAO_CustomValueTable::getValues($params);
     if (!empty($result['is_error'])) {
-      return array();
+      return [];
     }
     unset($result['is_error'], $result['entityID']);
-    $values = array();
+    $values = [];
     // Convert multi-value strings to arrays and sort by group
     foreach ($result as $key => $value) {
       $pieces = explode('_', $key);
@@ -437,11 +437,11 @@ abstract class wf_crm_webform_base {
    */
   protected function saveCustomData($entity, $entity_id, $entity_type, $known = TRUE) {
     $existing = $this->getCustomData($entity_id, $entity_type, FALSE);
-    $params = array('entityID' => $entity_id);
+    $params = ['entityID' => $entity_id];
     foreach ($entity as $table => $values) {
       if (substr($table, 0, 2) == 'cg' && is_array($values)) {
         if (empty($existing[$table])) {
-          $existing[$table] = array();
+          $existing[$table] = [];
         }
         $insert = 0;
         foreach ($values as $custom) {
@@ -467,11 +467,11 @@ abstract class wf_crm_webform_base {
         $bt = debug_backtrace();
         array_shift($params);
         foreach ($params as $k => $v) {
-          $single_param = array('entityID' => $entity_id, $k => $v);
+          $single_param = ['entityID' => $entity_id, $k => $v];
           $result = CRM_Core_BAO_CustomValueTable::setValues($single_param);
           if (!empty($result['is_error'])) {
             $file = explode('/', $bt[0]['file']);
-            watchdog('webform_civicrm', 'The CiviCRM "CustomValueTable::setValues" function returned the error: "%msg" when called by line !line of !file with the following parameters: "!params"', array('%msg' => $result['error_message'], '!line' => $bt[0]['line'], '!file' => array_pop($file), '!params' => print_r($single_param, TRUE)), WATCHDOG_ERROR);
+            watchdog('webform_civicrm', 'The CiviCRM "CustomValueTable::setValues" function returned the error: "%msg" when called by line !line of !file with the following parameters: "!params"', ['%msg' => $result['error_message'], '!line' => $bt[0]['line'], '!file' => array_pop($file), '!params' => print_r($single_param, TRUE)], WATCHDOG_ERROR);
           }
         }
       }
@@ -495,7 +495,7 @@ abstract class wf_crm_webform_base {
    * Loads the contribution page used for this webform
    */
   protected function getContributionPage() {
-    $params = array('id' => wf_crm_aval($this->data, 'contribution:1:contribution:1:contribution_page_id'));
+    $params = ['id' => wf_crm_aval($this->data, 'contribution:1:contribution:1:contribution_page_id')];
     if ($params['id']) {
       $result = wf_crm_apivalues('contribution_page', 'get', $params);
       $this->contribution_page = wf_crm_aval($result, $params['id']);
@@ -513,11 +513,11 @@ abstract class wf_crm_webform_base {
   /**
    * CiviCRM JS can't be attached to a drupal form so have to manually re-add this during validation
    */
-  function addPaymentJs() {
+  public function addPaymentJs() {
     $credit_card_types = CRM_Core_Payment_Form::getCreditCardCSSNames();
     CRM_Core_Resources::singleton()
       ->addCoreResources()
-      ->addSetting(array('config' => array('creditCardTypes' => $credit_card_types)))
+      ->addSetting(['config' => ['creditCardTypes' => $credit_card_types]])
       ->addScriptFile('civicrm', 'templates/CRM/Core/BillingBlock.js', -10, 'html-header');
   }
 

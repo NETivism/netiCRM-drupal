@@ -31,7 +31,7 @@ class views_handler_argument_civicrm_fulldate extends views_handler_argument_dat
   /**
    * Constructor implementation
    */
-  function construct() {
+  public function construct() {
     parent::construct();
     $this->format     = 'F j, Y';
     $this->arg_format = 'Ymd';
@@ -41,7 +41,7 @@ class views_handler_argument_civicrm_fulldate extends views_handler_argument_dat
   /**
    * Provide a link to the next level of the view
    */
-  function summary_name($data) {
+  public function summary_name($data) {
     $created = $data->{$this->name_alias};
     return format_date(strtotime($created), 'custom', $this->format, 0);
   }
@@ -49,7 +49,7 @@ class views_handler_argument_civicrm_fulldate extends views_handler_argument_dat
   /**
    * Provide a link to the next level of the view
    */
-  function title() {
+  public function title() {
     return format_date(strtotime($this->argument), 'custom', $this->format, 0);
   }
 }

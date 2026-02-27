@@ -65,13 +65,13 @@ function civicrm_rules_events_argument_civicrm_eventnode($participantobj) {
   $participant = $participantobj['participant'];
   $eventID = $participant->event_id;
   $results = db_select('field_config_instance', 'i')
-    ->fields('i', array('field_name', 'entity_type', 'bundle'))
+    ->fields('i', ['field_name', 'entity_type', 'bundle'])
     ->condition('field_name',  '%'.db_like('civicrm_event'), 'LIKE')
     ->execute()
     ->fetchAllAssoc('id');
   foreach($results as $result) {
     $nid = db_select('field_data_' . $result->field_name, 'fd')
-      ->fields('fd', array('entity_id'))
+      ->fields('fd', ['entity_id'])
       ->condition('bundle', $result->bundle, '=')
       ->condition($result->field_name . '_value', $eventID, '=')
       ->condition('entity_type',  $result->entity_type, '=')
@@ -88,7 +88,7 @@ function civicrm_rules_events_argument_civicrm_eventnode($participantobj) {
  */
 function civicrm_rules_events_argument_civicrm_contactID_load_user($entityobj) {
   require_once 'api/api.php';
-  $contact = civicrm_api('UFMatch', 'get', array('version' => 3, 'contact_id' => $entityobj['participant']->contact_id, 'sequential' => 1));
+  $contact = civicrm_api('UFMatch', 'get', ['version' => 3, 'contact_id' => $entityobj['participant']->contact_id, 'sequential' => 1]);
   if (!empty($contact) && is_numeric($contact['values'][0]['uf_id'])) {
     return $contact['values'][0]['uf_id'];
   }

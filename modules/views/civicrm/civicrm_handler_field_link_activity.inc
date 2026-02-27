@@ -43,52 +43,52 @@ class civicrm_handler_field_link_activity extends views_handler_field {
   /**
    * Constructor to provide additional field to add.
    */
-  function construct() {
+  public function construct() {
     parent::construct();
     $this->additional_fields['id'] = 'id';
     $this->additional_fields['source_contact_id'] = 'source_contact_id';
     $this->additional_fields['activity_type_id'] = 'activity_type_id';
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['link_to_civicrm_activity'] = array('default' => 'view');
-    $options['custom_link'] = array('default' => '');
-    $options['link_text'] = array('default' => '');
+    $options['link_to_civicrm_activity'] = ['default' => 'view'];
+    $options['custom_link'] = ['default' => ''];
+    $options['link_text'] = ['default' => ''];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    $form['link_to_civicrm_activity'] = array(
+    $form['link_to_civicrm_activity'] = [
       '#type' => 'select',
       '#title' => t('Choose where to link this field'),
-      '#options' => array(
+      '#options' => [
         'view' => t('Link to View Activity'),
         'edit' => t('Link to Edit Activity'),
         'delete' => t('Link to Delete Activity'),
         'custom' => t('Link to a Custom Node'),
-      ),
+      ],
       '#default_value' => !empty($this->options['link_to_civicrm_activity']),
-    );
+    ];
 
-    $form['custom_link'] = array(
+    $form['custom_link'] = [
       '#type' => 'textfield',
       '#title' => t('Custom Link to a Drupal Node'),
       '#description' => t('Link to a Drupal Node or View, from the base path. The Activity ID will be appended to the end of the link.'),
-      '#default_value' => isset($this->options['custom_link']) ? $this->options['custom_link'] : '',
-      '#dependency' => array('link_to_civicrm_activity' => array('custom')),
-    );
+      '#default_value' => $this->options['custom_link'] ?? '',
+      '#dependency' => ['link_to_civicrm_activity' => ['custom']],
+    ];
 
-    $form['link_text'] = array(
+    $form['link_text'] = [
       '#type' => 'textfield',
       '#title' => t('Links Text'),
       '#description' => t('The text that will display in the field with the link.'),
-      '#default_value' => isset($this->options['link_text']) ? $this->options['link_text'] : '',
-    );
+      '#default_value' => $this->options['link_text'] ?? '',
+    ];
   }
 
-  function render_link($data, $values) {
+  public function render_link($data, $values) {
 
     $link_text = $this->options['link_text'];
     $link_choice = $this->options['link_to_civicrm_activity'];
@@ -140,12 +140,12 @@ class civicrm_handler_field_link_activity extends views_handler_field {
     }
   }
 
-  function query() {
+  public function query() {
     $this->ensure_my_table();
     $this->add_additional_fields();
   }
 
-  function render($values) {
+  public function render($values) {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }

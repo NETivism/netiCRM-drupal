@@ -1,68 +1,68 @@
 <?php
 #http://pastebin.com/U32jjBVu - D7 has renamed admin settings
 function civicrm_engage_admin_settings($form_state = NULL) {
-  $form['last_donate'] = array(
+  $form['last_donate'] = [
     '#type' => 'fieldset',
     '#title' => t('CiviEngage Walklist Last Donate presentation'),
     '#weight' => 0,
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-  );
-  $form['last_donate']['civicrm_engage_no_canvas_period'] = array(
+  ];
+  $form['last_donate']['civicrm_engage_no_canvas_period'] = [
     '#title' => t("Exclusion Period"),
     '#type' => 'textfield',
     '#description' => t('If you wish to leave someone alone for a period after their last donation please enter it here (in months). 0 means disabled'),
     '#default_value' => variable_get('civicrm_engage_no_canvas_period', "0"),
-  );
-  $form['last_donate']['civicrm_engage_no_canvass_text'] = array(
+  ];
+  $form['last_donate']['civicrm_engage_no_canvass_text'] = [
     '#title' => t("Text when within exclusion period"),
     '#type' => 'textfield',
     '#description' => t('Text to put in if contact not to be canvassed'),
     '#default_value' => variable_get('civicrm_engage_no_canvass_text', "Do Not Canvass"),
-  );
-  $form['break_settings'] = array(
+  ];
+  $form['break_settings'] = [
     '#type' => 'fieldset',
     '#title' => t('CiviEngage Walklist data grouping'),
     '#weight' => 0,
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-  );
-  $form['break_settings']['civicrm_engage_groupbreak_odd_even'] = array(
+  ];
+  $form['break_settings']['civicrm_engage_groupbreak_odd_even'] = [
     '#title' => t("Group break on odds / evens"),
     '#type' => 'checkbox',
     '#description' => t('Do you want a group-break between each side of the street'),
     '#default_value' => variable_get('civicrm_engage_groupbreak_odd_even', "1"),
-  );
-  $form['break_settings']['civicrm_engage_groupbreak_street'] = array(
+  ];
+  $form['break_settings']['civicrm_engage_groupbreak_street'] = [
     '#title' => t("Group break on street "),
     '#type' => 'checkbox',
     '#description' => t('Do you want a group-break between each street'),
     '#default_value' => variable_get('civicrm_engage_groupbreak_street', "1"),
-  );
-  $form['break_settings']['civicrm_engage_groupbreak_city'] = array(
+  ];
+  $form['break_settings']['civicrm_engage_groupbreak_city'] = [
     '#title' => t("Group break on city"),
     '#type' => 'checkbox',
     '#description' => t('Do you want a group-break between each city'),
     '#default_value' => variable_get('civicrm_engage_groupbreak_city', "1"),
-  );
-  $form['break_settings']['civicrm_engage_groupbreak_zip'] = array(
+  ];
+  $form['break_settings']['civicrm_engage_groupbreak_zip'] = [
     '#title' => t("Group break on zip code"),
     '#type' => 'checkbox',
     '#description' => t('Do you want a group-break between each side of the street'),
     '#default_value' => variable_get('civicrm_engage_groupbreak_zip', "1"),
-  );
-  $form['break_settings']['civicrm_engage_lines_per_group'] = array(
+  ];
+  $form['break_settings']['civicrm_engage_lines_per_group'] = [
     '#title' => t("Row limit per group"),
     '#type' => 'textfield',
     '#description' => t('Limit rows per group - ie. if you want to print out in blocks of 6'),
     '#default_value' => variable_get('civicrm_engage_lines_per_group', "6"),
-  );
-  $form['break_settings']['civicrm_engage_group_per_page'] = array(
+  ];
+  $form['break_settings']['civicrm_engage_group_per_page'] = [
     '#title' => t("New page for each group?"),
     '#type' => 'checkbox',
     '#description' => t('Do you want each group to have new page? (default is yes)'),
     '#default_value' => variable_get('civicrm_engage_group_per_page', "1"),
-  );
+  ];
   return system_settings_form($form);
 }
 
@@ -87,43 +87,43 @@ function civicrm_engage_admin_load_data($form_state = NULL) {
   if(civicrm_engage_autocomplete_options_set()) {
     $autocomplete_options_set = ' <em>' . t("It appears that the autocomplete options are properly set.") . '</em>';
   }
-  $form['load_data'] = array(
+  $form['load_data'] = [
     '#type' => 'fieldset',
     '#title' => t('CiviEngage Load Data and Set Configuration Options'),
     '#weight' => 0,
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-  );
+  ];
 
-  $form['load_data']['contact_subtypes'] = array(
+  $form['load_data']['contact_subtypes'] = [
     '#type' => 'checkbox',
     '#title' => t('Add contact subtypes'),
     '#description' => t("Civicrm Engage depends on the presence of a Media, Funder, Elected Official, Media Outlet and Foundation contact subtypes. Check this box to add them. This step is not reversible.") . $subtypes_added
-  ); 
-  $form['load_data']['address_parsing'] = array(
+  ]; 
+  $form['load_data']['address_parsing'] = [
     '#type' => 'checkbox',
     '#title' => t('Enable address parsing'),
     '#description' => t("Street parsing is required for walk lists because it needs to sort by even/odd address numbers.") . $address_parsing_enabled
-  );
-  $form['load_data']['autocomplete_options'] = array(
+  ];
+  $form['load_data']['autocomplete_options'] = [
     '#type' => 'checkbox',
     '#title' => t('Set phone to autocomplete'),
     '#description' => t("Autocomplete options double as indicator of whether a field should show up in batch update. For civicrm engage to work properly, phone should be set to autocomplete so it shows up in batch update.") . $autocomplete_options_set
-  );
-  $form['load_data']['custom_data'] = array(
+  ];
+  $form['load_data']['custom_data'] = [
     '#type' => 'checkbox',
     '#title' => t('Add general custom groups, fields and other data'),
     '#description' => t("Civicrm Engage depends on a number of custom data groups and fields and profiles. Check this box to add them. This step is not reversible and will take several minutes to complete.") . $custom_data_added
-  );
-  $form['load_data']['custom_voter_us_data'] = array(
+  ];
+  $form['load_data']['custom_voter_us_data'] = [
     '#type' => 'checkbox',
     '#title' => t('Add US voter custom groups, fields and other data'),
     '#description' => t("Civicrm Engage depends on voter-related fields being imported (to track congressional district, city district, etc.). Current only US-specific voter fields are available.") . $custom_voter_us_data_added
-  );
-  $form['load_data']['submit'] = array(
+  ];
+  $form['load_data']['submit'] = [
     '#type' => 'submit',
     '#value' => 'Submit'
-  );
+  ];
   return $form;
 }
 
@@ -193,49 +193,49 @@ function civicrm_engage_custom_voter_us_data_added() {
  */
 function civicrm_engage_load_contact_subtypes() {
   // parent_id : 1 is Individual, 3 is Organization
-  $create = array(
-    'Media_Contact' => array(
+  $create = [
+    'Media_Contact' => [
       'label' => 'Media Contact',
       'parent_id' => 1,
       'is_active' => 1,
       'name' => 'Media_Contact',
-    ),
-    'Funder_Contact' => array(
+    ],
+    'Funder_Contact' => [
       'label' => 'Funder Contact',
       'parent_id' => 1,
       'is_active' => 1,
       'name' => 'Funder_Contact',
-    ),
-    'Elected_Official' => array(
+    ],
+    'Elected_Official' => [
       'label' => 'Elected Official',
       'parent_id' => 1,
       'is_active' => 1,
       'name' => 'Elected_Official',
-    ),
-    'Media_Outlet' => array(
+    ],
+    'Media_Outlet' => [
       'label' => 'Media Outlet',
       'parent_id' => 3,
       'is_active' => 1,
       'name' => 'Media_Outlet',
-    ),
-    'Foundation' => array(
+    ],
+    'Foundation' => [
       'label' => 'Foundation',
       'parent_id' => 3,
       'is_active' => 1,
       'name' => 'Foundation',
-    ),
-  );
+    ],
+  ];
   require_once ("CRM/Contact/BAO/ContactType.php");
   $existing_types = CRM_Contact_BAO_ContactType::subTypeInfo();
   foreach(array_keys($existing_types) as $k) {
     if (array_key_exists($k, $create)) {
-      drupal_set_message(t("Not creating @type, already exists.", array("@type" => $k)));
+      drupal_set_message(t("Not creating @type, already exists.", ["@type" => $k]));
       unset($create[$k]);
     }
   }
   $contact_type = new CRM_Contact_BAO_ContactType();
   foreach($create as $k => $v) {
-    drupal_set_message(t("Creating %c", array('%c' => $k)));
+    drupal_set_message(t("Creating %c", ['%c' => $k]));
     $contact_type->add($v);
   }
 }

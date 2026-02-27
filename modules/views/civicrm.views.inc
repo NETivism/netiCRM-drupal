@@ -192,18 +192,18 @@ function civicrm_views_add_fields(&$fields, &$data, $tableName, &$skipFields = N
     $type = CRM_Utils_Array::value('type', $value, 'String');
     $field_handler = civicrm_get_field_handler($type);
     $filter_handler = civicrm_get_filter_handler($type);
-    $data[$value['name']] = array(
+    $data[$value['name']] = [
       'title' => $value['title'],
       'help' => $value['title'],
       'field' => $field_handler,
-      'sort' => array(
+      'sort' => [
         'handler' => civicrm_get_sort_handler($type),
-      ),
+      ],
       'filter' => $filter_handler,
-      'argument' => array(
+      'argument' => [
         'handler' => civicrm_get_argument_handler($type),
-      ),
-    );
+      ],
+    ];
 
     // For date fields add in 6 arguments
     // not sure how its numeric here, but leaving it as is for now
@@ -225,59 +225,59 @@ function civicrm_views_add_fields(&$fields, &$data, $tableName, &$skipFields = N
  */
 function civicrm_views_add_date_arguments(&$data, $value) {
 
-  $data[$value['name']]['argument'] = array(
+  $data[$value['name']]['argument'] = [
     'handler' => 'date_views_argument_handler',
     'empty field name' => t('Undated'),
     'is date' => TRUE,
-  );
-  $data[$value['name'] . '_full'] = array(
+  ];
+  $data[$value['name'] . '_full'] = [
     'title' => $value['title'],
     'help' => t('In the form of CCYYMMDD.'),
-    'argument' => array(
+    'argument' => [
       'field' => $value['name'],
       'handler' => 'views_handler_argument_civicrm_fulldate',
-    ),
-  );
-  $data[$value['name'] . '_year_month'] = array(
-    'title' => t('%title year + month', array('%title' => $value['title'])),
+    ],
+  ];
+  $data[$value['name'] . '_year_month'] = [
+    'title' => t('%title year + month', ['%title' => $value['title']]),
     'help' => t('In the form of YYYYMM.'),
-    'argument' => array(
+    'argument' => [
       'field' => $value['name'],
       'handler' => 'views_handler_argument_civicrm_year_month',
-    ),
-  );
-  $data[$value['name'] . '_year'] = array(
-    'title' => t('%title year', array('%title' => $value['title'])),
+    ],
+  ];
+  $data[$value['name'] . '_year'] = [
+    'title' => t('%title year', ['%title' => $value['title']]),
     'help' => t('In the form of YYYY.'),
-    'argument' => array(
+    'argument' => [
       'field' => $value['name'],
       'handler' => 'views_handler_argument_civicrm_year',
-    ),
-  );
-  $data[$value['name'] . '_month'] = array(
-    'title' => t('%title month', array('%title' => $value['title'])),
+    ],
+  ];
+  $data[$value['name'] . '_month'] = [
+    'title' => t('%title month', ['%title' => $value['title']]),
     'help' => t('In the form of MM (01 - 12).'),
-    'argument' => array(
+    'argument' => [
       'field' => $value['name'],
       'handler' => 'views_handler_argument_civicrm_month',
-    ),
-  );
-  $data[$value['name'] . '_day'] = array(
-    'title' => t('%title day', array('%title' => $value['title'])),
+    ],
+  ];
+  $data[$value['name'] . '_day'] = [
+    'title' => t('%title day', ['%title' => $value['title']]),
     'help' => t('In the form of DD (01 - 31).'),
-    'argument' => array(
+    'argument' => [
       'field' => $value['name'],
       'handler' => 'views_handler_argument_civicrm_day',
-    ),
-  );
-  $data[$value['name'] . '_week'] = array(
-    'title' => t('%title week', array('%title' => $value['title'])),
+    ],
+  ];
+  $data[$value['name'] . '_week'] = [
+    'title' => t('%title week', ['%title' => $value['title']]),
     'help' => t('In the form of WW (01 - 53).'),
-    'argument' => array(
+    'argument' => [
       'field' => $value['name'],
       'handler' => 'views_handler_argument_civicrm_week',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -369,42 +369,42 @@ function civicrm_views_custom_data_cache(&$data, $entity_type, $groupID, $subTyp
     $data[$currentgroup['table_name']]['table']['group'] = t('CiviCRM Custom: ') . $currentgroup['title'];
 
     // Join this table to Contacts.
-    $data[$currentgroup['table_name']]['table']['join'] = array(
+    $data[$currentgroup['table_name']]['table']['join'] = [
       // Directly links to join table.
-      $jointable => array(
+      $jointable => [
         'left_field' => 'id',
         'field' => 'entity_id',
-      ),
-    );
+      ],
+    ];
     // expose custom data to users view - note I tested with contact & membership fields which worked
     // event won't work due to missing relationship in chain.
     // 'contribution' & 'activity' not currently related to users so excluded
     if ($jointable != 'civicrm_event' && $jointable != 'civicrm_activity' && $jointable != 'civicrm_contribution') {
-      $data[$currentgroup['table_name']]['table']['join']['users'] = array(
+      $data[$currentgroup['table_name']]['table']['join']['users'] = [
         'left_table' => $jointable,
         'left_field' => 'id',
         'field' => 'entity_id',
-      );
+      ];
 
       // expose custom data to contact view, too
       if ($jointable != 'civicrm_contact') {
-        $data[$currentgroup['table_name']]['table']['join']['civicrm_contact'] = array(
+        $data[$currentgroup['table_name']]['table']['join']['civicrm_contact'] = [
           'left_table' => $jointable,
           'left_field' => 'id',
           'field' => 'entity_id',
-        );
+        ];
       }
     }
     $currentgroupfields = $currentgroup['fields'];
-    $customHTMLTypes = array(
+    $customHTMLTypes = [
       'Select', 'Multi-Select', 'AdvMulti-Select', 'Radio', 'CheckBox',
       'Select State/Province', 'Select Country', 'Multi-Select Country',
       'Multi-Select State/Province', 'Autocomplete-Select',
-    );
-    $customMultiValueHTMLTypes = array(
+    ];
+    $customMultiValueHTMLTypes = [
       'Multi-Select', 'AdvMulti-Select', 'CheckBox', 'Multi-Select Country',
       'Multi-Select State/Province',
-    );
+    ];
 
     foreach ($currentgroupfields as $key => $currentfield) {
       if (empty($currentfield['help_post'])) {
@@ -415,34 +415,34 @@ function civicrm_views_custom_data_cache(&$data, $entity_type, $groupID, $subTyp
 
       if (in_array($currentfield['html_type'],
           $customHTMLTypes ) ) {
-        $handler = array('handler' => 'civicrm_handler_field_custom',
-                   'click sortable' => TRUE,);
+        $handler = ['handler' => 'civicrm_handler_field_custom',
+                   'click sortable' => TRUE,];
       } else if ( $currentfield['html_type'] == 'File' ) {
-        $handler = array('handler' => 'civicrm_handler_field_custom_file',
-                   'click sortable' => TRUE,);
+        $handler = ['handler' => 'civicrm_handler_field_custom_file',
+                   'click sortable' => TRUE,];
       } else {
         $handler = civicrm_get_field_handler($currentfield['data_type']);
       }
 
-      $data['civicrm_group']['table']['base'] = array(
+      $data['civicrm_group']['table']['base'] = [
         'field' => 'id',
         'title' => t('CiviCRM Groups'),
         'help' => t("View displays CiviCRM Groups."),
-      );
+      ];
 
       if ($currentfield['html_type'] == 'Multi-Select Country') {
-        $filter_handler = array('handler' => 'civicrm_handler_filter_country_multi');
+        $filter_handler = ['handler' => 'civicrm_handler_filter_country_multi'];
       }
       elseif ($currentfield['html_type'] == 'Multi-Select State/Province') {
-        $filter_handler = array('handler' => 'civicrm_handler_filter_state_multi');
+        $filter_handler = ['handler' => 'civicrm_handler_filter_state_multi'];
       }
       elseif (!empty($currentfield['option_group_id']) &&
         in_array($currentfield['html_type'], $customMultiValueHTMLTypes)
       ) {
-        $filter_handler = array('handler' => 'civicrm_handler_filter_custom_option');
+        $filter_handler = ['handler' => 'civicrm_handler_filter_custom_option'];
       }
       elseif (!empty($currentfield['option_group_id'])) {
-        $filter_handler = array('handler' => 'civicrm_handler_filter_custom_single_option');
+        $filter_handler = ['handler' => 'civicrm_handler_filter_custom_single_option'];
       }
       else {
         $filter_handler = civicrm_get_filter_handler($currentfield['data_type']);
@@ -457,23 +457,23 @@ function civicrm_views_custom_data_cache(&$data, $entity_type, $groupID, $subTyp
       }
 
       //Create the Views Field
-      $data[$currentgroup['table_name']][$currentfield['column_name']] = array(
+      $data[$currentgroup['table_name']][$currentfield['column_name']] = [
         'title' => $currentfield['label'],
         'help' => $currentfield['help_post'],
         'field' => $handler,
-        'argument' => array(
+        'argument' => [
           'handler' => $argument_handler,
-        ),
+        ],
         'filter' => $filter_handler,
-        'sort' => array(
+        'sort' => [
           'handler' => civicrm_get_sort_handler($currentfield['data_type']),
-        ),
-      );
+        ],
+      ];
 
       //For date fields add in 6 arguments
       if ($currentfield['data_type'] == 'Date') {
         //@TODO  Still need to get the field under it's respecitve group, I may e able to set the civicrm_views_add_date_arguments() function with a group variable and default it to null
-        $value          = array();
+        $value          = [];
         $value['title'] = $currentfield['label'];
         $value['name']  = $currentfield['column_name'];
         civicrm_views_add_date_arguments($data[$currentgroup['table_name']], $value);
@@ -496,55 +496,55 @@ function civicrm_get_field_handler($type) {
   switch ($type) {
     case "String":
     case "Memo":
-      return array(
+      return [
         'handler' => 'civicrm_handler_field_markup',
         'click sortable' => TRUE,
-      );
+      ];
 
     case "Float":
     case "Int":
-      return array(
+      return [
         'handler' => 'views_handler_field_numeric',
         'click sortable' => TRUE,
-      );
+      ];
 
     case "Date":
-      return array(
+      return [
         'handler' => 'civicrm_handler_field_datetime',
         'click sortable' => TRUE,
-      );
+      ];
 
     case "Boolean":
-      return array(
+      return [
         'handler' => 'views_handler_field_boolean',
         'click sortable' => TRUE,
-      );
+      ];
 
     case "StateProvince":
-      return array(
+      return [
         'handler' => 'civicrm_handler_field_state',
         'click sortable' => TRUE,
-      );
+      ];
 
     case "Country":
-      return array(
+      return [
         'handler' => 'civicrm_handler_field_country',
         'click sortable' => TRUE,
-      );
+      ];
 
     case "County":
-      return array(
+      return [
         'handler' => 'civicrm_handler_field_pseudo_constant',
         'click sortable' => TRUE,
         'pseudo class' => 'CRM_Core_PseudoConstant',
         'pseudo method' => 'county',
-      );
+      ];
 
     default:
-      return array(
+      return [
         'views_handler_field',
         'click sortable' => TRUE,
-      );
+      ];
   }
 }
 
@@ -600,53 +600,53 @@ function civicrm_get_filter_handler($type) {
   switch ($type) {
     case "String":
     case "Memo":
-      return array(
+      return [
         'handler' => 'views_handler_filter_string',
         'allow empty' => TRUE,
-      );
+      ];
 
     case "Float":
     case "Int":
-      return array(
+      return [
         'handler' => 'views_handler_filter_numeric',
         'allow empty' => TRUE,
-      );
+      ];
 
     case "Date":
-      return array('handler' => 'civicrm_handler_filter_datetime');
+      return ['handler' => 'civicrm_handler_filter_datetime'];
 
     case "Boolean":
-      return array('handler' => 'views_handler_filter_boolean_operator');
+      return ['handler' => 'views_handler_filter_boolean_operator'];
 
     case "StateProvince":
-      return array(
+      return [
         'handler' => 'civicrm_handler_filter_pseudo_constant',
         'pseudo class' => 'CRM_Core_PseudoConstant',
         'pseudo method' => 'stateProvince',
         'allow empty' => TRUE,
-      );
+      ];
 
     case "Country":
-      return array(
+      return [
         'handler' => 'civicrm_handler_filter_pseudo_constant',
         'pseudo class' => 'CRM_Core_PseudoConstant',
         'pseudo method' => 'country',
         'allow empty' => TRUE,
-      );
+      ];
 
     case "County":
-      return array(
+      return [
         'handler' => 'civicrm_handler_filter_pseudo_constant',
         'pseudo class' => 'CRM_Core_PseudoConstant',
         'pseudo method' => 'county',
         'allow empty' => TRUE,
-      );
+      ];
 
     default:
-      return array(
+      return [
         'handler' => 'views_handler_filter_string',
         'allow empty' => TRUE,
-      );
+      ];
   }
 }
 
@@ -691,7 +691,7 @@ function civicrm_get_sort_handler($type) {
  * Implements hook_date_views_fields().
  */
 function civicrm_date_views_fields($field) {
-  $values = array(
+  $values = [
     // The type of date: DATE_UNIX, DATE_ISO, DATE_DATETIME.
     'sql_type' => DATE_DATETIME,
     // Timezone handling options: 'none', 'site', 'date', 'utc'.
@@ -702,10 +702,10 @@ function civicrm_date_views_fields($field) {
     'offset_field' => '',
     // Array of "table.field" values for related fields that should be
     // loaded automatically in the Views SQL.
-    'related_fields' => array(),
+    'related_fields' => [],
     // Granularity of this date field's db data.
-    'granularity' => array('year', 'month', 'day', 'hour', 'minute', 'second'),
-  );
+    'granularity' => ['year', 'month', 'day', 'hour', 'minute', 'second'],
+  ];
 
   switch ($field) {
     case 'civicrm_event.start_date':
@@ -726,77 +726,77 @@ function civicrm_date_views_fields($field) {
  * Implements hook_date_api_tables().
  */
 function civicrm_date_views_tables() {
-  return array(
+  return [
     'civicrm_mailing_job',
     'civicrm_event',
     'civicrm_activity',
     'civicrm_campaign',
-  );
+  ];
 }
 
 /**
  * Implements hook_views_plugins
  */
 function civicrm_views_plugins() {
-  $data = array();
+  $data = [];
   if (module_exists('calendar')) {
     $civicrm_module_path = drupal_get_path('module', 'civicrm');
 
-    $data = array(
+    $data = [
       // This just tells our themes are elsewhere.
       'module' => 'civicrm',
-      'row' => array(
-        'civicrm_event_calendar' => array(
+      'row' => [
+        'civicrm_event_calendar' => [
           'title' => t('Calendar Items'),
           'help' => t('Displays each selected event as a Calendar item.'),
           'handler' => 'calendar_plugin_row_civicrm',
           'path' => "$civicrm_module_path/modules/views/plugins",
-          'base' => array('civicrm_event'),
+          'base' => ['civicrm_event'],
           'uses options' => TRUE,
           'uses fields' => TRUE,
           'type' => 'normal',
           'dao class' => 'CRM_Event_DAO_Event',
           'title field' => 'title',
-        ),
-        'civicrm_activity_calendar' => array(
+        ],
+        'civicrm_activity_calendar' => [
           'title' => t('Calendar Items'),
           'help' => t('Displays each selected activity as a Calendar item.'),
           'handler' => 'calendar_plugin_row_civicrm',
           'path' => "$civicrm_module_path/modules/views/plugins",
-          'base' => array('civicrm_activity'),
+          'base' => ['civicrm_activity'],
           'uses options' => TRUE,
           'uses fields' => TRUE,
           'type' => 'normal',
           'dao class' => 'CRM_Activity_DAO_Activity',
           'title field' => 'subject',
-        ),
-        'civicrm_mail_calendar' => array(
+        ],
+        'civicrm_mail_calendar' => [
           'title' => t('Calendar Items'),
           'help' => t('Displays each selected mailing as a Calendar item.'),
           'handler' => 'calendar_plugin_row_civicrm',
           'path' => "$civicrm_module_path/modules/views/plugins",
-          'base' => array('civicrm_mail'),
+          'base' => ['civicrm_mail'],
           'uses options' => TRUE,
           'uses fields' => TRUE,
           'type' => 'normal',
           'dao class' => 'CRM_Mailing_DAO_Job',
           // @TODO come up with a better title field
           'title field' => 'mailing_id',
-        ),
-        'civicrm_campaign_calendar' => array(
+        ],
+        'civicrm_campaign_calendar' => [
           'title' => t('Calendar Items'),
           'help' => t('Displays each selected campaign as a Calendar item.'),
           'handler' => 'calendar_plugin_row_civicrm',
           'path' => "$civicrm_module_path/modules/views/plugins",
-          'base' => array('civicrm_campaign'),
+          'base' => ['civicrm_campaign'],
           'uses options' => TRUE,
           'uses fields' => TRUE,
           'type' => 'normal',
           'dao class' => 'CRM_Campaign_DAO_Campaign',
           'title field' => 'title',
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
   }
   return $data;
 }

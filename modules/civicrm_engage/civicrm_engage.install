@@ -39,7 +39,7 @@
 function civicrm_engage_enable() {
   db_query("UPDATE {system} SET weight = 110 WHERE name = 'civicrm_engage'");
   $url = url('admin/config/civicrm/civicrm_engage');
-  drupal_set_message(t('CiviCRM Engage must be <a href="@url">configured</a> before it will work properly.', array('@url' => $url)));
+  drupal_set_message(t('CiviCRM Engage must be <a href="@url">configured</a> before it will work properly.', ['@url' => $url]));
 }
 
 /**

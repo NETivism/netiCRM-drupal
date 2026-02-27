@@ -8,7 +8,7 @@
  * Implements hook_default_rules_configuration().
  */
 function relationship_to_role_sync_default_rules_configuration() {
-  $items = array();
+  $items = [];
   $items['rules_relationship_activated'] = entity_import('rules_config', '{ "rules_relationship_activated" : {
       "LABEL" : "Relationship Activated",
       "PLUGIN" : "reaction rule",

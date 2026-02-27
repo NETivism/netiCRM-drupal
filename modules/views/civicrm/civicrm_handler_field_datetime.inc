@@ -39,7 +39,7 @@ class civicrm_handler_field_datetime extends views_handler_field_date {
      * Also trick php into thinking the time is in the same timezone, no
      * matter the default timezone
      */
-  function render($values) {
+  public function render($values) {
     $value = $values->{$this->field_alias};
 
     if (is_string($value) && strpos($value, "-")) {

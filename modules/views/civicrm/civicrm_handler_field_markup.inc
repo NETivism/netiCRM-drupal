@@ -5,32 +5,32 @@
  *
  */
 class civicrm_handler_field_markup extends views_handler_field {
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
 
-    $options['text_format'] = array('default' => filter_fallback_format());
+    $options['text_format'] = ['default' => filter_fallback_format()];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
-    $form['text_format'] = array(
+    $form['text_format'] = [
       '#type' => 'select',
       '#title' => 'Text format',
       '#default_value' => $this->options['text_format'],
       '#options' => $this->get_formats(),
-    );
+    ];
   }
 
-  function render($values) {
+  public function render($values) {
     $value = $values->{$this->field_alias};
     $retval = check_markup($value, $this->options['text_format'], FALSE);
     return ($retval == 'n/a') ? NULL : $retval;
   }
 
-  function get_formats() {
-    $formats = array();
+  public function get_formats() {
+    $formats = [];
     foreach (filter_formats() as $format) {
       $formats[$format->format] = $format->name;
 }

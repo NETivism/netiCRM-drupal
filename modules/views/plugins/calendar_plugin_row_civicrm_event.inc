@@ -11,86 +11,86 @@
  */
 class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
   // Basic properties that let the row style follow relationships.
-  var $base_table = 'civicrm_event';
-  var $base_field = 'id';
+  public $base_table = 'civicrm_event';
+  public $base_field = 'id';
 
   // Stores the nodes loaded with pre_render.
-  var $nodes = array();
-  function construct() {
+  public $nodes = [];
+  public function construct() {
     parent::construct();
     if (!civicrm_initialize()) {
       return;
     }
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['date_fields'] = array('default' => array());
-    $options['calendar_date_link'] = array('default' => '');
-    $options['colors'] = array(
-      'contains' => array(
-        'legend' => array('default' => ''),
-        'calendar_colors_type' => array('default' => array()),
-      ),
-    );
+    $options['date_fields'] = ['default' => []];
+    $options['calendar_date_link'] = ['default' => ''];
+    $options['colors'] = [
+      'contains' => [
+        'legend' => ['default' => ''],
+        'calendar_colors_type' => ['default' => []],
+      ],
+    ];
     return $options;
   }
 
   /**
    * Provide a form for setting options.
    */
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
     $form['markup']['#markup'] = t("The calendar row plugin will format view results as calendar items. Make sure this display has a 'Calendar' format and uses a 'Date' contextual filter, or this plugin will not work correctly.");
-    $form['calendar_date_link'] = array(
+    $form['calendar_date_link'] = [
       '#title' => t('Add new date link'),
       '#type' => 'select',
       '#default_value' => $this->options['calendar_date_link'],
-      '#options' => array('' => t('No link')) + node_type_get_names(),
+      '#options' => ['' => t('No link')] + node_type_get_names(),
       '#description' => t('Display a link to add a new date of the specified content type. Displayed only to users with appropriate permissions.'),
-    );
-    $form['colors'] = array(
+    ];
+    $form['colors'] = [
       '#type' => 'fieldset',
       '#title' => t('Legend Colors'),
       '#description' => t('Set a hex color value (like #ffffff) to use in the calendar legend for each content type. Items with empty values will have no stripe in the calendar and will not be added to the legend.'),
-    );
-    $form['colors']['legend'] = array(
+    ];
+    $form['colors']['legend'] = [
       '#title' => t('Stripes'),
       '#description' => t('Add stripes to calendar items.'),
       '#type' => 'select',
-      '#options' => array('' => t('None')),
+      '#options' => ['' => t('None')],
       '#default_value' => $this->options['colors']['legend'],
-    );
+    ];
     $colors = $this->options['colors']['calendar_colors_type'];
     $type_names = node_type_get_names();
     foreach ($type_names as $key => $name) {
-      $form['colors']['calendar_colors_type'][$key] = array(
+      $form['colors']['calendar_colors_type'][$key] = [
         '#title' => $name,
         '#type' => 'textfield',
-        '#default_value' => isset($colors[$key]) ? $colors[$key] : '#ffffff',
+        '#default_value' => $colors[$key] ?? '#ffffff',
         '#size' => 7,
         '#maxlength' => 7,
-        '#element_validate' => array('calendar_validate_hex_color'),
-        '#dependency' => array('edit-row-options-colors-legend' => array('type')),
+        '#element_validate' => ['calendar_validate_hex_color'],
+        '#dependency' => ['edit-row-options-colors-legend' => ['type']],
         '#prefix' => '<div class="calendar-colorpicker-wrapper">',
         '#suffix' => '<div class="calendar-colorpicker"></div></div>',
-        '#attributes' => array('class' => array('edit-calendar-colorpicker')),
-        '#attached' => array(
+        '#attributes' => ['class' => ['edit-calendar-colorpicker']],
+        '#attached' => [
           // Add Farbtastic color picker.
-          'library' => array(
-            array('system', 'farbtastic'),
-          ),
+          'library' => [
+            ['system', 'farbtastic'],
+          ],
           // Add javascript to trigger the colorpicker.
-          'js' => array(drupal_get_path('module', 'calendar') . '/js/calendar_colorpicker.js'),
-        ),
-      );
+          'js' => [drupal_get_path('module', 'calendar') . '/js/calendar_colorpicker.js'],
+        ],
+      ];
     }
   }
 
-  function pre_render($values) {
+  public function pre_render($values) {
 
-    $ids = array();
+    $ids = [];
     foreach ($values as $row) {
       // Use the $nid as the key so we don't create more than one value per node.
       $id = $row->{$this->field_alias};
@@ -118,7 +118,7 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
     // field name, so we know how to retrieve field values from the cached node.
     $data        = date_views_fields('civicrm_event');
     $data        = $data['name'];
-    $date_fields = array();
+    $date_fields = [];
     foreach ($this->view->argument as $handler) {
       if (date_views_handler_is_date($handler, 'argument')) {
         // If this is the complex Date argument, the date fields are stored in the handler options,
@@ -126,13 +126,13 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
         if ($handler->definition['handler'] != 'date_views_argument_handler') {
           $alias = $handler->table_alias . '.' . $handler->field;
           $info = $data[$alias];
-          $field_name = str_replace(array('_value2', '_value'), '', $info['real_field_name']);
+          $field_name = str_replace(['_value2', '_value'], '', $info['real_field_name']);
           $date_fields[$field_name] = $info;
         }
         else {
           foreach ($handler->options['date_fields'] as $alias) {
             $info = $data[$alias];
-            $field_name = str_replace(array('_value2', '_value'), '', $info['real_field_name']);
+            $field_name = str_replace(['_value2', '_value'], '', $info['real_field_name']);
             $date_fields[$field_name] = $info;
           }
         }
@@ -142,7 +142,7 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
     }
   }
 
-  function render($row) {
+  public function render($row) {
     global $base_url;
     $date_info = $this->date_argument->view->date_info;
 
@@ -163,7 +163,7 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
     // There could be more than one date field in a view
     // so iterate through all of them to find the right values
     // for this view result.
-    $rows = array();
+    $rows = [];
     foreach ($this->date_fields as $field_name => $info) {
 
       $table_name  = $info['table_name'];
@@ -177,12 +177,12 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
       // Find the date and set it to the right timezone.
 
       $item            = $node->$field_name;
-      $node->date_id   = array();
+      $node->date_id   = [];
       $item_start_date = NULL;
       $item_end_date   = NULL;
 
-      $db_tz       = date_get_timezone_db($tz_handling, isset($item->$tz_field) ? $item->$tz_field : $date_info->display_timezone_name);
-      $to_zone     = date_get_timezone($tz_handling, isset($item->$tz_field) ? $item->$tz_field : $date_info->display_timezone_name);
+      $db_tz       = date_get_timezone_db($tz_handling, $item->$tz_field ?? $date_info->display_timezone_name);
+      $to_zone     = date_get_timezone($tz_handling, $item->$tz_field ?? $date_info->display_timezone_name);
       $granularity = 'second';
       $increment   = 1;
 
@@ -190,12 +190,12 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
 
         // @TODO Not sure if this is the correct way to retrieve the right language value, but I think so.
         $lang  = $node->language;
-        $delta = isset($row->$delta_field) ? $row->$delta_field : 0;
+        $delta = $row->$delta_field ?? 0;
         $item  = array_key_exists($lang, $item) ? $item[$lang][$delta] : $item['und'][$delta];
 
         // Set the date_id for the node, used to identify which field value to display for
         // fields that have multiple values. The theme expects it to be an array.
-        $node->date_id = array('calendar.' . $node->id . '.' . $field_name . '.' . $delta);
+        $node->date_id = ['calendar.' . $node->id . '.' . $field_name . '.' . $delta];
 
         if (!empty($item['value'])) {
           $item_start_date = new dateObject($item['value'], $db_tz);
@@ -210,7 +210,7 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
       elseif (!$is_field && !empty($item)) {
         $item_start_date = new dateObject($item, $db_tz);
         $item_end_date   = $item_start_date;
-        $node->date_id   = array('calendar.' . $node->id . '.' . $field_name . '.0');
+        $node->date_id   = ['calendar.' . $node->id . '.' . $field_name . '.0'];
       }
 
       // If we don't have date value, go no further.

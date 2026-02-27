@@ -31,7 +31,7 @@ class views_handler_argument_civicrm_year_month extends views_handler_argument_d
   /**
    * Constructor implementation
    */
-  function construct() {
+  public function construct() {
     parent::construct();
     $this->format     = 'F Y';
     $this->arg_format = 'Ym';
@@ -41,7 +41,7 @@ class views_handler_argument_civicrm_year_month extends views_handler_argument_d
   /**
    * Provide a link to the next level of the view
    */
-  function summary_name($data) {
+  public function summary_name($data) {
     $timestamp = strtotime($data->{$this->name_alias});
     if ($timestamp !== FALSE) {
       return format_date($timestamp, 'custom', $this->format);
@@ -51,7 +51,7 @@ class views_handler_argument_civicrm_year_month extends views_handler_argument_d
   /**
    * Provide a link to the next level of the view
    */
-  function title() {
+  public function title() {
     $timestamp = strtotime($this->argument);
     if ($timestamp !== FALSE) {
       return format_date($timestamp, 'custom', $this->format);

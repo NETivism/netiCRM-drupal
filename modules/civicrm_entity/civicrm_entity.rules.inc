@@ -16,24 +16,24 @@ function civicrm_entity_rules_data_info() {
     return;
   }
 
-  $info = array();
+  $info = [];
   $entities = _civicrm_entity_enabled_entities();
 
   foreach ($entities as $drupal_entity => $civicrm_entity) {
-    $info[$drupal_entity] = array(
+    $info[$drupal_entity] = [
       'label' => t('CiviCRM' . $civicrm_entity),
       //parent => 'civicrm_entity',
       'wrap' => TRUE,
       'group' => 'CiviCRM',
       // 'ui class' => 'RulesDataUIEntityExportable',
       'module' => 'civicrm'
-    );
+    ];
     $info[$drupal_entity]['property_info'] = _civicrm_entity_getproperties($civicrm_entity);
     // I don't think these are being 'kept'.
-    $fields = civicrm_api($civicrm_entity, 'getfields', array(
+    $fields = civicrm_api($civicrm_entity, 'getfields', [
       'version' => 3,
       'action' => 'create'
-    ));
+    ]);
     foreach ($fields['values'] as $fieldname => $field_specs) {
       if (! empty($field_specs['type']) && $field_specs['type'] == 1) {
         // Type is empty for custom fields - we should sort that out
@@ -42,25 +42,25 @@ function civicrm_entity_rules_data_info() {
           $fks = _civicrm_entity_chained_fks();
           if (array_key_exists($field_specs['FKClassName'], $fks)) {
             $fksEntity = $fks[$field_specs['FKClassName']];
-            $info[$drupal_entity]['property_info'][$fieldname] = array(
+            $info[$drupal_entity]['property_info'][$fieldname] = [
               'label' => empty($field_specs['title']) ? 'label not defined in CiviCRM schema' : $field_specs['title'],
               'type' => 'civicrm_' . $fksEntity
-            );
+            ];
           }
         }
 
         if ($fieldname == 'entity_id') {
           $fksEntity = 'contact';
-          $info[$drupal_entity]['property_info'][$fieldname] = array(
+          $info[$drupal_entity]['property_info'][$fieldname] = [
             'label' => empty($field_specs['title']) ? 'label not defined in CiviCRM schema' : $field_specs['title'],
             'type' => 'civicrm_' . $fksEntity
-         );
+         ];
         }
 
-        $info[$drupal_entity]['property_info'][$fieldname] = array(
+        $info[$drupal_entity]['property_info'][$fieldname] = [
           'label' => empty($field_specs['title']) ? 'label not defined in CiviCRM schema' : $field_specs['title'],
           'type' => 'integer'
-        );
+        ];
         if (! empty($field_specs['options'])) {
           $info[$drupal_entity]['property_info'][$fieldname]['type'] = 'list<integer>';
           $info[$drupal_entity]['property_info'][$fieldname]['options list'] = '_civicrm_entity_rules_attach_options';
@@ -77,7 +77,7 @@ function civicrm_entity_rules_data_info() {
  * Implementation of hook_rules_event_info().
  */
 function civicrm_entity_rules_event_info() {
-  $events = array();
+  $events = [];
   $valid_objects = _civicrm_entity_enabled_entities();
   // array('Event' => 'civicrm_event');
   if (is_array($valid_objects)) {
@@ -85,50 +85,50 @@ function civicrm_entity_rules_event_info() {
       $entity_name = 'CiviCRM ' . ucwords(str_replace('_', ' ', $civicrm_entity));
       // @TODO consider building the entity name into the argument
       // rather than calling the same argument for each.
-      $events[$entity . '_create'] = array(
-        'label' => t("!entity has been created", array(
+      $events[$entity . '_create'] = [
+        'label' => t("!entity has been created", [
           '!entity' => $entity_name
-        )),
+        ]),
         'group' => $entity_name,
         'module' => 'civicrm',
         'access_callback' => '_civicrm_entity_rules_access',
-        'variables' => civicrm_entity_rules_events_variables(t('Created !entity', array(
+        'variables' => civicrm_entity_rules_events_variables(t('Created !entity', [
           '!entity' => $entity_name
-        )), $entity, $civicrm_entity)
-      );
-      $events[$entity . '_edit'] = array(
+        ]), $entity, $civicrm_entity)
+      ];
+      $events[$entity . '_edit'] = [
         'group' => $entity_name,
         'module' => 'civicrm',
         'access_callback' => '_civicrm_entity_rules_access',
-        'label' => t("!entity has been updated", array(
+        'label' => t("!entity has been updated", [
           '!entity' => $entity_name
-        )),
-        'variables' => civicrm_entity_rules_events_variables(t('Updated !entity', array(
+        ]),
+        'variables' => civicrm_entity_rules_events_variables(t('Updated !entity', [
           '!entity' => $entity_name
-        )), $entity)
-      );
-      $events[$entity . '_view'] = array(
+        ]), $entity)
+      ];
+      $events[$entity . '_view'] = [
         'group' => $entity_name,
         'module' => 'civicrm',
         'access_callback' => '_civicrm_entity_rules_access',
-        'label' => t("!entity has been viewed", array(
+        'label' => t("!entity has been viewed", [
           '!entity' => $entity_name
-        )),
-        'variables' => civicrm_entity_rules_events_variables(t('Viewed !entity', array(
+        ]),
+        'variables' => civicrm_entity_rules_events_variables(t('Viewed !entity', [
           '!entity' => $entity_name
-        )), $entity)
-      );
-      $events[$entity . '_delete'] = array(
+        ]), $entity)
+      ];
+      $events[$entity . '_delete'] = [
         'group' => $entity_name,
         'module' => 'civicrm',
         'access_callback' => '_civicrm_entity_rules_access',
-        'label' => t("!entity has been deleted", array(
+        'label' => t("!entity has been deleted", [
           '!entity' => $entity_name
-        )),
-        'variables' => civicrm_entity_rules_events_variables(t('Deleted !entity', array(
+        ]),
+        'variables' => civicrm_entity_rules_events_variables(t('Deleted !entity', [
           '!entity' => $entity_name
-        )), $entity)
-      );
+        ]), $entity)
+      ];
     }
   }
   return $events;
@@ -141,78 +141,78 @@ function civicrm_entity_rules_event_info() {
  * Remove.
  */
 function civicrm_entity_rules_condition_info() {
-  return array(
-    'civicrm_entity_user_exists' => array(
+  return [
+    'civicrm_entity_user_exists' => [
       'label' => t('Drupal User Account exists for Contact'),
       'module' => 'civicrm',
       'access_callback' => '_civicrm_entity_rules_access',
-      'parameter' => array(
-        'civicrm_contact' => array(
+      'parameter' => [
+        'civicrm_contact' => [
           'label' => t('CiviCRM Contact'),
           'type' => 'civicrm_contact'
-        )
-      ),
-      'provides' => array(
-        'civicrm_user' => array(
+        ]
+      ],
+      'provides' => [
+        'civicrm_user' => [
           'label' => t('Drupal User'),
           'type' => 'user'
-        )
-      ),
+        ]
+      ],
       'group' => t('CiviCRM')
-    ),
-    'civicrm_entity_user_creatable' => array(
+    ],
+    'civicrm_entity_user_creatable' => [
       'label' => t('Drupal User Account can be created for user (this condition creates the user)'),
       'module' => 'civicrm',
       'access_callback' => '_civicrm_entity_rules_access',
-      'parameter' => array(
-        'civicrm_contact' => array(
+      'parameter' => [
+        'civicrm_contact' => [
           'label' => t('CiviCRM Contact'),
           'type' => 'civicrm_contact'
-        ),
-        'is_active' => array(
+        ],
+        'is_active' => [
           'label' => t('Activate Account'),
           'type' => 'boolean',
           'default' => 1,
-        ),
-        'notify' => array(
+        ],
+        'notify' => [
           'label' => t('Send account notification email'),
           'type' => 'boolean',
           'default' => 1,
-        ),
-        'signin' => array(
+        ],
+        'signin' => [
           'label' => t('Instant signin'),
           'type' => 'boolean',
           'default' => FALSE,
           'description' => t('Automatically log in as the created user.'),
-        ),
-      ),
-      'provides' => array(
-        'civicrm_user' => array(
+        ],
+      ],
+      'provides' => [
+        'civicrm_user' => [
           'label' => t('Drupal User'),
           'type' => 'user'
-        )
-      ),
+        ]
+      ],
       'group' => t('CiviCRM')
-    ),
-    'civicrm_entity_user_exists_or_creatable' => array(
+    ],
+    'civicrm_entity_user_exists_or_creatable' => [
       'label' => t('Drupal User Account exists or can be created for user'),
       'module' => 'civicrm',
       'access_callback' => '_civicrm_entity_rules_access',
-      'parameter' => array(
-        'civicrm_contact' => array(
+      'parameter' => [
+        'civicrm_contact' => [
           'label' => t('CiviCRM Contact'),
           'type' => 'civicrm_contact'
-        )
-      ),
-      'provides' => array(
-        'civicrm_user' => array(
+        ]
+      ],
+      'provides' => [
+        'civicrm_user' => [
           'label' => t('Drupal User'),
           'type' => 'user'
-        )
-      ),
+        ]
+      ],
       'group' => t('CiviCRM')
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -221,92 +221,92 @@ function civicrm_entity_rules_condition_info() {
  * @see http://drupalcontrib.org/api/drupal/contributions!rules!rules.api.php/function/hook_rules_action_info/7
  */
 function civicrm_entity_rules_action_info() {
-  return array(
-    'civicrm_entity_action_load_user' => array(
+  return [
+    'civicrm_entity_action_load_user' => [
       'label' => t('Load Drupal User Account'),
       'module' => 'civicrm',
       'access_callback' => '_civicrm_entity_rules_access',
-      'parameter' => array(
-        'civicrm_contact' => array(
+      'parameter' => [
+        'civicrm_contact' => [
           'label' => t('CiviCRM Contact'),
           'type' => 'civicrm_contact'
-        ),
-      ),
-      'provides' => array(
-        'civicrm_user' => array(
+        ],
+      ],
+      'provides' => [
+        'civicrm_user' => [
           'label' => t('Loaded Drupal User'),
           'type' => 'user'
-        )
-      ),
+        ]
+      ],
       'group' => t('CiviCRM'),
       'access callback' => 'payment_rules_access',
       'base' => 'civicrm_entity_action_load_user'
-    ),
-    'civicrm_entity_action_create_user' => array(
+    ],
+    'civicrm_entity_action_create_user' => [
       'label' => t('Create Linked Drupal User Account'),
       'module' => 'civicrm',
       'access_callback' => '_civicrm_entity_rules_access',
-      'parameter' => array(
-        'civicrm_contact' => array(
+      'parameter' => [
+        'civicrm_contact' => [
           'label' => t('CiviCRM Contact'),
           'type' => 'civicrm_contact'
-        ),
-        'is_active' => array(
+        ],
+        'is_active' => [
           'label' => t('Activate Account'),
           'type' => 'boolean',
           'default' => 1,
-        ),
-        'notify' => array(
+        ],
+        'notify' => [
           'label' => t('Send account notification email'),
           'type' => 'boolean',
           'default' => 1,
-        ),
-        'signin' => array(
+        ],
+        'signin' => [
           'label' => t('Instant signin'),
           'type' => 'boolean',
           'default' => FALSE,
           'description' => t('Automatically log in as the created user.'),
-        ),
-      ),
-      'provides' => array(
-        'civicrm_user' => array(
+        ],
+      ],
+      'provides' => [
+        'civicrm_user' => [
           'label' => t('Created Drupal User'),
           'type' => 'user'
-        )
-      ),
+        ]
+      ],
       'group' => t('CiviCRM'),
       'base' => 'civicrm_entity_action_create_user'
-    ),
-    'civicrm_entity_action_load_create_user' => array(
+    ],
+    'civicrm_entity_action_load_create_user' => [
       'label' => t('Create or Load Linked Drupal User Account'),
       'module' => 'civicrm',
       'access_callback' => '_civicrm_entity_rules_access',
-      'parameter' => array(
-        'civicrm_contact' => array(
+      'parameter' => [
+        'civicrm_contact' => [
           'label' => t('CiviCRM Contact'),
           'type' => 'civicrm_contact'
-        ),
-        'is_active' => array(
+        ],
+        'is_active' => [
           'label' => t('Activate Account'),
           'type' => 'boolean',
           'default' => 1,
-        ),
-        'notify' => array(
+        ],
+        'notify' => [
           'label' => t('Send account notification email'),
           'type' => 'boolean',
           'default' => 1,
-        ),
-      ),
-      'provides' => array(
-        'civicrm_user' => array(
+        ],
+      ],
+      'provides' => [
+        'civicrm_user' => [
           'label' => t('Created or Loaded Drupal User'),
           'type' => 'user'
-        )
-      ),
+        ]
+      ],
       'group' => t('CiviCRM'),
       'base' => 'civicrm_entity_action_load_create_user'
-    )
-  );
+    ]
+  ];
 }
 
 /**
@@ -323,7 +323,7 @@ function civicrm_entity_rules_access($type, $name) {
  *
  */
 function civicrm_entity_rules_events_variables($label, $type, $civicrm_entity = NULL) {
-  $vars = array();
+  $vars = [];
   /*
    * this was adding other entities to args - but seems to expect them rather than chain them
   if ($civicrm_entity && civicrm_initialize(True)){
@@ -346,13 +346,13 @@ function civicrm_entity_rules_events_variables($label, $type, $civicrm_entity = 
     }
   }
 */
-  $default = array(
-    $type => array(
+  $default = [
+    $type => [
       'type' => $type,
       'label' => $label,
       'description' => "CiviCRM Entity - $label"
-    )
-  );
+    ]
+  ];
 
   return $default;
 }

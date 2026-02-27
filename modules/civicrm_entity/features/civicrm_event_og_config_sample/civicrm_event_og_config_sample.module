@@ -14,14 +14,14 @@ function civicrm_event_og_config_sample_variable_info($options) {
     return;
   }
   // This is the very minimum we need, some descriptive name.
-  $options = array();#civicrm_api('event', 'getoptions', array('version' => 3, 'field' => 'event_type_id'));
-  $variable['civicrm_event_og_config_sample_types'] = array(
-    'title' => t('Event types for which OGs should be created', array(), $options),
+  $options = [];#civicrm_api('event', 'getoptions', array('version' => 3, 'field' => 'event_type_id'));
+  $variable['civicrm_event_og_config_sample_types'] = [
+    'title' => t('Event types for which OGs should be created', [], $options),
     'type' => 'options',
     'description' => 'Specify Event Types to be Synced with OG',
     'options' => $options,
-    'default' => array(1),
+    'default' => [1],
     'token' => TRUE,
-  );
+  ];
   return $variable;
 }

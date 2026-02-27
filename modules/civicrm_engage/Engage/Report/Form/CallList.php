@@ -39,160 +39,160 @@ require_once 'Engage/Report/Form/List.php';
  *  Generate a phone call list report
  */
 class Engage_Report_Form_CallList extends Engage_Report_Form_List {
-  function __construct() {
+  public function __construct() {
 
     parent::__construct();
 
-    $this->_columns = array(
+    $this->_columns = [
       'civicrm_phone' =>
-      array(
+      [
         'dao' => 'CRM_Core_DAO_Phone',
         'fields' =>
-        array(
-          'phone' => array('default' => TRUE,
+        [
+          'phone' => ['default' => TRUE,
             'required' => TRUE,
-          )),
+          ]],
         'grouping' => 'location-fields',
         'order_bys' =>
-        array('phone' => array('title' => ts('Phone'),
+        ['phone' => ['title' => ts('Phone'),
             'required' => TRUE,
-          )),
-      ),
+          ]],
+      ],
       'civicrm_address' =>
-      array(
+      [
         'dao' => 'CRM_Core_DAO_Address',
         'fields' =>
-        array(
+        [
           'street_address' =>
-          array('default' => TRUE),
+          ['default' => TRUE],
           'city' =>
-          array('default' => TRUE),
+          ['default' => TRUE],
           'postal_code' =>
-          array(
+          [
             'title' => 'Zip',
             'default' => TRUE,
-          ),
+          ],
           'state_province_id' =>
-          array('title' => ts('State/Province'),
+          ['title' => ts('State/Province'),
             'default' => TRUE,
-          ),
+          ],
           'country_id' =>
-          array('title' => ts('Country'),
-          ),
-        ),
+          ['title' => ts('Country'),
+          ],
+        ],
         'filters' =>
-        array(
+        [
           'street_address' => NULL,
           'city' => NULL,
-          'postal_code' => array('title' => 'Zip'),
-        ),
+          'postal_code' => ['title' => 'Zip'],
+        ],
         'grouping' => 'location-fields',
-      ),
+      ],
       'civicrm_email' =>
-      array(
+      [
         'dao' => 'CRM_Core_DAO_Email',
         'fields' =>
-        array('email' => NULL),
+        ['email' => NULL],
         'grouping' => 'location-fields',
-      ),
+      ],
       'civicrm_contact' =>
-      array(
+      [
         'dao' => 'CRM_Contact_DAO_Contact',
         'fields' =>
-        array(
+        [
           'id' =>
-          array('title' => ts('Contact ID'),
+          ['title' => ts('Contact ID'),
             'required' => TRUE,
-          ),
+          ],
           'display_name' =>
-          array('title' => ts('Contact Name'),
+          ['title' => ts('Contact Name'),
             'required' => TRUE,
             'no_repeat' => TRUE,
-          ),
+          ],
           'gender_id' =>
-          array('title' => ts('Sex'),
+          ['title' => ts('Sex'),
             'required' => TRUE,
-          ),
+          ],
           'birth_date' =>
-          array('title' => ts('Age'),
+          ['title' => ts('Age'),
             'required' => TRUE,
             'type' => CRM_Report_FORM::OP_INT,
-          ),
-        ),
+          ],
+        ],
         'filters' =>
-        array(
+        [
           'sort_name' =>
-          array('title' => ts('Contact Name'),
+          ['title' => ts('Contact Name'),
             'operator' => 'like',
-          ),
-        ),
+          ],
+        ],
         'grouping' => 'contact-fields',
-      ),
+      ],
       $this->_demoTable =>
-      array(
+      [
         'dao' => 'CRM_Contact_DAO_Contact',
         'fields' =>
-        array(
+        [
           $this->_demoLangCol =>
-          array(
+          [
             'type' => CRM_Report_FORM::OP_STRING,
             'required' => TRUE,
             'title' => ts('Language'),
-          ),
-        ),
+          ],
+        ],
         'filters' =>
-        array(
+        [
           $this->_demoLangCol =>
-          array(
+          [
             'title' => ts('Language'),
             'operatorType' => CRM_Report_FORM::OP_SELECT,
             'type' => CRM_Report_FORM::OP_STRING,
             'methodName' => 'selector',
             'options' => $this->_languages,
-          ),
-        ),
+          ],
+        ],
         'grouping' => 'contact-fields',
-      ),
+      ],
       $this->_coreInfoTable =>
-      array(
+      [
         'dao' => 'CRM_Contact_DAO_Contact',
         'fields' =>
-        array(
+        [
           $this->_coreTypeCol =>
-          array(
+          [
             'type' => CRM_Report_FORM::OP_STRING,
             'required' => TRUE,
             'title' => ts('Constituent Type'),
-          ),
+          ],
           $this->_coreOtherCol =>
-          array(
+          [
             'no_display' => TRUE,
             'type' => CRM_Report_Form::OP_STRING,
             'required' => TRUE,
-          ),
-        ),
+          ],
+        ],
         'grouping' => 'contact-fields',
-      ),
+      ],
       'civicrm_group' =>
-      array(
+      [
         'dao' => 'CRM_Contact_DAO_GroupContact',
         'alias' => 'cgroup',
         'filters' =>
-        array(
+        [
           'gid' =>
-          array(
+          [
             'name' => 'group_id',
             'title' => ts('Group'),
             'operatorType' => CRM_Report_Form::OP_MULTISELECT,
             'group' => TRUE,
             'options' => CRM_Core_PseudoConstant::group(),
-          ),
-        ),
-      ),
-    );
+          ],
+        ],
+      ],
+    ];
   }
 
-  function preProcess() {
+  public function preProcess() {
     parent::preProcess();
     $reportDate = CRM_Utils_Date::customFormat(date('Y-m-d H:i'));
     $this->assign('reportTitle', "{$this->_orgName} - Call List <br /> {$reportDate}");
@@ -201,13 +201,13 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
   /**
    *  Generate WHERE clauses for SQL SELECT
    */
-  function where() {
+  public function where() {
     //  Don't list anybody who doesn't have a phone
     //  or has do_not_phone = 1
-    $clauses = array(
+    $clauses = [
       "{$this->_aliases['civicrm_contact']}.do_not_phone != 1",
       "NOT ISNULL({$this->_aliases['civicrm_phone']}.phone)",
-    );
+    ];
 
     foreach ($this->_columns as $tableName => $table) {
       //echo "where: table name $tableName<br>";
@@ -270,7 +270,7 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
   /**
    *  Process submitted form
    */
-  function postProcess() {
+  public function postProcess() {
     parent::postProcess();
   }
 
@@ -278,7 +278,7 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
    *  Convert contact type info from fields separated by \x01 to a
    *  string of fields separated by commas
    */
-  function type2str($type) {
+  public function type2str($type) {
     $typeArray = explode("\x01", $type);
     foreach ($typeArray as $key => $value) {
       if (empty($value)) {
@@ -288,7 +288,7 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
     return implode(', ', $typeArray);
   }
 
-  function alterDisplay(&$rows) {
+  public function alterDisplay(&$rows) {
     // custom code to alter rows
     $genderList = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'gender_id');
     $entryFound = FALSE;
@@ -339,7 +339,7 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
       }
     }
 
-    $columnOrder = array(
+    $columnOrder = [
       'civicrm_phone_phone',
       'civicrm_contact_display_name',
       'civicrm_address_street_address',
@@ -348,68 +348,68 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
       $this->_demoTable . '_' . $this->_demoLangCol,
       $this->_coreInfoTable . '_' . $this->_coreTypeCol,
       'civicrm_contact_id',
-    );
+    ];
     if ($this->_outputMode == 'print' || $this->_outputMode == 'pdf') {
-      $this->_columnHeaders = array(
-        'civicrm_phone_phone' => array(
+      $this->_columnHeaders = [
+        'civicrm_phone_phone' => [
           'title' => 'PHONE',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=68',
-        ),
-        'civicrm_contact_display_name' => array(
+        ],
+        'civicrm_contact_display_name' => [
           'title' => 'NAME',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=83',
-        ),
-        'civicrm_address_street_address' => array(
+        ],
+        'civicrm_address_street_address' => [
           'title' => 'ADDRESS',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=117',
-        ),
-        'civicrm_contact_birth_date' => array(
+        ],
+        'civicrm_contact_birth_date' => [
           'title' => 'AGE',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=25',
-        ),
-        'civicrm_contact_gender_id' => array(
+        ],
+        'civicrm_contact_gender_id' => [
           'title' => 'SEX',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=18',
-        ),
+        ],
         $this->_demoTable . '_' . $this->_demoLangCol =>
-        array(
+        [
           'title' => 'Lang',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=27',
-        ),
+        ],
         $this->_coreInfoTable . '_' . $this->_coreTypeCol =>
-        array(
+        [
           'title' => 'Contact Type',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=48',
-        ),
-        'notes' => array(
+        ],
+        'notes' => [
           'title' => 'NOTES',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=48',
-        ),
-        'response_codes' => array(
+        ],
+        'response_codes' => [
           'title' => 'RESPONSE CODES',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=91',
-        ),
-        'status' => array(
+        ],
+        'status' => [
           'title' => 'STATUS',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=70',
-        ),
-        'civicrm_contact_id' => array(
+        ],
+        'civicrm_contact_id' => [
           'title' => 'ID',
           'type' => CRM_Utils_Type::T_STRING,
           'class' => 'width=100',
-        ),
-      );
-      $newRows = array();
+        ],
+      ];
+      $newRows = [];
       foreach ($columnOrder as $col) {
         foreach ($rows as $rowNum => $row) {
           $newRows[$rowNum][$col] = $row[$col];
@@ -428,7 +428,7 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
     else {
       // make sure column order is same as in print mode
       $tempHeaders = $this->_columnHeaders;
-      $this->_columnHeaders = array();
+      $this->_columnHeaders = [];
       foreach ($columnOrder as $col) {
         if (array_key_exists($col, $tempHeaders)) {
           $this->_columnHeaders[$col] = $tempHeaders[$col];

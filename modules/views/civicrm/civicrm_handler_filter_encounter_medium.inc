@@ -33,8 +33,8 @@
  *
  */
 class civicrm_handler_filter_encounter_medium extends views_handler_filter_in_operator {
-  static $_encounter_medium;
-  function construct() {
+  public static $_encounter_medium;
+  public function construct() {
     parent::construct();
     if (!self::$_encounter_medium) {
       if (!civicrm_initialize()) {
@@ -45,10 +45,10 @@ class civicrm_handler_filter_encounter_medium extends views_handler_filter_in_op
     }
   }
 
-  function get_value_options() {
+  public function get_value_options() {
     if (!isset($this->value_options)) {
       $this->value_title = t('Encounter Medium');
-      $options = array();
+      $options = [];
       foreach (self::$_encounter_medium as $id => $name) {
         $options[$id] = $name;
       }

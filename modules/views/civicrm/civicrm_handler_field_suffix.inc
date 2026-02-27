@@ -30,8 +30,8 @@
  *
  */
 class civicrm_handler_field_suffix extends views_handler_field {
-  static $_individualSuffix;
-  function construct() {
+  public static $_individualSuffix;
+  public function construct() {
     parent::construct();
     if (!self::$_individualSuffix) {
       if (!civicrm_initialize()) {
@@ -42,7 +42,7 @@ class civicrm_handler_field_suffix extends views_handler_field {
     }
   }
 
-  function render($values) {
+  public function render($values) {
     $lid = $values->{$this->field_alias};
     if (empty($lid) ||
       (int ) $lid <= 0

@@ -70,13 +70,13 @@ function civicrm_rules_events_argument_civicrm_event($eventobj) {
     //todo BAO POST hook leaves created_id blank, the api call is a work-around for now
     if (empty($event->created_id)) {
       require_once 'api/api.php';
-      $result = civicrm_api('Event', 'get', array('version' => 3, 'id' => $event->id, 'sequential' => 1));
+      $result = civicrm_api('Event', 'get', ['version' => 3, 'id' => $event->id, 'sequential' => 1]);
       if (!CRM_Utils_Array::value('is_error', $result) && CRM_Utils_Array::value('created_id', $result['values'][0])) {
-        $contact = civicrm_api('UFMatch', 'get', array('version' => 3, 'contact_id' => $result['values'][0]['created_id'], 'sequential' => 1));
+        $contact = civicrm_api('UFMatch', 'get', ['version' => 3, 'contact_id' => $result['values'][0]['created_id'], 'sequential' => 1]);
       }
     }
     else {
-      $contact = civicrm_api('UFMatch', 'get', array('version' => 3, 'contact_id' => $event->created_id, 'sequential' => 1));
+      $contact = civicrm_api('UFMatch', 'get', ['version' => 3, 'contact_id' => $event->created_id, 'sequential' => 1]);
     }
   }
 

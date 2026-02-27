@@ -30,26 +30,26 @@
  */
 class civicrm_handler_filter_group_status extends views_handler_filter_in_operator {
 
-  static $groupContactStatus = NULL;
-  function construct() {
+  public static $groupContactStatus = NULL;
+  public function construct() {
     parent::construct();
 
     if (!self::$groupContactStatus) {
       if (!civicrm_initialize()) {
         return;
       }
-      self::$groupContactStatus = array(
+      self::$groupContactStatus = [
         0 => 'Added',
         1 => 'Removed',
         2 => 'Pending',
-      );
+      ];
     }
   }
 
-  function get_value_options() {
+  public function get_value_options() {
     if (!isset($this->value_options)) {
       $this->value_title = t('Contact Group Status');
-      $options = array();
+      $options = [];
       foreach (self::$groupContactStatus as $id => $name) {
         $options[$name] = $name;
       }

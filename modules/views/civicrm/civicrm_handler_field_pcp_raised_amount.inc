@@ -29,7 +29,7 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_pcp_raised_amount extends views_handler_field {
-  function construct() {
+  public function construct() {
     parent::construct();
     if (!civicrm_initialize()) {
       return;
@@ -37,30 +37,30 @@ class civicrm_handler_field_pcp_raised_amount extends views_handler_field {
     require_once 'CRM/Utils/Money.php';
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
-    $options['raised_amount_type'] = array(
+    $options['raised_amount_type'] = [
       'default' => 'amount',
-    );
+    ];
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
-    $form['raised_amount_type'] = array(
+  public function options_form(&$form, &$form_state) {
+    $form['raised_amount_type'] = [
       '#type' => 'select',
       '#title' => 'Raised Amount Type',
       '#default_value' => $this->options['raised_amount_type'],
-      '#options' => array(
+      '#options' => [
         'amount' => 'Amount',
         'amount_per_contact' => 'Amount per Contact',
         'num_contact' => 'Number of Contacts',
         'num_contribution' => 'Number of Contributions',
-      ),
-    );
+      ],
+    ];
     parent::options_form($form, $form_state);
   }
 
-  function render($values) {
+  public function render($values) {
     $raised_amount_type = !empty($this->options['raised_amount_type']) ? $this->options['raised_amount_type'] : 'amount';
     // retrieve the value of the "real field"
     $pcp_id = $values->{$this->field_alias};

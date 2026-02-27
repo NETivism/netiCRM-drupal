@@ -45,7 +45,7 @@ function civicrmtheme_enable() {
  */
 function civicrmtheme_install() {
   $link = l(t('Administer > Appearance > Administration theme'), 'admin/appearance');
-  drupal_set_message(t("CiviCRM theme configuration setting is available under !link", array('!link' => $link)));
+  drupal_set_message(t("CiviCRM theme configuration setting is available under !link", ['!link' => $link]));
 }
 
 /**

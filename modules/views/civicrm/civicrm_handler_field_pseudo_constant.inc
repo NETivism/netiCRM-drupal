@@ -33,7 +33,7 @@
 class civicrm_handler_field_pseudo_constant extends views_handler_field {
   public $_pseudo_constant;
 
-  function construct() {
+  public function construct() {
     parent::construct();
     parent::construct();
     if (!civicrm_initialize() ||
@@ -48,14 +48,14 @@ class civicrm_handler_field_pseudo_constant extends views_handler_field {
       $pseudo_args = $this->definition['pseudo args'];
     }
     else {
-      $pseudo_args = array();
+      $pseudo_args = [];
     }
 
     // Include and call the Pseudo Class method
     $this->_pseudo_constant = call_user_func_array($this->definition['pseudo class'] . "::" . $this->definition['pseudo method'], $pseudo_args);
   }
 
-  function render($values) {
+  public function render($values) {
     civicrm_initialize();
     if (!empty($values->{$this->field_alias})) {
       return ts($this->_pseudo_constant[$values->{$this->field_alias}]);

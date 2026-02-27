@@ -9,7 +9,7 @@ module_load_include('inc', 'webform_civicrm', 'includes/wf_crm_webform_base');
 
 class wf_crm_webform_ajax extends wf_crm_webform_base {
   
-  function __construct() {
+  public function __construct() {
     civicrm_initialize();
   }
 
@@ -17,9 +17,9 @@ class wf_crm_webform_ajax extends wf_crm_webform_base {
    * Populate a state list based on chosen country
    * @param string $input
    */
-  function stateProvince($input) {
+  public function stateProvince($input) {
     if (!$input || (intval($input) != $input && $input != 'default')) {
-      drupal_json_output(array('' => t('- first choose a country -')));
+      drupal_json_output(['' => t('- first choose a country -')]);
       exit();
     }
     drupal_json_output(wf_crm_get_states($input));
@@ -30,13 +30,13 @@ class wf_crm_webform_ajax extends wf_crm_webform_base {
    * Populate a county list based on chosen state
    * @param string $input
    */
-  function county($input) {
+  public function county($input) {
     if (strpos($input, '-')) {
       list($state, $country) = explode('-', $input);
-      $params = array(
+      $params = [
         'field' => 'county_id',
         'state_province_id' => wf_crm_state_abbr($state, 'id', $country)
-      );
+      ];
       drupal_json_output(wf_crm_apivalues('address', 'getoptions', $params));
       exit();
     }
@@ -46,7 +46,7 @@ class wf_crm_webform_ajax extends wf_crm_webform_base {
    * Load one or more contacts via ajax
    * @param $key
    */
-  function contactAjax($key) {
+  public function contactAjax($key) {
     module_load_include('inc', 'webform_civicrm', 'includes/contact_component');
     if (empty($_GET['str']) && (empty($_GET['load']) || empty($_GET['cid']))) {
       exit();
@@ -61,7 +61,7 @@ class wf_crm_webform_ajax extends wf_crm_webform_base {
     $filters = wf_crm_search_filters($this->node, $component);
     // Bypass filters when choosing contact on component edit form
     if (!empty($_GET['admin']) && wf_crm_admin_access($this->node)) {
-      $filters = array('check_permissions' => 1, 'is_deleted' => 0, 'contact_type' => $filters['contact_type']);
+      $filters = ['check_permissions' => 1, 'is_deleted' => 0, 'contact_type' => $filters['contact_type']];
       $component['extra']['allow_create'] = 0;
     }
     // Autocomplete contact names
@@ -72,7 +72,7 @@ class wf_crm_webform_ajax extends wf_crm_webform_base {
       exit();
     }
     // Load contact by id
-    $data = array();
+    $data = [];
     if ($name = wf_crm_contact_access($component, $filters, $_GET['cid'])) {
       if ($_GET['load'] == 'name') {
         if ($_GET['cid'][0] === '-') {
@@ -101,7 +101,7 @@ class wf_crm_webform_ajax extends wf_crm_webform_base {
           if ($i == $c && $ent == 'contact' && isset($contact[$table][$n][$field])) {
             $type = ($table == 'contact' && strpos($field, 'name')) ? 'name' : $table;
             // Exclude blank and hidden fields to save bandwidth
-            if ($contact[$table][$n][$field] !== '' && $contact[$table][$n][$field] !== array() && !in_array($type, $component['extra']['hide_fields'])) {
+            if ($contact[$table][$n][$field] !== '' && $contact[$table][$n][$field] !== [] && !in_array($type, $component['extra']['hide_fields'])) {
               $val = $contact[$table][$n][$field];
               // Explode multivalue strings
               if (is_string($val) && strpos($val, $sp) !== FALSE) {
@@ -140,7 +140,7 @@ class wf_crm_webform_ajax extends wf_crm_webform_base {
       return FALSE;
     }
     if (variable_get('webform_submission_access_control', 1)) {
-      $allowed_roles = array();
+      $allowed_roles = [];
       foreach ($this->node->webform['roles'] as $rid) {
         $allowed_roles[$rid] = isset($user->roles[$rid]) ? TRUE : FALSE;
       }

@@ -42,7 +42,7 @@ class civicrm_handler_filter_datetime extends views_handler_filter_date {
      * We use strtotime() to accept a wide range of date inputs and then
      * convert the unixtime back to SQL DATETIME before adding the WHERE clause
      */
-  function op_simple($field) {
+  public function op_simple($field) {
     $value = intval(strtotime($this->value['value'], 0));
 
     if (!empty($this->value['type']) && $this->value['type'] == 'offset') {
@@ -55,7 +55,7 @@ class civicrm_handler_filter_datetime extends views_handler_filter_date {
     $this->query->add_where($this->options['group'], $field, $value, $this->operator);
   }
 
-  function op_between($field) {
+  public function op_between($field) {
     if ($this->operator == 'between') {
       $a = intval(strtotime($this->value['min'], 0));
       $b = intval(strtotime($this->value['max'], 0));
@@ -83,7 +83,7 @@ class civicrm_handler_filter_datetime extends views_handler_filter_date {
     $this->query->add_where($this->options['group'], $field, $b, '<=');
   }
 
-  function format_date($unixtime) {
+  public function format_date($unixtime) {
     return date("Y-m-d H:i:s", $unixtime);
   }
 }

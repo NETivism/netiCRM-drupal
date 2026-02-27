@@ -32,8 +32,8 @@
  *
  */
 class civicrm_handler_filter_suffix extends views_handler_filter_in_operator {
-  static $_individualSuffix;
-  function construct() {
+  public static $_individualSuffix;
+  public function construct() {
     parent::construct();
     if (!self::$_individualSuffix) {
       if (!civicrm_initialize()) {
@@ -44,10 +44,10 @@ class civicrm_handler_filter_suffix extends views_handler_filter_in_operator {
     }
   }
 
-  function get_value_options() {
+  public function get_value_options() {
     if (!isset($this->value_options)) {
       $this->value_title = t('Suffix');
-      $options = array();
+      $options = [];
       foreach (self::$_individualSuffix as $id => $name) {
         $options[$id] = $name;
       }

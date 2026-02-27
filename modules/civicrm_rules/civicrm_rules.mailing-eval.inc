@@ -43,32 +43,32 @@ function civicrm_rules_rules_action_mailing_send_email($to,
   RulesPlugin$element
 ) {
   if (isset($state->variables['mailing']) && $state->variables['mailing']->id) {
-    $to = str_replace(array("\r", "\n"), ',', $to);
+    $to = str_replace(["\r", "\n"], ',', $to);
     $toEmails = explode(',', $to);
     if (empty($toEmails)) {
       return;
     }
     require_once 'CRM/Utils/Token.php';
-    $tokens['mailing'] = array(
+    $tokens['mailing'] = [
       'mailing.editUrl',
       'mailing.scheduleUrl',
       'mailing.html',
       'mailing.creatorEmail',
       'mailing.creator',
-    );
+    ];
 
-    $params            = array();
-    $params['from']    = !empty($from) ? str_replace(array(
-      "\r", "\n"), '', $from) : 'Admin';
+    $params            = [];
+    $params['from']    = !empty($from) ? str_replace([
+      "\r", "\n"], '', $from) : 'Admin';
     $params['subject'] = CRM_Utils_Token::replaceMailingTokens($subject, $state->variables['mailing'], NULL, $tokens);
     $params['html']    = CRM_Utils_Token::replaceMailingTokens($message, $state->variables['mailing'], NULL, $tokens);
 
     // also allow some user permission tokens for the toEmail
-    $tokens['user'] = array(
+    $tokens['user'] = [
       'user.permission-schedule mailings',
       'user.permission-create mailings',
       'user.permission-approve mailings',
-    );
+    ];
     foreach ($toEmails as $toEmail) {
       $params['toEmail'] = CRM_Utils_Token::replaceMailingTokens($toEmail, $state->variables['mailing'], NULL, $tokens);
 

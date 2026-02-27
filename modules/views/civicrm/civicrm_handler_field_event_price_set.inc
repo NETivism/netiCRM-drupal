@@ -33,17 +33,17 @@
  *
  */
 class civicrm_handler_field_event_price_set extends views_handler_field_prerender_list {
-  function construct() {
+  public function construct() {
     parent::construct();
-    $this->additional_fields['event_page_id'] = array('table' => 'civicrm_event_page', 'field' => 'id');
+    $this->additional_fields['event_page_id'] = ['table' => 'civicrm_event_page', 'field' => 'id'];
   }
 
-  function query() {
+  public function query() {
     $this->add_additional_fields();
     $this->field_alias = $this->aliases['event_page_id'];
   }
 
-  function pre_render($values) {
+  public function pre_render($values) {
 
     if (!civicrm_initialize()) {
       return;
@@ -53,8 +53,8 @@ class civicrm_handler_field_event_price_set extends views_handler_field_prerende
     require_once 'CRM/Core/OptionGroup.php';
     require_once 'CRM/Core/BAO/Discount.php';
 
-    $eventPageIDs = array();
-    $this->items = array();
+    $eventPageIDs = [];
+    $this->items = [];
 
     foreach ($values as $result) {
       $eventPageIDs[] = $result->{$this->aliases['event_page_id']};
@@ -63,7 +63,7 @@ class civicrm_handler_field_event_price_set extends views_handler_field_prerende
 
     if ($eventPageIDs) {
       foreach ($eventPageIDs as $eventPageID) {
-        $priceSet = array();
+        $priceSet = [];
 
 
         if (isset($eventPageID)) {

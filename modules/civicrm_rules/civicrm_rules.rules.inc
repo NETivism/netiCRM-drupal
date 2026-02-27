@@ -42,12 +42,12 @@ require_once 'civicrm_rules.participant-eval.inc';
  * Implements hook_rules_file_info() on behalf of the user module.
  */
 function civicrm_rules_rules_file_info() {
-  return array(
+  return [
     'civicrm_rules.contact-eval',
     'civicrm_rules.mailing-eval',
     'civicrm_rules.event-eval',
     'civicrm_rules.participant-eval',
-  );
+  ];
 }
 
 /**

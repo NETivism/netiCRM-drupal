@@ -34,17 +34,17 @@
  *   the relationship.
  */
 class civicrm_handler_relationship extends views_handler_relationship {
-  static $_relationshipType;
+  public static $_relationshipType;
 
   /**
    * Init handler to let relationships live on tables other than
    * the table they operate on.
    */
-  function init(&$view, &$options) {
+  public function init(&$view, &$options) {
     parent::init($view, $options);
   }
 
-  function construct() {
+  public function construct() {
     parent::construct();
     if (!civicrm_initialize()) {
       return;
@@ -54,7 +54,7 @@ class civicrm_handler_relationship extends views_handler_relationship {
 
     // relationshipType() returns information about relations as array with fields
     // 'name_a_b', 'name_b_a', 'contact_type_a' and 'contact_type_b'.
-    $options = array(0 => 'Any');
+    $options = [0 => 'Any'];
     foreach ($relationshipType_array as $id => $value_array) {
       if ($this->definition['real field'] == 'contact_id_b') {
         $options[$id] = $value_array['name_b_a'];
@@ -70,19 +70,19 @@ class civicrm_handler_relationship extends views_handler_relationship {
   /**
    * Get this field's label.
    */
-  function label() {
+  public function label() {
     if (!isset($this->options['label'])) {
       return '';
     }
     return $this->options['label'];
   }
 
-  function option_definition() {
+  public function option_definition() {
     $options = parent::option_definition();
     $label = !empty($this->definition['label']) ? $this->definition['label'] : $this->definition['title'];
-    $options['label'] = array('default' => $label, 'translatable' => TRUE);
-    $options['relationship_type'] = array('default' => 0);
-    $options['relationship_state'] = array('default' => 1);
+    $options['label'] = ['default' => $label, 'translatable' => TRUE];
+    $options['relationship_type'] = ['default' => 0];
+    $options['relationship_state'] = ['default' => 1];
     return $options;
   }
 
@@ -90,35 +90,35 @@ class civicrm_handler_relationship extends views_handler_relationship {
    * Default options form that provides the label widget that all fields
    * should have.
    */
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    $form['label'] = array(
+    $form['label'] = [
       '#type' => 'textfield',
       '#title' => t('Identifier'),
-      '#default_value' => isset($this->options['label']) ? $this->options['label'] : $this->definition['label'],
+      '#default_value' => $this->options['label'] ?? $this->definition['label'],
       '#description' => t('Edit the administrative label displayed when referencing this relationship form filters, etc.'),
-    );
+    ];
 
-    $form['relationship_type'] = array(
+    $form['relationship_type'] = [
       '#type' => 'select',
       '#title' => 'Choose a specific relationship type',
       '#options' => self::$_relationshipType,
       '#description' => t('Use this drop down to limit this relatioship to a specific type of CiviCRM relationship'),
       '#default_value' => $this->options['relationship_type'],
-    );
+    ];
 
-    $form['relationship_state'] = array(
+    $form['relationship_state'] = [
       '#type' => 'checkbox',
       '#title' => t('Limit results only to active relationships?'),
       '#default_value' => $this->options['relationship_state'],
       '#description' => t('Exclude relationships that are inactive.')
-    );
+    ];
   }
 
   /**
    * Called to implement a relationship in a query.
    */
-  function query() {
+  public function query() {
 
     // Figure out what base table this relationship brings to the party.
     $table_data        = views_fetch_data($this->definition['base']);
@@ -156,21 +156,21 @@ class civicrm_handler_relationship extends views_handler_relationship {
 
     // Add a join condition to the on clause to narrow down the relationship type shown
     if (isset($this->options['relationship_type']) && $this->options['relationship_type']) {
-      $this->query->table_queue[$this->table_alias]['join']->extra[] = array(
+      $this->query->table_queue[$this->table_alias]['join']->extra[] = [
         'value' => $this->options['relationship_type'],
         'numeric' => TRUE,
         'field' => 'relationship_type_id',
         'operator' => '=',
-      );
+      ];
     }
 
     if (isset($this->options['relationship_state']) && $this->options['relationship_state']) {
-      $this->query->table_queue[$this->table_alias]['join']->extra[] = array(
+      $this->query->table_queue[$this->table_alias]['join']->extra[] = [
         'value' => 1,
         'numeric' => TRUE,
         'field' => 'is_active',
         'operator' => '=',
-      );
+      ];
     }
 
     // use a short alias for this:

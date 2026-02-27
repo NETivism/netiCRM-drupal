@@ -31,8 +31,8 @@
  *
  */
 class civicrm_handler_field_relationship_type extends views_handler_field {
-  static $_relationshipType;
-  function construct() {
+  public static $_relationshipType;
+  public function construct() {
     parent::construct();
     if (!self::$_relationshipType) {
       if (!civicrm_initialize()) {
@@ -45,7 +45,7 @@ class civicrm_handler_field_relationship_type extends views_handler_field {
       // 'name_a_b', 'name_b_a', 'contact_type_a' and 'contact_type_b'.
       // We keep just 'name_a_b' for simplicity.
 
-      $options = array();
+      $options = [];
       foreach ($relationshipType_array as $id => $value_array) {
         $options[$id] = $value_array['name_a_b'];
       }
@@ -54,7 +54,7 @@ class civicrm_handler_field_relationship_type extends views_handler_field {
     }
   }
 
-  function render($values) {
+  public function render($values) {
     $lid = $values->{$this->field_alias};
     if (empty($lid) ||
       (int ) $lid <= 0

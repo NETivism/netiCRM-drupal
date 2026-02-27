@@ -36,7 +36,7 @@
  * Get all available themes.
  */
 function civicrmtheme_list_themes() {
-  $theme_list = array();
+  $theme_list = [];
   // Get current list of themes.
   $themes = system_rebuild_theme_data();
   uasort($themes, 'system_sort_modules_by_info_name');
@@ -56,32 +56,32 @@ function civicrmtheme_list_themes() {
  */
 function civicrmtheme_form_system_themes_admin_form_alter(&$form, $form_state) {
   // Define a fieldset for civicrm theme setting section
-  $form['admin_theme']['civicrm'] = array(
+  $form['admin_theme']['civicrm'] = [
     '#type' => 'fieldset',
     '#title' => t('CiviCRM'),
     '#collapsible' => TRUE,
     '#description' => t('Choose theme for CiviCRM.'),
-  );
+  ];
 
   $theme_list = civicrmtheme_list_themes();
 
-  $form['admin_theme']['civicrm']['civicrm_admin'] = array(
+  $form['admin_theme']['civicrm']['civicrm_admin'] = [
     '#type' => 'select',
-    '#options' => array(
-      0 => t('Default theme')) + $theme_list,
+    '#options' => [
+      0 => t('Default theme')] + $theme_list,
     '#title' => t('CiviCRM Administration theme'),
     '#description' => t('Choose theme for CiviCRM administration/backend pages.'),
     '#default_value' => variable_get('civicrmtheme_theme_admin', 0),
-  );
+  ];
 
-  $form['admin_theme']['civicrm']['civicrm_public'] = array(
+  $form['admin_theme']['civicrm']['civicrm_public'] = [
     '#type' => 'select',
-    '#options' => array(
-      0 => t('Default theme')) + $theme_list,
+    '#options' => [
+      0 => t('Default theme')] + $theme_list,
     '#title' => t('CiviCRM Public theme'),
     '#description' => t('Choose theme for CiviCRM frontend pages.'),
     '#default_value' => variable_get('civicrmtheme_theme_public', 0),
-  );
+  ];
 
   // Add extra submit
   $form['#submit'][] = 'civicrmtheme_system_themes_admin_form_submit';
@@ -120,9 +120,9 @@ function civicrmtheme_custom_theme() {
 
   // Get the menu for above URL.
   $item = CRM_Core_Menu::get($path);
-  if (in_array($path, array(
+  if (in_array($path, [
     'civicrm/contribute/payment',
-  ))) {
+  ])) {
     $item['is_public'] = TRUE;
   }
 

@@ -29,11 +29,11 @@
  * @ingroup civicrm_field_handlers
  */
 class civicrm_handler_field_money extends views_handler_field {
-  function construct() {
+  public function construct() {
     parent::construct();
   }
 
-  function render($values) {
+  public function render($values) {
     if (isset($values->civicrm_pcp_currency) && !empty($values->civicrm_pcp_currency)) {
       $currency = $values->civicrm_pcp_currency;
     }

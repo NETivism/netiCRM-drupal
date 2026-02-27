@@ -43,15 +43,15 @@
 require_once 'civicrm_rules_utils.inc';
 function civicrm_rules_rules_action_contact_send_email($to, $subject, $message, $from = NULL, $settings, RulesState$state, RulesPlugin$element) {
 
-  $to = str_replace(array("\r", "\n"), ',', $to);
+  $to = str_replace(["\r", "\n"], ',', $to);
   $toEmails = explode(',', $to);
   if (empty($toEmails)) {
     return;
   }
   foreach ($toEmails as $toEmail) {
-    $params            = array();
-    $params['from']    = !empty($from) ? str_replace(array(
-      "\r", "\n"), '', $from) : 'Admin';
+    $params            = [];
+    $params['from']    = !empty($from) ? str_replace([
+      "\r", "\n"], '', $from) : 'Admin';
     $params['toEmail'] = $toEmail;
     $params['subject'] = $subject;
     $params['text']    = is_array($message) ? implode("\n", $message) : $message;
@@ -71,7 +71,7 @@ function civicrm_rules_rules_action_add_to_group($contact, $settings) {
     foreach ($settings as $gid) {
       _civicrm_rules_group_contact($contactId, $gid);
     }
-    return array('contact' => $contact);
+    return ['contact' => $contact];
   }
 }
 
@@ -84,7 +84,7 @@ function civicrm_rules_rules_action_remove_from_group($contact, $settings) {
     foreach ($settings as $gid) {
       _civicrm_rules_group_contact($contactId, $gid, 'delete');
     }
-    return array('contact' => $contact);
+    return ['contact' => $contact];
   }
 }
 
@@ -93,20 +93,20 @@ function civicrm_rules_rules_action_remove_from_group($contact, $settings) {
  * FIX ME: This function is not called, hence can be deleted
  */
 function civicrm_rules_rules_contact_create($first_name, $last_name, $email) {
-  $params = array(
+  $params = [
     'first_name' => $first_name,
     'last_name' => $last_name,
     'email' => $email,
     'version' => 3,
-  );
+  ];
 
   $contact = civicrm_api('contact', 'create', $params);
 
   if (!$contact['is_error']) {
-    return array('contact' => _civicrm_rules_load_contact($contact['id']));
+    return ['contact' => _civicrm_rules_load_contact($contact['id'])];
   }
   else {
-    return array('contact' => NULL);
+    return ['contact' => NULL];
   }
 }
 

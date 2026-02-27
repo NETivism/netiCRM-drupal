@@ -74,7 +74,7 @@ function civicrm_drupal_create_user($email, $rid = NULL) {
   $email = $dao->escape($email);
 
   // Default values for new user
-  $params = array();
+  $params = [];
   //WARNING -- this is likely *wrong* since it will crash Drupal 6.
   //calling conventions for Drupal 7 are different, as well.
   //$params['uid']     = db_next_id('{users}_uid');
@@ -140,7 +140,7 @@ function civicrm_drupal_is_user_verified($id) {
     return FALSE;
   }
 
-  $params = array();
+  $params = [];
   $params['uid'] = $id;
 
   $user = user_load($params);
@@ -172,14 +172,14 @@ function civicrm_drupal_user_update_and_redirect($params) {
     return FALSE;
   }
 
-  $update           = array();
+  $update           = [];
   $update['status'] = 1;
   $update['pass']   = $params['password'];
 
   $user = user_save($user, $update);
 
   // Login the user
-  $edit = array();
+  $edit = [];
   user_module_invoke('login', $edit, $user);
 
   // redirect user to locker

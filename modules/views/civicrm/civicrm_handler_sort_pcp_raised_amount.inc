@@ -28,7 +28,7 @@
  *
  */
 class civicrm_handler_sort_pcp_raised_amount extends views_handler_sort {
-  function query() {
+  public function query() {
     $this->ensure_my_table();
 
     // @see CRM_PCP_BAO_PCP::thermoMeter for the source of this SQL
