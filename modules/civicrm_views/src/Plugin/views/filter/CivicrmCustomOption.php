@@ -14,7 +14,7 @@ use Drupal\civicrm\Civicrm;
  */
 class CivicrmCustomOption extends CivicrmInOperator {
 
-  public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL){
+  public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL){
     parent::init($view, $display, $options);
     $this->html_type=$this->definition['pseudo info']['html_type'];
   }

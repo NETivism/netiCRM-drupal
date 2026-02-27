@@ -32,7 +32,7 @@ class UserProfile extends FormBase  {
     return 'civicrm_user_profile';
   }
 
-  public function buildForm(array $form, FormStateInterface $form_state, AccountInterface $user = NULL, $profile = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?AccountInterface $user = NULL, $profile = NULL) {
     // Make the controller state available to form overrides.
     $form_state->set('controller', $this);
     $this->user = $user;
