@@ -289,7 +289,6 @@ function _civicrm_campaign_data(&$data, $enabled) {
   // Add Support of Survey Fields.
   $data['civicrm_survey']['table']['group'] = t('CiviCRM Surveys');
 
-
   $data['civicrm_survey']['table']['base'] = [
     // Governs the whole mozilla
     'field' => 'id',
@@ -340,8 +339,6 @@ function _civicrm_campaign_data(&$data, $enabled) {
       'label' => t('Survey -> Campaign'),
     ],
   ];
-
-
 
   //Activity Type
   $data['civicrm_survey']['activity_type'] = [
@@ -408,4 +405,3 @@ function _civicrm_campaign_data(&$data, $enabled) {
   //$skipFields = array( );
   civicrm_views_add_fields($fields, $data['civicrm_survey'], 'civicrm_survey');
 }
-

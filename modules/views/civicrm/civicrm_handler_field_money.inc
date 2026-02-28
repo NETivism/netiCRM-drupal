@@ -43,5 +43,3 @@ class civicrm_handler_field_money extends views_handler_field {
     return CRM_Utils_Money::format($values->{$this->field_alias}, $currency);
   }
 }
-
-

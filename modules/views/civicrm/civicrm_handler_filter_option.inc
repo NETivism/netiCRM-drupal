@@ -37,5 +37,3 @@ class civicrm_handler_filter_option extends views_handler_filter_in_operator {
     }
   }
 }
-
-

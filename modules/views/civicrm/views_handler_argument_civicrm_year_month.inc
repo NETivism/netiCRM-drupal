@@ -58,4 +58,3 @@ class views_handler_argument_civicrm_year_month extends views_handler_argument_d
     }
   }
 }
-

@@ -25,7 +25,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  * CiviCRM Views Integration

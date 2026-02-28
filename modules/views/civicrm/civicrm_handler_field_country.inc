@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  *
@@ -79,4 +78,3 @@ class civicrm_handler_field_country extends civicrm_handler_field_address {
     ];
   }
 }
-

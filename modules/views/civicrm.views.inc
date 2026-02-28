@@ -29,7 +29,6 @@
    *
    */
 
-
 /*
    *  civicrm.views.inc  Called from civicrm.module, gives the views cache all information it needs
    *                     to access CiviCRM's database for use in Views, as well as referencing the
@@ -81,7 +80,7 @@ function civicrm_views_data_alter(&$data) {
   // Get list of enabled CiviCRM components
   $enabled = CRM_Core_Component::getEnabledComponents();
 
- // $data = array();
+  // $data = array();
   // Load Core CiviCRM data
   _civicrm_core_data($data, $enabled);
 
@@ -176,7 +175,8 @@ function civicrm_views_add_fields(&$fields, &$data, $tableName, &$skipFields = N
       CRM_Utils_Array::value($name, $skipFields) ||
       CRM_Utils_Array::value($name, $data) ||
       !isset($value['title']) ||
-      (isset($value['where']) &&
+      (
+        isset($value['where']) &&
         substr($value['where'], 0, strlen($tableName) + 1) != "{$tableName}."
       )
     ) {
@@ -364,7 +364,7 @@ function civicrm_views_custom_data_cache(&$data, $entity_type, $groupID, $subTyp
   foreach ($tree as $groupkey => $currentgroup) {
     if ($groupkey == 'info') {
       return $data;
-    // dodges an invalid argument call after all the groups go through // have a look at what $tree outputs to to see why.
+      // dodges an invalid argument call after all the groups go through // have a look at what $tree outputs to to see why.
     }
     $data[$currentgroup['table_name']]['table']['group'] = t('CiviCRM Custom: ') . $currentgroup['title'];
 
@@ -412,15 +412,18 @@ function civicrm_views_custom_data_cache(&$data, $entity_type, $groupID, $subTyp
       }
       // Populates help text so there aren't     miles of error: Missing Help
 
-
-      if (in_array($currentfield['html_type'],
-          $customHTMLTypes ) ) {
+      if (in_array(
+        $currentfield['html_type'],
+        $customHTMLTypes
+      )) {
         $handler = ['handler' => 'civicrm_handler_field_custom',
                    'click sortable' => TRUE,];
-      } else if ( $currentfield['html_type'] == 'File' ) {
+      }
+      elseif ($currentfield['html_type'] == 'File') {
         $handler = ['handler' => 'civicrm_handler_field_custom_file',
                    'click sortable' => TRUE,];
-      } else {
+      }
+      else {
         $handler = civicrm_get_field_handler($currentfield['data_type']);
       }
 
@@ -800,4 +803,3 @@ function civicrm_views_plugins() {
   }
   return $data;
 }
-

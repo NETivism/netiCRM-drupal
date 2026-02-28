@@ -43,5 +43,3 @@ class civicrm_handler_field_option extends civicrm_handler_field {
     return self::$_options[$values->{$this->field_alias}];
   }
 }
-
-

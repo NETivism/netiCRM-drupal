@@ -270,7 +270,7 @@ function _webform_edit_civicrm_contact($component) {
 }
 
 function wf_crm_contact_component_form_help(&$form) {
-  foreach(element_children($form) as $element) {
+  foreach (element_children($form) as $element) {
     if (is_array($form[$element])) {
       wf_crm_contact_component_form_help($form[$element]);
       if (method_exists('wf_crm_admin_help', "contact_component_$element")) {
@@ -556,8 +556,10 @@ function wf_crm_contact_search($node, $component, $params, $str = NULL) {
       if (wf_crm_admin_access($node) && node_is_page($node)) {
         drupal_set_message(
           '<strong>' . t('Maximum contacts exceeded, list truncated.') .'</strong><br>' .
-          t('The field "@field" cannot show more than !limit contacts because it is a select list. Recommend switching to autocomplete widget in <a !link>component settings</a>.',
-            ['!limit' => $limit, '@field' => $component['name'], '!link' => 'href="' . url("node/{$node->nid}/webform/components/{$component['cid']}") . '"']),
+          t(
+            'The field "@field" cannot show more than !limit contacts because it is a select list. Recommend switching to autocomplete widget in <a !link>component settings</a>.',
+            ['!limit' => $limit, '@field' => $component['name'], '!link' => 'href="' . url("node/{$node->nid}/webform/components/{$component['cid']}") . '"']
+          ),
           'warning'
         );
       }
@@ -648,7 +650,7 @@ function wf_crm_contact_fields($node, $con) {
   $sets['name'] = ['label' => t('Name')];
   foreach ($node->webform['components'] as $f) {
     if ($pieces = wf_crm_explode_key($f['form_key'])) {
-      list( , $c, $ent, , $table, $field) = $pieces;
+      list(, $c, $ent, , $table, $field) = $pieces;
       if ($ent == 'contact' && $c == $con && isset($sets[$table])) {
         // Separate name from other contact fields
         if ($table == 'contact' && strpos($field, 'name')) {
@@ -688,14 +690,14 @@ function wf_crm_update_existing_component(&$component, $enabled, $data) {
 
 /**
  * Get a contact's relations of certain types
- * 
+ *
  * @param cid
  *   Contact id
  * @param types
  *   Array of relationship_type_ids
  * @param $current
  *   Limit to current & enabled relations?
- * 
+ *
  * @return array
  */
 function wf_crm_find_relations($cid, $types, $current = TRUE) {
@@ -751,12 +753,12 @@ function wf_crm_find_relations($cid, $types, $current = TRUE) {
 
 /**
  * Format filters for the contact get api
- * 
+ *
  * @param $node
  *   Webform node object
  * @param $component
  *   Webform component of type 'civicrm_contact'
- * 
+ *
  * @return array
  *   Api params
  */

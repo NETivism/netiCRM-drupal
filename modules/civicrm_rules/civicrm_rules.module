@@ -48,9 +48,10 @@ function civicrm_rules_civicrm_post($op, $objectName, $objectId, &$objectRef) {
     return;
   }
 
-  if (in_array($objectName,
-      ['Individual', 'Household', 'Organization']
-    )) {
+  if (in_array(
+    $objectName,
+    ['Individual', 'Household', 'Organization']
+  )) {
     $objectName = 'Contact';
   }
 
@@ -60,7 +61,7 @@ function civicrm_rules_civicrm_post($op, $objectName, $objectId, &$objectRef) {
     ['contact' => 'contact']
   );
 
-  if (!in_array(strtolower($objectName), $validObjects, true)) {
+  if (!in_array(strtolower($objectName), $validObjects, TRUE)) {
     return;
   }
 
@@ -217,4 +218,3 @@ function civicrm_rules_menu() {
   ];
   return $items;
 }
-

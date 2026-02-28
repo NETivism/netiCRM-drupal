@@ -805,7 +805,8 @@ class wf_crm_admin_form {
     // Handle ajax submission from "webform_tracking_mode" mini-form below
     if (!empty($_POST['webform_tracking_mode']) && $_POST['webform_tracking_mode'] == 'strict') {
       variable_set('webform_tracking_mode', 'strict');
-      drupal_set_message(t('Webform anonymous user tracking has been updated to use the strict method. You may revisit this option any time on the global <a !link>Webform Settings</a> page.',
+      drupal_set_message(t(
+        'Webform anonymous user tracking has been updated to use the strict method. You may revisit this option any time on the global <a !link>Webform Settings</a> page.',
         ['!link' => 'href="/admin/config/content/webform" target="_blank"']
       ));
     }
@@ -870,7 +871,7 @@ class wf_crm_admin_form {
       'civicrm_1_contact_1_contact_existing' => 'create_civicrm_webform_element',
     ];
   }
-  
+
   /**
    * Build a field item for the admin form
    *
@@ -982,13 +983,13 @@ class wf_crm_admin_form {
    * @param string $container
    *   Array key of the container to be created
    */
-  private function addAjaxItem($path, $control_element, $container, $class='civicrm-ajax-wrapper') {
+  private function addAjaxItem($path, $control_element, $container, $class = 'civicrm-ajax-wrapper') {
     $pathArray = explode(':', $path);
     $currentVal = &$this->form;
     foreach ($pathArray as $value) {
-      $currentVal =& $currentVal[$value];
+      $currentVal = &$currentVal[$value];
     }
-    $snippet =& $currentVal;
+    $snippet = &$currentVal;
     $path .= ':' . $container;
     $id = 'civicrm-ajax-' . str_replace([':', '_'], '-', $path);
     $snippet[$control_element]['#ajax'] = [
@@ -1016,7 +1017,7 @@ class wf_crm_admin_form {
     </div>',
     ];
   }
-  
+
   /**
    * Build $this->data array for webform settings; called while rebuilding or post-processing the admin form.
    */
@@ -1517,4 +1518,3 @@ function wf_crm_configure_form_submit($form, &$form_state) {
   $admin_form = new wf_crm_admin_form($form, $form_state, $node);
   $admin_form->postProcess();
 }
-

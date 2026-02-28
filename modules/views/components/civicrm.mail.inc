@@ -62,8 +62,6 @@ function _civicrm_mail_data(&$data, $enabled) {
     ],
   ];
 
-
-
   //CiviCRM Mailing - FIELDS
   // expose the ID to Views to allow users to drill down to a specific mailing.
   $data['civicrm_mailing']['id'] = [
@@ -315,7 +313,6 @@ function _civicrm_mail_data(&$data, $enabled) {
     ],
   ];
 
-
   // mailing_component table aliased as mailing_footer
   $data['civicrm_mailing_footer']['table']['group'] = ts('CiviCRM Mailings');
 
@@ -345,7 +342,6 @@ function _civicrm_mail_data(&$data, $enabled) {
       'click sortable' => FALSE,
     ],
   ];
-
 
   //Mailing Job table
   $data['civicrm_mailing_job']['table']['group'] = ts('CiviCRM Mailing Job');
@@ -424,7 +420,6 @@ function _civicrm_mail_data(&$data, $enabled) {
     'title' => 'End Date',
       'name' => 'end_date',
     ]);
-
 
   //Is this a test mailing
   $data['civicrm_mailing_job']['is_test'] = [
@@ -552,8 +547,6 @@ function _civicrm_mail_data(&$data, $enabled) {
     ],
   ];
 
-
-
   $data['civicrm_mailing_event_bounce']['table']['group'] = ts('CiviCRM Mailing Bounced');
 
   $data['civicrm_mailing_event_bounce']['table']['join'] = [
@@ -669,7 +662,6 @@ function _civicrm_mail_data(&$data, $enabled) {
     ],
   ];
 
-
   $data['civicrm_mailing_event_opened']['table']['group'] = ts('CiviCRM Mailing Opened');
 
   $data['civicrm_mailing_event_opened']['table']['join'] = [
@@ -718,7 +710,6 @@ function _civicrm_mail_data(&$data, $enabled) {
     ],
   ];
 
-
   $data['civicrm_mailing_event_reply']['table']['group'] = ts('CiviCRM Mailing Replied');
 
   $data['civicrm_mailing_event_reply']['table']['join'] = [
@@ -766,7 +757,6 @@ function _civicrm_mail_data(&$data, $enabled) {
       'handler' => 'views_handler_sort',
     ],
   ];
-
 
   $data['civicrm_mailing_event_unsubscribe']['table']['group'] = ts('CiviCRM Mailing Unsubscribe');
 
@@ -817,4 +807,3 @@ function _civicrm_mail_data(&$data, $enabled) {
     ],
   ];
 }
-

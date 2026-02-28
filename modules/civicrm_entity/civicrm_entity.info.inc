@@ -13,7 +13,7 @@ class CivicrmEntityMetadataController extends EntityDefaultMetadataController {
    * Return a set of properties for an entity based on the schema definition
    */
   protected function convertSchema() {
-    if(empty($this->info['base table'])){
+    if (empty($this->info['base table'])) {
       return [];
     }
     return civicrm_entity_metadata_convert_schema($this->info['base table']);

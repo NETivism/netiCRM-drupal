@@ -147,7 +147,3 @@ class civicrm_handler_field_location extends civicrm_handler_field {
     return $extra;
   }
 }
-
-
-
-

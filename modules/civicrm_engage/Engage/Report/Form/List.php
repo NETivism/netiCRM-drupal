@@ -41,14 +41,14 @@ require_once 'CRM/Core/DAO.php';
  */
 class Engage_Report_Form_List extends CRM_Report_Form {
   /*
-     * Note: In order to detect column names of a particular custom group, we need to know 
-     * custom field ID or LABEL. Since labels are less likely to change on initial setup of the module, 
+     * Note: In order to detect column names of a particular custom group, we need to know
+     * custom field ID or LABEL. Since labels are less likely to change on initial setup of the module,
      * we 'll use label constants for now.
      *
      * Please note these values 'll need to be adjusted if custom field labels are modified.
      *
      */
-  public CONST CF_CONSTITUENT_TYPE_NAME = 'constituent_type', CF_OTHER_NAME_NAME = 'other_name', CG_VOTER_INFO_TABLE = 'civicrm_value_voter_info', CF_PARTY_REG_NAME = 'party_registration', CF_VOTER_HISTORY_NAME = 'voter_history', CG_DEMOGROPHICS_TABLE = 'civicrm_value_demographics';
+  public const CF_CONSTITUENT_TYPE_NAME = 'constituent_type', CF_OTHER_NAME_NAME = 'other_name', CG_VOTER_INFO_TABLE = 'civicrm_value_voter_info', CF_PARTY_REG_NAME = 'party_registration', CF_VOTER_HISTORY_NAME = 'voter_history', CG_DEMOGROPHICS_TABLE = 'civicrm_value_demographics';
 
   /**
    *  Address information needed in output
@@ -165,7 +165,8 @@ class Engage_Report_Form_List extends CRM_Report_Form {
    *  Column in $_voterInfoTable with voter history information
    *  @var string
    */
-  protected $_vhCol; public function __construct() {
+  protected $_vhCol;
+  public function __construct() {
     // Find the invidual constituent table (varies between versions)
     $query = "SELECT table_name FROM civicrm_custom_group g" . " JOIN civicrm_custom_field f ON g.id = f.custom_group_id" . " WHERE column_name='" . self::CF_CONSTITUENT_TYPE_NAME . "' AND" . " ( g.table_name = 'civicrm_value_core_info' OR g.table_name " . " = 'civicrm_value_constituent_info' )";
     $dao = CRM_Core_DAO::executeQuery($query);
@@ -220,7 +221,6 @@ WHERE ov.option_group_id = (
       $this->_contactType[$dao->value] = $dao->label;
     }
 
-
     // ** demographics ** //
     $query = "SELECT id, table_name FROM civicrm_custom_group WHERE table_name='" . self::CG_DEMOGROPHICS_TABLE . "'";
     $dao = CRM_Core_DAO::executeQuery($query);
@@ -258,7 +258,6 @@ WHERE custom_group_id={$coreInfoTableID} AND column_name='" . self::CF_CONSTITUE
     $dao = CRM_Core_DAO::executeQuery($query);
     $dao->fetch();
     $this->_coreTypeCol = $dao->column_name;
-
 
     //  Get language option values, English on top
     $this->_languages = ['' => ''];
@@ -501,7 +500,6 @@ ORDER BY ov.label
       $this->_from .= " LEFT JOIN " . $this->_coreInfoTable . "   AS " . $this->_aliases[$this->_coreInfoTable] . " ON {$this->_aliases['civicrm_contact']}.id =" . $this->_aliases[$this->_coreInfoTable] . ".entity_id\n";
     }
 
-
     if ($this->_voterInfoField) {
       $this->_from .= " LEFT JOIN {$this->_voterInfoTable}" . "   AS {$this->_aliases[$this->_voterInfoTable]}" . " ON {$this->_aliases['civicrm_contact']}.id =" . "{$this->_aliases[$this->_voterInfoTable]}.entity_id\n";
     }
@@ -543,8 +541,10 @@ ORDER BY ov.label
   public function dob2age($myTimestamp) {
     //  Separate parts of DOB timestamp
     $matches = [];
-    preg_match('/(\d\d\d\d)-(\d\d)-(\d\d)/',
-      $myTimestamp, $matches
+    preg_match(
+      '/(\d\d\d\d)-(\d\d)-(\d\d)/',
+      $myTimestamp,
+      $matches
     );
     //var_dump($matches);
     $dobYear  = (int)$matches[1];
@@ -581,4 +581,3 @@ ORDER BY ov.label
     return $age;
   }
 }
-

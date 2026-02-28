@@ -61,4 +61,3 @@ function civicrm_rules_get_entity() {
     ],
   ];
 }
-

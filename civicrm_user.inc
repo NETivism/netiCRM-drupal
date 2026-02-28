@@ -84,7 +84,10 @@ function civicrm_user_insert(&$edit, &$user, $category = NULL) {
     civicrm_register_data($edit, $user, $category, FALSE);
   }
   else {
-    CRM_Core_BAO_UFMatch::synchronize($user, FALSE, 'Drupal',
+    CRM_Core_BAO_UFMatch::synchronize(
+      $user,
+      FALSE,
+      'Drupal',
       civicrm_get_ctype('Individual')
     );
   }
@@ -182,30 +185,30 @@ function civicrm_user_view($user, $view_mode) {
       }
       $contactURL =
   '<div class="user-page-link" id="user-page-dashboard"><i class="zmdi zmdi-accounts-list-alt"></i> ' .
-  l(ts("View Contact Dashboard"),
+  l(
+    ts("View Contact Dashboard"),
     'civicrm/user',
     ['query' => ['reset' => 1, 'id' => $userID ]]
-    ) .
+  ) .
   '</div>';
     }
     if (CRM_Core_Permission::check('access CiviCRM') && $civiPerm) {
       $contactURL .=
   '<div class="user-page-link" id="user-page-contact" ><i class="zmdi zmdi-view-dashboard"></i> ' .
-  l(ts("View Contact Record"),
+  l(
+    ts("View Contact Record"),
     'civicrm/contact/view',
     ['query' => ['reset' => 1, 'cid' => $userID ]]
-    ) .
+  ) .
   '</div>';
     }
-
 
     $ctype = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $userID, 'contact_type');
     $orgtype = NULL;
     $orgID = CRM_Contact_BAO_Relationship::currentPermittedOrganization($userID);
-    if($orgID){
+    if ($orgID) {
       $orgtype = 'Organization';
     }
-
 
     $ufGroups = CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, TRUE);
     $weight = 100;
@@ -231,7 +234,8 @@ function civicrm_user_view($user, $view_mode) {
       // CRM-3537: profile edit link
       $editURL = '';
       if (user_edit_access($user)) {
-        $editURL = '<div class="crm-section"><span class="user-page-link content" id="user-page-profile-' . $group['name'] . '" ><i class="zmdi zmdi-edit"></i>' . l(ts("Edit %1", [1 => $group['title']]),
+        $editURL = '<div class="crm-section"><span class="user-page-link content" id="user-page-profile-' . $group['name'] . '" ><i class="zmdi zmdi-edit"></i>' . l(
+          ts("Edit %1", [1 => $group['title']]),
           "user/{$user->uid}/edit/" . $group['name']
         ) . '</span></div>';
       }
@@ -283,4 +287,3 @@ function civicrm_validate_user_forms($form, &$form_state) {
   global $user;
   civicrm_validate_data($edit, $user, $category);
 }
-

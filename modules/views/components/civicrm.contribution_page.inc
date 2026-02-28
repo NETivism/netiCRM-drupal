@@ -84,7 +84,7 @@ function _civicrm_contribution_page_data(&$data, $enabled) {
       'handler' => 'views_handler_sort',
     ],
   ];
-  //Numeric: IS Active 
+  //Numeric: IS Active
   $data['civicrm_contribution_page']['is_active'] = [
     'title' => t('Is Active'),
     'field' => [

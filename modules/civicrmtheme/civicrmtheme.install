@@ -56,4 +56,3 @@ function civicrmtheme_uninstall() {
   variable_del('civicrmtheme_theme_admin');
   variable_del('civicrmtheme_theme_public');
 }
-

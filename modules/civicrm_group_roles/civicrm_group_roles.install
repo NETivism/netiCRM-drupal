@@ -25,7 +25,6 @@
 
 // $Id: civicrm_group_roles.module,v 1.1.4.2 2008/10/14 00:20:36 matt2000 Exp $
 
-
 /* @file
  * A simple module to synchronize Drupal Roles with Specified CiviCRM Groups
  */
@@ -75,11 +74,12 @@ function civicrm_group_roles_schema() {
 /**
  * Implementation of hook_uninstall().
  */
-function civicrm_group_roles_uninstall() {}
+function civicrm_group_roles_uninstall() {
+}
 
 /**
  * Update CiviGroup Roles Sync module weight to be greater than CiviCRM's.
  */
 function civicrm_group_roles_update_7400(&$sandbox) {
-    db_query("UPDATE {system} SET weight = 101 WHERE name = 'civicrm_group_roles'");
+  db_query("UPDATE {system} SET weight = 101 WHERE name = 'civicrm_group_roles'");
 }

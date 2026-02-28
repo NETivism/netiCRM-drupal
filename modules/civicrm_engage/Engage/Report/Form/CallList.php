@@ -236,7 +236,8 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
               $clause = TRUE;
             }
             elseif ($op) {
-              $clause = $this->whereClause($field,
+              $clause = $this->whereClause(
+                $field,
                 $op,
                 CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
                 CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
@@ -439,4 +440,3 @@ class Engage_Report_Form_CallList extends Engage_Report_Form_List {
     }
   }
 }
-

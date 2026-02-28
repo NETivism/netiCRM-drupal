@@ -33,7 +33,6 @@ function _civicrm_member_data(&$data, $enabled) {
   // CIVICRM Memberships are here with all the connections.
   //----------------------------------------------------------------
 
-
   $data['civicrm_membership']['table']['group'] = t('CiviCRM Member');
 
   $data['civicrm_membership']['table']['base'] = [
@@ -56,8 +55,6 @@ function _civicrm_member_data(&$data, $enabled) {
     'left_field' => 'contact_id',
     'field' => 'contact_id',
   ];
-
-
 
   //CiviCRM Memberships - FIELDS
 
@@ -151,7 +148,6 @@ function _civicrm_member_data(&$data, $enabled) {
       'name' => 'start_date',
     ]);
 
-
   //Membership end date
   $data['civicrm_membership']['end_date'] = [
     'title' => t('End Date'),
@@ -173,7 +169,6 @@ function _civicrm_member_data(&$data, $enabled) {
     'title' => 'End Date',
       'name' => 'end_date',
     ]);
-
 
   //membership Source
   $data['civicrm_membership']['source'] = [
@@ -260,8 +255,6 @@ function _civicrm_member_data(&$data, $enabled) {
       'name' => 'reminder_date',
     ]);
 
-
-
   //Numeric Membership Owner ID
   $data['civicrm_membership']['owner_membership_id'] = [
     'title' => t('Membership Owner ID'),
@@ -333,4 +326,3 @@ function _civicrm_member_data(&$data, $enabled) {
     ];
   }
 }
-

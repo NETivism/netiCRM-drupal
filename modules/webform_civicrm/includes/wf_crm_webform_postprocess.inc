@@ -217,7 +217,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       }
       // Process activity
       if (!empty($this->data['activity'][1]['activity'])) {
-       $this->processActivity();
+        $this->processActivity();
         if (!empty($this->id['act'][1])) {
           $record['activity_id'] = $this->id['act'][1];
         }
@@ -239,8 +239,8 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     $errors = form_get_errors();
     foreach ((array) $errors as $key => $error) {
       $pieces = wf_crm_explode_key(substr($key, strrpos($key, '][') + 2));
-      if($pieces) {
-        list( , $c, $ent, $n, $table, $name) = $pieces;
+      if ($pieces) {
+        list(, $c, $ent, $n, $table, $name) = $pieces;
         if ($this->isFieldHiddenByExistingContactSettings($ent, $c, $table, $n, $name)) {
           $this->unsetError($key);
         }
@@ -397,10 +397,12 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
             form_set_error($eid, '<em>' . $event['title'] . '</em>: ' . $event['full_message']);
           }
           else {
-            form_set_error($eid, format_plural($event['remaining'],
+            form_set_error($eid, format_plural(
+              $event['remaining'],
               'Sorry, you tried to register !count people for %event but there is only 1 space remaining.',
               'Sorry, you tried to register !count people for %event but there are only @count spaces remaining.',
-              ['%event' => $event['title'], '!count' => $event['count']]));
+              ['%event' => $event['title'], '!count' => $event['count']]
+            ));
           }
         }
       }
@@ -415,8 +417,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     if (!$this->multiPageDataLoaded) {
       $this->multiPageDataLoaded = TRUE;
       if (!empty($this->form_state['storage']['submitted'])
-        && wf_crm_aval($this->form_state, 'storage:page_num', 1) > 1)
-      {
+        && wf_crm_aval($this->form_state, 'storage:page_num', 1) > 1) {
         $this->rawValues += $this->form_state['storage']['submitted'];
         $this->crmValues = wf_crm_enabled_fields($this->node, $this->rawValues);
       }
@@ -521,8 +522,11 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
           }
           // Else look up the master contact's address
           elseif (!empty($this->existing_contacts[$m])) {
-            $masters = wf_civicrm_api('address', 'get',
-              ['contact_id' => $this->id['cid'][$m], 'sort' => 'is_primary DESC']);
+            $masters = wf_civicrm_api(
+              'address',
+              'get',
+              ['contact_id' => $this->id['cid'][$m], 'sort' => 'is_primary DESC']
+            );
             if (!empty($masters['values'])) {
               $params['civicrm_address'] = array_shift($masters['values']);
             }
@@ -1161,7 +1165,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       $params['details'] .= '<p>' . l(t('View Webform Submission'), 'node/' . $this->node->nid . '/submission/' . $this->submission->sid, ['absolute' => TRUE, 'alias' => TRUE]) . '</p>';
     }
     if (!empty($this->data['activity'][1]['details']['edit_link'])) {
-      $params['details'] .= '<p>' . l(t('Edit Submission'), 'node/' . $this->node->nid . '/submission/' . $this->submission->sid . '/edit',  ['absolute' => TRUE, 'alias' => TRUE]) . '</p>';
+      $params['details'] .= '<p>' . l(t('Edit Submission'), 'node/' . $this->node->nid . '/submission/' . $this->submission->sid . '/edit', ['absolute' => TRUE, 'alias' => TRUE]) . '</p>';
     }
     if (empty($params['campaign_id']) || empty($this->all_fields['activity_campaign_id'])) {
       unset($params['campaign_id']);
@@ -1526,7 +1530,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     foreach ($this->enabled as $field_key => $fid) {
       $val = $this->submissionValue($fid);
       if ($val !== FALSE) {
-        list( , $c, $ent, $n, $table, $name) = explode('_', $field_key, 6);
+        list(, $c, $ent, $n, $table, $name) = explode('_', $field_key, 6);
         // Fieldsets and existing contact fields are not strictly CiviCRM fields, so ignore
         if ($name === 'existing' || $name === 'fieldset') {
           continue;
@@ -1692,7 +1696,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       if (!isset($this->submission->data[$fid])) {
         return NULL;
       }
-      $field =& $this->submission->data[$fid];
+      $field = &$this->submission->data[$fid];
       // During submission preprocessing this is used to alter the submission
       if ($value !== NULL) {
         $field = (array) $value;

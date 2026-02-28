@@ -45,4 +45,3 @@ class views_handler_argument_civicrm_week extends views_handler_argument_date {
     return t('Week %week', ['%week' => $created]);
   }
 }
-

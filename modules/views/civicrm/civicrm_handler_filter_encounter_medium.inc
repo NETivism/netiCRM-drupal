@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  * CiviCRM Views Integration
@@ -41,7 +40,8 @@ class civicrm_handler_filter_encounter_medium extends views_handler_filter_in_op
         return;
       }
       require_once 'CRM/Core/OptionGroup.php';
-      self::$_encounter_medium = CRM_Core_OptionGroup::values('encounter_medium', FALSE);;
+      self::$_encounter_medium = CRM_Core_OptionGroup::values('encounter_medium', FALSE);
+      ;
     }
   }
 
@@ -56,4 +56,3 @@ class civicrm_handler_filter_encounter_medium extends views_handler_filter_in_op
     }
   }
 }
-

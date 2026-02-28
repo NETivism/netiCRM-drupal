@@ -8,13 +8,12 @@
  */
 
 /**
- * The versions of CiviCRM and WebForm. Min is >=.  Max is <. FALSE = no MAX  
+ * The versions of CiviCRM and WebForm. Min is >=.  Max is <. FALSE = no MAX
  */
 define('WEBFROM_CIVICRM_CIVICRM_VERSION_MIN', '4.4');
 define('WEBFROM_CIVICRM_CIVICRM_VERSION_MAX', FALSE);
 
 define('WEBFROM_CIVICRM_WEBFORM_VERSION', '4');
-
 
 /**
  * Implements hook_menu().
@@ -332,7 +331,8 @@ function webform_civicrm_civicrm_merge($type, $data, $new_id = NULL, $old_id = N
     ->condition('contact_id', '%-' . $old_id . '-%', 'LIKE')
     ->execute();
     // Update contact reference field data
-    db_query("UPDATE {webform_submitted_data} d, {webform_component} c SET d.data = :new
+    db_query(
+      "UPDATE {webform_submitted_data} d, {webform_component} c SET d.data = :new
       WHERE d.data = :old AND d.cid = c.cid AND d.nid = c.nid AND c.type = 'civicrm_contact'",
       [':new' => $new_id, ':old' => $old_id]
     );
@@ -396,7 +396,7 @@ function webform_civicrm_webform_component_presave(&$component) {
  * Implements hook_preprocess_HOOK().
  * Add CiviCRM names to webform submission results table.
  */
-function webform_civicrm_preprocess_webform_results_submissions(&$vars){
+function webform_civicrm_preprocess_webform_results_submissions(&$vars) {
   if (count($vars['table']['#rows']) && !empty($vars['node']->webform_civicrm)) {
     $access = user_access('access CiviCRM');
     $temp = $vars['table']['#header'];
@@ -536,21 +536,21 @@ function _webform_civicrm_status() {
 
   $path = drupal_get_path('module', 'civicrm') . '/civicrm.info';
   $civicrm = drupal_parse_info_file($path);
-  
+
   $path = drupal_get_path('module', 'webform') . '/webform.info';
   $webform = drupal_parse_info_file($path);
   //strip the 7.x- from version so version_compare works
   $webform['version'] = str_replace('7.x-', '', $webform['version']);
-    
-  if (version_compare($civicrm['version'], WEBFROM_CIVICRM_CIVICRM_VERSION_MIN, '>=') && 
+
+  if (version_compare($civicrm['version'], WEBFROM_CIVICRM_CIVICRM_VERSION_MIN, '>=') &&
   version_compare($webform['version'], WEBFROM_CIVICRM_WEBFORM_VERSION, '>=')) {
     $status['webform_civicrm'] = TRUE;
   }
-  
+
   // if there is a max version of CiviCRM supported, check it too
   if (WEBFROM_CIVICRM_CIVICRM_VERSION_MAX && version_compare($civicrm['version'], WEBFROM_CIVICRM_CIVICRM_VERSION_MAX, '>=')) {
     $status['webform_civicrm'] = FALSE;
   }
-  
+
   return $status;
 }

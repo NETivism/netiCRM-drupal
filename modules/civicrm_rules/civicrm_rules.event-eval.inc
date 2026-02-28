@@ -92,4 +92,3 @@ function civicrm_rules_events_argument_civicrm_event($eventobj) {
 function civicrm_rules_get_event_type_options() {
   return civicrm_rules_get_options('event_type');
 }
-

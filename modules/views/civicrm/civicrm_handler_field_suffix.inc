@@ -53,5 +53,3 @@ class civicrm_handler_field_suffix extends views_handler_field {
     return self::$_individualSuffix[$values->{$this->field_alias}];
   }
 }
-
-

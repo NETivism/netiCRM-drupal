@@ -21,7 +21,7 @@
    | GNU Affero General Public License or the licensing of CiviCRM,     |
    | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
    +--------------------------------------------------------------------+
-   
+
    **
    * @file Provides Views integration for CiviCRM Multi-Select Country custom fields
    *
@@ -75,4 +75,3 @@ class civicrm_handler_filter_state_multi extends views_handler_filter_in_operato
     $this->query->add_where_expression($this->options['group'], $clause);
   }
 }
-

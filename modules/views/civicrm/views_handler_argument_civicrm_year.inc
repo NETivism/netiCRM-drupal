@@ -37,4 +37,3 @@ class views_handler_argument_civicrm_year extends views_handler_argument_date {
     $this->formula = views_date_sql_extract('YEAR', "***table***.$this->real_field", "datetime", '0');
   }
 }
-

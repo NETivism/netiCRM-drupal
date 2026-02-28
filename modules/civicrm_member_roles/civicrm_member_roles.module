@@ -1,7 +1,6 @@
 <?php
 // $Id: civicrm_member_roles.module,v 1.3.2.4.2.5 2008/09/01 04:17:11 posco Exp $
 
-
 /**
  * Copyright (C) 2010 Neil Goodman
  * @license GNU General Public License version 2 or later
@@ -497,7 +496,8 @@ function _civicrm_member_roles_sync($ext_uid = NULL, $cid = NULL) {
   }
   $contacts = CRM_Core_DAO::executeQuery($sql, $params);
   if ($contacts->N == 0) {
-    watchdog('civicrm_member_roles',
+    watchdog(
+      'civicrm_member_roles',
       $errorMsg,
       $errorParams,
       WATCHDOG_ERROR

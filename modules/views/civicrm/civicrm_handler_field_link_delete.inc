@@ -37,11 +37,10 @@ class civicrm_handler_field_link_delete extends civicrm_handler_field_link {
   public function render($values) {
     $text = !empty($this->options['text']) ? $this->options['text'] : t('delete');
     $id = $values->{$this->aliases['id']};
-    return civicrm_views_href($text,
+    return civicrm_views_href(
+      $text,
       'civicrm/contact/delete',
       "reset=1&id=$id"
     );
   }
 }
-
-

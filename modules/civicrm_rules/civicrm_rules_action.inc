@@ -145,4 +145,3 @@ The content of the email is:
   ];
   return $items;
 }
-

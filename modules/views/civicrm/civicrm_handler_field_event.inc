@@ -45,7 +45,8 @@ class civicrm_handler_field_event extends views_handler_field_markup {
 
   public function render_link($data, $values) {
     if (!empty($this->options['link_to_event']) && user_access('view event info') && $values->id) {
-      return civicrm_views_href($data,
+      return civicrm_views_href(
+        $data,
         'civicrm/event/info',
         "reset=1&id={$values->id}"
       );
@@ -60,4 +61,3 @@ class civicrm_handler_field_event extends views_handler_field_markup {
     return $this->render_link(check_markup($values->{$this->field_alias}, $format, FALSE), $values);
   }
 }
-

@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Unchanged anonymous code contribution. No claim.
  * CiviCRM Views Integration
@@ -31,7 +30,6 @@
  * civicrm_handler_filter_datetime.inc
  *
  */
-
 
 /*
  * All the comparisons need to be done with SQL DATETIMES and not unixtime
@@ -87,5 +85,3 @@ class civicrm_handler_filter_datetime extends views_handler_filter_date {
     return date("Y-m-d H:i:s", $unixtime);
   }
 }
-
-

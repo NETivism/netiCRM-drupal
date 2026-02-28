@@ -93,54 +93,62 @@ class civicrm_handler_field_event_link extends views_handler_field {
       $custom_link = $this->options['custom_link'];
     }
 
-
     switch ($link_choice) {
 
       // LINKING TO EVENT PAGE (PUBLICLY ACCESSIBLE)
 
       case 'page':
         if (user_access('view event info') && $data !== NULL && $data !== '') {
-          return civicrm_views_href($data,
+          return civicrm_views_href(
+            $data,
             'civicrm/event/info',
             "reset=1&id={$values->{$this->aliases['id']}}"
           );
         }
 
         // LINKING TO EVENT REGISTRATION PAGE
+        // no break
       case 'registration':
         if (user_access('register for events') && $data !== NULL && $data !== '') {
           require_once 'CRM/Core/Config.php';
-          return civicrm_views_href($data,
+          return civicrm_views_href(
+            $data,
             'civicrm/event/register',
             "reset=1&id={$values->{$this->aliases['id']}}"
           );
         }
 
         // LINKING TO EVENT CONFIG PAGE
+        // no break
       case 'config':
         if (user_access('access CiviEvent') && $data !== NULL && $data !== '') {
-          return civicrm_views_href($data,
+          return civicrm_views_href(
+            $data,
             'civicrm/event/manage/eventInfo',
             "action=update&id={$values->{$this->aliases['id']}}&reset=1"
           );
         }
 
         // LINKING TO EVENT PARTICIPANTS LIST
+        // no break
       case 'participants':
         if (user_access('access CiviEvent') && $data !== NULL && $data !== '') {
-          return civicrm_views_href($data,
+          return civicrm_views_href(
+            $data,
             'civicrm/event/search',
             "reset=1&force=1&event={$values->{$this->aliases['id']}}"
           );
         }
 
         // CUSTOM NODE LINKAGE, GOOD FOR LINKING TO OTHER VIEWS WITH AN ARGUMENT
+        // no break
       case 'custom':
         if ($custom_link !== NULL && $custom_link !== '' && $data !== NULL && $data !== '') {
           return l($data, $custom_link . "{$values->{$this->aliases['id']}}", ['html' => TRUE]);
         }
 
         // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE DATA
+        // no break
       default:
         return $data;
     }
@@ -150,4 +158,3 @@ class civicrm_handler_field_event_link extends views_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-

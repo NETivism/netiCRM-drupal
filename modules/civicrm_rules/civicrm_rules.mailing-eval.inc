@@ -34,10 +34,11 @@
  */
 
 require_once 'civicrm_rules_utils.inc';
-function civicrm_rules_rules_action_mailing_send_email($to,
+function civicrm_rules_rules_action_mailing_send_email(
+  $to,
   $subject,
   $message,
-  $from = NULL,
+  $from,
   $settings,
   RulesState$state,
   RulesPlugin$element
@@ -73,7 +74,7 @@ function civicrm_rules_rules_action_mailing_send_email($to,
       $params['toEmail'] = CRM_Utils_Token::replaceMailingTokens($toEmail, $state->variables['mailing'], NULL, $tokens);
 
       //only process user permission tokens if used in toEmail
-      if ( in_array(trim($toEmail, '{}'), $tokens['user']) ) {
+      if (in_array(trim($toEmail, '{}'), $tokens['user'])) {
         //we require a TO email, but can only send one; so we strip the first off and send the rest as CCs
         $userEmails = explode(',', CRM_Utils_Token::replaceUserTokens($params['toEmail'], $tokens));
         $params['toEmail'] = $userEmails[0];
@@ -93,4 +94,3 @@ function civicrm_rules_condition_mailing_approved($mailing, $settings) {
 function civicrm_rules_condition_mailing_rejected($mailing, $settings) {
   return $mailing->approval_status_id != 1;
 }
-

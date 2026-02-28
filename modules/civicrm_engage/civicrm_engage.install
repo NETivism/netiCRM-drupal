@@ -43,7 +43,7 @@ function civicrm_engage_enable() {
 }
 
 /**
- * Fix the Participant Role field in the Update Event Invite Responses 
+ * Fix the Participant Role field in the Update Event Invite Responses
  **/
 function civicrm_engage_update_7001() {
   civicrm_initialize();

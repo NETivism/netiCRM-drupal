@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  *
  * civicrm_handler_field_file.inc
@@ -80,4 +79,3 @@ class civicrm_handler_field_file extends views_handler_field {
     }
   }
 }
-

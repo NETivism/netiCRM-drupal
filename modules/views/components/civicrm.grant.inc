@@ -324,4 +324,3 @@ function _civicrm_grant_data(&$data, $enabled) {
     ],
   ];
 }
-

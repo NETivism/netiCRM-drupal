@@ -35,7 +35,6 @@
 
 // $Id: example.drush.inc,v 1.5 2009/09/30 13:15:54 weitzman Exp $
 
-
 /**
  * @file
  *   Example drush command.
@@ -296,7 +295,6 @@ function drush_civicrm_install_validate() {
   return TRUE;
 }
 
-
 /**
  * Implementation of command 'civicrm-install'
  */
@@ -351,8 +349,13 @@ function _civicrm_extract_tarfile($destinationPath, $option = 'tarfile') {
   drush_shell_exec("tar -xf $tarpath -C \"$destinationPath\"");
 }
 
-function _civicrm_install_db($dbuser, $dbpass, $dbhost, $dbname,
-  $modPath, $lang
+function _civicrm_install_db(
+  $dbuser,
+  $dbpass,
+  $dbhost,
+  $dbname,
+  $modPath,
+  $lang
 ) {
   $drupalRoot = drush_get_context('DRUSH_DRUPAL_ROOT');
   $siteRoot = drush_get_context('DRUSH_DRUPAL_SITE_ROOT', FALSE);
@@ -382,9 +385,10 @@ function _civicrm_install_db($dbuser, $dbpass, $dbhost, $dbname,
       $acl_file = $sqlPath . '/civicrm_acl.' . $lang . '.mysql';
     }
     else {
-      drush_log(dt("No sql files could be retrieved for \"" . $lang .
+      drush_log(dt(
+        "No sql files could be retrieved for \"" . $lang .
           "\", using default language."
-        ), 'warning');
+      ), 'warning');
     }
   }
   civicrm_source($dsn, $data_file);
@@ -537,7 +541,7 @@ function civicrm_drush_help($section) {
  */
 function drush_civicrm_ext_list() {
   civicrm_initialize();
-  try{
+  try {
     $result = civicrm_api('extension', 'get', ['version' => 3]);
     $rows = [[dt('App name'), dt('Status')]];
     foreach ($result['values'] as $k => $extension_data) {
@@ -563,12 +567,13 @@ function drush_civicrm_ext_list() {
  */
 function drush_civicrm_ext_install($extension_name) {
   civicrm_initialize();
-  try{
+  try {
     $result = civicrm_api('extension', 'install', ['key' => $extension_name, 'version' => 3]);
-    if($result['values'] && $result['values'] == 1) {
+    if ($result['values'] && $result['values'] == 1) {
       drush_print(dt("Extension !ename installed.", ['!ename' => $extension_name]));
-    } else {
-      drush_log(t('Extension !ename could not be installed.', ['!ename' => $extension_name]), 'error');    
+    }
+    else {
+      drush_log(t('Extension !ename could not be installed.', ['!ename' => $extension_name]), 'error');
     }
   }
   catch (CiviCRM_API3_Exception $e) {
@@ -585,11 +590,12 @@ function drush_civicrm_ext_install($extension_name) {
  */
 function drush_civicrm_ext_disable($extension_name) {
   civicrm_initialize();
-  try{
+  try {
     $result = civicrm_api('extension', 'disable', ['key' => $extension_name, 'version' => 3]);
-    if($result['values'] && $result['values'] == 1) {
+    if ($result['values'] && $result['values'] == 1) {
       drush_print(dt("Extension !ename disabled.", ['!ename' => $extension_name]));
-    } else {
+    }
+    else {
       drush_log(t('Extension !ename could not be disabled.', ['!ename' => $extension_name]), 'error');
     }
   }
@@ -607,12 +613,13 @@ function drush_civicrm_ext_disable($extension_name) {
  */
 function drush_civicrm_ext_uninstall($extension_name) {
   civicrm_initialize();
-  try{
+  try {
     $result = civicrm_api('extension', 'uninstall', ['key' => $extension_name, 'version' => 3]);
-    if($result['values'] && $result['values'] == 1) {
+    if ($result['values'] && $result['values'] == 1) {
       drush_print(dt("Extension !ename uninstalled.", ['!ename' => $extension_name]));
-    } else {
-      drush_log(t('Extension !ename could not be uninstalled.', ['!ename' => $extension_name]), 'error');    
+    }
+    else {
+      drush_log(t('Extension !ename could not be uninstalled.', ['!ename' => $extension_name]), 'error');
     }
   }
   catch (CiviCRM_API3_Exception $e) {
@@ -679,7 +686,7 @@ function drush_civicrm_upgrade_db() {
     require_once 'CRM/Core/Smarty.php';
     $template = CRM_Core_Smarty::singleton();
 
-    require_once ('CRM/Upgrade/Page/Upgrade.php');
+    require_once('CRM/Upgrade/Page/Upgrade.php');
     $upgrade = new CRM_Upgrade_Page_Upgrade();
 
     // new since CiviCRM 4.1
@@ -704,7 +711,6 @@ function drush_civicrm_upgrade_db() {
 function drush_civicrm_update_cfg_validate() {
   return _civicrm_init();
 }
-
 
 /**
  * Implementation of command 'civicrm-update-cfg'
@@ -731,7 +737,9 @@ function drush_civicrm_update_cfg() {
     drush_log(dt('Config successfully updated.'), 'completed');
 
   }
-  else drush_log(dt('Config update failed.'), 'failed');
+  else {
+    drush_log(dt('Config update failed.'), 'failed');
+  }
 }
 
 /**
@@ -867,15 +875,18 @@ function drush_civicrm_upgrade() {
   $backup_dir  = rtrim($backup_dir, '/');
 
   drush_print(dt("\nThe upgrade process involves - "));
-  drush_print(dt("1. Backing up current CiviCRM code as => !path",
-      ['!path' => "$backup_dir/modules/$date/$backup_file"]
-    ));
-  drush_print(dt("2. Backing up database as => !path",
-      ['!path' => "$backup_dir/modules/$date/$backup_file.sql"]
-    ));
-  drush_print(dt("3. Unpacking tarfile to => !path",
-      ['!path' => "$project_path"]
-    ));
+  drush_print(dt(
+    "1. Backing up current CiviCRM code as => !path",
+    ['!path' => "$backup_dir/modules/$date/$backup_file"]
+  ));
+  drush_print(dt(
+    "2. Backing up database as => !path",
+    ['!path' => "$backup_dir/modules/$date/$backup_file.sql"]
+  ));
+  drush_print(dt(
+    "3. Unpacking tarfile to => !path",
+    ['!path' => "$project_path"]
+  ));
   drush_print(dt("4. Executing civicrm/upgrade?reset=1 just as a browser would.\n"));
   if (!drush_confirm(dt('Do you really want to continue?'))) {
     return drush_user_abort();
@@ -888,9 +899,10 @@ function drush_civicrm_upgrade() {
   @drush_op('mkdir', $backup_dir, 0777);
   $backup_target = $backup_dir . '/' . $backup_file;
   if (!drush_op('rename', $civicrm_root, $backup_target)) {
-    return drush_set_error('CIVICRM_BACKUP_FAILED', dt('Failed to backup CiviCRM project directory !source to !backup_target',
-        ['!source' => $civicrm_root, '!backup_target' => $backup_target]
-      ));
+    return drush_set_error('CIVICRM_BACKUP_FAILED', dt(
+      'Failed to backup CiviCRM project directory !source to !backup_target',
+      ['!source' => $civicrm_root, '!backup_target' => $backup_target]
+    ));
   }
   drush_log(dt("\n1. Code backed up."), 'ok');
 
@@ -966,9 +978,10 @@ function drush_civicrm_restore() {
   drush_print(dt("2. Dropping and creating '!db' database.", ['!db' => $db_spec['database']]));
   drush_print(dt("3. Loading '\$restore-dir/civicrm.sql' file into the database."));
   drush_print();
-  drush_print(dt("Note: Before restoring a backup will be taken in '!path' directory.",
-      ['!path' => "$restore_backup_dir/modules/restore"]
-    ));
+  drush_print(dt(
+    "Note: Before restoring a backup will be taken in '!path' directory.",
+    ['!path' => "$restore_backup_dir/modules/restore"]
+  ));
   drush_print();
   if (!drush_confirm(dt('Do you really want to continue?'))) {
     return drush_user_abort();
@@ -986,14 +999,16 @@ function drush_civicrm_restore() {
   // 1. backup and restore codebase
   drush_log(dt('Restoring civicrm codebase ..'));
   if (is_dir($civicrm_root) && !drush_op('rename', $civicrm_root, $restore_backup_dir . '/civicrm')) {
-    return drush_set_error('CIVICRM_RESTORE_CODE_FAILED', dt("Failed to take backup for '!destination' directory",
-        ['!destination' => $civicrm_root]
-      ));
+    return drush_set_error('CIVICRM_RESTORE_CODE_FAILED', dt(
+      "Failed to take backup for '!destination' directory",
+      ['!destination' => $civicrm_root]
+    ));
   }
   if (!drush_op('rename', $code_dir, $civicrm_root)) {
-    return drush_set_error('CIVICRM_RESTORE_DESTINATION_FAILED', dt("Failed to restore civicrm directory '!source' to '!dest'",
-        ['!source' => $code_dir, '!dest' => $civicrm_root_base]
-      ));
+    return drush_set_error('CIVICRM_RESTORE_DESTINATION_FAILED', dt(
+      "Failed to restore civicrm directory '!source' to '!dest'",
+      ['!source' => $code_dir, '!dest' => $civicrm_root_base]
+    ));
   }
   drush_log(dt('Codebase restored.'), 'ok');
 
@@ -1112,7 +1127,6 @@ function drush_civicrm_rest() {
   }
   echo $rest->run($config);
 }
-
 
 /**
  * Implementation of drush_hook_COMMAND_validate for command 'civicrm-sql-dump'
@@ -1357,7 +1371,10 @@ function drush_civicrm_api() {
   civicrm_initialize();
 
   global $user;
-  CRM_Core_BAO_UFMatch::synchronize($user, FALSE, 'Drupal',
+  CRM_Core_BAO_UFMatch::synchronize(
+    $user,
+    FALSE,
+    'Drupal',
     civicrm_get_ctype('Individual')
   );
 
@@ -1376,4 +1393,3 @@ function drush_civicrm_api() {
       return drush_set_error('CIVICRM_UNKNOWN_FORMAT', dt('Unknown format: @format', ['@format' => $format]));
   }
 }
-

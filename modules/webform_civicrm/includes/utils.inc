@@ -21,7 +21,7 @@ function wf_crm_field_options($field, $context, $data) {
   $ret = [];
   $fields = wf_crm_get_fields();
   if ($pieces = wf_crm_explode_key($field['form_key'])) {
-    list( , $c, $ent, $n, $table, $name) = $pieces;
+    list(, $c, $ent, $n, $table, $name) = $pieces;
     // Ensure we have complete info for this field
     $field += $fields[$table . '_' . $name];
     if ($name === 'contact_sub_type') {
@@ -332,7 +332,7 @@ function wf_crm_get_privacy_options() {
 }
 
 function wf_crm_supported_payment_processors(&$ret) {
-  foreach(wf_crm_apivalues('payment_processor', 'get', ['is_test' => 0]) as $processor) {
+  foreach (wf_crm_apivalues('payment_processor', 'get', ['is_test' => 0]) as $processor) {
     if (!in_array($processor['billing_mode'], [1, 3])) {
       unset($ret[$processor['id']]);
     }
@@ -1101,7 +1101,7 @@ function wf_crm_get_field($key) {
     return $fields[$key];
   }
   if ($pieces = wf_crm_explode_key($key)) {
-    list( , , , , $table, $name) = $pieces;
+    list(, , , , $table, $name) = $pieces;
     if (isset($fields[$table . '_' . $name])) {
       return $fields[$table . '_' . $name];
     }

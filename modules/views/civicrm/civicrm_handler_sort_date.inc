@@ -65,4 +65,3 @@ class civicrm_handler_sort_date extends views_handler_sort_date {
     $this->query->add_orderby(NULL, $formula, $this->options['order'], $this->table_alias . '_' . $this->field . '_' . $this->options['granularity']);
   }
 }
-

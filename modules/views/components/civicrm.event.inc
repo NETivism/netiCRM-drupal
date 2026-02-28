@@ -412,7 +412,6 @@ function _civicrm_event_data(&$data, $enabled) {
     ],
   ];
 
-
   //----------------------------------------------------------------
   // CIVICRM Participants are here, base tabling it up.
   //----------------------------------------------------------------

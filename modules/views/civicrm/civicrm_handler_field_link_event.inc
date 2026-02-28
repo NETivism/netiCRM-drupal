@@ -98,71 +98,83 @@ class civicrm_handler_field_link_event extends views_handler_field {
       $custom_link = $this->options['custom_link'];
     }
 
-
     switch ($link_choice) {
 
       // LINKING TO EVENT INFO
 
       case 'page':
         if (user_access('view event info') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/event/info',
             "id={$values->id}&reset=1"
           );
         }
 
         // LINKING TO EVENT REGISTRATION
+        // no break
       case 'register':
         if (user_access('register for events') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/event/register',
             "id={$values->id}&reset=1"
           );
         }
 
         // LINKING TO EVENT CONFIG
+        // no break
       case 'config':
         if (user_access('access CiviEvent') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/event/manage',
             "action=update&id={$values->id}&reset=1"
           );
         }
 
         // LINKING TO EVENT PARTICIPANT LISTING
+        // no break
       case 'listing':
         if (user_access('view event participants') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/event/participant',
             "reset=1&id={$values->id}"
           );
         }
 
         // LINKING TO EVENT PARTICIPANTS
+        // no break
       case 'participants':
         if (user_access('edit event participants') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/event/search',
             "reset=1&force=1&event={$values->id}"
           );
         }
 
         // LINKING TO EVENT DELETION
+        // no break
       case 'delete':
         if (user_access('access CiviEvent') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/event/manage',
             "action=delete&id={$values->id}"
           );
         }
 
         // CUSTOM NODE LINKAGE, GOOD FOR LINKING TO OTHER VIEWS WITH AN ARGUMENT
+        // no break
       case 'custom':
         if ($custom_link !== NULL && $custom_link !== '' && $link_text !== NULL && $link_text !== '') {
           return l($link_text, $custom_link . "{$values->id}");
         }
 
         // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE TEXT
+        // no break
       default:
         return $link_text;
     }
@@ -177,4 +189,3 @@ class civicrm_handler_field_link_event extends views_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-

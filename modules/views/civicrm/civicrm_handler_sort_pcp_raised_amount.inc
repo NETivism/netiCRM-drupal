@@ -42,4 +42,3 @@ WHERE pcp2.id = " . $this->table_alias . "." . $this->real_field . " AND cc.cont
     $this->query->add_orderby(NULL, $formula, $this->options['order'], $this->table_alias . '_' . $this->field);
   }
 }
-

@@ -92,4 +92,3 @@ class civicrm_handler_field_phone extends civicrm_handler_field_location {
     return $this->table_alias;
   }
 }
-

@@ -144,7 +144,7 @@ class civicrm_handler_relationship extends views_handler_relationship {
     }
 
     if (!empty($def['join_handler']) && class_exists($def['join_handler'])) {
-      $join = new $def['join_handler'];
+      $join = new $def['join_handler']();
     }
     else {
       $join = new views_join();
@@ -179,4 +179,3 @@ class civicrm_handler_relationship extends views_handler_relationship {
     $this->alias = $this->query->add_relationship($alias, $join, $this->definition['base'], $this->relationship);
   }
 }
-

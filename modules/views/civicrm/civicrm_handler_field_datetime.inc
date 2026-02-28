@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Unchanged anonymous code contribution. No claim.
  *
@@ -53,6 +52,3 @@ class civicrm_handler_field_datetime extends views_handler_field_date {
     return parent::render($values);
   }
 }
-
-
-

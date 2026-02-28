@@ -97,4 +97,3 @@ function civicrm_rules_condition_parameter($label, $type = 'contact') {
 
   return $default;
 }
-

@@ -46,14 +46,16 @@ class civicrm_handler_field_custom_file extends views_handler_field {
   public function render($values) {
     $value = $values->{$this->field_alias};
     if (!is_null($value)) {
-      $fileType = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_File',
+      $fileType = CRM_Core_DAO::getFieldValue(
+        'CRM_Core_DAO_File',
         $value,
         'mime_type'
       );
 
       if ($fileType && in_array($fileType, [
         "image/jpeg", "image/pjpeg", "image/gif", "image/x-png", "image/png"])) {
-        $uri = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_File',
+        $uri = CRM_Core_DAO::getFieldValue(
+          'CRM_Core_DAO_File',
           $value,
           'uri'
         );
@@ -62,14 +64,16 @@ class civicrm_handler_field_custom_file extends views_handler_field {
       }
       else {
         $entityField = $this->aliases['entity_id'];
-        return CRM_Utils_System::url('civicrm/file',
+        return CRM_Utils_System::url(
+          'civicrm/file',
           "reset=1&id={$value}&eid={$values->$entityField}",
-          TRUE, NULL, TRUE, TRUE
+          TRUE,
+          NULL,
+          TRUE,
+          TRUE
         );
       }
     }
     return NULL;
   }
 }
-
-

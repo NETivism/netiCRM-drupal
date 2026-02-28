@@ -99,7 +99,6 @@ class civicrm_handler_field_link_relationship extends views_handler_field {
       $custom_link = $this->options['custom_link'];
     }
 
-
     switch ($link_choice) {
 
       // LINKING TO RELATIONSHIP VIEW PAGE
@@ -107,54 +106,65 @@ class civicrm_handler_field_link_relationship extends views_handler_field {
       case 'view_A_B':
 
         if (user_access('view all contacts') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/rel',
             "reset=1&id={$values->id}&cid={$values->civicrm_relationship_contact_id_a}&action=view&rtype=a_b&selectedChild=rel"
           );
         }
 
         // LINKING TO RELATIONSHIP EDIT PAGE
+        // no break
       case 'edit_A_B':
         if (user_access('edit relationships') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/rel',
             "reset=1&action=update&id={$values->id}&cid={$values->civicrm_relationship_contact_id_a}&rtype=a_b"
           );
         }
+        // no break
       case 'view_B_A':
 
         if (user_access('view all contacts') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/rel',
             "reset=1&id={$values->id}&cid={$values->civicrm_relationship_contact_id_b}&action=view&rtype=b_a&selectedChild=rel"
           );
         }
 
         // LINKING TO RELATIONSHIP EDIT PAGE
+        // no break
       case 'edit_B_A':
         if (user_access('edit relationships') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/rel',
             "reset=1&action=update&id={$values->id}&cid={$values->civicrm_relationship_contact_id_b}&rtype=b_a"
           );
         }
 
         // LINKING TO RELATIONSHIP DELETE PAGE
+        // no break
       case 'delete':
         if (user_access('edit relationships') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/rel',
             "reset=1&action=delete&id={$values->id}&cid={$values->civicrm_relationship_contact_id_a}&rtype=a_b"
           );
         }
 
         // CUSTOM NODE LINKAGE, GOOD FOR LINKING TO OTHER VIEWS WITH AN ARGUMENT
+        // no break
       case 'custom':
         if ($custom_link !== NULL && $custom_link !== '' && $link_text !== NULL && $link_text !== '') {
           return l($link_text, $custom_link . "{$values->id}");
         }
 
         // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE TEXT
+        // no break
       default:
         return $link_text;
     }
@@ -169,4 +179,3 @@ class civicrm_handler_field_link_relationship extends views_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-

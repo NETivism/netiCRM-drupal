@@ -53,4 +53,3 @@ class civicrm_handler_field_encounter_medium extends views_handler_field {
     return self::$_encounter_medium[$values->{$this->field_alias}];
   }
 }
-

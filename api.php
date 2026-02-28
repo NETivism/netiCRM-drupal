@@ -186,4 +186,3 @@ function civicrm_drupal_user_update_and_redirect($params) {
   drupal_goto('locker');
 }
 //end func civicrm_drupal_user_update_and_redirect
-

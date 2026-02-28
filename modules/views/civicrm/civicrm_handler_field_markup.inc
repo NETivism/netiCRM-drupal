@@ -33,8 +33,7 @@ class civicrm_handler_field_markup extends views_handler_field {
     $formats = [];
     foreach (filter_formats() as $format) {
       $formats[$format->format] = $format->name;
-}
+    }
     return $formats;
   }
 }
-

@@ -65,7 +65,7 @@ class calendar_plugin_row_civicrm extends calendar_plugin_row {
       '#type' => 'value',
       '#value' => '',
     ];
-    }
+  }
 
   public function pre_render($values) {
 
@@ -81,7 +81,7 @@ class calendar_plugin_row_civicrm extends calendar_plugin_row {
     // Sadly neither DAO nor API allows you to load multiple at once eg node_load_multiple()
     foreach ($ids as $key => $id) {
       require_once str_replace('_', DIRECTORY_SEPARATOR, $this->definition['dao class']) . '.php';
-      $dao = New $this->definition['dao class'];
+      $dao = new $this->definition['dao class']();
       $dao->id = $id;
       $dao->find();
       $dao->fetch();
@@ -91,7 +91,6 @@ class calendar_plugin_row_civicrm extends calendar_plugin_row {
       }
       $dao->release();
     }
-
 
     // Identify the date argument and fields that apply to this view.
     // Preload the Date Views field info for each field, keyed by the
@@ -223,4 +222,3 @@ class calendar_plugin_row_civicrm extends calendar_plugin_row {
     return $rows;
   }
 }
-

@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * civicrm_handler_field_county.inc
  * Displays County after grabbing the label from the database
@@ -62,4 +61,3 @@ class civicrm_handler_field_county extends civicrm_handler_field_address {
     parent::options_form($form, $form_state);
   }
 }
-

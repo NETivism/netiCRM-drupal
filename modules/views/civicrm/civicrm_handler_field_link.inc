@@ -65,5 +65,3 @@ class civicrm_handler_field_link extends civicrm_handler_field {
     return civicrm_views_href($text, "civicrm/contact/view", "reset=1&id=$id");
   }
 }
-
-

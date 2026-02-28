@@ -297,7 +297,8 @@ class Engage_Report_Form_WalkList extends Engage_Report_Form_List {
               $clause = TRUE;
             }
             elseif ($op) {
-              $clause = $this->whereClause($field,
+              $clause = $this->whereClause(
+                $field,
                 $op,
                 CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
                 CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
@@ -457,12 +458,15 @@ class Engage_Report_Form_WalkList extends Engage_Report_Form_List {
 
       $dob  = $value['civicrm_contact_birth_date'];
       $age  = empty($dob) ? 0 : $this->dob2age($dob);
-      if (!empty($value['civicrm_contact_gender_id'])){
+      if (!empty($value['civicrm_contact_gender_id'])) {
         $sex  = $gender[CRM_Utils_Array::value('civicrm_contact_gender_id', $value)];
       }
       $sex  = is_null($sex) ? '' : $sex;
-      $lang = strtoupper(substr($value[$this->_demoTable . '_' . $this->_demoLangCol], 0, 2
-        ));
+      $lang = strtoupper(substr(
+        $value[$this->_demoTable . '_' . $this->_demoLangCol],
+        0,
+        2
+      ));
       $party       = substr($value["{$this->_voterInfoTable}_{$this->_partyCol}"], 0, 1);
       $vh          = substr($value["{$this->_voterInfoTable}_{$this->_vhCol}"], 0, 1);
       $contactType = $value[$this->_coreInfoTable . '_' . $this->_coreTypeCol];
@@ -507,23 +511,23 @@ class Engage_Report_Form_WalkList extends Engage_Report_Form_List {
                        contact_id      = %18";
       $params = [
         1 => [$value['civicrm_address_street_name'] ? $value['civicrm_address_street_name'] : '', 'String'],
-        2 => [(String )$sStreetNumber, 'String'],
+        2 => [(string )$sStreetNumber, 'String'],
         3 => [$iStreetNumber, 'Integer'],
         4 => [$odd, 'Integer'],
-        5 => [(String) $apt_number , 'String'],
+        5 => [(string) $apt_number , 'String'],
         6 => [$value['civicrm_address_city'] ? $value['civicrm_address_city'] : '', 'String'],
-        7 => [(String) $state , 'String'],
+        7 => [(string) $state , 'String'],
         8 => [$value['civicrm_address_postal_code'] ? $value['civicrm_address_postal_code'] : '', 'String'],
         9 => [$value['civicrm_contact_display_name'] ? $value['civicrm_contact_display_name'] : '', 'String'],
-        10 => [(String)  $phone_number, 'String'],
+        10 => [(string)  $phone_number, 'String'],
         11 => [$age, 'Integer'],
-        12 => [(String) $sex, 'String'],
-        13 => [(String) $lang, 'String'],
-        14 => [(String) $party, 'String'],
-        15 => [(String) $vh, 'String'],
-        16 => [(String) $type, 'String'],
-        17 => [(String) $otherName, 'String'],
-        18 => [(String) $contact_id, 'Integer'],
+        12 => [(string) $sex, 'String'],
+        13 => [(string) $lang, 'String'],
+        14 => [(string) $party, 'String'],
+        15 => [(string) $vh, 'String'],
+        16 => [(string) $type, 'String'],
+        17 => [(string) $otherName, 'String'],
+        18 => [(string) $contact_id, 'Integer'],
       ];
 
       if (!empty($contAmount)) {
@@ -588,12 +592,10 @@ class Engage_Report_Form_WalkList extends Engage_Report_Form_List {
       $pdfHeaders['total_amount'] = ['title' => 'Last donation'];
     }
 
-
     $groupInfo = [
       'date' => $reportDate,
       'descr' => empty($this->_groupDescr) ? '' : "<br>Group {$this->_groupDescr}",
     ];
-
 
     while ($dao->fetch()) {
 
@@ -665,4 +667,3 @@ class Engage_Report_Form_WalkList extends Engage_Report_Form_List {
     $this->assign('groupRows', $groupRows);
   }
 }
-

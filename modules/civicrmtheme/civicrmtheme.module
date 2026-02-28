@@ -41,7 +41,7 @@ function civicrmtheme_list_themes() {
   $themes = system_rebuild_theme_data();
   uasort($themes, 'system_sort_modules_by_info_name');
 
-  foreach ($themes as & $theme) {
+  foreach ($themes as &$theme) {
     if (!empty($theme->info['hidden'])) {
       continue;
     }
@@ -138,4 +138,3 @@ function civicrmtheme_custom_theme() {
     return $admin_theme;
   }
 }
-

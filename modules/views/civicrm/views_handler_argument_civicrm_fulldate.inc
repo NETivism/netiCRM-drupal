@@ -53,4 +53,3 @@ class views_handler_argument_civicrm_fulldate extends views_handler_argument_dat
     return format_date(strtotime($this->argument), 'custom', $this->format, 0);
   }
 }
-

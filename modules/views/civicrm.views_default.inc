@@ -26,7 +26,7 @@ function civicrm_views_default_views() {
   $views = NULL;
 
   if (module_exists('date_views') && module_exists('calendar')) {
-    $view              = new view;
+    $view              = new view();
     $view->name = 'civicrm_events';
     $view->description = 'Calendar of CiviCRM Events';
     $view->tag         = 'civicrm';
@@ -813,4 +813,3 @@ function civicrm_views_default_views() {
 
   return $views;
 }
-

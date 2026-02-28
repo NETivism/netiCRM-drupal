@@ -72,11 +72,12 @@ class wf_crm_admin_help {
       '</p>';
   }
 
-
   public static function contribution_contribution_page_id() {
     print '<p>' .
-      t("It is recommended to <a !link>create a new contribution page</a> solely for webform use. When configuring the page, most options will be irrelevant (such as profiles, premiums, widgets, recurring, etc.). Only the following need to be configured:",
-      ['!link' => 'target="_blank" href="' . url('civicrm/admin/contribute/add', ['query' => ['reset' => 1, 'action' => 'add']]) . '"']) .
+      t(
+        "It is recommended to <a !link>create a new contribution page</a> solely for webform use. When configuring the page, most options will be irrelevant (such as profiles, premiums, widgets, recurring, etc.). Only the following need to be configured:",
+        ['!link' => 'target="_blank" href="' . url('civicrm/admin/contribute/add', ['query' => ['reset' => 1, 'action' => 'add']]) . '"']
+      ) .
       '</p><ul>' .
       '<li>' . t('Title: Displayed on the webform.') . '</li>' .
       '<li>' . t('Financial Type: Controls overall contribution type.') . '</li>' .
@@ -181,7 +182,8 @@ class wf_crm_admin_help {
 
   public static function reg_options_title_display() {
     print '<p>' .
-      t('Controls how events are displayed. Date formats can be further configured in <a !link>CiviCRM Date Settings</a>',
+      t(
+        'Controls how events are displayed. Date formats can be further configured in <a !link>CiviCRM Date Settings</a>',
         ['!link' => 'target="_blank" href="' . url('civicrm/admin/setting/date', ['query' => ['reset' => 1]]) . '"']
       ) .
       '</p><p>' .
@@ -230,7 +232,6 @@ class wf_crm_admin_help {
       t('You can override this default by allowing users to enter a subject (enable "Activity Subject" field below)') .
       '</p>';
   }
-
 
   public static function activity_target_contact_id() {
     print '<p>' .
@@ -336,7 +337,7 @@ class wf_crm_admin_help {
    * Get help for a custom field
    */
   public static function custom($param) {
-    list( , $id) = explode('_', $param);
+    list(, $id) = explode('_', $param);
     if (!is_numeric($id)) {
       return;
     }
@@ -355,7 +356,7 @@ class wf_crm_admin_help {
    * Get help for a fieldset
    */
   public static function fieldset($param) {
-    list( , $set) = explode('_', $param);
+    list(, $set) = explode('_', $param);
     civicrm_initialize();
     module_load_include('inc', 'webform_civicrm', 'includes/utils');
     $sets = wf_crm_get_fields('sets');

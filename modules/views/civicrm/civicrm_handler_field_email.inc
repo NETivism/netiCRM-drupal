@@ -67,5 +67,3 @@ class civicrm_handler_field_email extends civicrm_handler_field_location {
     return $input;
   }
 }
-
-

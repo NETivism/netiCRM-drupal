@@ -43,7 +43,6 @@ function _civicrm_core_data(&$data, $enabled) {
   // CiviCRM Contacts Views Table
   //------------------------------------------------------
 
-
   $data['civicrm_contact']['table']['group'] = t('CiviCRM Contacts');
 
   $data['civicrm_contact']['table']['base'] = [
@@ -565,7 +564,6 @@ function _civicrm_core_data(&$data, $enabled) {
   ];
   civicrm_views_add_fields($fields, $data['civicrm_contact'], 'civicrm_contact', $skipFields);
 
-
   // CHILLING OUT AT THE CIVICRM_ADDRESS TABLE
 
   $data['civicrm_address']['table']['group'] = t('CiviCRM Address');
@@ -625,7 +623,6 @@ function _civicrm_core_data(&$data, $enabled) {
     'left_field' => 'contact_id',
     'field' => 'contact_id',
   ];
-
 
   //BOOLEAN : IS PRIMARY ADDRESS
   $data['civicrm_address']['is_primary'] = [
@@ -1063,7 +1060,6 @@ function _civicrm_core_data(&$data, $enabled) {
     ],
   ];
 
-
   // CHILLING OUT AT THE CIVICRM_PHONE TABLE
 
   $data['civicrm_phone']['table']['group'] = t('CiviCRM Phone Details');
@@ -1098,7 +1094,6 @@ function _civicrm_core_data(&$data, $enabled) {
     'field' => 'contact_id',
   ];
 
-
   //CiviCRM Phone Using Locations as a pitstop before going on to Events
   $data['civicrm_phone']['table']['join']['civicrm_event'] = [
     'left_table' => 'civicrm_loc_block',
@@ -1118,7 +1113,6 @@ function _civicrm_core_data(&$data, $enabled) {
     'left_field' => 'contact_id',
     'field' => 'contact_id',
   ];
-
 
   //BOOLEAN : IS PRIMARY EMAIL
   $data['civicrm_phone']['is_primary'] = [
@@ -1256,7 +1250,6 @@ function _civicrm_core_data(&$data, $enabled) {
     ],
   ];
 
-
   // CHILLING OUT AT THE CIVICRM_WEBSITE TABLE
 
   $data['civicrm_website']['table']['group'] = t('CiviCRM Website');
@@ -1291,14 +1284,12 @@ function _civicrm_core_data(&$data, $enabled) {
     'field' => 'contact_id',
   ];
 
-
   //CiviCRM Website Using Contacts as a pitstop before going on to Memberhsips
   $data['civicrm_website']['table']['join']['civicrm_membership'] = [
     'left_table' => 'civicrm_contact',
     'left_field' => 'id',
     'field' => 'contact_id',
   ];
-
 
   //Display Websites in User Views
   $data['civicrm_website']['table']['join']['users'] = [
@@ -1626,7 +1617,6 @@ function _civicrm_core_data(&$data, $enabled) {
     ],
   ];
 
-
   //BOOLEAN : IS A TEST ACTIVITY
   $data['civicrm_activity']['is_test'] = [
     'title' => t('Is Test'),
@@ -1769,7 +1759,7 @@ function _civicrm_core_data(&$data, $enabled) {
     'sort' => [
       'handler' => 'views_handler_sort',
     ],
-  ]; 
+  ];
 
   // CHILLING OUT AT THE civicrm_activity_assignment TABLE
 
@@ -1829,7 +1819,6 @@ function _civicrm_core_data(&$data, $enabled) {
     ],
   ];
 
-
   //TEXT LINKS THAT AREN'T PART OF THE TABLE
   //Contact Text Link
   $data['civicrm_contact']['text_link'] = [
@@ -1874,8 +1863,6 @@ function _civicrm_core_data(&$data, $enabled) {
     'left_field' => 'contact_id',
     'field' => 'contact_id_a',
   ];
-
-
 
   //CiviCRM Relationships - FIELDS
 
@@ -2052,9 +2039,7 @@ function _civicrm_core_data(&$data, $enabled) {
      * Add support for CivicRM groups table
      */
 
-
   $data['civicrm_group']['table']['group'] = t('CiviCRM Groups');
-
 
   $data['civicrm_group']['table']['join']['civicrm_contact'] = [
     'left_table' => 'civicrm_group_contact',
@@ -2140,8 +2125,6 @@ function _civicrm_core_data(&$data, $enabled) {
       'handler' => 'views_handler_sort',
     ],
   ];
-
-
 
   $data['civicrm_group']['title'] = [
     'title' => t('Title'),
@@ -2322,25 +2305,22 @@ function _civicrm_core_data(&$data, $enabled) {
     ],
   ];
 
-
   // Pull in all the Custom fields
   $query = "select id, extends, extends_entity_column_value, style from civicrm_custom_group where is_active = 1";
 
   $dao = CRM_Core_DAO::executeQuery($query);
 
-
   while ($dao->fetch()) {
     // call getTree using $dao->id as groupID and $dao->extends as entityType
     $extends_column_values = [];
-    if(strstr($dao->extends_entity_column_value, CRM_Core_DAO::VALUE_SEPARATOR)) {
+    if (strstr($dao->extends_entity_column_value, CRM_Core_DAO::VALUE_SEPARATOR)) {
       $extends_column_values = trim($dao->extends_entity_column_value, CRM_Core_DAO::VALUE_SEPARATOR);
       $extends_column_values = explode(CRM_Core_DAO::VALUE_SEPARATOR, $extends_column_values);
     }
-    else{
+    else {
       $extends_column_values = $dao->extends_entity_column_value;
     }
 
     $data = civicrm_views_custom_data_cache($data, $dao->extends, $dao->id, $extends_column_values, $dao->style);
   }
 }
-

@@ -101,7 +101,7 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
     // and object, hence using DAO
     foreach ($ids as $key => $id) {
       require_once 'CRM/Event/DAO/Event.php';
-      $dao = New CRM_Event_DAO_Event;
+      $dao = new CRM_Event_DAO_Event();
       $dao->id = $id;
       $dao->find();
       $dao->fetch();
@@ -111,7 +111,6 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
       }
       $dao->release();
     }
-
 
     // Identify the date argument and fields that apply to this view.
     // Preload the Date Views field info for each field, keyed by the
@@ -247,4 +246,3 @@ class calendar_plugin_row_civicrm_event extends calendar_plugin_row_node {
     return $rows;
   }
 }
-

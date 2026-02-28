@@ -21,7 +21,7 @@
    | GNU Affero General Public License or the licensing of CiviCRM,     |
    | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
    +--------------------------------------------------------------------+
-   
+
    **
    * @file Provides Views integration for custom CiviCRM custom field option groups
    *
@@ -50,4 +50,3 @@ class civicrm_handler_filter_custom_single_option extends views_handler_filter_i
     }
   }
 }
-

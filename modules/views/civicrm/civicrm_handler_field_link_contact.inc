@@ -93,43 +93,49 @@ class civicrm_handler_field_link_contact extends views_handler_field {
       $custom_link = $this->options['custom_link'];
     }
 
-
     switch ($link_choice) {
 
       // LINKING TO CONTACT VIEW PAGE
 
       case 'view':
         if (user_access('view all contacts') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view',
             "reset=1&cid={$values->id}"
           );
         }
 
         // LINKING TO CONTACT EDIT PAGE
+        // no break
       case 'edit':
         if (user_access('edit all contacts') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/add',
             "reset=1&action=update&cid={$values->id}"
           );
         }
 
         // LINKING TO CONTACT DELETE PAGE
+        // no break
       case 'delete':
         if (user_access('edit all contacts') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/delete',
             "reset=1&delete=1&cid={$values->id}"
           );
         }
 
         // CUSTOM NODE LINKAGE, GOOD FOR LINKING TO OTHER VIEWS WITH AN ARGUMENT
+        // no break
       case 'custom':
         if ($custom_link !== NULL && $custom_link !== '' && $link_text !== NULL && $link_text !== '') {
           return l($link_text, $custom_link . "{$values->id}");
         }
         // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE TEXT
+        // no break
       default:
         return $link_text;
     }
@@ -144,4 +150,3 @@ class civicrm_handler_field_link_contact extends views_handler_field {
     return $this->render_link(check_plain(property_exists($values, $this->field_alias)), $values);
   }
 }
-

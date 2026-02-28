@@ -76,4 +76,3 @@ class civicrm_handler_field_state extends civicrm_handler_field_address {
     ];
   }
 }
-

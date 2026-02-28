@@ -52,7 +52,8 @@ class civicrm_handler_field extends views_handler_field {
   public function render_link($data, $values) {
     $data = str_replace('', ', ', trim($data, ''));
     if (!empty($this->options['link_to_civicrm']) && user_access('access CiviCRM') && $values->id) {
-      return civicrm_views_href($data,
+      return civicrm_views_href(
+        $data,
         'civicrm/contact/view',
         "reset=1&cid={$values->id}"
       );
@@ -66,4 +67,3 @@ class civicrm_handler_field extends views_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-

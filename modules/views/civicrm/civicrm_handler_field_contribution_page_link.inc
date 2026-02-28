@@ -59,34 +59,38 @@ class civicrm_handler_field_contribution_page_link extends views_handler_field {
       $custom_link = $this->options['custom_link'];
     }
 
-
     switch ($link_choice) {
 
       // LINKING TO Contribution PAGE (PUBLICLY ACCESSIBLE)
       case 'page':
         if (user_access('make online contributions') && $data !== NULL && $data !== '') {
-          return civicrm_views_href($data,
+          return civicrm_views_href(
+            $data,
             'civicrm/contribute/transact',
             "reset=1&id={$values->{$this->aliases['id']}}"
           );
         }
 
-      // LINKING TO Contribution Page config
+        // LINKING TO Contribution Page config
+        // no break
       case 'config':
         if (user_access('access CiviContribute') && $data !== NULL && $data !== '') {
-          return civicrm_views_href($data,
+          return civicrm_views_href(
+            $data,
             'civicrm/admin/contribute',
             "action=update&id={$values->{$this->aliases['id']}}&reset=1"
           );
         }
 
-      // CUSTOM NODE LINKAGE, GOOD FOR LINKING TO OTHER VIEWS WITH AN ARGUMENT
+        // CUSTOM NODE LINKAGE, GOOD FOR LINKING TO OTHER VIEWS WITH AN ARGUMENT
+        // no break
       case 'custom':
         if ($custom_link !== NULL && $custom_link !== '' && $data !== NULL && $data !== '') {
           return l($data, $custom_link . "{$values->{$this->aliases['id']}}", ['html' => TRUE]);
         }
 
-      // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE DATA
+        // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE DATA
+        // no break
       default:
         return $data;
     }
@@ -96,4 +100,3 @@ class civicrm_handler_field_contribution_page_link extends views_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-

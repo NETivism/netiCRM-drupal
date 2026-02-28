@@ -75,7 +75,6 @@ class wf_crm_admin_component {
       $this->form['value']['#options'] = wf_crm_get_states();
       $this->form['value']['#empty_value'] = '';
     }
-
     elseif ($name == 'contribution_page_id') {
       $this->form['value']['#access'] = FALSE;
       $this->form['#prefix'] = '<p>' . t('This is a placeholder for a Contribution Page.') . '</p>';
@@ -358,7 +357,8 @@ class wf_crm_admin_component {
     }
     // CSS trick to add currency symbol to options element keys
     $symbol = wf_crm_aval(CRM_Core_Config::singleton(), 'defaultCurrencySymbol', '$');
-    drupal_add_css('
+    drupal_add_css(
+      '
       .option-key-cell:before {
         content:"' . $symbol . '";
       }
@@ -366,7 +366,8 @@ class wf_crm_admin_component {
         width: 50%;
         margin-left: .3em;
       }',
-      'inline');
+      'inline'
+    );
   }
 
   /**
@@ -477,7 +478,7 @@ class wf_crm_admin_component {
           $fields = wf_crm_get_fields();
           $sets = wf_crm_get_fields('sets');
           $class = 'civi-icon';
-          list( , $c, $ent, $n, $table, $name) = explode('_', $component['form_key'], 6);
+          list(, $c, $ent, $n, $table, $name) = explode('_', $component['form_key'], 6);
           $field = wf_crm_aval($fields, $table . '_' . $name, ['type' => 'fieldset']);
           // Don't allow CiviCRM fields to be cloned
           $row['data'][6]['data'] = '';
@@ -574,7 +575,7 @@ class wf_crm_admin_component {
     ];
     foreach ($node->webform['components'] as $cid => $component) {
       if (in_array($cid, $enabled)) {
-        list( , , , , $key) = explode('_', $component['form_key'], 5);
+        list(, , , , $key) = explode('_', $component['form_key'], 5);
         if (in_array($key, $field_ids)) {
           $payment_fields[$cid] = $component;
         }

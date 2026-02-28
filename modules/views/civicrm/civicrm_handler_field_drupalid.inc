@@ -43,5 +43,3 @@ class civicrm_handler_field_drupalid extends views_handler_field {
     return $uf_id;
   }
 }
-
-

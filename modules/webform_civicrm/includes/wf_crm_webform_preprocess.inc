@@ -314,10 +314,12 @@ class wf_crm_webform_preprocess extends wf_crm_webform_base {
         else {
           $reg['block_form'] = FALSE;
           if ($event['max_participants'] && ($reg['show_remaining'] == 'always' || intval($reg['show_remaining']) >= $event['remaining'])) {
-            $this->setMessage(format_plural($event['remaining'],
+            $this->setMessage(format_plural(
+              $event['remaining'],
               '%event has 1 remaining space.',
               '%event has @count remaining spaces.',
-              ['%event' => $event['title']]));
+              ['%event' => $event['title']]
+            ));
           }
         }
       }
@@ -338,7 +340,8 @@ class wf_crm_webform_preprocess extends wf_crm_webform_base {
       $select[] = 'campaign_id';
     }
     $status_types = wf_crm_apivalues('participant_status_type', 'get');
-    $dao = CRM_Core_DAO::executeQuery('SELECT ' . implode(',', $select) . '
+    $dao = CRM_Core_DAO::executeQuery(
+      'SELECT ' . implode(',', $select) . '
       FROM civicrm_participant
       WHERE contact_id = ' . $this->id['cid'][$c] . ' AND event_id IN (' . implode(',', array_keys($this->events)) . ")"
     );
@@ -478,7 +481,7 @@ class wf_crm_webform_preprocess extends wf_crm_webform_base {
       }
     }
   }
-  
+
   /**
    * Recursively walk through form array and set properties of CiviCRM fields
    *
@@ -499,7 +502,7 @@ class wf_crm_webform_preprocess extends wf_crm_webform_base {
         continue;
       }
       if (!empty($element['#webform_component']) && $pieces = wf_crm_explode_key($eid)) {
-        list( , $c, $ent, $n, $table, $name) = $pieces;
+        list(, $c, $ent, $n, $table, $name) = $pieces;
         // Separate out time fields
         if (substr($name, -8) === 'timepart') {
           $name = str_replace('_timepart', '', $name);
@@ -638,7 +641,7 @@ class wf_crm_webform_preprocess extends wf_crm_webform_base {
    * @param $message
    * @param string $type
    */
-  public function setMessage($message, $type='status') {
+  public function setMessage($message, $type = 'status') {
     if (node_is_page($this->node) && empty($_POST)) {
       drupal_set_message($message, $type, FALSE);
     }

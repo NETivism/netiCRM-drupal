@@ -80,5 +80,3 @@ class civicrm_handler_field_pcp_raised_amount extends views_handler_field {
     }
   }
 }
-
-

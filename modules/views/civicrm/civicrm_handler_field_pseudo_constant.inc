@@ -62,4 +62,3 @@ class civicrm_handler_field_pseudo_constant extends views_handler_field {
     }
   }
 }
-

@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  *
  * civicrm_handler_field_link_pcp.inc
@@ -94,6 +93,7 @@ class civicrm_handler_field_link_pcp extends views_handler_field {
      * (e.g., exclude this field from view and output the Text For Donate Link of the PCP as a link, using Views'
      * replacement patterns to supply the link path
      */
+        // no break
       case 'contribute':
         if (user_access('make online contributions')) {
           return civicrm_views_url(
@@ -115,4 +115,3 @@ class civicrm_handler_field_link_pcp extends views_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-

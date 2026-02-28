@@ -96,44 +96,50 @@ class civicrm_handler_field_link_contribution extends views_handler_field {
       $custom_link = $this->options['custom_link'];
     }
 
-
     switch ($link_choice) {
 
       // LINKING TO CONTRIBUTION VIEW PAGE
 
       case 'view':
         if (user_access('edit contributions') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/contribution',
             "reset=1&id={$values->id}&cid={$values->civicrm_contribution_contact_id}&action=view&context=search&selectedChild=contribute"
           );
         }
 
         // LINKING TO CONTRIBUTION EDIT PAGE
+        // no break
       case 'edit':
         if (user_access('edit contributions') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/contribution',
             "reset=1&action=update&id={$values->id}&cid={$values->civicrm_contribution_contact_id}&context=search"
           );
         }
 
         // LINKING TO CONTRIBUTION DELETE PAGE
+        // no break
       case 'delete':
         if (user_access('edit contributions') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/contribution',
             "reset=1&action=delete&id={$values->id}&cid={$values->civicrm_contribution_contact_id}&context=search"
           );
         }
 
         // CUSTOM NODE LINKAGE, GOOD FOR LINKING TO OTHER VIEWS WITH AN ARGUMENT
+        // no break
       case 'custom':
         if ($custom_link !== NULL && $custom_link !== '' && $link_text !== NULL && $link_text !== '') {
           return l($link_text, $custom_link . "{$values->id}");
         }
 
         // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE TEXT
+        // no break
       default:
         return $link_text;
     }
@@ -148,4 +154,3 @@ class civicrm_handler_field_link_contribution extends views_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-

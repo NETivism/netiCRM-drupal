@@ -21,7 +21,7 @@
    | GNU Affero General Public License or the licensing of CiviCRM,     |
    | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
    +--------------------------------------------------------------------+
-   
+
    **
    * @file Provides Views integration for custom CiviCRM custom field option groups
    *
@@ -80,7 +80,6 @@ class civicrm_handler_filter_custom_option extends views_handler_filter_in_opera
       $value_str = "'".implode("','", $this->value)."'";
       $clause = "$this->table_alias.$this->real_field " . $this->operator . "($value_str)";
       $this->query->add_where_expression($this->options['group'], $clause);
-     }
+    }
   }
 }
-

@@ -66,15 +66,15 @@ function civicrm_rules_events_argument_civicrm_eventnode($participantobj) {
   $eventID = $participant->event_id;
   $results = db_select('field_config_instance', 'i')
     ->fields('i', ['field_name', 'entity_type', 'bundle'])
-    ->condition('field_name',  '%'.db_like('civicrm_event'), 'LIKE')
+    ->condition('field_name', '%'.db_like('civicrm_event'), 'LIKE')
     ->execute()
     ->fetchAllAssoc('id');
-  foreach($results as $result) {
+  foreach ($results as $result) {
     $nid = db_select('field_data_' . $result->field_name, 'fd')
       ->fields('fd', ['entity_id'])
       ->condition('bundle', $result->bundle, '=')
       ->condition($result->field_name . '_value', $eventID, '=')
-      ->condition('entity_type',  $result->entity_type, '=')
+      ->condition('entity_type', $result->entity_type, '=')
       ->execute()
       ->fetchAssoc();
     return $nid['entity_id'];
@@ -94,4 +94,3 @@ function civicrm_rules_events_argument_civicrm_contactID_load_user($entityobj) {
   }
   return NULL;
 }
-

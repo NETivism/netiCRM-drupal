@@ -52,7 +52,6 @@ class civicrm_handler_relationship_contact2users extends views_handler_relations
 
     $this->first_join = $this->query->add_table('civicrm_uf_match', $this->relationship, $join);
 
-
     // Then, create a relationship on that table:
     $join = new views_join();
     $join->definition = [
@@ -73,4 +72,3 @@ class civicrm_handler_relationship_contact2users extends views_handler_relations
     $this->alias = $this->query->add_relationship($alias, $join, 'users');
   }
 }
-

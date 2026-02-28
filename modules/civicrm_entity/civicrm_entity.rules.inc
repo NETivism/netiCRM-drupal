@@ -12,7 +12,7 @@
  * Implements of hook_rules_data_type_info().
  */
 function civicrm_entity_rules_data_info() {
-  if (! civicrm_initialize(TRUE)) {
+  if (!civicrm_initialize(TRUE)) {
     return;
   }
 
@@ -35,7 +35,7 @@ function civicrm_entity_rules_data_info() {
       'action' => 'create'
     ]);
     foreach ($fields['values'] as $fieldname => $field_specs) {
-      if (! empty($field_specs['type']) && $field_specs['type'] == 1) {
+      if (!empty($field_specs['type']) && $field_specs['type'] == 1) {
         // Type is empty for custom fields - we should sort that out
         // but skipping for now.
         if (CRM_Utils_Array::value('FKClassName', $field_specs)) {
@@ -61,7 +61,7 @@ function civicrm_entity_rules_data_info() {
           'label' => empty($field_specs['title']) ? 'label not defined in CiviCRM schema' : $field_specs['title'],
           'type' => 'integer'
         ];
-        if (! empty($field_specs['options'])) {
+        if (!empty($field_specs['options'])) {
           $info[$drupal_entity]['property_info'][$fieldname]['type'] = 'list<integer>';
           $info[$drupal_entity]['property_info'][$fieldname]['options list'] = '_civicrm_entity_rules_attach_options';
           $info[$drupal_entity]['property_info'][$fieldname]['options data'] = $field_specs['options'];

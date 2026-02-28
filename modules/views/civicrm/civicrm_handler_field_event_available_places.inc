@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Copyright (C) 2009 James Rakich
  * Licensed to CiviCRM under the Academic Free License version 3.0.
@@ -91,6 +90,7 @@ class civicrm_handler_field_event_available_places extends views_handler_field {
         else {
           return (int) $value;
         }
+        // no break
       case 'is_full':
         return $value ? t('Is Full') : '';
       case 'number':
@@ -99,4 +99,3 @@ class civicrm_handler_field_event_available_places extends views_handler_field {
     }
   }
 }
-

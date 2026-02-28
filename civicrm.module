@@ -34,7 +34,6 @@ define('CIVICRM_UF_HEAD', TRUE);
  * Utilities
  */
 
-
 /**
  * Provides a link to the CSS stylesheet associated with this module.
  * and the javascript files needed by this module
@@ -55,29 +54,29 @@ function civicrm_html_head($force_load = FALSE) {
   $head = '';
   $crm_path = preg_replace('/drupal$/', '', drupal_get_path('module', 'civicrm'));
   drupal_add_js(['civicrm' => ['resourceBase' => $base_url.$base_path.$crm_path]], 'setting');
-  drupal_add_js( $base_url.$base_path.$crm_path . 'js/insights.js?v'.$config->ver, ['scope' => 'footer', 'every_page' => TRUE, 'weight' => 999, 'defer' => TRUE, 'preprocess' => FALSE, 'type' => 'file']);
-  if ( arg(0) == 'civicrm' || arg(0) == 'user' || $force_load) {
-    $template = CRM_Core_Smarty::singleton( );
-    $buffer = $template->fetch( 'CRM/common/jquery.files.tpl' );
-    $lines  = preg_split( '/\s+/', $buffer );
+  drupal_add_js($base_url.$base_path.$crm_path . 'js/insights.js?v'.$config->ver, ['scope' => 'footer', 'every_page' => TRUE, 'weight' => 999, 'defer' => TRUE, 'preprocess' => FALSE, 'type' => 'file']);
+  if (arg(0) == 'civicrm' || arg(0) == 'user' || $force_load) {
+    $template = CRM_Core_Smarty::singleton();
+    $buffer = $template->fetch('CRM/common/jquery.files.tpl');
+    $lines  = preg_split('/\s+/', $buffer);
     $options = ['type' => 'file', 'scope' => 'header', 'weight' => 900, 'group' => 999];
-    foreach ( $lines as $line ) {
-      $line = trim( $line );
-      if ( empty( $line ) ) {
+    foreach ($lines as $line) {
+      $line = trim($line);
+      if (empty($line)) {
         continue;
       }
-      if ( strpos( $line, '.js' ) !== false ) {
+      if (strpos($line, '.js') !== FALSE) {
         $options['weight']++;
-        drupal_add_js( $crm_path . $line, $options);
+        drupal_add_js($crm_path . $line, $options);
       }
-      else if ( strpos( $line, '.css' ) !== false ) {
-        drupal_add_css( $crm_path . $line );
+      elseif (strpos($line, '.css') !== FALSE) {
+        drupal_add_css($crm_path . $line);
       }
     }
 
     // add Common.js
     $options['weight'] = 999;
-    drupal_add_js( $crm_path . 'js/Common.js', $options);
+    drupal_add_js($crm_path . 'js/Common.js', $options);
 
     // add noconflict.js
     // set weight to 999.9 to ensure that the file is at the end
@@ -90,7 +89,7 @@ function civicrm_html_head($force_load = FALSE) {
   drupal_add_css($crm_path . 'css/civicrm.css', $options);
 
   $options['weight'] = 991;
-  drupal_add_css($crm_path . 'css/extras.css',  $options);
+  drupal_add_css($crm_path . 'css/extras.css', $options);
 
   $customCSS = variable_get('civicrm_custom_css_url', '');
   if (!empty($config->customCSSURL)) {
@@ -102,7 +101,7 @@ function civicrm_html_head($force_load = FALSE) {
       variable_set('civicrm_custom_css_url', $config->customCSSURL);
     }
   }
-  elseif(!empty($customCSS)) {
+  elseif (!empty($customCSS)) {
     variable_set('civicrm_custom_css_url', '');
   }
   $added = TRUE;
@@ -133,44 +132,44 @@ function civicrm_help($section) {
     case 'admin/help#civicrm':
       return;
 
-    // FIXME - should not invoke any civicrm stuff here
-    // way too expensive
-    $docLinkAdmin  = CRM_Utils_System::docURL2("Administrator's Guide", TRUE);
-    $docLinkAccess = CRM_Utils_System::docURL2("Access Control", TRUE);
-    $output        = '<p>' . t('The CiviCRM module stores information on the universe of people associated with a community and on their interactions such as emails, donations, petitions, events, etc. It can act as a stand alone contact management system or it can be integrated with mass mailer, volunteer management, petition, and event finding. CiviCRM enables organizations to maintain all these activities in a single database, creating efficiencies and new opportunities for communities to better communicate and benefit from relationships with their community members.') . '</p>';
-    $output .= '<p>' . t('The CiviCRM module allows you to create contacts, or import them from other sources. You can record relationships between contacts, such as indicating they live in the same household. There are two types of groups of contacts. You can create static groups which have a set list of contacts. You can also create dynamic (smart) groups based on characteristics that contacts have in common. For example, you could create a group of all contacts who live in California AND who have volunteered for your organization within the past year. The CiviCRM module also allows for tagging for less formal categorization of contacts or groups. You can easily extend CiviCRM to record community member information which is specific to your community or organization using custom fields. For example, you can create a set of fields to track volunteer skills and preferences. CiviCRM profile gives you a way to allow community members (\'users\') to update their own information, as well as share some of that information with others. Finally, you can configure custom activity types such as volunteering or attending events.') . '</p>';
-    $output .= '<p>' . t('You can:') . '</p>';
-    $output .= '<ul>';
-    $output .= '<li>' . t('read the <a href="!1">CiviCRM Administrator Guide</a>.', [
-      '!1' => $docLinkAdmin]) . '</li>';
-    $output .= '<li>' . t('enable CiviCRM blocks at <a href="!1">Administer &raquo; Site Building &raquo; Blocks</a>.', [
-      '!1' => url('admin/build/block')]) . '</li>';
-    $output .= '<li>' . t('read about <a href="!1">CiviCRM access permissions</a> and set access permissions at <a href="!2">Administer CiviCRM &raquo; Users and Permissions &raquo; Permissions (Access Control)</a>.', [
-      '!1' => $docLinkAccess, '!2' => url('civicrm/admin/access', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('find contacts by name, email address, group membership and or tagging at <a href="!1">Find Contacts</a>.', [
-      '!1' => url('civicrm/contact/search/basic', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('do complex searches based on tags, group membership, location, activities and custom fields at <a href="!1">Advanced Search</a>.', [
-      '!1' => url('civicrm/contact/search/advanced', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('create or manage groups at <a href="!1">Manage Groups</a>.', [
-      '!1' => url('civicrm/group', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('import contacts from other sources at <a href="!1">Import Contacts</a>.', [
-      '!1' => url('civicrm/import', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('create or administer tags (e.g. organizer, foundation, environment...) at <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Tags</a>.', [
-      '!1' => url('civicrm/admin/tag', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('create or administer relationship types (e.g. household member, board member, spouse...) <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Relationship Types</a>.', [
-      '!1' => url('civicrm/admin/reltype', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('create or administer location types (e.g. home, work, school...) <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Dropdown Options &raquo; Location Types</a>.', [
-      '!1' => url('civicrm/admin/locationType', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('create or administer activity types (e.g. house meeting, intake interview...) at <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Activity Types</a>.', [
-      '!1' => url('civicrm/admin/options/activity_type', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('create or administer custom data fields (e.g. volunteer skills, emergency contact info...) <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Custom Fields</a>.', [
-      '!1' => url('civicrm/admin/custom/group', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '<li>' . t('create or administer CiviCRM profiles (i.e. what contact data is collected during user registration and included in My Account) at <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Profiles</a>.', [
-      '!1' => url('civicrm/admin/uf/group', ['query' => 'reset=1'])]) . '</li>';
-    $output .= '</ul>';
-    $output .= '<p>' . t('For more information please refer to the <a href="!1">CiviCRM web-site</a> which includes project information, documentation and support resources and more.', [
-      '!1' => 'http://civicrm.org']) . '</p>';
-    return $output;
+      // FIXME - should not invoke any civicrm stuff here
+      // way too expensive
+      $docLinkAdmin  = CRM_Utils_System::docURL2("Administrator's Guide", TRUE);
+      $docLinkAccess = CRM_Utils_System::docURL2("Access Control", TRUE);
+      $output        = '<p>' . t('The CiviCRM module stores information on the universe of people associated with a community and on their interactions such as emails, donations, petitions, events, etc. It can act as a stand alone contact management system or it can be integrated with mass mailer, volunteer management, petition, and event finding. CiviCRM enables organizations to maintain all these activities in a single database, creating efficiencies and new opportunities for communities to better communicate and benefit from relationships with their community members.') . '</p>';
+      $output .= '<p>' . t('The CiviCRM module allows you to create contacts, or import them from other sources. You can record relationships between contacts, such as indicating they live in the same household. There are two types of groups of contacts. You can create static groups which have a set list of contacts. You can also create dynamic (smart) groups based on characteristics that contacts have in common. For example, you could create a group of all contacts who live in California AND who have volunteered for your organization within the past year. The CiviCRM module also allows for tagging for less formal categorization of contacts or groups. You can easily extend CiviCRM to record community member information which is specific to your community or organization using custom fields. For example, you can create a set of fields to track volunteer skills and preferences. CiviCRM profile gives you a way to allow community members (\'users\') to update their own information, as well as share some of that information with others. Finally, you can configure custom activity types such as volunteering or attending events.') . '</p>';
+      $output .= '<p>' . t('You can:') . '</p>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('read the <a href="!1">CiviCRM Administrator Guide</a>.', [
+        '!1' => $docLinkAdmin]) . '</li>';
+      $output .= '<li>' . t('enable CiviCRM blocks at <a href="!1">Administer &raquo; Site Building &raquo; Blocks</a>.', [
+        '!1' => url('admin/build/block')]) . '</li>';
+      $output .= '<li>' . t('read about <a href="!1">CiviCRM access permissions</a> and set access permissions at <a href="!2">Administer CiviCRM &raquo; Users and Permissions &raquo; Permissions (Access Control)</a>.', [
+        '!1' => $docLinkAccess, '!2' => url('civicrm/admin/access', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('find contacts by name, email address, group membership and or tagging at <a href="!1">Find Contacts</a>.', [
+        '!1' => url('civicrm/contact/search/basic', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('do complex searches based on tags, group membership, location, activities and custom fields at <a href="!1">Advanced Search</a>.', [
+        '!1' => url('civicrm/contact/search/advanced', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('create or manage groups at <a href="!1">Manage Groups</a>.', [
+        '!1' => url('civicrm/group', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('import contacts from other sources at <a href="!1">Import Contacts</a>.', [
+        '!1' => url('civicrm/import', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('create or administer tags (e.g. organizer, foundation, environment...) at <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Tags</a>.', [
+        '!1' => url('civicrm/admin/tag', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('create or administer relationship types (e.g. household member, board member, spouse...) <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Relationship Types</a>.', [
+        '!1' => url('civicrm/admin/reltype', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('create or administer location types (e.g. home, work, school...) <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Dropdown Options &raquo; Location Types</a>.', [
+        '!1' => url('civicrm/admin/locationType', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('create or administer activity types (e.g. house meeting, intake interview...) at <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Activity Types</a>.', [
+        '!1' => url('civicrm/admin/options/activity_type', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('create or administer custom data fields (e.g. volunteer skills, emergency contact info...) <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Custom Fields</a>.', [
+        '!1' => url('civicrm/admin/custom/group', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '<li>' . t('create or administer CiviCRM profiles (i.e. what contact data is collected during user registration and included in My Account) at <a href="!1">CiviCRM &raquo; Administer &raquo; Customize Data and Screens &raquo; Profiles</a>.', [
+        '!1' => url('civicrm/admin/uf/group', ['query' => 'reset=1'])]) . '</li>';
+      $output .= '</ul>';
+      $output .= '<p>' . t('For more information please refer to the <a href="!1">CiviCRM web-site</a> which includes project information, documentation and support resources and more.', [
+        '!1' => 'http://civicrm.org']) . '</p>';
+      return $output;
 
     case 'admin/modules#description':
       // This description is shown in the listing at admin/modules.
@@ -203,10 +202,10 @@ function civicrm_permission() {
   ];
   foreach ($permissions as $perm => $title) {
     //order matters here, but we deal with that later
-    if(preg_match('/(administer|view all|delete|edit all)/', $perm) || in_array($perm, $restrict)){
+    if (preg_match('/(administer|view all|delete|edit all)/', $perm) || in_array($perm, $restrict)) {
       $restrict_access = TRUE;
     }
-    else{
+    else {
       $restrict_access = FALSE;
     }
     $perms_array[$perm] = [
@@ -321,41 +320,41 @@ function civicrm_menu() {
 /**
  * Syncronize civicrm menu and druipal menu permission
  */
-function _civicrm_checkmenu( ){
+function _civicrm_checkmenu() {
   global $user;
   $args = func_get_args();
   $path = trim(implode('/', $args), '/');
 
   static $checked;
-  if(isset($checked[$path])){
+  if (isset($checked[$path])) {
     return $checked[$path];
   }
 
   civicrm_initialize();
-  $item = CRM_Core_Menu::get( $path );
-  if($item){
-    if(!empty($item['is_public'])){
-      return true;
+  $item = CRM_Core_Menu::get($path);
+  if ($item) {
+    if (!empty($item['is_public'])) {
+      return TRUE;
     }
-    if(strstr($item['path'], 'civicrm/ajax')){
-      if(CRM_Core_Permission::checkMenuItem( $item )){
-        $checked[$path] = true;
-        return true;
+    if (strstr($item['path'], 'civicrm/ajax')) {
+      if (CRM_Core_Permission::checkMenuItem($item)) {
+        $checked[$path] = TRUE;
+        return TRUE;
       }
     }
-    elseif($item['access_callback'] && is_numeric($item['access_callback']) && !$user->uid){
-      if($access = $item['access_arguments'][0][0]){
-        if(user_access($access)){
-          return true;
+    elseif ($item['access_callback'] && is_numeric($item['access_callback']) && !$user->uid) {
+      if ($access = $item['access_arguments'][0][0]) {
+        if (user_access($access)) {
+          return TRUE;
         }
       }
     }
-    elseif ( CRM_Core_Permission::checkMenuItem( $item ) ) {
-      $checked[$path] = true;
-      return true;
+    elseif (CRM_Core_Permission::checkMenuItem($item)) {
+      $checked[$path] = TRUE;
+      return TRUE;
     }
   }
-  return false;
+  return FALSE;
 }
 
 /**
@@ -391,7 +390,7 @@ function civicrm_cron() {
     }
 
     # tappay sync
-    $disableTappay = variable_get('disable_civicrm_tappay_execute_recur', false);
+    $disableTappay = variable_get('disable_civicrm_tappay_execute_recur', FALSE);
     if ($hour > 7 && !$disableTappay) {
       CRM_Core_Payment_TapPay::doExecuteAllRecur($time);
     }
@@ -429,7 +428,7 @@ function civicrm_cron() {
   // weekly , monthly
   if ($hour >= 1 && $hour < 4) {
     // sunday
-    if ($time - $last['weekly'] >= (86300*7)) {
+    if ($time - $last['weekly'] >= (86300 * 7)) {
       CRM_Core_Config::singleton()->clearTempTables();
       CRM_Core_BAO_File::clearUploadDir(28);
       CRM_Utils_Mail::validDKIMDomainList(TRUE, CRM_Utils_Mail::DKIM_EXTERNAL_VERIFIED_FILE);
@@ -439,7 +438,7 @@ function civicrm_cron() {
     }
 
     // start of month
-    if ($time - $last['monthly'] >= (86400*30 - 50) && date('j') == '1') {
+    if ($time - $last['monthly'] >= (86400 * 30 - 50) && date('j') == '1') {
       CRM_Core_Error::purge();
       $last['monthly'] = $time;
     }
@@ -447,21 +446,20 @@ function civicrm_cron() {
   variable_set('civicrm_cron', $last);
 }
 
-
 /**
  * Implementation of hook_page_build
  */
 function civicrm_page_build($page) {
   // CRM-11823 - If Civi bootstrapped, then merge its HTML header with the CMS's header
-/*
-  global $civicrm_root;
-  if (empty($civicrm_root)) {
-    return;
-  }
-  if ($region = CRM_Core_Region::instance('html-header', FALSE)) {
-    CRM_Utils_System::addHTMLHead($region->render(''));
-  }
-*/
+  /*
+    global $civicrm_root;
+    if (empty($civicrm_root)) {
+      return;
+    }
+    if ($region = CRM_Core_Region::instance('html-header', FALSE)) {
+      CRM_Utils_System::addHTMLHead($region->render(''));
+    }
+  */
 }
 
 /**
@@ -497,20 +495,22 @@ function civicrm_initialize() {
     if (!defined('CIVICRM_SETTINGS_PATH')) {
       define('CIVICRM_SETTINGS_PATH', $settingsFile);
     }
-    $error = include_once ($settingsFile);
+    $error = include_once($settingsFile);
 
     // get ready for problems
     $docLinkInstall = "http://wiki.civicrm.org/confluence/display/CRMDOC/Drupal+Installation+Guide";
     $docLinkTrouble = "http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Configuration+Trouble-shooting";
     $forumLink      = "http://forum.civicrm.org/index.php/board,6.0.html";
 
-    $errorMsgAdd = t("Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
+    $errorMsgAdd = t(
+      "Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
       ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink]
     );
 
     if ($error == FALSE) {
       $failure = TRUE;
-      drupal_set_message("<strong><p class='error'>" .
+      drupal_set_message(
+        "<strong><p class='error'>" .
         t("Oops! - The CiviCRM settings file (civicrm.settings.php) was not found in the expected location ") .
         "(" . $settingsFile . "). </p><p class='error'>" .
         $errorMsgAdd . '</p></strong>'
@@ -519,11 +519,13 @@ function civicrm_initialize() {
     }
 
     // this does pretty much all of the civicrm initialization
-    $error = include_once ('CRM/Core/Config.php');
+    $error = include_once('CRM/Core/Config.php');
     if ($error == FALSE) {
       $failure = TRUE;
-      drupal_set_message("<strong><p class='error'>" .
-        t("Oops! - The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
+      drupal_set_message(
+        "<strong><p class='error'>" .
+        t(
+          "Oops! - The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
           ['!1' => $settingsFile]
         ) .
         "</p><p class='error'> &raquo; " .
@@ -667,7 +669,10 @@ function civicrm_invoke() {
     $args[1] != 'upgrade'
   ) {
 
-    CRM_Core_BAO_UFMatch::synchronize($user, FALSE, 'Drupal',
+    CRM_Core_BAO_UFMatch::synchronize(
+      $user,
+      FALSE,
+      'Drupal',
       civicrm_get_ctype('Individual')
     );
   }
@@ -803,7 +808,6 @@ function civicrm_register_data($edit, &$user, $category, $reset, $doNotProcess =
   // lets suppress key generation for all registration forms
   civicrm_key_disable();
 
-
   $ctype = civicrm_get_ctype('Individual');
   if ($user->uid) {
     // Happens on $type == 'insert'
@@ -814,25 +818,34 @@ function civicrm_register_data($edit, &$user, $category, $reset, $doNotProcess =
 
     // CRM-7858
     if (isset($edit['mail'])) {
-      CRM_Core_BAO_UFMatch::updateContactEmail($userID,
+      CRM_Core_BAO_UFMatch::updateContactEmail(
+        $userID,
         trim($edit['mail'])
       );
     }
 
-    $html = CRM_Core_BAO_UFGroup::getEditHTML($userID, '',
+    $html = CRM_Core_BAO_UFGroup::getEditHTML(
+      $userID,
+      '',
       2,
       TRUE,
-      $reset, NULL,
-      $doNotProcess, $ctype
+      $reset,
+      NULL,
+      $doNotProcess,
+      $ctype
     );
   }
   else {
     // Happens on $type == 'register'
-    $html = CRM_Core_BAO_UFGroup::getEditHTML(NULL, '',
+    $html = CRM_Core_BAO_UFGroup::getEditHTML(
+      NULL,
+      '',
       1,
       TRUE,
-      $reset, NULL,
-      $doNotProcess, $ctype
+      $reset,
+      NULL,
+      $doNotProcess,
+      $ctype
     );
   }
 
@@ -898,9 +911,10 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FAL
     $title = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_UFGroup', $profileID, 'title');
   }
   else {
-    CRM_Core_Error::fatal(ts('The requested Profile (gid=%1) is disabled OR it is not configured to be used for \'Profile\' listings in its Settings OR there is no Profile with that ID OR you do not have permission to access this profile. Please contact the site administrator if you need assistance.',
-        [1 => $profileID]
-      ));
+    CRM_Core_Error::fatal(ts(
+      'The requested Profile (gid=%1) is disabled OR it is not configured to be used for \'Profile\' listings in its Settings OR there is no Profile with that ID OR you do not have permission to access this profile. Please contact the site administrator if you need assistance.',
+      [1 => $profileID]
+    ));
   }
 
   if ($html) {
@@ -931,9 +945,10 @@ function civicrm_user_form_validate($form, &$form_state) {
 
   // check for either user/register or admin/people/create
   $register =
-    ((arg(0) == 'user' && arg(1) == 'register') ||
+    (
+      (arg(0) == 'user' && arg(1) == 'register') ||
     (arg(0) == 'admin' && arg(1) == 'people' && arg(2) == 'create')
-  ) ? TRUE : FALSE;
+    ) ? TRUE : FALSE;
   $userID = NULL;
   if (!empty($form['#user'])) {
     $userID = CRM_Core_BAO_UFMatch::getContactId($form['#user']->uid);
@@ -1055,14 +1070,14 @@ function civicrm_views_api() {
 
 function civicrm_views_query_alter(&$view, &$query) {
 
-  if ( ! civicrm_initialize( ) ) {
+  if (!civicrm_initialize()) {
     return;
   }
 
   // check if we are in multilingual mode, otherwise return
   // TODO: should be a simple call - is_multiligual ?
   $domain = new CRM_Core_DAO_Domain();
-  $domain->find(true);
+  $domain->find(TRUE);
 
   $multilingual = (bool) $domain->locales;
 
@@ -1091,6 +1106,7 @@ function civicrm_form_alter(&$form, $formValues, $formID) {
   switch ($formID) {
     case 'user_admin_permissions':
       $form['#submit'][] = 'civicrm_user_admin_permissions_submit';
+      // no break
     case 'system_clean_url_settings':
       if (!empty($formValues['input'])) {
         // reset navigation for permissions changed and clean url
@@ -1105,9 +1121,12 @@ function civicrm_form_alter(&$form, $formValues, $formID) {
       civicrm_html_head(TRUE);
       $form['#attributes']['enctype'] = 'multipart/form-data';
       $form['#validate'][] = 'civicrm_user_form_validate';
-      $output = civicrm_register_data($form,
+      $output = civicrm_register_data(
+        $form,
         $form['#user'],
-        NULL, TRUE, FALSE
+        NULL,
+        TRUE,
+        FALSE
       );
       $form = array_merge($form, $output);
       break;
@@ -1330,7 +1349,8 @@ function civicrm_filter_info() {
  * Implements hook_filter_FILTER_tips
  */
 function _civicrm_filter_tips($filter, $format, $long = FALSE) {
-  return t('Evaluate <a target="_blank" href="@smarty">Smarty</a> and <a target="_blank" href="@civiapi">CiviCRM API</a> codes',
+  return t(
+    'Evaluate <a target="_blank" href="@smarty">Smarty</a> and <a target="_blank" href="@civiapi">CiviCRM API</a> codes',
     [
       '@smarty' => 'http://www.smarty.net/docsv2/en/',
       '@civiapi' => 'http://wiki.civicrm.org/confluence/display/CRMDOC/CiviCRM+Public+APIs',
@@ -1351,7 +1371,7 @@ function _civicrm_filter_process($text, $filter, $format, $langcode, $cache, $ca
 
   $was_secure       = $smarty->security;
   $smarty->security = TRUE;
-  $text             = $smarty->fetch("string:${text}");
+  $text             = $smarty->fetch("string:{$text}");
   $smarty->security = $was_secure;
 
   // In the use-case of embedding Smarty codes inside a Drupal page, one is likely
@@ -1580,7 +1600,7 @@ function civicrm_metatag_page_cache_cid_parts_alter(&$cid_parts) {
   if (!empty($cid_parts['path']) && substr($cid_parts['path'], 0, 7) == 'civicrm') {
     $get = $_GET;
     ksort($get);
-    $cid_parts['path'] .= '/' . md5(print_r($get, true));
+    $cid_parts['path'] .= '/' . md5(print_r($get, TRUE));
   }
 }
 
@@ -1596,9 +1616,10 @@ function civicrm_metatag_page_cache_cid_parts_alter(&$cid_parts) {
  */
 function civicrm_metatag_metatags_view_alter(&$output, $instance) {
   civicrm_initialize();
-  if(CRM_Utils_System::isSSL() == TRUE) {
+  if (CRM_Utils_System::isSSL() == TRUE) {
     $secure = 'https';
-  } else {
+  }
+  else {
     $secure = 'http';
   }
 
@@ -1609,7 +1630,7 @@ function civicrm_metatag_metatags_view_alter(&$output, $instance) {
       if (isset($output[$url]['#attached']['drupal_add_html_head'][0][0]['#value'])) {
         $output[$url]['#attached']['drupal_add_html_head'][0][0]['#value'] = $link;
       }
-    } 
+    }
   }
 }
 
@@ -1644,7 +1665,7 @@ function civicrm_system_theme_settings_post_render($html, $form) {
   }
 
   $ai_completion_default = CRM_AI_BAO_AICompletion::getDefaultTemplate('');
-  
+
   // Validate AI completion default template data
   $ai_completion_valid = FALSE;
   if (!empty($ai_completion_default)) {
@@ -1657,7 +1678,7 @@ function civicrm_system_theme_settings_post_render($html, $form) {
   // Build dynamic template based on AI completion validity
   $tabs_html = '';
   $panels_html = '';
-  
+
   // Add AI Copywriter tab and panel only if valid
   if ($ai_completion_valid) {
     $tabs_html .= '<li><a href="#nme-aicompletion" data-target-id="nme-aicompletion">{ts}AI Copywriter{/ts}</a></li>';
@@ -1670,7 +1691,7 @@ function civicrm_system_theme_settings_post_render($html, $form) {
         </div>
       </div>';
   }
-  
+
   // Always add AI Image Generator tab and panel
   $tabs_html .= '<li><a href="#nme-aiimagegeneration" class="is-active" data-target-id="nme-aiimagegeneration">{ts}AI Image Generator{/ts}</a></li>';
   $panels_html .= '<div id="nme-aiimagegeneration" class="nme-aiimagegeneration nme-setting-panel is-active">
@@ -1682,35 +1703,35 @@ function civicrm_system_theme_settings_post_render($html, $form) {
         </div>
       </div>';
 
-$tpl = <<<EOT
-<div class="nme-setting-panels">
-  <div class="nme-setting-panels-inner">
-    <div class="nme-setting-panels-header" id="nme-setting-panels-header">
-      <div class="inner">
-        <ul data-target-contents="nme-setting-panel" class="nme-setting-panels-tabs">
-          {$tabs_html}
-        </ul>
+  $tpl = <<<EOT
+  <div class="nme-setting-panels">
+    <div class="nme-setting-panels-inner">
+      <div class="nme-setting-panels-header" id="nme-setting-panels-header">
+        <div class="inner">
+          <ul data-target-contents="nme-setting-panel" class="nme-setting-panels-tabs">
+            {$tabs_html}
+          </ul>
+        </div>
+      </div>
+      <div class="nme-ai-panels-content" id="nme-setting-panels-content">
+        {$panels_html}
       </div>
     </div>
-    <div class="nme-ai-panels-content" id="nme-setting-panels-content">
-      {$panels_html}
-    </div>
+    <div class="nme-setting-panels-trigger" data-tooltip data-tooltip-placement="w"><i
+        class="zmdi zmdi-settings"></i></div>
   </div>
-  <div class="nme-setting-panels-trigger" data-tooltip data-tooltip-placement="w"><i
-      class="zmdi zmdi-settings"></i></div>
-</div>
-{include file="CRM/common/sidePanel.tpl" type="inline" headerSelector="#nme-setting-panels-header" contentSelector="#nme-setting-panels-content" containerClass="nme-setting-panels" opened="true" userPreference="true" triggerText="AI Assistant" width="500px" fullscreen="true" triggerIcon="packages/AICompletion/images/icon--magic--white.svg"}
-EOT;
+  {include file="CRM/common/sidePanel.tpl" type="inline" headerSelector="#nme-setting-panels-header" contentSelector="#nme-setting-panels-content" containerClass="nme-setting-panels" opened="true" userPreference="true" triggerText="AI Assistant" width="500px" fullscreen="true" triggerIcon="packages/AICompletion/images/icon--magic--white.svg"}
+  EOT;
 
   require_once 'CRM/Core/Smarty/resources/String.php';
   civicrm_smarty_register_string_resource();
   $smarty = CRM_Core_Smarty::singleton();
-  
+
   // Assign AI completion variables for template rendering
   $smarty->assign('ai_completion_default', $ai_completion_default);
   $smarty->assign('ai_completion_url_basepath', $config->userSystem->languageNegotiationURL('/'));
   $smarty->assign('ai_completion_component', '');
-  
+
   $civicrm_side_panel = $smarty->fetch("string:" . $tpl);
 
   // Append custom HTML at the end of the form

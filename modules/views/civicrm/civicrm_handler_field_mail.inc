@@ -56,5 +56,3 @@ class civicrm_handler_field_mail extends civicrm_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-
-

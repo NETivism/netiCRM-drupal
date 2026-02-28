@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Copyright (C) 2009 James Rakich
  * Licensed to CiviCRM under the Academic Free License version 3.0.
@@ -60,11 +59,9 @@ class civicrm_handler_field_event_price_set extends views_handler_field_prerende
       $eventPageIDs[] = $result->{$this->aliases['event_page_id']};
     }
 
-
     if ($eventPageIDs) {
       foreach ($eventPageIDs as $eventPageID) {
         $priceSet = [];
-
 
         if (isset($eventPageID)) {
           if (!CRM_Price_BAO_Set::getFor('civicrm_event_page', $eventPageID)) {
@@ -72,11 +69,13 @@ class civicrm_handler_field_event_price_set extends views_handler_field_prerende
             $discountId = CRM_Core_BAO_Discount::findSet($eventPageID, 'civicrm_event');
             if ($discountId) {
               CRM_Core_OptionGroup::getAssoc(
-                CRM_Core_DAO::getFieldValue('CRM_Financial_DAO_Discount',
+                CRM_Core_DAO::getFieldValue(
+                  'CRM_Financial_DAO_Discount',
                   $discountId,
                   'option_group_id'
                 ),
-                $priceSet, 'id'
+                $priceSet,
+                'id'
               );
             }
             else {
@@ -85,7 +84,6 @@ class civicrm_handler_field_event_price_set extends views_handler_field_prerende
           }
         }
 
-
         for ($i = 1; $i <= count($priceSet[label]); $i++) {
           $this->items[$eventPageID][] = $priceSet[label][$i] . " " . CRM_Utils_Money::format($priceSet[value][$i]);
         }
@@ -93,4 +91,3 @@ class civicrm_handler_field_event_price_set extends views_handler_field_prerende
     }
   }
 }
-

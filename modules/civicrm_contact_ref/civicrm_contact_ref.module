@@ -108,7 +108,8 @@ function civicrm_contact_ref_field_formatter_view($entity_type, $entity, $field,
         if (isset($item['contact_id']) && is_numeric($item['contact_id'])) {
           $title = _civicrm_contact_ref_titles($item['contact_id']);
           $element[$delta] = [
-            '#markup' => l($title,
+            '#markup' => l(
+              $title,
               'civicrm/contact/view',
               [
                 'query' =>
@@ -269,7 +270,8 @@ function civicrm_contact_ref_autocomplete_value($field_name, $string = '') {
     return;
   }
 
-  $field = field_info_field($field_name);;
+  $field = field_info_field($field_name);
+  ;
   $matches = [];
 
   $references = _civicrm_contact_ref_potential_references($field, $string);

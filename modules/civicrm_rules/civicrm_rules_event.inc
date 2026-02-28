@@ -184,4 +184,3 @@ function civicrm_rules_rules_events_variables($label, $type = 'contact') {
 
   return $default;
 }
-

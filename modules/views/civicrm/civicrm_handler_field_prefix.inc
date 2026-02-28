@@ -53,5 +53,3 @@ class civicrm_handler_field_prefix extends views_handler_field {
     return self::$_individualPrefix[$values->{$this->field_alias}];
   }
 }
-
-

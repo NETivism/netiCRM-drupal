@@ -97,44 +97,50 @@ class civicrm_handler_field_link_activity extends views_handler_field {
       $custom_link = $this->options['custom_link'];
     }
 
-
     switch ($link_choice) {
 
       // LINKING TO activity VIEW PAGE
 
       case 'view':
         if (user_access('view all activities') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/activity',
             "atype={$values->civicrm_activity_activity_type_id}&action=view&reset=1&id={$values->id}&cid={$values->civicrm_activity_source_contact_id}&context=home"
           );
         }
 
         // LINKING TO activity EDIT PAGE
+        // no break
       case 'edit':
         if (user_access('view all activities') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/activity',
             "atype={$values->civicrm_activity_activity_type_id}&action=update&reset=1&id={$values->id}&cid={$values->civicrm_activity_source_contact_id}&context=home"
           );
         }
 
         // LINKING TO activity DELETE PAGE
+        // no break
       case 'delete':
         if (user_access('view all activities') && $link_text !== NULL && $link_text !== '') {
-          return civicrm_views_href($link_text,
+          return civicrm_views_href(
+            $link_text,
             'civicrm/contact/view/activity',
             "atype={$values->civicrm_activity_activity_type_id}&action=delete&reset=1&id={$values->id}&cid={$values->civicrm_activity_source_contact_id}&context=home"
           );
         }
 
         // CUSTOM NODE LINKAGE, GOOD FOR LINKING TO OTHER VIEWS WITH AN ARGUMENT
+        // no break
       case 'custom':
         if ($custom_link !== NULL && $custom_link !== '' && $link_text !== NULL && $link_text !== '') {
           return l($link_text, $custom_link . "{$values->id}");
         }
 
         // IF THE OTHER CASES AREN'T IN PLAY, THEN JUST PRINT THE TEXT
+        // no break
       default:
         return $link_text;
     }
@@ -149,4 +155,3 @@ class civicrm_handler_field_link_activity extends views_handler_field {
     return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }
-

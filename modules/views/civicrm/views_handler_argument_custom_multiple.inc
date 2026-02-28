@@ -76,7 +76,7 @@ class views_handler_argument_custom_multiple extends views_handler_argument {
     $conditions = $placeholders = [];
     if (count($this->value)) {
       $count = 0;
-      foreach($this->value as $value) {
+      foreach ($this->value as $value) {
         $count++;
         $conditions[$count] = "FIND_IN_SET($placeholder".$count.", REPLACE("."$this->table_alias.$this->real_field".", '', ','))";
         $placeholders[$placeholder.$count] = $value;

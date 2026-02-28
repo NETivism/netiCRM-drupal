@@ -94,4 +94,3 @@ function civicrm_rules_rules_data_info() {
   require_once 'civicrm_rules_entity.inc';
   return civicrm_rules_get_entity();
 }
-

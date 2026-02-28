@@ -14,19 +14,19 @@ function webform_civicrm_requirements($phase) {
   if ($phase == 'runtime') {
     $t = get_t();
     $status = _webform_civicrm_status();
-      
+
     if (!$status['webform_civicrm']) {
 
       $requirements['webform_civicrm'] = [
         'title' => 'Webform CiviCRM Integration',
         'value' => $t('Version error'),
         'severity' => REQUIREMENT_ERROR,
-        'description' => $t('The versions of the Webform CiviCRM Integration, Webform, CiviCRM enabled are not compatible. ') . 
+        'description' => $t('The versions of the Webform CiviCRM Integration, Webform, CiviCRM enabled are not compatible. ') .
         l($t('See the Webform CiviCRM Integration project page for version compatibility'), 'https://drupal.org/project/webform_civicrm'),
       ];
     }
     else {
-      
+
       $requirements['webform_civicrm'] = [
         'title' => 'Webform CiviCRM Integration',
         'severity' => REQUIREMENT_OK,
@@ -142,7 +142,6 @@ function webform_civicrm_schema() {
   ];
   return $schema;
 }
-
 
 /**
  * Add column for message to webform_civicrm_forms table.
@@ -417,7 +416,7 @@ function webform_civicrm_update_6205() {
   $tag = $group = [];
   foreach ($db as $row) {
     if ($pieces = wf_crm_explode_key($row->form_key)) {
-      list( , $c, $ent, $n, $table, $name) = $pieces;
+      list(, $c, $ent, $n, $table, $name) = $pieces;
       if ($name == 'groups') {
         if (empty($group[$row->nid][$c])) {
           $group[$row->nid][$c] = ['value' => ''];
@@ -591,7 +590,7 @@ function webform_civicrm_update_7300() {
     }
     // Update some fields
     foreach ($enabled as $key => $field_id) {
-      list( , $c, $ent, $n, $table, $name) = wf_crm_explode_key($key);
+      list(, $c, $ent, $n, $table, $name) = wf_crm_explode_key($key);
       $field = $node->webform['components'][$field_id];
       // Convert ContactRef fields to real contacts
       if (wf_crm_aval($fields, "{$table}_$name:data_type") == 'ContactReference') {
@@ -716,7 +715,6 @@ function webform_civicrm_update_7302() {
 
   return st('All "Existing Contact" fields have been modified to enable the "Enforce Permissions" setting. In most cases you do not need to further modify this setting. You may wish to review your webforms if you are an advanced user and have configured custom contact permissions.');
 }
-
 
 /**
  * Add column for contribution_id to webform_civicrm_submissions table.

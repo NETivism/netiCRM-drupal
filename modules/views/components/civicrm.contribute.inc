@@ -179,8 +179,6 @@ function _civicrm_contribute_data(&$data, $enabled) {
     ],
   ];
 
-
-
   //Contribution Receive Date
   $data['civicrm_contribution']['receive_date'] = [
     'title' => t('Receive Date'),
@@ -404,7 +402,6 @@ function _civicrm_contribute_data(&$data, $enabled) {
       'name' => 'receipt_date',
     ]);
 
-
   //Receipt ID
   $data['civicrm_contribution']['receipt_id'] = [
     'title' => t('Receipt ID'),
@@ -424,7 +421,6 @@ function _civicrm_contribute_data(&$data, $enabled) {
       'handler' => 'views_handler_sort',
     ],
   ];
-
 
   //Contribution Thank You Date
   $data['civicrm_contribution']['thankyou_date'] = [
@@ -562,14 +558,11 @@ function _civicrm_contribute_data(&$data, $enabled) {
     ];
   }
 
-
   /*
      * Soft Credits
      */
 
-
   $data['civicrm_contribution_soft']['table']['group'] = t('CiviCRM  Soft Credits');
-
 
   //TABLE JOINS FOR CIVICRM CONTRIBUTIONS GO HERE!
   $data['civicrm_contribution_soft']['table']['join']['civicrm_contribution'] = [
@@ -683,14 +676,11 @@ function _civicrm_contribute_data(&$data, $enabled) {
     ],
   ];
 
-
   /*
      * Soft Credits
      */
 
-
   $data['civicrm_contribution_recur']['table']['group'] = t('CiviCRM  Recurring Contributions');
-
 
   //TABLE JOINS FOR CIVICRM CONTRIBUTIONS GO HERE!
   $data['civicrm_contribution_recur']['table']['join']['civicrm_contribution'] = [
@@ -1492,4 +1482,3 @@ function _civicrm_contribute_data(&$data, $enabled) {
     ],
   ];
 }
-

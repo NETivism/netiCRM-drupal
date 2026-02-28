@@ -87,5 +87,3 @@ class civicrm_handler_field_address extends civicrm_handler_field_location {
     return $this->table_alias;
   }
 }
-
-

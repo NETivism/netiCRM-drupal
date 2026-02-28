@@ -23,7 +23,6 @@
  +--------------------------------------------------------------------+
 */
 
-
 /*
  * Heavily based on anonymous code contribution. No claim.
  * CiviCRM Views Integration
@@ -55,5 +54,3 @@ class civicrm_handler_filter_suffix extends views_handler_filter_in_operator {
     }
   }
 }
-
-
