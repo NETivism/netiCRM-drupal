@@ -89,7 +89,6 @@ class CivicrmEventLink extends FieldPluginBase {
     ];
   }
 
-
   public function render(ResultRow $row) {
     // ksm($row);
     // $access = $this->checkUrlAccess($row);
@@ -99,7 +98,6 @@ class CivicrmEventLink extends FieldPluginBase {
 
     return $build;
   }
-
 
   public function renderLink(ResultRow $row) {
 
@@ -133,7 +131,7 @@ class CivicrmEventLink extends FieldPluginBase {
   }
 
   protected function prepareLinkAttr() {
-    $attr=[];
+    $attr = [];
     if (!$this->options['alter']['make_link']) {
       return [];
     }

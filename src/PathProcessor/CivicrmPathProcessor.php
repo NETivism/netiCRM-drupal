@@ -23,7 +23,7 @@ class CivicrmPathProcessor implements InboundPathProcessorInterface {
         // if he current path is a civicrm path
         if ((strpos($path, $item) === 0)) {
           // discover longest matching civicrm path in the request path
-          
+
           if (strlen($item) > strlen($longest)) {
             $longest = $item;
           }

@@ -66,7 +66,6 @@ class CivicrmStandard extends FieldPluginBase {
     ];
   }
 
-
   public function render(ResultRow $values) {
     $value = $this->getValue($values);
     if ($this->options['mask_output'] == 'partial') {

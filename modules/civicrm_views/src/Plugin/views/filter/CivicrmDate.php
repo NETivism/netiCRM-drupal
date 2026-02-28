@@ -136,8 +136,8 @@ class CivicrmDate extends Date {
   }
 
   public function acceptExposedInput($input) {
-    $rc=parent::acceptExposedInput($input);
-    if ($this->operator=='between') {
+    $rc = parent::acceptExposedInput($input);
+    if ($this->operator == 'between') {
       if ($this->value['min'] == '' && $this->value['max'] == '') {
         return FALSE;
       }
@@ -192,7 +192,7 @@ class CivicrmDate extends Date {
       // if ($max == -1 || $max === FALSE) {
       // $form_state->setError($form['max'], $this->t('Invalid date format.'));
       // }
-      if ($min===FALSE && $max===FALSE) {
+      if ($min === FALSE && $max === FALSE) {
         $form_state->setError($form['max'], $this->t('Invalid date format.'));
       }
     }

@@ -33,14 +33,13 @@ class CustomMultiple extends ArgumentPluginBase {
 
   }
 
-
   public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL) {
     parent::init($view, $display, $options);
-    $this->html_type=$this->definition['pseudo info']['html_type'];
+    $this->html_type = $this->definition['pseudo info']['html_type'];
   }
 
   protected function defineOptions() {
-    $options= parent::defineOptions();
+    $options = parent::defineOptions();
     $options['glossary'] = ['default' => FALSE, 'bool' => TRUE];
     $options['limit'] = ['default' => 0];
     $options['case'] = ['default' => 'none'];
@@ -69,7 +68,7 @@ class CustomMultiple extends ArgumentPluginBase {
       $this->unpackArgumentValue();
     }
     else {
-      $this->value=[$argument];
+      $this->value = [$argument];
       $this->operator = 'or';
     }
 
@@ -104,6 +103,5 @@ class CustomMultiple extends ArgumentPluginBase {
       $this->query->addWhereExpression(0, $where, $placeholders);
     }
   }
-
 
 }

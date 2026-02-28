@@ -49,7 +49,7 @@ class Routes {
         $itemsLeft[$path] = $item;
         continue;
       }
-      
+
       $route = new Route(
         '/' . $path . '/{extra}',
         [

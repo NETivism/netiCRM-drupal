@@ -28,8 +28,8 @@ class CivicrmEventRegistrationText extends FieldPluginBase {
   }
 
   public function render(ResultRow $row) {
-    $v=$this->getValue($row);
-    $build = ['#markup' => $v??ts('Register Now')];
+    $v = $this->getValue($row);
+    $build = ['#markup' => $v ?? ts('Register Now')];
     return $build;
   }
 

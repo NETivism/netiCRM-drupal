@@ -89,7 +89,6 @@ function civicrm_install() {
     _civicrm_import_sql($config, 'sql/civicrm_acl.mysql');
   }
 
-
   // step 2: create file directory
   // Oh we can't create civicrm directory here. Leave it for initialize auto create script.
   $dirs = [
@@ -272,7 +271,7 @@ function _civicrm_init_setting($config) {
   }
   else {
     if (is_writable($config['site_dir'])) {
-      $default_scheme =\Drupal::config('system.file')->get('default_scheme');
+      $default_scheme = \Drupal::config('system.file')->get('default_scheme');
       $params = [];
       $params['%%baseURL%%'] = base_path();
       $params['%%cms%%'] = 'Drupal';
@@ -285,7 +284,7 @@ function _civicrm_init_setting($config) {
       $params['%%dbHost%%'] = $config['crmdb']['server'];
       $params['%%dbName%%'] = $config['crmdb']['database'];
       $params['%%crmRoot%%'] = $config['crm_path'].'/';
-      $params['%%templateCompileDir%%'] =\Drupal::service('file_system')->realpath($default_scheme  . "://").'/civicrm/templates_c/';
+      $params['%%templateCompileDir%%'] = \Drupal::service('file_system')->realpath($default_scheme  . "://").'/civicrm/templates_c/';
       $params['%%siteKey%%'] = md5($GLOBALS['base_url'].microtime());
 
       $filename = $config['crm_path'].'/templates/CRM/common/civicrm.settings.php.template';
@@ -311,7 +310,7 @@ function _civicrm_init_setting($config) {
 function _civicrm_db_test() {
   // test if database exists
   $db_crm  = DB::connect(CIVICRM_DSN);
-  $pear = new PEAR;
+  $pear = new PEAR();
   if ($pear->isError($db_crm)) {
     throw new Exception(t('Database connection failed when enable civicrm'));
   }
@@ -329,7 +328,7 @@ function _civicrm_import_sql($config, $filename) {
   $filename = $crm_root.'/'.$filename;
 
   $db = DB::connect($dsn);
-  $pear = new PEAR;
+  $pear = new PEAR();
   if ($pear->isError($db)) {
     \Drupal::logger('civicrm')->error("Cannot open $dsn: " . $db->getMessage().' Check Line:'. __LINE__);
     return FALSE;

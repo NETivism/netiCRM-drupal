@@ -325,7 +325,7 @@ function civicrm_cron() {
   if ($hour >= 1 && $hour < 4) {
     civicrm_initialize();
     // sunday
-    if ($time - $last['weekly'] >= (86400*7 - 50) && date('w') == '0') {
+    if ($time - $last['weekly'] >= (86400 * 7 - 50) && date('w') == '0') {
       CRM_Core_Config::singleton()->clearTempTables();
       CRM_Core_BAO_File::clearUploadDir(28);
       // periodically verify dkim / spf
@@ -335,7 +335,7 @@ function civicrm_cron() {
     }
 
     // start of month
-    if ($time - $last['monthly'] >= (86400*30 - 50) && date('j') == '1') {
+    if ($time - $last['monthly'] >= (86400 * 30 - 50) && date('j') == '1') {
       CRM_Core_Error::purge();
       $last['month'] = $time;
       $modified = TRUE;
@@ -346,7 +346,6 @@ function civicrm_cron() {
     \Drupal::state()->set('civicrm.last_cron', $last);
   }
 }
-
 
 /**
  * Implements hook_entity_extra_field_info().
@@ -536,7 +535,6 @@ function _civicrm_user_register_form_validate(&$form, \Drupal\Core\Form\FormStat
     }
   }
 }
-
 
 /**
  * Determine if the user is on a CiviCRM generated page.

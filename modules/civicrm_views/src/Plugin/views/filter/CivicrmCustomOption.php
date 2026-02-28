@@ -16,7 +16,7 @@ class CivicrmCustomOption extends CivicrmInOperator {
 
   public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL) {
     parent::init($view, $display, $options);
-    $this->html_type=$this->definition['pseudo info']['html_type'];
+    $this->html_type = $this->definition['pseudo info']['html_type'];
   }
 
   public function getValueOptions() {
@@ -24,7 +24,7 @@ class CivicrmCustomOption extends CivicrmInOperator {
       return $this->valueOptions;
     }
     if (is_array($this->definition['options arguments']) && array_key_exists('custom_field_id', $this->definition['options arguments'])) {
-      $this->valueOptions=$this->getCustomFieldOptions($this->definition['options arguments']['custom_field_id']);
+      $this->valueOptions = $this->getCustomFieldOptions($this->definition['options arguments']['custom_field_id']);
     }
 
     return $this->valueOptions;
@@ -85,6 +85,5 @@ class CivicrmCustomOption extends CivicrmInOperator {
     }
 
   }
-
 
 }

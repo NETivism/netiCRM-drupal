@@ -17,13 +17,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class CivicrmPseudoconstant extends FieldPluginBase {
   protected $pseudovalues = [];
-  protected $html_type='';
+  protected $html_type = '';
 
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm, Connection $conn) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $civicrm->initialize();
-    $this->html_type=$this->definition['pseudo info']['html_type'];
+    $this->html_type = $this->definition['pseudo info']['html_type'];
     if (array_key_exists('pseudo arguments', $this->definition)) {
       $this->pseudovalues = call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
     }
@@ -42,7 +42,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    if ($this->html_type=='File') {
+    if ($this->html_type == 'File') {
       $options['file_display_format'] = ['default' => 'url'];
     }
 
@@ -57,7 +57,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
   }
 
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    if ($this->html_type=='File') {
+    if ($this->html_type == 'File') {
       $form['file_display_format'] = [
         '#type' => 'select',
         '#title' => t('Display format'),
@@ -101,7 +101,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
 
   public function render(ResultRow $values) {
     $value = $this->getValue($values);
-    if ($this->html_type=='File') {
+    if ($this->html_type == 'File') {
       return $this->renderFile($values);
     }
     $output = '';
@@ -124,7 +124,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
         else {
           $output = implode(', ', $multiple);
         }
-        return ['#markup'=>$output];
+        return ['#markup' => $output];
       }
       else {
         if ($this->options['pseudoconstant_format'] == 'pseudoconstant' && isset($this->pseudovalues[$value])) {
@@ -133,7 +133,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
         else {
           $output = $this->sanitizeValue($value);
         }
-        return ['#markup'=>$output];
+        return ['#markup' => $output];
       }
     }
 
@@ -157,7 +157,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
           break;
         case 'image':
           if ($file['img']) { // mimetype already checked
-            return ['#markup'=> $file['img']];
+            return ['#markup' => $file['img']];
           }
           break;
         case 'url_real':
@@ -167,7 +167,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
           break;
         case 'image_real':
           if ($file['img']) { // mimetype already checked, caution this will be accessable by public
-            return ['#markup'=> $file['img_real']];
+            return ['#markup' => $file['img_real']];
           }
           break;
         case 'raw':

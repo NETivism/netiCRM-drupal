@@ -75,7 +75,7 @@ function civicrm_views_views_data() {
 
     $data[$field['table']][$field['name']] = [
       'title' => t('CiviCRM Custom Field: @title', ['@title' => $field['title']]),
-      'group'=>t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
+      'group' => t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
       'help' => t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
       'real field' => $field['real field'],
       'field' => _civicrm_views_field_to_field_plugin($civicrm_entities[$field['join']], $field),
@@ -119,8 +119,8 @@ function civicrm_views_views_data_alter(&$data) {
   $data['civicrm_contribution_page']['is_active']['filter']['id'] = 'numeric';
 
   //alter Event registration link text
-  $data['civicrm_event']['registration_link_text']['field']['id']= 'civicrm_event_registration_text';
-  $data['civicrm_event']['event_links']=[
+  $data['civicrm_event']['registration_link_text']['field']['id'] = 'civicrm_event_registration_text';
+  $data['civicrm_event']['event_links'] = [
     'title' => t('Event Link'),
     'help' => t('Registration/info Link for event'),
     'field' => [
@@ -299,13 +299,13 @@ function _civicrm_views_civicrm_entities() {
  * Add PseudoConstant fields for civicrm Enties
  */
 function _civicrm_views_add_pseudoconstant(&$data) {
-  $data['civicrm_event']['event_type']=[
-    'title'=> 'Civicrm Event Type',
-    'help'=> 'Civicrm Event Type',
-    'field'=>[
-      'id'=>'civicrm_pseudoconstant',
-      'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>[
+  $data['civicrm_event']['event_type'] = [
+    'title' => 'Civicrm Event Type',
+    'help' => 'Civicrm Event Type',
+    'field' => [
+      'id' => 'civicrm_pseudoconstant',
+      'pseudo callback' => '_civicrm_views_get_field_options',
+      'pseudo arguments' => [
         'event',
         'getoptions',
         [
@@ -313,20 +313,20 @@ function _civicrm_views_add_pseudoconstant(&$data) {
           'field' => 'event_type_id',
         ],
       ],
-      'real field'=>'event_type_id'
+      'real field' => 'event_type_id'
     ],
-    'filter'=>[
-      'id'=>'civicrm_in_operator',
-      'options callback'=>'CRM_Event_PseudoConstant::eventType',
-      'options arguments'=>[],
-      'real field'=>'event_type_id'
+    'filter' => [
+      'id' => 'civicrm_in_operator',
+      'options callback' => 'CRM_Event_PseudoConstant::eventType',
+      'options arguments' => [],
+      'real field' => 'event_type_id'
     ]
   ];
 
   $data['civicrm_contribution']['contribution_status_id']['field'] = [
-    'id'=>'civicrm_pseudoconstant',
-    'pseudo callback'=>'_civicrm_views_get_field_options',
-    'pseudo arguments'=>[
+    'id' => 'civicrm_pseudoconstant',
+    'pseudo callback' => '_civicrm_views_get_field_options',
+    'pseudo arguments' => [
       'contribution',
       'getoptions',
       [
@@ -334,12 +334,12 @@ function _civicrm_views_add_pseudoconstant(&$data) {
         'field' => 'contribution_status_id',
       ],
     ],
-    'real field'=> 'contribution_status_id'
+    'real field' => 'contribution_status_id'
   ];
   $data['civicrm_contribution']['contribution_status_id']['filter'] = [
-    'id'=>'civicrm_in_operator',
-    'options callback'=>'_civicrm_views_get_field_options',
-    'options arguments'=> [
+    'id' => 'civicrm_in_operator',
+    'options callback' => '_civicrm_views_get_field_options',
+    'options arguments' => [
       'contribution',
       'getoptions',
       [
@@ -347,13 +347,13 @@ function _civicrm_views_add_pseudoconstant(&$data) {
         'field' => 'contribution_status_id',
       ],
     ],
-    'real field'=> 'contribution_status_id'
+    'real field' => 'contribution_status_id'
   ];
 
   $data['civicrm_contribution']['contribution_type_id']['field'] = [
-    'id'=>'civicrm_pseudoconstant',
-    'pseudo callback'=>'_civicrm_views_get_field_options',
-    'pseudo arguments'=>[
+    'id' => 'civicrm_pseudoconstant',
+    'pseudo callback' => '_civicrm_views_get_field_options',
+    'pseudo arguments' => [
       'contribution',
       'getoptions',
       [
@@ -361,12 +361,12 @@ function _civicrm_views_add_pseudoconstant(&$data) {
         'field' => 'contribution_type_id',
       ],
     ],
-    'real field'=> 'contribution_type_id'
+    'real field' => 'contribution_type_id'
   ];
   $data['civicrm_contribution']['contribution_type_id']['filter'] = [
-    'id'=>'civicrm_in_operator',
-    'options callback'=>'_civicrm_views_get_field_options',
-    'options arguments'=> [
+    'id' => 'civicrm_in_operator',
+    'options callback' => '_civicrm_views_get_field_options',
+    'options arguments' => [
       'contribution',
       'getoptions',
       [
@@ -374,12 +374,12 @@ function _civicrm_views_add_pseudoconstant(&$data) {
         'field' => 'contribution_type_id',
       ],
     ],
-    'real field'=> 'contribution_type_id'
+    'real field' => 'contribution_type_id'
   ];
   $data['civicrm_contribution']['payment_instrument_id']['field'] = [
-    'id'=>'civicrm_pseudoconstant',
-    'pseudo callback'=>'_civicrm_views_get_field_options',
-    'pseudo arguments'=>[
+    'id' => 'civicrm_pseudoconstant',
+    'pseudo callback' => '_civicrm_views_get_field_options',
+    'pseudo arguments' => [
       'contribution',
       'getoptions',
       [
@@ -387,12 +387,12 @@ function _civicrm_views_add_pseudoconstant(&$data) {
         'field' => 'payment_instrument_id',
       ],
     ],
-    'real field'=> 'payment_instrument_id'
+    'real field' => 'payment_instrument_id'
   ];
   $data['civicrm_contribution']['payment_instrument_id']['filter'] = [
-    'id'=>'civicrm_in_operator',
-    'options callback'=>'_civicrm_views_get_field_options',
-    'options arguments'=> [
+    'id' => 'civicrm_in_operator',
+    'options callback' => '_civicrm_views_get_field_options',
+    'options arguments' => [
       'contribution',
       'getoptions',
       [
@@ -400,13 +400,13 @@ function _civicrm_views_add_pseudoconstant(&$data) {
         'field' => 'payment_instrument_id',
       ],
     ],
-    'real field'=> 'payment_instrument_id'
+    'real field' => 'payment_instrument_id'
   ];
 
   $data['civicrm_membership']['status_id']['field'] = [
-    'id'=>'civicrm_pseudoconstant',
-    'pseudo callback'=>'_civicrm_views_get_field_options',
-    'pseudo arguments'=>[
+    'id' => 'civicrm_pseudoconstant',
+    'pseudo callback' => '_civicrm_views_get_field_options',
+    'pseudo arguments' => [
       'membership',
       'getoptions',
       [
@@ -414,12 +414,12 @@ function _civicrm_views_add_pseudoconstant(&$data) {
         'field' => 'status_id',
       ],
     ],
-    'real field'=> 'status_id'
+    'real field' => 'status_id'
   ];
   $data['civicrm_membership']['status_id']['filter'] = [
-    'id'=>'civicrm_in_operator',
-    'options callback'=>'_civicrm_views_get_field_options',
-    'options arguments'=> [
+    'id' => 'civicrm_in_operator',
+    'options callback' => '_civicrm_views_get_field_options',
+    'options arguments' => [
       'membership',
       'getoptions',
       [
@@ -427,16 +427,16 @@ function _civicrm_views_add_pseudoconstant(&$data) {
         'field' => 'status_id',
       ],
     ],
-    'real field'=> 'status_id'
+    'real field' => 'status_id'
   ];
 
-  $data['civicrm_address']['state_province']=[
-    'title'=> 'Civicrm State Province',
-    'help'=> 'Civicrm State Province',
-    'field'=>[
-      'id'=>'civicrm_pseudoconstant',
-      'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>[
+  $data['civicrm_address']['state_province'] = [
+    'title' => 'Civicrm State Province',
+    'help' => 'Civicrm State Province',
+    'field' => [
+      'id' => 'civicrm_pseudoconstant',
+      'pseudo callback' => '_civicrm_views_get_field_options',
+      'pseudo arguments' => [
         'contact',
         'getoptions',
         [
@@ -444,22 +444,22 @@ function _civicrm_views_add_pseudoconstant(&$data) {
           'field' => 'state_province_id',
         ],
       ],
-      'real field'=>'state_province_id'
+      'real field' => 'state_province_id'
     ],
-    'filter'=>[
-      'id'=>'civicrm_in_operator',
-      'options callback'=>'CRM_Core_PseudoConstant::stateProvince',
-      'options arguments'=>[],
-      'real field'=>'state_province_id'
+    'filter' => [
+      'id' => 'civicrm_in_operator',
+      'options callback' => 'CRM_Core_PseudoConstant::stateProvince',
+      'options arguments' => [],
+      'real field' => 'state_province_id'
     ]
   ];
-  $data['civicrm_address']['country']=[
-    'title'=> 'Civicrm Country',
-    'help'=> 'Civicrm Country',
-    'field'=>[
-      'id'=>'civicrm_pseudoconstant',
-      'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>[
+  $data['civicrm_address']['country'] = [
+    'title' => 'Civicrm Country',
+    'help' => 'Civicrm Country',
+    'field' => [
+      'id' => 'civicrm_pseudoconstant',
+      'pseudo callback' => '_civicrm_views_get_field_options',
+      'pseudo arguments' => [
         'contact',
         'getoptions',
         [
@@ -467,22 +467,22 @@ function _civicrm_views_add_pseudoconstant(&$data) {
           'field' => 'country_id',
         ],
       ],
-      'real field'=>'country_id'
+      'real field' => 'country_id'
     ],
-    'filter'=>[
-      'id'=>'civicrm_in_operator',
-      'options callback'=>'CRM_Core_PseudoConstant::country',
-      'options arguments'=>[],
-      'real field'=>'country_id'
+    'filter' => [
+      'id' => 'civicrm_in_operator',
+      'options callback' => 'CRM_Core_PseudoConstant::country',
+      'options arguments' => [],
+      'real field' => 'country_id'
     ]
   ];
-  $data['civicrm_contact']['gender_id']=[
-    'title'=> 'Civicrm Gender',
-    'help'=> 'Civicrm Gender',
-    'field'=>[
-      'id'=>'civicrm_pseudoconstant',
-      'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>[
+  $data['civicrm_contact']['gender_id'] = [
+    'title' => 'Civicrm Gender',
+    'help' => 'Civicrm Gender',
+    'field' => [
+      'id' => 'civicrm_pseudoconstant',
+      'pseudo callback' => '_civicrm_views_get_field_options',
+      'pseudo arguments' => [
         'contact',
         'getoptions',
         [
@@ -490,22 +490,22 @@ function _civicrm_views_add_pseudoconstant(&$data) {
           'field' => 'gender_id',
         ],
       ],
-      'real field'=>'gender_id'
+      'real field' => 'gender_id'
     ],
-    'filter'=>[
-      'id'=>'civicrm_in_operator',
-      'options callback'=>'CRM_Event_PseudoConstant::gender',
-      'options arguments'=>[],
-      'real field'=>'gender_id'
+    'filter' => [
+      'id' => 'civicrm_in_operator',
+      'options callback' => 'CRM_Event_PseudoConstant::gender',
+      'options arguments' => [],
+      'real field' => 'gender_id'
     ]
   ];
-  $data['civicrm_participant']['status_id']=[
-    'title'=> 'Civicrm Participant Status',
-    'help'=> 'Civicrm Participant Status',
-    'field'=>[
-      'id'=>'civicrm_pseudoconstant',
-      'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>[
+  $data['civicrm_participant']['status_id'] = [
+    'title' => 'Civicrm Participant Status',
+    'help' => 'Civicrm Participant Status',
+    'field' => [
+      'id' => 'civicrm_pseudoconstant',
+      'pseudo callback' => '_civicrm_views_get_field_options',
+      'pseudo arguments' => [
         'participant',
         'getoptions',
         [
@@ -513,12 +513,12 @@ function _civicrm_views_add_pseudoconstant(&$data) {
           'field' => 'status_id',
         ],
       ],
-      'real field'=>'status_id'
+      'real field' => 'status_id'
     ],
-    'filter'=>[
-      'id'=>'civicrm_in_operator',
-      'options callback'=>'_civicrm_views_get_field_options',
-      'options arguments'=>[
+    'filter' => [
+      'id' => 'civicrm_in_operator',
+      'options callback' => '_civicrm_views_get_field_options',
+      'options arguments' => [
         'participant',
         'getoptions',
         [
@@ -526,16 +526,16 @@ function _civicrm_views_add_pseudoconstant(&$data) {
           'field' => 'status_id',
         ],
       ],
-      'real field'=>'status_id'
+      'real field' => 'status_id'
     ]
   ];
-  $data['civicrm_activity']['status_id']=[
-    'title'=> 'Civicrm Activity Status',
-    'help'=> 'Civicrm Activity Status',
-    'field'=>[
-      'id'=>'civicrm_pseudoconstant',
-      'pseudo callback'=>'_civicrm_views_get_field_options',
-      'pseudo arguments'=>[
+  $data['civicrm_activity']['status_id'] = [
+    'title' => 'Civicrm Activity Status',
+    'help' => 'Civicrm Activity Status',
+    'field' => [
+      'id' => 'civicrm_pseudoconstant',
+      'pseudo callback' => '_civicrm_views_get_field_options',
+      'pseudo arguments' => [
         'activity',
         'getoptions',
         [
@@ -543,12 +543,12 @@ function _civicrm_views_add_pseudoconstant(&$data) {
           'field' => 'status_id',
         ],
       ],
-      'real field'=>'status_id'
+      'real field' => 'status_id'
     ],
-    'filter'=>[
-      'id'=>'civicrm_in_operator',
-      'options callback'=>'_civicrm_views_get_field_options',
-      'options arguments'=>[
+    'filter' => [
+      'id' => 'civicrm_in_operator',
+      'options callback' => '_civicrm_views_get_field_options',
+      'options arguments' => [
         'activity',
         'getoptions',
         [
@@ -556,12 +556,12 @@ function _civicrm_views_add_pseudoconstant(&$data) {
           'field' => 'status_id',
         ],
       ],
-      'real field'=>'status_id'
+      'real field' => 'status_id'
     ],
     'argument' => [
       'id' => 'civicrm_custom_label',
-      'label callback'=>'_civicrm_views_get_field_options',
-      'label arguments'=>[
+      'label callback' => '_civicrm_views_get_field_options',
+      'label arguments' => [
         'activity',
         'getoptions',
         [
@@ -1060,10 +1060,10 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
       ];
     case CRM_Utils_Type::T_ENUM:
     case CRM_Utils_Type::T_STRING:
-      if ($field['data_type']=='File') {
+      if ($field['data_type'] == 'File') {
         return [
           'id' => 'civicrm_pseudoconstant',
-          'pseudo info'=>$field,
+          'pseudo info' => $field,
         ];
       }
       else {
@@ -1111,7 +1111,7 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
             'field' => $field['name'],
           ],
         ],
-        'pseudo info'=>$field,
+        'pseudo info' => $field,
       ];
 
     default:
@@ -1204,9 +1204,9 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
         return [
           'id' => 'civicrm_custom_option',
           'options arguments' => [
-            'custom_field_id'=> $match[1]
+            'custom_field_id' => $match[1]
             ],
-          'pseudo info'=>$field,
+          'pseudo info' => $field,
         ];
       }
 
@@ -1235,9 +1235,9 @@ function _civicrm_views_field_to_argument_plugin($entity, $field) {
     case CRM_Utils_Type::T_STRING:
     case CRM_Utils_Type::T_URL:
     case CRM_Utils_Type::T_EMAIL:
-      return $field['data_type']!='File'?[
+      return $field['data_type'] != 'File' ? [
         'id' => 'string',
-      ]:NULL;
+      ] : NULL;
     case CRM_Utils_Type::TWELVE:
     case CRM_Utils_Type::T_DATE:
     case CRM_Utils_Type::T_TIMESTAMP:
@@ -1249,9 +1249,9 @@ function _civicrm_views_field_to_argument_plugin($entity, $field) {
         return [
           'id' => 'civicrm_custom_multiple',
           'options arguments' => [
-            'custom_field_id'=> $match[1]
+            'custom_field_id' => $match[1]
           ],
-          'pseudo info'=>$field,
+          'pseudo info' => $field,
         ];
       }
   }
@@ -1277,9 +1277,9 @@ function _civicrm_views_get_custom_fields() {
       'type' => _getStandardTypeFromCustomDataType($dao->data_type),
       'join' => _civicrm_views_get_join_table($dao->extends),
       'pseudoconstant' => $dao->option_group_id,
-      'extends'=>$dao->extends,
-      'data_type'=>$dao->data_type,
-      'html_type'=>$dao->html_type
+      'extends' => $dao->extends,
+      'data_type' => $dao->data_type,
+      'html_type' => $dao->html_type
     ];
   }
   return $custom_fields;
@@ -1289,7 +1289,7 @@ function _civicrm_views_get_field_type($field) {
   if (!empty($field['pseudoconstant']) ||
     (!empty($field['data_type']) && $field['data_type'] === 'StateProvince') ||
     (!empty($field['data_type']) && $field['data_type'] === 'Country') ||
-    (!empty($field['html_type']) && $field['html_type']=='Multi-Select')) {
+    (!empty($field['html_type']) && $field['html_type'] == 'Multi-Select')) {
     return 'pseudoconstant';
   }
   else {
