@@ -10,7 +10,7 @@ use Drupal\civicrm\Civicrm;
 class CivicrmPathProcessor implements InboundPathProcessorInterface {
 
   public function processInbound($path, Request $request) {
-    // if the path is a civicrm path   
+    // if the path is a civicrm path
     if (strpos($path, '/civicrm/') === 0) {
       // initialize civicrm
       $civicrm = new Civicrm();
@@ -21,11 +21,11 @@ class CivicrmPathProcessor implements InboundPathProcessorInterface {
       foreach (array_keys($items) as $item) {
         $item = '/' . $item;
         // if he current path is a civicrm path
-        if ((strpos($path, $item ) === 0))  {
-          // discover longest matching civicrm path in the request path 
+        if ((strpos($path, $item) === 0)) {
+          // discover longest matching civicrm path in the request path
           
           if (strlen($item) > strlen($longest)) {
-           $longest = $item;
+            $longest = $item;
           }
         }
       }
@@ -36,7 +36,7 @@ class CivicrmPathProcessor implements InboundPathProcessorInterface {
         if (strlen($params)) {
           $params = str_replace('/', ':', $params);
           if (substr($params, 0, 1) == ':') {
-           $params = substr($params, 1);
+            $params = substr($params, 1);
           }
           return "$longest/$params";
         }

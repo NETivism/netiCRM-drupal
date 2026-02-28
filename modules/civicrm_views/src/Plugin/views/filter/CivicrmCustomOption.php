@@ -14,16 +14,16 @@ use Drupal\civicrm\Civicrm;
  */
 class CivicrmCustomOption extends CivicrmInOperator {
 
-  public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL){
+  public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL) {
     parent::init($view, $display, $options);
     $this->html_type=$this->definition['pseudo info']['html_type'];
   }
 
-  public function getValueOptions(){
+  public function getValueOptions() {
     if (isset($this->valueOptions)) {
       return $this->valueOptions;
     }
-    if(is_array($this->definition['options arguments']) && array_key_exists('custom_field_id', $this->definition['options arguments'])){
+    if (is_array($this->definition['options arguments']) && array_key_exists('custom_field_id', $this->definition['options arguments'])) {
       $this->valueOptions=$this->getCustomFieldOptions($this->definition['options arguments']['custom_field_id']);
     }
 
@@ -34,7 +34,7 @@ class CivicrmCustomOption extends CivicrmInOperator {
   /**
    * @todo: Cache using Drupal Cache API
    */
-  protected function getCustomFieldOptions($custom_field_id, $ignore_cache = false){
+  protected function getCustomFieldOptions($custom_field_id, $ignore_cache = FALSE) {
     require_once 'CRM/Core/BAO/CustomOption.php';
     $options = [];
     $req_time = \Drupal::time()->getRequestTime();
@@ -42,7 +42,8 @@ class CivicrmCustomOption extends CivicrmInOperator {
 
     if (is_array($this->options_cache) && isset($this->options_cache[$cache_id]) && !$ignore_cache && ($req_time < $this->options_cache[$cache_id]['expired'])) {
       $options = $this->options_cache[$cache_id]['options'];
-    } else {
+    }
+    else {
       $raw_options = \CRM_Core_BAO_CustomOption::getCustomOption($custom_field_id);
       foreach ($raw_options as $k => $v) {
         $options[$v['value']] = $v['label'];
@@ -61,7 +62,7 @@ class CivicrmCustomOption extends CivicrmInOperator {
     }
     $this->ensureMyTable();
     $sep = \CRM_Core_DAO::VALUE_SEPARATOR;
-    if(strstr($this->html_type, 'Multi-Select') || $this->html_type === 'CheckBox'){
+    if (strstr($this->html_type, 'Multi-Select') || $this->html_type === 'CheckBox') {
       $op = ($this->operator == 'in') ? 'LIKE' : 'NOT LIKE';
       $glue = ($this->operator == 'in') ? 'OR ' : 'AND ';
 
@@ -76,7 +77,8 @@ class CivicrmCustomOption extends CivicrmInOperator {
         $this->query->addWhereExpression($this->options['group'], $clause);
       }
 
-    }else{
+    }
+    else {
       $value_str = "'".implode("','", $this->value)."'";
       $clause = "$this->tableAlias.$this->realField " . $this->operator . "($value_str)";
       $this->query->addWhereExpression($this->options['group'], $clause);

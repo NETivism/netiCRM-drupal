@@ -126,7 +126,7 @@ class CivicrmController extends ControllerBase {
       }
     }
     // From \Drupal\Core\Form\FormBuilder->buildForm, the Response always throw EnforcedResponseException.
-    catch(\Drupal\Core\Form\EnforcedResponseException $e) {
+    catch (\Drupal\Core\Form\EnforcedResponseException $e) {
       $e->getResponse()->send();
     }
     // not one of CRM_Core_Exception
@@ -145,7 +145,7 @@ class CivicrmController extends ControllerBase {
     $page_state = \Drupal::service('civicrm.page_state');
     $javascripts = $page_state->getJs();
     if (!empty($javascripts['inline'])) {
-      foreach($javascripts['inline'] as $js) {
+      foreach ($javascripts['inline'] as $js) {
         $script = [
           '#type'   => 'html_tag',
           '#tag' => 'script',

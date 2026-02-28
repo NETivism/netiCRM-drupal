@@ -15,17 +15,14 @@ use Drupal\Core\Url as CoreUrl;
  *
  * @ViewsField("civicrm_event_link")
  */
-class CivicrmEventLink extends FieldPluginBase
-{
+class CivicrmEventLink extends FieldPluginBase {
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm)
-  {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $civicrm->initialize();
   }
 
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition)
-  {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
@@ -37,16 +34,14 @@ class CivicrmEventLink extends FieldPluginBase
   /**
    * {@inheritdoc}
    */
-  protected function getDefaultLabel()
-  {
+  protected function getDefaultLabel() {
     return $this->options['link_to_civicrm_event'] == 'page' ? ts('Event Info') : ts('Online Registration');
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions()
-  {
+  protected function defineOptions() {
     $options = parent::defineOptions();
     $options['output_url_as_text'] = ['default' => FALSE];
     $options['absolute'] = ['default' => FALSE];
@@ -58,8 +53,7 @@ class CivicrmEventLink extends FieldPluginBase
   /**
    * {@inheritdoc}
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state)
-  {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
     // The path is set by ::renderLink() so we do not allow to set it.
@@ -96,8 +90,7 @@ class CivicrmEventLink extends FieldPluginBase
   }
 
 
-  public function render(ResultRow $row)
-  {
+  public function render(ResultRow $row) {
     // ksm($row);
     // $access = $this->checkUrlAccess($row);
     // $build = ['#markup' => $access->isAllowed() ? $this->renderLink($row) : ''];
@@ -108,8 +101,7 @@ class CivicrmEventLink extends FieldPluginBase
   }
 
 
-  public function renderLink(ResultRow $row)
-  {
+  public function renderLink(ResultRow $row) {
 
     $event_id = $row->id;
 
@@ -140,14 +132,14 @@ class CivicrmEventLink extends FieldPluginBase
     return $link;
   }
 
-  protected function prepareLinkAttr()  {
+  protected function prepareLinkAttr() {
     $attr=[];
     if (!$this->options['alter']['make_link']) {
       return [];
     }
     $altOpts = $this->options['alter'];
 
-    if($altOpts['target']){
+    if ($altOpts['target']) {
       $attr['target'] = $this->tokenizeValue($altOpts['target']);
     }
     if ($altOpts['link_class']) {
@@ -172,8 +164,7 @@ class CivicrmEventLink extends FieldPluginBase
    * @return \Drupal\Core\Session\AccountInterface
    *   The current user.
    */
-  protected function currentUser()
-  {
+  protected function currentUser() {
     if (!$this->currentUser) {
       $this->currentUser = \Drupal::currentUser();
     }
@@ -190,9 +181,8 @@ class CivicrmEventLink extends FieldPluginBase
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  protected function checkUrlAccess(ResultRow $row)
-  {
-    return true;
+  protected function checkUrlAccess(ResultRow $row) {
+    return TRUE;
     // $url = $this->getUrlInfo($row);
     // return $this->accessManager->checkNamedRoute($url->getRouteName(), $url->getRouteParameters(), $this->currentUser(), TRUE);
   }

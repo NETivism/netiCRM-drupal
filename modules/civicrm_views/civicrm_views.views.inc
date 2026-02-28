@@ -74,7 +74,7 @@ function civicrm_views_views_data() {
     ];
 
     $data[$field['table']][$field['name']] = [
-      'title' => t('CiviCRM Custom Field: @title',['@title' => $field['title']]),
+      'title' => t('CiviCRM Custom Field: @title', ['@title' => $field['title']]),
       'group'=>t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
       'help' => t('CiviCRM Custom Field: @title', ['@title' => $field['group']]),
       'real field' => $field['real field'],
@@ -298,7 +298,7 @@ function _civicrm_views_civicrm_entities() {
 /**
  * Add PseudoConstant fields for civicrm Enties
  */
-function _civicrm_views_add_pseudoconstant(&$data){
+function _civicrm_views_add_pseudoconstant(&$data) {
   $data['civicrm_event']['event_type']=[
     'title'=> 'Civicrm Event Type',
     'help'=> 'Civicrm Event Type',
@@ -1047,7 +1047,7 @@ function _civicrm_views_add_implicit_joins(&$data) {
 function _civicrm_views_field_to_field_plugin($entity, $field) {
   $type = _civicrm_views_get_field_type($field);
 
-  switch($type) {
+  switch ($type) {
     case CRM_Utils_Type::T_INT:
       return [
         'id' => 'numeric',
@@ -1056,21 +1056,23 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
     case CRM_Utils_Type::T_MONEY:
       return [
         'id' => 'numeric',
-        'float' => true,
+        'float' => TRUE,
       ];
     case CRM_Utils_Type::T_ENUM:
     case CRM_Utils_Type::T_STRING:
-      if($field['data_type']=='File'){
+      if ($field['data_type']=='File') {
         return [
           'id' => 'civicrm_pseudoconstant',
           'pseudo info'=>$field,
         ];
-      }else{
+      }
+      else {
         return [
           'id' => 'civicrm_standard',
         ];
       }
 
+      // no break
     case CRM_Utils_Type::T_TEXT:
     case CRM_Utils_Type::T_LONGTEXT:
       // @Todo: Override markup to allow configurable text formats
@@ -1092,10 +1094,10 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
         'id' => 'civicrm_date',
       ];
     case 'pseudoconstant':
-      if(preg_match('/^custom_(\d+)/',$field['name'],$match)){
+      if (preg_match('/^custom_(\d+)/', $field['name'], $match)) {
         $entityName = 'contact';
       }
-      else{
+      else {
         $entityName = $entity['entity'];
       }
       return [
@@ -1140,7 +1142,7 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
  * @Todo: sorting for dates
  */
 function _civicrm_views_field_to_sort_plugin($entity, $field) {
-  switch($field['type']) {
+  switch ($field['type']) {
     default:
       return [
         'id' => 'standard',
@@ -1198,7 +1200,7 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
         'id' => 'civicrm_date',
       ];
     case 'pseudoconstant':
-      if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
+      if (preg_match('/^custom_(\d+)/', $field['name'], $match)) {
         return [
           'id' => 'civicrm_custom_option',
           'options arguments' => [
@@ -1208,6 +1210,7 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
         ];
       }
 
+      // no break
     default:
       return [
         'id' => 'standard',
@@ -1234,15 +1237,15 @@ function _civicrm_views_field_to_argument_plugin($entity, $field) {
     case CRM_Utils_Type::T_EMAIL:
       return $field['data_type']!='File'?[
         'id' => 'string',
-      ]:null;
+      ]:NULL;
     case CRM_Utils_Type::TWELVE:
     case CRM_Utils_Type::T_DATE:
     case CRM_Utils_Type::T_TIMESTAMP:
-        return [
-          'id' => 'civicrm_date',
+      return [
+        'id' => 'civicrm_date',
       ];
     case 'pseudoconstant':
-      if (preg_match('/^custom_(\d+)/', $field['name'], $match)){
+      if (preg_match('/^custom_(\d+)/', $field['name'], $match)) {
         return [
           'id' => 'civicrm_custom_multiple',
           'options arguments' => [
@@ -1286,7 +1289,7 @@ function _civicrm_views_get_field_type($field) {
   if (!empty($field['pseudoconstant']) ||
     (!empty($field['data_type']) && $field['data_type'] === 'StateProvince') ||
     (!empty($field['data_type']) && $field['data_type'] === 'Country') ||
-    (!empty($field['html_type']) && $field['html_type']=='Multi-Select') ) {
+    (!empty($field['html_type']) && $field['html_type']=='Multi-Select')) {
     return 'pseudoconstant';
   }
   else {

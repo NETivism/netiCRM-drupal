@@ -5,7 +5,6 @@
 
 namespace Drupal\civicrm_views\Plugin\views\argument;
 
-
 use Drupal\civicrm\Civicrm;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Form\FormStateInterface;
@@ -22,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class CustomMultiple extends ArgumentPluginBase {
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition,Civicrm $civicrm) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $civicrm->initialize();
   }
@@ -68,7 +67,8 @@ class CustomMultiple extends ArgumentPluginBase {
     $argument = $this->argument;
     if (!empty($this->options['break_phrase'])) {
       $this->unpackArgumentValue();
-    }else{
+    }
+    else {
       $this->value=[$argument];
       $this->operator = 'or';
     }
@@ -95,7 +95,7 @@ class CustomMultiple extends ArgumentPluginBase {
     $conditions = $placeholders = [];
     if (count($this->value)) {
       $count = 0;
-      foreach($this->value as $value) {
+      foreach ($this->value as $value) {
         $count++;
         $conditions[$count] = 'FIND_IN_SET('.$placeholder.$count.', REPLACE('.$field.", '".\CRM_Core_DAO::VALUE_SEPARATOR."', ','))";
         $placeholders[$placeholder.$count] = $value;

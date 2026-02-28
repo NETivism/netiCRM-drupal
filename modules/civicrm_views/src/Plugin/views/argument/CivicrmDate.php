@@ -2,7 +2,6 @@
 
 namespace Drupal\civicrm_views\Plugin\views\argument;
 
-
 use Drupal\civicrm\Civicrm;
 use Drupal\views\Plugin\views\argument\ArgumentPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -15,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class CivicrmDate extends ArgumentPluginBase {
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition,Civicrm $civicrm) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $civicrm->initialize();
   }

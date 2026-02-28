@@ -4,7 +4,7 @@ require_once 'civicrm.user.inc';
 
 /**
  * CiviCRM initialize function
- * 
+ *
  * For backward compatibility, we add this to prevent module blocked by this old api
  */
 function civicrm_initialize() {
@@ -22,12 +22,12 @@ function civicrm_library_info_build() {
 
   // core
   $libraries['civicrm-js-core'] = [
-    'header' => true,
-    'js' => ['../packages/jquery/jquery.js' => ['weight' => -10, 'minified' => true]],
+    'header' => TRUE,
+    'js' => ['../packages/jquery/jquery.js' => ['weight' => -10, 'minified' => TRUE]],
   ];
   $libraries['civicrm-js-allpage'] = [
-    'header' => false,
-    'js' => ['../js/insights.js' => ['weight' => -0.01, 'preprocess' => false]],
+    'header' => FALSE,
+    'js' => ['../js/insights.js' => ['weight' => -0.01, 'preprocess' => FALSE]],
     'dependencies' => [
       'core/drupalSettings'
     ]
@@ -40,29 +40,29 @@ function civicrm_library_info_build() {
   $file_path = DRUPAL_ROOT.base_path().$crm_path.'/../templates/CRM/common/jquery.files.tpl';
   $buffer = file_get_contents($file_path);
   $buffer = preg_replace('/\{\*(.*?)\*\}/s', '', $buffer);
-  $lines  = preg_split( '/\s+/', $buffer);
+  $lines  = preg_split('/\s+/', $buffer);
 
   $libraries['civicrm-css-packages'] = [];
   $libraries['civicrm-js-packages'] = [
     'dependencies' => [
       'civicrm/civicrm-js-core',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $weight = 0;
-  foreach($lines as $line) {
-    if ( strpos( $line, '.css' ) !== false ) {
+  foreach ($lines as $line) {
+    if (strpos($line, '.css') !== FALSE) {
       if (strpos($line, 'material-design-iconic-font')) {
         continue;  // added on all-css
       }
       $weight++;
       $libraries['civicrm-css-packages']['css']['state']['../'.$line] = [ 'weight' => $weight ];
     }
-    if ( strpos($line, '.js' ) !== false ) {
-      if (strpos($line, 'packages/jquery/jquery-1') !== false) {
+    if (strpos($line, '.js') !== FALSE) {
+      if (strpos($line, 'packages/jquery/jquery-1') !== FALSE) {
         continue;
       }
-      $libraries['civicrm-js-packages']['js']['../'.$line] = ['weight' => -5, 'header' => true];
+      $libraries['civicrm-js-packages']['js']['../'.$line] = ['weight' => -5, 'header' => TRUE];
     }
   }
   $libraries['civicrm-js-packages']['js']['../js/Common.js'] = ['weight' => -2];
@@ -72,7 +72,7 @@ function civicrm_library_info_build() {
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-noconflict']['js']['../js/noconflict.js'] = ['weight' => -1];
 
@@ -81,7 +81,7 @@ function civicrm_library_info_build() {
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-mailingeditor']['js']['../packages/poshytip/src/jquery.poshytip.min.js'] = ['weight' => -3];
   $libraries['civicrm-js-mailingeditor']['js']['../packages/x-editable/dist/jquery-editable/js/jquery-editable-poshytip.min.js'] = ['weight' => -3];
@@ -98,7 +98,7 @@ function civicrm_library_info_build() {
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-magnific-popup']['js']['../packages/Magnific-Popup/dist/jquery.magnific-popup.min.js'] = ['weight' => -3];
 
@@ -107,7 +107,7 @@ function civicrm_library_info_build() {
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-sidepanel']['js']['../packages/sidePanel/sidePanel.js'] = ['weight' => -3];
 
@@ -116,14 +116,14 @@ function civicrm_library_info_build() {
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-aicompletion']['js']['../packages/AICompletion/AICompletion.js'] = ['weight' => -3];
   $libraries['civicrm-js-ncfunnel'] = [
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-ncfunnel']['js']['../packages/ncfunnel/ncfunnel.js'] = ['weight' => -3];
 
@@ -132,7 +132,7 @@ function civicrm_library_info_build() {
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-aiimagegeneration']['js']['../packages/AIImageGeneration/AIImageGeneration.js'] = ['weight' => -3];
   $libraries['civicrm-js-aiimagegeneration']['js']['../packages/AIImageGeneration/AIImageGeneration-History.js'] = ['weight' => -3];
@@ -142,7 +142,7 @@ function civicrm_library_info_build() {
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-rfm']['js']['../packages/RFM/RFM.js'] = ['weight' => -3];
 
@@ -150,7 +150,7 @@ function civicrm_library_info_build() {
     'dependencies' => [
       'civicrm/civicrm-js-packages',
     ],
-    'header' => true,
+    'header' => TRUE,
   ];
   $libraries['civicrm-js-zh-tw']['js']['../packages/jquery/plugins/jquery.select2.zh-TW.js'] = ['weight' => -3];
   $libraries['civicrm-js-zh-tw']['js']['../packages/jquery/jquery-ui/development-bundle/ui/i18n/jquery.ui.datepicker-zh-TW.js'] = ['weight' => -3];
@@ -159,7 +159,7 @@ function civicrm_library_info_build() {
 
 /**
  * Implements hook_library_info_alter().
- * 
+ *
  * Dynamic add custom css into current theme
  */
 function civicrm_library_info_alter(&$libraries, $extension) {
@@ -247,10 +247,10 @@ function civicrm_toolbar() {
 
 /**
  * Implements hook_cron
- * 
+ *
  * Control how civicrm running job periodly
  */
-function civicrm_cron(){
+function civicrm_cron() {
   $is_maintenance = \Drupal::state()->get('system.maintenance_mode');
   if (!empty($is_maintenance)) {
     return;
@@ -577,16 +577,17 @@ function civicrm_metatags_alter(&$metatags, &$context) {
   $current_path = \Drupal::service('path.current')->getPath();
   if (strstr($current_path, 'civicrm')) {
     civicrm_initialize();
-    if(CRM_Utils_System::isSSL() == TRUE) {
+    if (CRM_Utils_System::isSSL() == TRUE) {
       $secure = 'https';
-    } else {
+    }
+    else {
       $secure = 'http';
     }
 
     // rebuild correct link
     $items = ['og:url', 'canonical_url', 'shortlink'];
     $link = "$secure://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    foreach($items as $item) {
+    foreach ($items as $item) {
       if (isset($metatags[$item])) {
         $metatags[$item] = $link;
       }
@@ -594,7 +595,7 @@ function civicrm_metatags_alter(&$metatags, &$context) {
 
     // unset wrong title, og image, etc.
     $items = ['title', 'og:image'];
-    foreach($items as $item) {
+    foreach ($items as $item) {
       if (isset($metatags[$item])) {
         unset($metatags[$item]);
       }
@@ -613,7 +614,7 @@ function template_preprocess_civicrm_contact(&$vars) {
 
 /**
  * hook_civicrm_buildForm
- * 
+ *
  * this hook call by CRM_Utils_Hook
  */
 function civicrm_civicrm_buildForm($form_name, &$form) {
@@ -621,7 +622,7 @@ function civicrm_civicrm_buildForm($form_name, &$form) {
   if ($imceEnabled) {
     $imceUrl = CRM_Utils_System::url('imce');
     foreach ($form->_elements as $name => $element) {
-      if($element->_type == 'CKeditor') {
+      if ($element->_type == 'CKeditor') {
         $eleName = $element->_attributes['name'];
         // add external plugin
         $ckeditorInlineJs = "

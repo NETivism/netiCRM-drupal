@@ -4,7 +4,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-
 /**
  * Implements hook_user_login().
  */

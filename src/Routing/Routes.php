@@ -71,7 +71,7 @@ class Routes {
       $requirement = [];
       $tmpPath = $path;
       $strOccr = substr_count($tmpPath, '/');
-      for($i = 0; $i < $strOccr; $i++) {
+      for ($i = 0; $i < $strOccr; $i++) {
         $tmpPath =  substr($tmpPath, 0, strrpos($tmpPath, '/'));
         if (!empty($permissions[$tmpPath])) {
           $requirement['_permission'] = $permissions[$tmpPath];

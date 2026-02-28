@@ -64,7 +64,7 @@ class CivicrmPageState {
   /**
    * Save tag array to stacked variable: $html_headers_meta.
    *
-   * @param string $meta The tag array, which likes: 
+   * @param string $meta The tag array, which likes:
    * [
    *   '#tag' => 'style',
    *   '#attribute' => [
@@ -77,7 +77,7 @@ class CivicrmPageState {
    * @access public
    */
   public function addHtmlHeaderMeta($meta) {
-    if (is_array($meta)){
+    if (is_array($meta)) {
       $this->html_headers_meta[] = $meta;
     }
   }

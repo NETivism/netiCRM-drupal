@@ -35,7 +35,7 @@ class Civicrm {
     // include_path will conflict when using autoload
     // we need to make sure remove all PEAR related include path on autoload
     $includePaths = explode(PATH_SEPARATOR, get_include_path());
-    foreach($includePaths as $idx => $path) {
+    foreach ($includePaths as $idx => $path) {
       if (strstr($path, 'pear')) {
         unset($includePaths[$idx]);
       }
@@ -47,7 +47,8 @@ class Civicrm {
     $docLinkTrouble = "http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Configuration+Trouble-shooting";
     $forumLink      = "http://forum.civicrm.org/index.php/board,6.0.html";
 
-    $errorMsgAdd = t("Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
+    $errorMsgAdd = t(
+      "Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
       ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink]
     );
 
@@ -66,9 +67,10 @@ class Civicrm {
     // This does pretty much all of the civicrm initialization
     $included = include_once 'CRM/Core/Config.php';
     if ($included == FALSE) {
-      $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
-          ['!1' => $settingsFile]
-        ) . t("civicrm_root is currently set to: <em>!1</em>.", ['!1' => $civicrm_root]) . $errorMsgAdd;
+      $msg = t(
+        "The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
+        ['!1' => $settingsFile]
+      ) . t("civicrm_root is currently set to: <em>!1</em>.", ['!1' => $civicrm_root]) . $errorMsgAdd;
       throw new ConfigException($msg);
     }
 
@@ -118,7 +120,7 @@ class Civicrm {
     if (!empty($_REQUEST['ctype'])) {
       $ctype = $_REQUEST['ctype'];
     }
-    else if (!empty($_REQUEST['edit']['ctype'])) {
+    elseif (!empty($_REQUEST['edit']['ctype'])) {
       $ctype = $_REQUEST['edit']['ctype'];
     }
     else {

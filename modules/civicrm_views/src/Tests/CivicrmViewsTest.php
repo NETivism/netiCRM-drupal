@@ -125,7 +125,9 @@ class CivicrmViewsTest extends CivicrmTestBase {
     $this->assertEqual(3, count($xpath), "There are 3 rows in the table.");
 
     foreach ($xpath as $key => $tr) {
-      if ($key == 0) continue; // Skip Default Organization
+      if ($key == 0) {
+        continue;
+      } // Skip Default Organization
 
       $this->assertEqual("{$this->contact_data[$key - 1]['first_name']} {$this->contact_data[$key - 1]['last_name']}", trim((string) $tr->td[1]));
       $this->assertEqual($this->contact_data[$key - 1]['api.email.create'][0]['email'], trim((string) $tr->td[2]));

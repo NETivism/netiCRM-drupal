@@ -8,11 +8,11 @@ use Drupal\Core\Form\FormStateInterface;
  * @ingroup views_filter_handlers
  * @ViewsFilter("civicrm_date")
  */
-class CivicrmDate extends Date{
+class CivicrmDate extends Date {
 
   protected function valueForm(&$form, FormStateInterface $form_state) {
     parent::valueForm($form, $form_state);
-    if (isset($form['value']) && !empty($form['value']['operator']) && $form['value']['operator']['#type'] == 'radios' ) {
+    if (isset($form['value']) && !empty($form['value']['operator']) && $form['value']['operator']['#type'] == 'radios') {
       $form['value']['operator']['#options']['regular_expression'] = ts('Regular expression');
       $form['value']['operator']['#options']['not_regular_expression'] = ts('Negated regular expression');
     }
@@ -76,7 +76,7 @@ class CivicrmDate extends Date{
     ];
   }
 
-  protected function opSimple($field){
+  protected function opSimple($field) {
     if (!empty($this->value['type']) && $this->value['type'] == 'offset') {
       $value = intval(strtotime($this->value['value'], 0));
       // keep sign
@@ -92,11 +92,12 @@ class CivicrmDate extends Date{
 
   }
 
-  protected function opBetween($field){
+  protected function opBetween($field) {
     if ($this->operator == 'between') {
       $a = intval(strtotime($this->value['min'], 0));
       $b = intval(strtotime($this->value['max'], 0));
-    } else {
+    }
+    else {
       $a = intval(strtotime($this->value['max'], 0));
       $b = intval(strtotime($this->value['min'], 0));
 
@@ -123,23 +124,24 @@ class CivicrmDate extends Date{
       }
     }
 
-    if($a){
+    if ($a) {
       $a = $this->formatDate($a);
       $this->query->addWhere($this->options['group'], $field, $a, '>=');
     }
-    if($b){
+    if ($b) {
       $b = $this->formatDate($b);
       $this->query->addWhere($this->options['group'], $field, $b, '<=');
     }
 
   }
 
-  public function acceptExposedInput($input){
+  public function acceptExposedInput($input) {
     $rc=parent::acceptExposedInput($input);
-    if($this->operator=='between'){
+    if ($this->operator=='between') {
       if ($this->value['min'] == '' && $this->value['max'] == '') {
         return FALSE;
-      }else{
+      }
+      else {
         return TRUE;
       }
     }
@@ -158,7 +160,8 @@ class CivicrmDate extends Date{
     $value = &$form_state->getValue($this->options['expose']['identifier']);
     if (!empty($this->options['expose']['use_operator']) && !empty($this->options['expose']['operator_id'])) {
       $operator = &$form_state->getValue($this->options['expose']['operator_id']);
-    } else {
+    }
+    else {
       $operator = $this->operator;
     }
 
@@ -169,32 +172,33 @@ class CivicrmDate extends Date{
   /**
    * Validate that the time values convert to something usable.
    */
-  public function validateValidTime(&$form, FormStateInterface $form_state, $operator, $value){
+  public function validateValidTime(&$form, FormStateInterface $form_state, $operator, $value) {
     $operators = $this->operators();
     if ($operators[$operator]['values'] == 1) {
       $valueToCheck = is_array($value) ? $value['value'] : $value;
       if (!empty($valueToCheck)) {
         $convert = strtotime($valueToCheck);
         if ($convert == -1 || $convert === FALSE) {
-            $form_state->setError($form['value'], $this->t('Invalid date format.'));
+          $form_state->setError($form['value'], $this->t('Invalid date format.'));
         }
       }
-    } elseif ($operators[$operator]['values'] == 2) {
+    }
+    elseif ($operators[$operator]['values'] == 2) {
       $min = strtotime($value['min']);
       // if ($min == -1 || $min === FALSE) {
-        // $form_state->setError($form['min'], $this->t('Invalid date format.'));
+      // $form_state->setError($form['min'], $this->t('Invalid date format.'));
       // }
       $max = strtotime($value['max']);
       // if ($max == -1 || $max === FALSE) {
-        // $form_state->setError($form['max'], $this->t('Invalid date format.'));
+      // $form_state->setError($form['max'], $this->t('Invalid date format.'));
       // }
-      if($min===false && $max===false){
+      if ($min===FALSE && $max===FALSE) {
         $form_state->setError($form['max'], $this->t('Invalid date format.'));
       }
     }
   }
 
-  protected function formatDate($unixtime){
+  protected function formatDate($unixtime) {
     return date("Y-m-d H:i:s", $unixtime);
   }
 

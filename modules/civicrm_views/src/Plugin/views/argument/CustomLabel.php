@@ -2,7 +2,6 @@
 
 namespace Drupal\civicrm_views\Plugin\views\argument;
 
-
 use Drupal\civicrm\Civicrm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\views\Plugin\views\argument\NumericArgument;

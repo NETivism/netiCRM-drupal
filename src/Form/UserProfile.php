@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Drupal\Core\Cache\Cache;
 
-class UserProfile extends FormBase  {
+class UserProfile extends FormBase {
   protected $user;
   protected $profile;
   protected $contact_id;

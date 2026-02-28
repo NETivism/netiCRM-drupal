@@ -19,12 +19,12 @@ class CivicrmPseudoconstant extends FieldPluginBase {
   protected $pseudovalues = [];
   protected $html_type='';
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm,Connection $conn) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm, Connection $conn) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $civicrm->initialize();
     $this->html_type=$this->definition['pseudo info']['html_type'];
-    if(array_key_exists('pseudo arguments',$this->definition)){
+    if (array_key_exists('pseudo arguments', $this->definition)) {
       $this->pseudovalues = call_user_func_array($this->definition['pseudo callback'], $this->definition['pseudo arguments']);
     }
   }
@@ -42,22 +42,22 @@ class CivicrmPseudoconstant extends FieldPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    if($this->html_type=='File'){
+    if ($this->html_type=='File') {
       $options['file_display_format'] = ['default' => 'url'];
     }
 
-    if(array_key_exists('pseudo arguments',$this->definition)){
+    if (array_key_exists('pseudo arguments', $this->definition)) {
       $options['pseudoconstant_format'] = ['default' => 'raw'];
     }
 
-    if(strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox'){
+    if (strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox') {
       $options['value_separator'] = ['default' => ', '];
     }
     return $options;
   }
 
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    if($this->html_type=='File'){
+    if ($this->html_type=='File') {
       $form['file_display_format'] = [
         '#type' => 'select',
         '#title' => t('Display format'),
@@ -73,7 +73,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
       ];
     }
 
-    if(array_key_exists('pseudo arguments',$this->definition)){
+    if (array_key_exists('pseudo arguments', $this->definition)) {
       $form['pseudoconstant_format'] = [
         '#type' => 'radios',
         '#title' => t('Display format'),
@@ -86,7 +86,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
       ];
     }
 
-    if(strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox'){
+    if (strstr($this->html_type, 'Multi-Select') || $this->_html_type === 'Checkbox') {
       $form['value_separator'] = [
         '#title' => $this->t('Value separator'),
         '#type' => 'textfield',
@@ -101,24 +101,24 @@ class CivicrmPseudoconstant extends FieldPluginBase {
 
   public function render(ResultRow $values) {
     $value = $this->getValue($values);
-    if($this->html_type=='File'){
+    if ($this->html_type=='File') {
       return $this->renderFile($values);
     }
     $output = '';
     if (isset($this->options['pseudoconstant_format'])) {
-      if(strstr($this->html_type, 'Multi-Select') || $this->html_type === 'CheckBox'){
+      if (strstr($this->html_type, 'Multi-Select') || $this->html_type === 'CheckBox') {
         $multiple = explode(\CRM_Core_DAO::VALUE_SEPARATOR, trim($value, \CRM_Core_DAO::VALUE_SEPARATOR));
-        if($this->options['pseudoconstant_format'] == 'pseudoconstant') {
-          foreach($multiple as $idx => $val) {
+        if ($this->options['pseudoconstant_format'] == 'pseudoconstant') {
+          foreach ($multiple as $idx => $val) {
             $multiple[$idx] = $this->sanitizeValue($this->pseudovalues[$val]);
           }
         }
         else {
-          foreach($multiple as $idx => $val) {
+          foreach ($multiple as $idx => $val) {
             $multiple[$idx] = $this->sanitizeValue($val);
           }
         }
-        if($this->options['value_separator']){
+        if ($this->options['value_separator']) {
           $output = implode($this->options['value_separator'], $multiple);
         }
         else {
@@ -127,7 +127,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
         return ['#markup'=>$output];
       }
       else {
-        if($this->options['pseudoconstant_format'] == 'pseudoconstant' && isset($this->pseudovalues[$value])) {
+        if ($this->options['pseudoconstant_format'] == 'pseudoconstant' && isset($this->pseudovalues[$value])) {
           $output = $this->sanitizeValue($this->pseudovalues[$value]);
         }
         else {
@@ -142,7 +142,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
     return $this->sanitizeValue($this->getValue($values));
   }
 
-  protected function renderFile(ResultRow $values){
+  protected function renderFile(ResultRow $values) {
     $file_id = $this->getValue($values);
     $entity = \CRM_Core_BAO_File::getEntity($file_id);
     if (intval($file_id) && intval($entity['entity_id'])) {
@@ -151,7 +151,7 @@ class CivicrmPseudoconstant extends FieldPluginBase {
       }
       $entity_file = \CRM_Core_BAO_File::getEntityFile($entity['entity_table'], $entity['entity_id']);
       $file = $entity_file[$file_id];
-      switch ($this->options['file_display_format']){
+      switch ($this->options['file_display_format']) {
         case 'url':
           return $file['url'];
           break;
