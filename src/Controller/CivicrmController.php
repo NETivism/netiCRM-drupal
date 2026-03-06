@@ -131,7 +131,12 @@ class CivicrmController extends ControllerBase {
     }
     // not one of CRM_Core_Exception
     catch (\Exception $e) {
-      \Drupal::logger('civicrm')->error($e->getMessage());
+      $logger = \Drupal::service('logger.factory')->get('civicrm');
+      $backtrace = \Drupal\Core\Utility\Error::formatBacktrace($e->getTrace());
+      $message = $e->getMessage();
+      $exception_type = get_class($e);
+      $logger->error($exception_type.": ".$message."\n".$backtrace);
+
       throw new Exception\AccessDeniedHttpException();
     }
 
