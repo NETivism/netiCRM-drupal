@@ -776,12 +776,24 @@ function civicrm_invoke() {
         break;
     }
   }
-  // not one of CRM_Core_Exception
-  /* We may not need this here.
   catch (\Exception $e) {
-    throw new Exception($e->getMessage());
+    $message = $e->getMessage();
+    $exception_type = get_class($e);
+    $backtrace = $e->getTrace();
+    foreach ($backtrace as $trace) {
+      $msgs[] = CRM_Utils_Array::implode(
+        ', ',
+        [CRM_Utils_Array::value('file', $trace),
+          CRM_Utils_Array::value('function', $trace),
+          CRM_Utils_Array::value('line', $trace),
+        ]
+      );
+    }
+    $error = $exception_type.": ".$message."\n".implode("\n", $msgs);
+    watchdog('civicrm', strip_tags($error), [], WATCHDOG_ERROR);
+
+    drupal_access_denied();
   }
-  */
   return $content;
 }
 
