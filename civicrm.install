@@ -356,3 +356,23 @@ function _civicrm_import_sql($config, $filename) {
   }
   return TRUE;
 }
+
+/**
+ * Add neticrm_connector pseudo-field to user entity view display.
+ */
+function civicrm_update_10001() {
+  $config = \Drupal::configFactory()->getEditable('core.entity_view_display.user.user.default');
+  $content = $config->get('content');
+  if (isset($content) && !isset($content['neticrm_connector'])) {
+    $content['neticrm_connector'] = [
+      'weight' => 4,
+      'region' => 'content',
+      'settings' => [],
+      'third_party_settings' => [],
+    ];
+    if (isset($content['civicrm_profiles'])) {
+      $content['civicrm_profiles']['weight'] = 5;
+    }
+    $config->set('content', $content)->save();
+  }
+}
