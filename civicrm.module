@@ -34,6 +34,7 @@ function civicrm_library_info_build() {
   ];
   $libraries['civicrm-css-allpage']['css']['state']['../packages/material-design-iconic-font/css/material-design-iconic-font.min.css'] = [ 'weight' => 0];
   $libraries['civicrm-css-core']['css']['state']['../css/civicrm.css'] = [ 'weight' => 200 ];
+  $libraries['civicrm-css-core']['css']['state']['../css/civicrm-content.css'] = [ 'weight' => 201 ];
 
   // packages
   $crm_path = \Drupal::service('extension.list.module')->getPath('civicrm');
