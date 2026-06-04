@@ -370,6 +370,11 @@ function civicrm_entity_extra_field_info() {
     'weight' => 0,
     'visible' => FALSE,
   ];
+  $extra['user']['user']['display']['neticrm_connector'] = [
+    'label' => 'netiCRM Connector',
+    'weight' => 0,
+    'visible' => FALSE,
+  ];
   $extra['user']['user']['display']['civicrm_profiles'] = [
     'label' => t('CiviCRM profile summaries'),
     'description' => t('A list CiviCRM profile summaries.'),
@@ -430,6 +435,26 @@ function civicrm_user_view(array &$build, \Drupal\user\UserInterface $account, \
           'cid' => $contact_id,
         ]),
         '#prefix' => '<div class="user-page-link" id="user-page-contact" ><i class="zmdi zmdi-view-dashboard"></i> ',
+        '#suffix' => '</div>',
+      ],
+    ];
+  }
+
+  // netiCRM Connector link.
+  $adminPerm = \CRM_Core_Config::$_userSystem->admin_permissions ?? 'administer CiviCRM';
+  $isAdmin = \CRM_Core_Permission::check($adminPerm);
+  $hasMCPPerm = \CRM_Core_Permission::check('MCP query');
+  if (defined('CIVICRM_MCP_ENABLED') && CIVICRM_MCP_ENABLED && ($conf = $display->getComponent('neticrm_connector')) && ($isAdmin || ($hasMCPPerm && $account->id() === $current_user->id()))) {
+    $build['neticrm_connector'] = [
+      '#type' => 'item',
+      '#weight' => $conf['weight'],
+      0 => [
+        '#type' => 'link',
+        '#title' => 'netiCRM Connector',
+        '#url' => \Drupal\Core\Url::fromUserInput('/civicrm/connector', [
+          'query' => ['reset' => 1, 'cid' => $contact_id],
+        ]),
+        '#prefix' => '<div class="user-page-link" id="user-page-connect" ><i class="zmdi zmdi-input-antenna"></i> ',
         '#suffix' => '</div>',
       ],
     ];
