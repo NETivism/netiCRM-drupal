@@ -203,6 +203,21 @@ function civicrm_user_view($user, $view_mode) {
   '</div>';
     }
 
+
+    $adminPerm = CRM_Core_Config::$_userSystem->admin_permissions ?? 'administer CiviCRM';
+    $isAdmin = CRM_Core_Permission::check($adminPerm);
+    $hasMCPPerm = CRM_Core_Permission::check('MCP query');
+    if (defined('CIVICRM_MCP_ENABLED') && CIVICRM_MCP_ENABLED && ($isAdmin || ($hasMCPPerm && $user->uid === $GLOBALS['user']->uid))) {
+      $contactURL .=
+  '<div class="user-page-link" id="user-page-connect" ><i class="zmdi zmdi-input-antenna"></i> ' .
+  l(
+    ts("netiCRM Connector"),
+    'civicrm/connector',
+    ['query' => ['reset' => 1, 'cid' => $userID ]]
+  ) .
+  '</div>';
+    }
+
     $ctype = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $userID, 'contact_type');
     $orgtype = NULL;
     $orgID = CRM_Contact_BAO_Relationship::currentPermittedOrganization($userID);
