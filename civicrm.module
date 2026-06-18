@@ -155,6 +155,47 @@ function civicrm_library_info_build() {
   ];
   $libraries['civicrm-js-zh-tw']['js']['../packages/jquery/plugins/jquery.select2.zh-TW.js'] = ['weight' => -3];
   $libraries['civicrm-js-zh-tw']['js']['../packages/jquery/jquery-ui/development-bundle/ui/i18n/jquery.ui.datepicker-zh-TW.js'] = ['weight' => -3];
+
+  // css library, mailing editor
+  // attached via {css library=civicrm/civicrm-css-mailingeditor} in mailingEditor.tpl
+  global $tsLocale;
+  $mailingEditorCss = [
+    '../packages/poshytip/src/tip-yellowsimple/tip-yellowsimple.css',
+    '../packages/x-editable/dist/jquery-editable/css/jquery-editable.css',
+    '../packages/x-editable/dist/inputs-ext/quill/lib/quill.snow.css',
+    '../packages/x-editable/dist/inputs-ext/quill/lib/quill.bubble.css',
+    '../packages/mailingEditor/quill.override.css',
+    '../packages/x-editable/dist/inputs-ext/quill/lib/placeholder/quill.placeholder.css',
+    '../packages/x-editable/dist/inputs-ext/quill/lib/emoji/quill-emoji.min.css',
+  ];
+  // zh_TW placeholder labels, only for zh_TW locale (matches {if} in template)
+  if ($tsLocale == 'zh_TW') {
+    $mailingEditorCss[] = '../packages/x-editable/dist/inputs-ext/quill/lib/l10n.zh_TW.css';
+  }
+  $mailingEditorCss[] = '../packages/pickr/dist/themes/nano.min.css';
+  $mailingEditorCss[] = '../packages/Magnific-Popup/dist/magnific-popup.css';
+  $mailingEditorCss[] = '../packages/mailingEditor/mailingEditor.css';
+  $libraries['civicrm-css-mailingeditor'] = [];
+  $weight = 0;
+  foreach ($mailingEditorCss as $css) {
+    $weight++;
+    $libraries['civicrm-css-mailingeditor']['css']['theme'][$css] = ['weight' => $weight];
+  }
+
+  // css library, aicompletion
+  // attached via {css library=civicrm/civicrm-css-aicompletion} in AICompletion.tpl
+  $aiCompletionCss = [
+    '../packages/Magnific-Popup/dist/magnific-popup.css',
+    '../packages/mailingEditor/mailingEditor.css',
+    '../packages/AICompletion/AICompletion.css',
+  ];
+  $libraries['civicrm-css-aicompletion'] = [];
+  $weight = 0;
+  foreach ($aiCompletionCss as $css) {
+    $weight++;
+    $libraries['civicrm-css-aicompletion']['css']['theme'][$css] = ['weight' => $weight];
+  }
+
   return $libraries;
 }
 
@@ -212,6 +253,12 @@ function civicrm_page_attachments(array &$page) {
   $dynamic = CRM_Core_Config::singleton()->userSystem::$jsLibraries;
   if (!empty($dynamic) && is_array($dynamic)) {
     foreach ($dynamic as $lib => $doncare) {
+      $page['#attached']['library'][] = $lib;
+    }
+  }
+  $dynamicCss = CRM_Core_Config::singleton()->userSystem::$cssLibraries;
+  if (!empty($dynamicCss) && is_array($dynamicCss)) {
+    foreach ($dynamicCss as $lib => $doncare) {
       $page['#attached']['library'][] = $lib;
     }
   }
