@@ -196,6 +196,29 @@ function civicrm_library_info_build() {
     $libraries['civicrm-css-aicompletion']['css']['theme'][$css] = ['weight' => $weight];
   }
 
+  // css library, magnific-popup (shared base, depended on by other css libraries)
+  // attached via {css library=civicrm/civicrm-css-magnific-popup}
+  $libraries['civicrm-css-magnific-popup'] = [];
+  $libraries['civicrm-css-magnific-popup']['css']['theme']['../packages/Magnific-Popup/dist/magnific-popup.css'] = ['weight' => 1];
+
+  // css library, aiimagegeneration
+  // attached via {css library=civicrm/civicrm-css-aiimagegeneration} in AIImageGeneration.tpl
+  // depends on magnific-popup so it loads first (matches original <link> order)
+  $aiImageGenerationCss = [
+    '../packages/AIImageGeneration/AIImageGeneration.css',
+    '../packages/AIImageGeneration/AIImageGeneration-History.css',
+  ];
+  $libraries['civicrm-css-aiimagegeneration'] = [
+    'dependencies' => [
+      'civicrm/civicrm-css-magnific-popup',
+    ],
+  ];
+  $weight = 0;
+  foreach ($aiImageGenerationCss as $css) {
+    $weight++;
+    $libraries['civicrm-css-aiimagegeneration']['css']['theme'][$css] = ['weight' => $weight];
+  }
+
   return $libraries;
 }
 
