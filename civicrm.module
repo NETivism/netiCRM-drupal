@@ -260,6 +260,21 @@ function civicrm_library_info_build() {
   ];
   $libraries['civicrm-css-rfm']['css']['theme']['../packages/RFM/RFM.css'] = ['weight' => 1];
 
+  // css library, side panel
+  // attached via {css library=civicrm/civicrm-css-sidepanel} in sidePanel.tpl
+  $libraries['civicrm-css-sidepanel'] = [];
+  $libraries['civicrm-css-sidepanel']['css']['theme']['../packages/sidePanel/sidePanel.css'] = ['weight' => 1];
+
+  // css library, ncfunnel
+  // attached via {css library=civicrm/civicrm-css-ncfunnel} in funnel.tpl
+  $libraries['civicrm-css-ncfunnel'] = [];
+  $libraries['civicrm-css-ncfunnel']['css']['theme']['../packages/ncfunnel/ncfunnel.css'] = ['weight' => 1];
+
+  // css library, audit (civicrm's own css, not under packages/)
+  // attached via {css library=civicrm/civicrm-css-audit} in Audit.tpl
+  $libraries['civicrm-css-audit'] = [];
+  $libraries['civicrm-css-audit']['css']['theme']['../css/Audit/style.css'] = ['weight' => 1];
+
   return $libraries;
 }
 
