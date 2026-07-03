@@ -147,6 +147,22 @@ function civicrm_library_info_build() {
   ];
   $libraries['civicrm-js-rfm']['js']['../packages/RFM/RFM.js'] = ['weight' => -3];
 
+  // additional, chartist (shared libs; replaces $crmChartistAdded guard)
+  // header => TRUE so core libs load in <head> before per-chart inline scripts in <body>
+  $libraries['civicrm-js-chartist'] = [
+    'dependencies' => [
+      'civicrm/civicrm-js-packages',
+    ],
+    'header' => TRUE,
+  ];
+  $libraries['civicrm-js-chartist']['js']['../packages/moment/moment.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-chartist']['js']['../packages/chartist/dist/chartist.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-chartist']['js']['../packages/chartist/plugin/chartist-plugin-axistitle.js'] = ['weight' => -3];
+  $libraries['civicrm-js-chartist']['js']['../packages/chartist/plugin/chartist-plugin-tooltip/chartist-plugin-tooltip.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-chartist']['js']['../packages/chartist/plugin/chartist-plugin-verticalhint/chartist-plugin-verticalhint.js'] = ['weight' => -3];
+  $libraries['civicrm-js-chartist']['js']['../packages/chartist/plugin/chartist-plugin-fill-donut/chartist-plugin-fill-donut.min.js'] = ['weight' => -3];
+  $libraries['civicrm-js-chartist']['js']['../packages/chartist/plugin/chartist-plugin-legend/chartist-plugin-legend.js'] = ['weight' => -3];
+
   $libraries['civicrm-js-zh-tw'] = [
     'dependencies' => [
       'civicrm/civicrm-js-packages',
@@ -218,6 +234,31 @@ function civicrm_library_info_build() {
     $weight++;
     $libraries['civicrm-css-aiimagegeneration']['css']['theme'][$css] = ['weight' => $weight];
   }
+
+  // css library, chartist
+  // attached via {css library=civicrm/civicrm-css-chartist} in chartist.tpl
+  $chartistCss = [
+    '../packages/chartist/dist/chartist.min.css',
+    '../packages/chartist/plugin/chartist-plugin-tooltip/chartist-plugin-tooltip.css',
+    '../packages/chartist/plugin/chartist-plugin-verticalhint/chartist-plugin-verticalhint.css',
+    '../packages/chartist/plugin/chartist-plugin-legend/chartist-plugin-legend-custom.css',
+  ];
+  $libraries['civicrm-css-chartist'] = [];
+  $weight = 0;
+  foreach ($chartistCss as $css) {
+    $weight++;
+    $libraries['civicrm-css-chartist']['css']['theme'][$css] = ['weight' => $weight];
+  }
+
+  // css library, rfm
+  // attached via {css library=civicrm/civicrm-css-rfm} in RFM.tpl
+  // depends on magnific-popup so it loads first (matches original <link> order)
+  $libraries['civicrm-css-rfm'] = [
+    'dependencies' => [
+      'civicrm/civicrm-css-magnific-popup',
+    ],
+  ];
+  $libraries['civicrm-css-rfm']['css']['theme']['../packages/RFM/RFM.css'] = ['weight' => 1];
 
   return $libraries;
 }
