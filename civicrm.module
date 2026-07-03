@@ -189,9 +189,13 @@ function civicrm_library_info_build() {
     $mailingEditorCss[] = '../packages/x-editable/dist/inputs-ext/quill/lib/l10n.zh_TW.css';
   }
   $mailingEditorCss[] = '../packages/pickr/dist/themes/nano.min.css';
-  $mailingEditorCss[] = '../packages/Magnific-Popup/dist/magnific-popup.css';
   $mailingEditorCss[] = '../packages/mailingEditor/mailingEditor.css';
-  $libraries['civicrm-css-mailingeditor'] = [];
+  // magnific-popup provided by shared css library via dependency
+  $libraries['civicrm-css-mailingeditor'] = [
+    'dependencies' => [
+      'civicrm/civicrm-css-magnific-popup',
+    ],
+  ];
   $weight = 0;
   foreach ($mailingEditorCss as $css) {
     $weight++;
@@ -200,12 +204,16 @@ function civicrm_library_info_build() {
 
   // css library, aicompletion
   // attached via {css library=civicrm/civicrm-css-aicompletion} in AICompletion.tpl
+  // magnific-popup provided by shared css library via dependency
   $aiCompletionCss = [
-    '../packages/Magnific-Popup/dist/magnific-popup.css',
     '../packages/mailingEditor/mailingEditor.css',
     '../packages/AICompletion/AICompletion.css',
   ];
-  $libraries['civicrm-css-aicompletion'] = [];
+  $libraries['civicrm-css-aicompletion'] = [
+    'dependencies' => [
+      'civicrm/civicrm-css-magnific-popup',
+    ],
+  ];
   $weight = 0;
   foreach ($aiCompletionCss as $css) {
     $weight++;
