@@ -3,6 +3,18 @@
 require_once 'civicrm.user.inc';
 
 /**
+ * Aggregate group for the component css attached via {css}.
+ *
+ * One step above CSS_AGGREGATE_THEME (100), which is where those files used to
+ * sit: they were an inline <link> in the page body, after every stylesheet in
+ * <head>. Drupal compares group before weight, so this is what keeps them after
+ * the theme css and the site custom css.
+ *
+ * @see civicrm_css_alter()
+ */
+define('CIVICRM_CSS_AGGREGATE_COMPONENT', 200);
+
+/**
  * CiviCRM initialize function
  *
  * For backward compatibility, we add this to prevent module blocked by this old api
@@ -174,12 +186,17 @@ function civicrm_library_info_build() {
 
   // Component css attached via {css}.
   //
-  // Drupal adds the SMACSS category weight on top of the declared weight, so a
-  // file under the 'theme' category gets weight + CSS_THEME (200). Civicrm core
-  // css sits at 300 / 301 (see civicrm-css-core above: 'state' = CSS_STATE 100,
-  // plus 200 / 201). Component css used to be an inline <link> in the page body,
-  // which means it always won over core css. To keep that, declared weights
-  // start at 110 (effective 310) so they stay after core css.
+  // These files used to be an inline <link> in the page body, so they won over
+  // every stylesheet in <head>. What puts them back there is the aggregate group,
+  // not the weight below: civicrm_css_alter() lifts them into
+  // CIVICRM_CSS_AGGREGATE_COMPONENT, and drupal compares group before weight.
+  //
+  // The weights below only order these files among themselves. Drupal adds the
+  // SMACSS category weight on top of the declared weight, so a file under the
+  // 'theme' category gets weight + CSS_THEME (200); the numbers start at 110 to
+  // stay clear of civicrm core css (300 / 301, see civicrm-css-core above),
+  // which no longer matters for correctness but keeps the two readable side by
+  // side.
   //
   // Shared files are their own library and pulled in with 'dependencies', never
   // repeated in another library: drupal keys css assets by file path, so listing
@@ -204,8 +221,9 @@ function civicrm_library_info_build() {
   // and css does not.
   //
   // Templates pass group / weight to {css} as well, but only drupal 7 reads
-  // them (see CRM_Utils_System_Drupal::addCss); on drupal 8+ the library
-  // definitions below are the only thing that decides the order.
+  // them (see CRM_Utils_System_Drupal::addCss, where group 999 puts the same
+  // files after the theme css); on drupal 8+ the library definitions below plus
+  // civicrm_css_alter() are the only thing that decides the order.
   $cssVendor = 110;
   $cssComponent = 120;
   $cssOverride = 130;
@@ -324,6 +342,44 @@ function civicrm_library_info_alter(&$libraries, $extension) {
       'weight' => 1,
       'type' => 'external',
     ];
+  }
+}
+
+/**
+ * Implements hook_css_alter().
+ *
+ * Put the component css attached via {css} back after the theme css.
+ *
+ * Those files used to be an inline <link> in the page body, so they came after
+ * every stylesheet in <head>, the theme css and the site custom css included.
+ * Drupal forces module css into CSS_AGGREGATE_DEFAULT and only hands
+ * CSS_AGGREGATE_THEME to theme extensions (LibraryDiscoveryParser), and group is
+ * compared before weight (AssetResolver::sort), so a module can never win over
+ * the theme by weight alone. Sorting happens after this hook runs and drupal
+ * expects modules to define their own groups when they need one, so lifting the
+ * files here is what restores the old order. Drupal 7 does the same thing with
+ * group 999, see CRM_Utils_System_Drupal::addCss().
+ */
+function civicrm_css_alter(&$css, $assets, $language) {
+  // Loaded from <head> long before the {css} block existed, so they keep losing
+  // to the theme css, just like before.
+  $alreadyInHead = ['civicrm-css-core', 'civicrm-css-allpage', 'civicrm-css-packages'];
+
+  // Walk the library definitions rather than the libraries {css} registered in
+  // CRM_Utils_System_Drupal::$cssLibraries: shared files such as
+  // magnific-popup.css live in their own library and only ever arrive through
+  // 'dependencies', so a template never names them.
+  $libraries = \Drupal::service('library.discovery')->getLibrariesByExtension('civicrm');
+  foreach ($libraries as $name => $library) {
+    if (strpos($name, 'civicrm-css-') !== 0 || in_array($name, $alreadyInHead, TRUE) || empty($library['css'])) {
+      continue;
+    }
+    foreach ($library['css'] as $item) {
+      // Css assets are keyed by file path, see AssetResolver::getCssAssets().
+      if (isset($css[$item['data']])) {
+        $css[$item['data']]['group'] = CIVICRM_CSS_AGGREGATE_COMPONENT;
+      }
+    }
   }
 }
 
