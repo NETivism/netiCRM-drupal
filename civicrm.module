@@ -185,18 +185,37 @@ function civicrm_library_info_build() {
   // repeated in another library: drupal keys css assets by file path, so listing
   // one file in two libraries would let the last one processed decide its weight.
   //
-  //   110       magnific-popup.css        (shared base)
-  //   120-129   mailing editor widgets    (quill / poshytip / pickr)
-  //   130       mailingEditor.css         (shared, overrides the widgets above)
-  //   140       AICompletion.css          (overrides mailingEditor.css)
-  //   150+      standalone components     (independent of each other)
+  // The three bands below mirror the weights the templates pass to {css}, so
+  // both platforms say the same thing:
+  //
+  //   110  vendor css, third party    (weight 997 in the templates)
+  //   120  the component itself       (998), overrides the vendor css above
+  //   130  overriding another component (999)
+  //
+  // Files in the same band never override one another, so they share one weight
+  // and simply keep the order they are declared in, the same way {js} does: a
+  // library's assets are collected in declaration order and drupal breaks equal
+  // weights with that order (AssetResolver, $options['weight'] += count / 30000).
+  // Css needing to override a file in its own band belongs in the next band.
+  //
+  // Weight is what orders css, not 'dependencies'. A dependency only guarantees
+  // "loaded before", while css needs "loaded after to override" - the opposite
+  // direction. That is why {js} gets away with a single weight for everything
+  // and css does not.
+  //
+  // Templates pass group / weight to {css} as well, but only drupal 7 reads
+  // them (see CRM_Utils_System_Drupal::addCss); on drupal 8+ the library
+  // definitions below are the only thing that decides the order.
+  $cssVendor = 110;
+  $cssComponent = 120;
+  $cssOverride = 130;
 
   // css library, magnific-popup (shared base, depended on by other css libraries)
   // attached via {css library=civicrm/civicrm-css-magnific-popup}
-  $libraries['civicrm-css-magnific-popup']['css']['theme']['../packages/Magnific-Popup/dist/magnific-popup.css'] = ['weight' => 110];
+  $libraries['civicrm-css-magnific-popup']['css']['theme']['../packages/Magnific-Popup/dist/magnific-popup.css'] = ['weight' => $cssVendor];
 
   // css library, mailingEditor.css (shared by mailingeditor and aicompletion)
-  $libraries['civicrm-css-mailingeditor-style']['css']['theme']['../packages/mailingEditor/mailingEditor.css'] = ['weight' => 130];
+  $libraries['civicrm-css-mailingeditor-style']['css']['theme']['../packages/mailingEditor/mailingEditor.css'] = ['weight' => $cssComponent];
 
   // css library, mailing editor
   // attached via {css library=civicrm/civicrm-css-mailingeditor} in mailingEditor.tpl
@@ -222,10 +241,9 @@ function civicrm_library_info_build() {
       'civicrm/civicrm-css-mailingeditor-style',
     ],
   ];
-  $weight = 120;
+  // quill.override.css relies on being declared after quill.snow / quill.bubble
   foreach ($mailingEditorCss as $css) {
-    $libraries['civicrm-css-mailingeditor']['css']['theme'][$css] = ['weight' => $weight];
-    $weight++;
+    $libraries['civicrm-css-mailingeditor']['css']['theme'][$css] = ['weight' => $cssVendor];
   }
 
   // css library, aicompletion
@@ -237,7 +255,7 @@ function civicrm_library_info_build() {
       'civicrm/civicrm-css-mailingeditor-style',
     ],
   ];
-  $libraries['civicrm-css-aicompletion']['css']['theme']['../packages/AICompletion/AICompletion.css'] = ['weight' => 140];
+  $libraries['civicrm-css-aicompletion']['css']['theme']['../packages/AICompletion/AICompletion.css'] = ['weight' => $cssOverride];
 
   // css library, aiimagegeneration
   // attached via {css library=civicrm/civicrm-css-aiimagegeneration} in AIImageGeneration.tpl
@@ -246,10 +264,11 @@ function civicrm_library_info_build() {
       'civicrm/civicrm-css-magnific-popup',
     ],
   ];
-  $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration.css'] = ['weight' => 150];
-  $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration-History.css'] = ['weight' => 151];
+  // AIImageGeneration-History.css overrides AIImageGeneration.css, so it loads after it
+  $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration.css'] = ['weight' => $cssComponent];
+  $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration-History.css'] = ['weight' => $cssOverride];
 
-  // css library, chartist
+  // css library, chartist (vendor css, shared by every page drawing a chart)
   // attached via {css library=civicrm/civicrm-css-chartist} in chartist.tpl
   $chartistCss = [
     '../packages/chartist/dist/chartist.min.css',
@@ -258,10 +277,8 @@ function civicrm_library_info_build() {
     '../packages/chartist/plugin/chartist-plugin-legend/chartist-plugin-legend-custom.css',
   ];
   $libraries['civicrm-css-chartist'] = [];
-  $weight = 150;
   foreach ($chartistCss as $css) {
-    $libraries['civicrm-css-chartist']['css']['theme'][$css] = ['weight' => $weight];
-    $weight++;
+    $libraries['civicrm-css-chartist']['css']['theme'][$css] = ['weight' => $cssVendor];
   }
 
   // css library, rfm
@@ -271,22 +288,22 @@ function civicrm_library_info_build() {
       'civicrm/civicrm-css-magnific-popup',
     ],
   ];
-  $libraries['civicrm-css-rfm']['css']['theme']['../packages/RFM/RFM.css'] = ['weight' => 150];
+  $libraries['civicrm-css-rfm']['css']['theme']['../packages/RFM/RFM.css'] = ['weight' => $cssComponent];
 
   // css library, side panel
   // attached via {css library=civicrm/civicrm-css-sidepanel} in sidePanel.tpl
   $libraries['civicrm-css-sidepanel'] = [];
-  $libraries['civicrm-css-sidepanel']['css']['theme']['../packages/sidePanel/sidePanel.css'] = ['weight' => 150];
+  $libraries['civicrm-css-sidepanel']['css']['theme']['../packages/sidePanel/sidePanel.css'] = ['weight' => $cssComponent];
 
   // css library, ncfunnel
   // attached via {css library=civicrm/civicrm-css-ncfunnel} in funnel.tpl
   $libraries['civicrm-css-ncfunnel'] = [];
-  $libraries['civicrm-css-ncfunnel']['css']['theme']['../packages/ncfunnel/ncfunnel.css'] = ['weight' => 150];
+  $libraries['civicrm-css-ncfunnel']['css']['theme']['../packages/ncfunnel/ncfunnel.css'] = ['weight' => $cssComponent];
 
   // css library, audit (civicrm's own css, not under packages/)
   // attached via {css library=civicrm/civicrm-css-audit} in Audit.tpl
   $libraries['civicrm-css-audit'] = [];
-  $libraries['civicrm-css-audit']['css']['theme']['../css/Audit/style.css'] = ['weight' => 150];
+  $libraries['civicrm-css-audit']['css']['theme']['../css/Audit/style.css'] = ['weight' => $cssComponent];
 
   return $libraries;
 }
