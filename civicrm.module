@@ -282,9 +282,12 @@ function civicrm_library_info_build() {
       'civicrm/civicrm-css-magnific-popup',
     ],
   ];
-  // AIImageGeneration-History.css overrides AIImageGeneration.css, so it loads after it
+  // AIImageGeneration-History.css overrides AIImageGeneration.css, both in this
+  // library. It keeps the same weight and relies on being declared after, the
+  // same way quill.override.css does above. A separate band would let another
+  // component's css sort between the two files.
   $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration.css'] = ['weight' => $cssComponent];
-  $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration-History.css'] = ['weight' => $cssOverride];
+  $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration-History.css'] = ['weight' => $cssComponent];
 
   // css library, chartist (vendor css, shared by every page drawing a chart)
   // attached via {css library=civicrm/civicrm-css-chartist} in chartist.tpl
