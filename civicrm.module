@@ -424,7 +424,7 @@ function civicrm_page_attachments(array &$page) {
       $page['#attached']['library'][] = $lib;
     }
   }
-  $dynamicCss = CRM_Core_Config::singleton()->userSystem::$cssLibraries;
+  $dynamicCss = CRM_Core_Config::singleton()->userSystem::$cssLibraries ?? [];
   if (!empty($dynamicCss) && is_array($dynamicCss)) {
     foreach ($dynamicCss as $lib => $doncare) {
       $page['#attached']['library'][] = $lib;
