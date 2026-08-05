@@ -57,6 +57,7 @@ function civicrm_user_update(AccountInterface $account) {
   if ($contact_id) {
     $contact_email = \CRM_Contact_BAO_Contact::getPrimaryEmail($contact_id);
     if ($contact_email != $account->getEmail()) {
+      \CRM_Core_BAO_Log::audit($account->id(), 'users.mail', $contact_email);
       \CRM_Core_BAO_UFMatch::updateContactEmail($contact_id, $account->getEmail());
     }
   }
