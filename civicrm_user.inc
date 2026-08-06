@@ -112,6 +112,7 @@ function civicrm_user_update(&$edit, &$user, $category) {
     $contactEmail = CRM_Contact_BAO_Contact::getPrimaryEmail($contactID);
     $userEmail = trim($edit['mail']);
     if ($contactEmail != $userEmail) {
+      CRM_Core_BAO_Log::audit($user->uid, 'users.mail', $contactEmail);
       CRM_Core_BAO_UFMatch::updateContactEmail($contactID, $userEmail);
     }
 
