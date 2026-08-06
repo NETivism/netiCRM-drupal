@@ -149,6 +149,7 @@ function civicrm_library_info_build() {
   ];
   $libraries['civicrm-js-aiimagegeneration']['js']['../packages/AIImageGeneration/AIImageGeneration.js'] = ['weight' => -3];
   $libraries['civicrm-js-aiimagegeneration']['js']['../packages/AIImageGeneration/AIImageGeneration-History.js'] = ['weight' => -3];
+  $libraries['civicrm-js-aiimagegeneration']['js']['../packages/AIImageGeneration/AIImageGeneration-Samples.js'] = ['weight' => -3];
 
   // additional, rfm
   $libraries['civicrm-js-rfm'] = [
@@ -288,6 +289,7 @@ function civicrm_library_info_build() {
   // component's css sort between the two files.
   $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration.css'] = ['weight' => $cssComponent];
   $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration-History.css'] = ['weight' => $cssComponent];
+  $libraries['civicrm-css-aiimagegeneration']['css']['theme']['../packages/AIImageGeneration/AIImageGeneration-Samples.css'] = ['weight' => $cssComponent];
 
   // css library, chartist (vendor css, shared by every page drawing a chart)
   // attached via {css library=civicrm/civicrm-css-chartist} in chartist.tpl
