@@ -542,6 +542,37 @@ function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
     ],
   ];
   $form['#validate'][] = '_civicrm_user_register_form_validate';
+  _civicrm_attach_inline_js($form);
+}
+
+/**
+ * Append CiviCRM inline javascript to a render array.
+ *
+ * CiviCRM hooks queue inline scripts through CRM_Utils_System::addJs(), which
+ * stores them on the civicrm.page_state service. Only CivicrmController reads
+ * that queue back, so pages embedding CiviCRM markup outside /civicrm/* routes
+ * have to flush it themselves or the scripts are silently dropped.
+ *
+ * @param array $build The render array to append script elements to.
+ *
+ * @return void
+ */
+function _civicrm_attach_inline_js(array &$build) {
+  $page_state = \Drupal::service('civicrm.page_state');
+  $javascripts = $page_state->getJs();
+  if (empty($javascripts['inline'])) {
+    return;
+  }
+  foreach ($javascripts['inline'] as $delta => $js) {
+    $build['civicrm_inline_js_' . $delta] = [
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => \Drupal\Core\Render\Markup::create($js),
+      // Keep scripts after the form actions, which default to weight 100.
+      '#weight' => 1000,
+    ];
+  }
+  $page_state->clearJs();
 }
 
 function civicrm_form_user_admin_settings_alter(&$form, &$form_state, $form_id) {

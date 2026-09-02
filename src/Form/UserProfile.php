@@ -62,6 +62,9 @@ class UserProfile extends FormBase {
     }
 
     $form['#title'] = $this->user->getAccountName();
+    // Keep the Drupal 7 form id. netiCRM frontend modules (civicrm_twaddress,
+    // civicrm_jvalidate) scope their selectors to form#user-profile-form.
+    $form['#id'] = 'user-profile-form';
     $form['form'] = [
       '#type' => 'fieldset',
       '#title' => $this->uf_group['title'],
@@ -77,6 +80,10 @@ class UserProfile extends FormBase {
         '#button_type' => 'primary',
       ],
     ];
+
+    // CiviCRM queued inline scripts while building the profile html above.
+    // This route does not go through CivicrmController, so flush them here.
+    _civicrm_attach_inline_js($form);
 
     return $form;
   }
