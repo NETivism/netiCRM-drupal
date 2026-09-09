@@ -112,6 +112,14 @@ function civicrm_html_head($force_load = FALSE) {
  * implements hook_init
  */
 function civicrm_init() {
+  // Check persisted identity on ordinary pages as well as CiviCRM routes.
+  $scope = isset($_SESSION['CiviCRM']) ? $_SESSION['CiviCRM'] : [];
+  if (is_array($scope) && (isset($scope['ufID']) || isset($scope['userID']))) {
+    if (civicrm_initialize()) {
+      CRM_Core_BAO_UFMatch::refreshSession();
+    }
+  }
+
   $customCSS = variable_get('civicrm_custom_css_url', '');
   if ($customCSS) {
     $options = [
@@ -540,6 +548,7 @@ function civicrm_initialize() {
 
     // initialize the system by creating a config object
     $config = CRM_Core_Config::singleton();
+    CRM_Core_BAO_UFMatch::refreshSession();
 
     // Add module-specific header elements
     $header = civicrm_html_head();
@@ -820,46 +829,8 @@ function civicrm_register_data($edit, &$user, $category, $reset, $doNotProcess =
   // lets suppress key generation for all registration forms
   civicrm_key_disable();
 
-  $ctype = civicrm_get_ctype('Individual');
-  if ($user->uid) {
-    // Happens on $type == 'insert'
-    // $reset == false always
-    // $doNotProcess == false always
-    CRM_Core_BAO_UFMatch::synchronize($user, TRUE, 'Drupal', $ctype);
-    $userID = CRM_Core_BAO_UFMatch::getContactId($user->uid);
-
-    // CRM-7858
-    if (isset($edit['mail'])) {
-      CRM_Core_BAO_UFMatch::updateContactEmail(
-        $userID,
-        trim($edit['mail'])
-      );
-    }
-
-    $html = CRM_Core_BAO_UFGroup::getEditHTML(
-      $userID,
-      '',
-      2,
-      TRUE,
-      $reset,
-      NULL,
-      $doNotProcess,
-      $ctype
-    );
-  }
-  else {
-    // Happens on $type == 'register'
-    $html = CRM_Core_BAO_UFGroup::getEditHTML(
-      NULL,
-      '',
-      1,
-      TRUE,
-      $reset,
-      NULL,
-      $doNotProcess,
-      $ctype
-    );
-  }
+  // Registration rendering never reads or updates an existing contact.
+  $html = CRM_Core_BAO_UFMatchRegistration::render(is_array($edit) ? $edit : []);
 
   $output = [];
   if ($html) {
@@ -941,6 +912,61 @@ function civicrm_form_data($edit, &$user, $category, $reset, $doNotProcess = FAL
   }
 
   return $output;
+}
+
+/**
+ * Keep validated registration data in this request only, bound to account email.
+ *
+ * @return array|null Request-local registration data, returned by reference.
+ */
+function &civicrm_registration_input() {
+  static $input = NULL;
+  return $input;
+}
+
+/**
+ * @param string $email Email of the account being created.
+ * @return array|null Matching registration data, consumed once, or NULL.
+ */
+function civicrm_take_registration_input($email) {
+  $pending =& civicrm_registration_input();
+  $input = $pending;
+  $pending = NULL;
+  return $input !== NULL && $input['email'] === mb_strtolower(trim($email), 'UTF-8') ? $input : NULL;
+}
+
+/**
+ * Validate only enabled registration fields before handing data to user_insert.
+ *
+ * @param array $form Drupal registration form definition.
+ * @param array $form_state Drupal form state containing raw input and validated account values.
+ * @return bool Whether validation succeeded and registration data was retained.
+ */
+function civicrm_user_register_form_validate($form, &$form_state) {
+  $pending =& civicrm_registration_input();
+  $pending = NULL;
+  if (!civicrm_initialize()) {
+    form_set_error('civicrm-profile-register', t('Unable to initialize CiviCRM.'));
+    return FALSE;
+  }
+  try {
+    $result = CRM_Core_BAO_UFMatchRegistration::validate(isset($form_state['input']) ? $form_state['input'] : []);
+    foreach ($result['errors'] as $name => $error) {
+      form_set_error($name, $error);
+    }
+    if (!$result['errors'] && !form_get_errors()) {
+      $pending = [
+        'email' => mb_strtolower(trim($form_state['values']['mail']), 'UTF-8'),
+        'values' => $result['values'],
+        'uploads' => $result['uploads'],
+      ];
+      return TRUE;
+    }
+  }
+  catch (CRM_Core_Exception $e) {
+    form_set_error('civicrm-profile-register', $e->getMessage());
+  }
+  return FALSE;
 }
 
 function civicrm_user_form_validate($form, &$form_state) {
@@ -1132,9 +1158,9 @@ function civicrm_form_alter(&$form, $formValues, $formID) {
     case 'user_register_form':
       civicrm_html_head(TRUE);
       $form['#attributes']['enctype'] = 'multipart/form-data';
-      $form['#validate'][] = 'civicrm_user_form_validate';
+      $form['#validate'][] = 'civicrm_user_register_form_validate';
       $output = civicrm_register_data(
-        $form,
+        isset($formValues['input']) ? $formValues['input'] : [],
         $form['#user'],
         NULL,
         TRUE,

@@ -32,10 +32,7 @@
 /**
  * User hooks for civicrm module
  *
- * Note that we ignore the edit field and do not follow the drupal protocol
- * of extracting values from the edit field. We extract the fields directly
- * from $_POST. This is because the underlying form package that we use
- * (HTML_QuickForm) does the form value extraction and validation.
+ * Registration values are validated and whitelisted before user_insert.
  *
  * @abstractparam array  $edit     The array of form values submitted by the user.
  *
@@ -79,17 +76,17 @@ function civicrm_user_insert(&$edit, &$user, $category = NULL) {
     return;
   }
 
-  // did civicrm generate this page, or is it via a user hook?
-  if (civicrm_on_user_page()) {
-    civicrm_register_data($edit, $user, $category, FALSE);
+  $registration = civicrm_take_registration_input($user->mail);
+  if ($registration !== NULL) {
+    $result = CRM_Core_BAO_UFMatchRegistration::register($user->uid, $user->mail, $registration['values'], $registration['uploads']);
+    $ufMatch = isset($result['ufMatch']) ? $result['ufMatch'] : NULL;
   }
   else {
-    CRM_Core_BAO_UFMatch::synchronize(
-      $user,
-      FALSE,
-      'Drupal',
-      civicrm_get_ctype('Individual')
-    );
+    // Programmatic creation has no validated registration profile.
+    $ufMatch = CRM_Core_BAO_UFMatch::synchronizeUFMatch($user, $user->uid, $user->mail, 'Drupal', NULL, 'Individual');
+  }
+  if (!$ufMatch) {
+    throw new CRM_Core_Exception(ts('Unable to link the account to a contact.'));
   }
   return;
 }
@@ -102,7 +99,7 @@ function civicrm_user_update(&$edit, &$user, $category) {
     return;
   }
   // this always comes in via user hook
-  // in D7 we dont know if the email has changed, so we go ahead and update
+  // A timestamp/role save must preserve a different CRM primary email.
   if (isset($edit['mail']) && !empty($edit['mail'])) {
     $contactID = CRM_Core_BAO_UFMatch::getContactId($user->uid);
     // cant find the contactID, so lets skip
@@ -111,7 +108,7 @@ function civicrm_user_update(&$edit, &$user, $category) {
     }
     $contactEmail = CRM_Contact_BAO_Contact::getPrimaryEmail($contactID);
     $userEmail = trim($edit['mail']);
-    if ($contactEmail != $userEmail) {
+    if (isset($user->original->mail) && trim($user->original->mail) !== $userEmail && $contactEmail != $userEmail) {
       CRM_Core_BAO_UFMatch::updateContactEmail($contactID, $userEmail);
     }
 
