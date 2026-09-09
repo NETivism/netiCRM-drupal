@@ -35,6 +35,19 @@ class CivicrmPageState {
     return $this->js;
   }
 
+  /**
+   * Empty the queued scripts.
+   *
+   * Callers that render the queue are expected to drain it, so the same
+   * script is not printed twice within one request.
+   *
+   * @return void
+   * @access public
+   */
+  public function clearJs() {
+    $this->js = [];
+  }
+
   public function addBreadcrumb($name, $url) {
     $this->breadcrumbs[$name] = $url;
   }
