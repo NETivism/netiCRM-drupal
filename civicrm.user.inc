@@ -18,7 +18,13 @@ function civicrm_user_login(AccountInterface $account) {
 function civicrm_user_insert(AccountInterface $account) {
   $civicrm = \Drupal::service('civicrm');
   $civicrm->initialize();
-  $userSystem = CRM_Core_Config::singleton()->userSystem;
+  $config = CRM_Core_Config::singleton();
+  // Embedded CiviCRM signup already has a contact. CMSUser::create() writes
+  // its UFMatch after createUser() returns; do not allocate another here.
+  if ($config->inCiviCRM) {
+    return;
+  }
+  $userSystem = $config->userSystem;
   $userSystemID = $userSystem->getBestUFID($account);
   $uniqId = $userSystem->getBestUFUniqueIdentifier($account);
   $registration = $civicrm->takeRegistrationInput($account->getEmail());
