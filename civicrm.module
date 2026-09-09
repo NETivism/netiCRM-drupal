@@ -745,7 +745,11 @@ function _civicrm_get_profiles($contact_id) {
 function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
   $civicrm = \Drupal::service('civicrm');
   $civicrm->initialize();
-  $html = \CRM_Core_BAO_UFGroup::getEditHTML(NULL, '', NULL, TRUE, TRUE, NULL, FALSE, $civicrm->getCtype());
+  $html = \CRM_Core_BAO_UFMatchRegistration::render($form_state->getUserInput());
+
+  // Embedded QuickForm file inputs are markup, so Form API cannot detect them.
+  $form_state->setHasFileElement();
+  $form['#attributes']['enctype'] = 'multipart/form-data';
 
   // Need to disable the page cache.
   \Drupal::service('page_cache_kill_switch')->trigger();
@@ -769,13 +773,19 @@ function civicrm_form_user_admin_settings_alter(&$form, &$form_state, $form_id) 
  * Validation function for additional profile form fields attached to user registration form.
  */
 function _civicrm_user_register_form_validate(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  \Drupal::service('civicrm')->initialize();
-  $errors = CRM_Core_BAO_UFGroup::isValid(NULL, '', TRUE);
-
-  if (is_array($errors)) {
-    foreach ($errors as $name => $message) {
+  $civicrm = \Drupal::service('civicrm');
+  $civicrm->initialize();
+  try {
+    $result = CRM_Core_BAO_UFMatchRegistration::validate($form_state->getUserInput());
+    foreach ($result['errors'] as $name => $message) {
       $form_state->setErrorByName($name, $message);
     }
+    if (!$result['errors'] && !$form_state->hasAnyErrors()) {
+      $civicrm->setRegistrationInput($form_state->getValue('mail'), $result['values'], $result['uploads']);
+    }
+  }
+  catch (\CRM_Core_Exception $e) {
+    $form_state->setErrorByName('civicrm_profile_register', $e->getMessage());
   }
 }
 

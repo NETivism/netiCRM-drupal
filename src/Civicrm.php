@@ -9,6 +9,29 @@ class Civicrm {
 
   public $initialized = FALSE;
 
+  /** Validated registration input, kept only in this request (never Session). */
+  private $registrationInput;
+
+  /**
+   * @param string $email Validated CMS registration email to bind the data to.
+   * @param array $values Validated registration profile values.
+   * @param \HTML_QuickForm_file[] $uploads Validated upload elements keyed by field name.
+   * @return void
+   */
+  public function setRegistrationInput($email, array $values, array $uploads = []) {
+    $this->registrationInput = ['email' => mb_strtolower(trim($email), 'UTF-8'), 'values' => $values, 'uploads' => $uploads];
+  }
+
+  /**
+   * @param string $email Email of the account being created.
+   * @return array|null Matching registration data, consumed once, or NULL.
+   */
+  public function takeRegistrationInput($email) {
+    $input = $this->registrationInput;
+    $this->registrationInput = NULL;
+    return $input && $input['email'] === mb_strtolower(trim($email), 'UTF-8') ? $input : NULL;
+  }
+
   /**
    * Initialize CiviCRM. Call this function from other modules too if
    * they use the CiviCRM API.
@@ -79,6 +102,8 @@ class Civicrm {
 
     // Mark CiviCRM as initialized.
     $this->initialized = TRUE;
+    // Validate persisted identity before a controller/profile can use CRM data.
+    \CRM_Core_BAO_UFMatch::refreshSession();
   }
 
   public function isInitialized() {

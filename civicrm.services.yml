@@ -16,3 +16,8 @@ services:
     class: Drupal\civicrm\EventSubscriber\CivicrmExit
     tags:
       - {name: event_subscriber}
+  civicrm.session_identity:
+    class: Drupal\civicrm\EventSubscriber\CivicrmSessionIdentity
+    arguments: ['@civicrm']
+    tags:
+      - {name: event_subscriber}

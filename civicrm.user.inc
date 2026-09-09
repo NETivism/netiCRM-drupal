@@ -21,29 +21,20 @@ function civicrm_user_insert(AccountInterface $account) {
   $userSystem = CRM_Core_Config::singleton()->userSystem;
   $userSystemID = $userSystem->getBestUFID($account);
   $uniqId = $userSystem->getBestUFUniqueIdentifier($account);
-  \CRM_Core_BAO_UFMatch::synchronizeUFMatch($account, $userSystemID, $uniqId, 'Drupal', NULL, 'Individual', $isLogin = FALSE);
-
-  // As per CRM-7858, the email address in CiviCRM isn't always set
-  // with a call to synchronize(). So we force this through.
-  $contact_id = \CRM_Core_BAO_UFMatch::getContactId($account->id());
-  if (empty($contact_id)) {
-    return;
+  $registration = $civicrm->takeRegistrationInput($account->getEmail());
+  if ($registration !== NULL) {
+    $result = \CRM_Core_BAO_UFMatchRegistration::register($userSystemID, $uniqId, $registration['values'], $registration['uploads']);
+    $ufMatch = $result['ufMatch'];
   }
-  \CRM_Core_BAO_UFMatch::updateContactEmail($contact_id, $account->getEmail());
-
-  // If already in CiviCRM, we don't do then next bit because it will cause
-  // the current request to exit, stopping execution.
-  $config = CRM_Core_Config::singleton();
-  if ($config->inCiviCRM) {
-    return;
+  else {
+    // Programmatic account creation has no validated registration profile.
+    $ufMatch = \CRM_Core_BAO_UFMatch::synchronizeUFMatch($account, $userSystemID, $uniqId, 'Drupal', NULL, 'Individual');
   }
-
-  // Process any profile form fields that may have been submitted.
-  // In particular, this will pick up form fields that were submitted on the
-  // user_registration page.
-  if (civicrm_on_user_page()) {
-    \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
+  if (!$ufMatch) {
+    throw new \CRM_Core_Exception(ts('Unable to link the account to a contact.'));
   }
+  // No raw POST/profile reprocessing or unconditional primary-email update.
+  // The mapping transaction has already applied the permitted profile values.
 }
 
 /**
@@ -52,7 +43,13 @@ function civicrm_user_insert(AccountInterface $account) {
 function civicrm_user_update(AccountInterface $account) {
   \Drupal::service('civicrm')->initialize();
 
-  // Update primary email address of contact if it has changed.
+  // Saving login timestamps/roles must not overwrite an existing contact's
+  // primary email merely because it differs from the account's email.
+  if (!isset($account->original) || $account->original->getEmail() === $account->getEmail()) {
+    return;
+  }
+
+  // Update primary email address only when the Drupal email actually changes.
   $contact_id = \CRM_Core_BAO_UFMatch::getContactId($account->id());
   if ($contact_id) {
     $contact_email = \CRM_Contact_BAO_Contact::getPrimaryEmail($contact_id);
