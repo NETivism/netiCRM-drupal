@@ -55,8 +55,9 @@ function civicrm_user_update(AccountInterface $account) {
     $contact_email = \CRM_Contact_BAO_Contact::getPrimaryEmail($contact_id);
     if ($contact_email != $account->getEmail()) {
       \CRM_Core_BAO_Log::audit($account->id(), 'users.mail', $contact_email);
-      \CRM_Core_BAO_UFMatch::updateContactEmail($contact_id, $account->getEmail());
     }
+    // This also updates uf_name, even if the contact already has the new email.
+    \CRM_Core_BAO_UFMatch::updateContactEmail($contact_id, $account->getEmail());
   }
 
   // @Todo Drupal 7 code cleared navigation menu if it detected a change in roles.
