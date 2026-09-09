@@ -111,8 +111,9 @@ function civicrm_user_update(&$edit, &$user, $category) {
     // updateContactEmail also refreshes uf_name when the contact email already matches.
     if ($contactEmail != $userEmail) {
       CRM_Core_BAO_Log::audit($user->uid, 'users.mail', $contactEmail);
-      CRM_Core_BAO_UFMatch::updateContactEmail($contactID, $userEmail);
     }
+    // This also updates uf_name, even if the contact already has the new email.
+    CRM_Core_BAO_UFMatch::updateContactEmail($contactID, $userEmail);
 
     // reset navigation on user role change
     $editRoles     = array_keys(CRM_Utils_Array::value('roles', $edit, []));
