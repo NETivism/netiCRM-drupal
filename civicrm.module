@@ -115,9 +115,7 @@ function civicrm_init() {
   // Check persisted identity on ordinary pages as well as CiviCRM routes.
   $scope = isset($_SESSION['CiviCRM']) ? $_SESSION['CiviCRM'] : [];
   if (is_array($scope) && (isset($scope['ufID']) || isset($scope['userID']))) {
-    if (civicrm_initialize()) {
-      CRM_Core_BAO_UFMatch::refreshSession();
-    }
+    civicrm_initialize(TRUE);
   }
 
   $customCSS = variable_get('civicrm_custom_css_url', '');
@@ -473,8 +471,11 @@ function civicrm_page_build($page) {
 /**
  * Initialize CiviCRM. Call this function from other modules too if
  * they use the CiviCRM API.
+ *
+ * @param bool $refreshSession Also verify Session identity when already initialized.
+ * @return bool Whether CiviCRM initialized successfully.
  */
-function civicrm_initialize() {
+function civicrm_initialize($refreshSession = FALSE) {
   // Check for php version and ensure its greater than minPhpVersion
   $minPhpVersion = '5.3.3';
   if (version_compare(PHP_VERSION, $minPhpVersion) < 0) {
@@ -549,6 +550,7 @@ function civicrm_initialize() {
     // initialize the system by creating a config object
     $config = CRM_Core_Config::singleton();
     CRM_Core_BAO_UFMatch::refreshSession();
+    $refreshSession = FALSE;
 
     // Add module-specific header elements
     $header = civicrm_html_head();
@@ -579,6 +581,11 @@ function civicrm_initialize() {
     // CRM_Core_Config::singleton()->userSystem->setMySQLTimeZone();
   }
 
+  // First initialization already refreshed; hook_init may also call us after
+  // another module initialized CiviCRM earlier in this request.
+  if ($refreshSession) {
+    CRM_Core_BAO_UFMatch::refreshSession();
+  }
   return TRUE;
 }
 
@@ -956,7 +963,7 @@ function civicrm_user_register_form_validate($form, &$form_state) {
     }
     if (!$result['errors'] && !form_get_errors()) {
       $pending = [
-        'email' => mb_strtolower(trim($form_state['values']['mail']), 'UTF-8'),
+        'email' => mb_strtolower(trim($form_state['values']['mail'] ?? ''), 'UTF-8'),
         'values' => $result['values'],
         'uploads' => $result['uploads'],
       ];
