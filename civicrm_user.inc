@@ -79,7 +79,7 @@ function civicrm_user_insert(&$edit, &$user, $category = NULL) {
   $registration = civicrm_take_registration_input($user->mail);
   if ($registration !== NULL) {
     $result = CRM_Core_BAO_UFMatchRegistration::register($user->uid, $user->mail, $registration['values'], $registration['uploads']);
-    $ufMatch = isset($result['ufMatch']) ? $result['ufMatch'] : NULL;
+    $ufMatch = $result['ufMatch'] ?? NULL;
   }
   else {
     // Programmatic creation has no validated registration profile.
@@ -107,8 +107,10 @@ function civicrm_user_update(&$edit, &$user, $category) {
       return;
     }
     $userEmail = trim($edit['mail']);
+    $contactEmail = \CRM_Contact_BAO_Contact::getPrimaryEmail($contactID);
     // updateContactEmail also refreshes uf_name when the contact email already matches.
-    if (isset($user->original->mail) && trim($user->original->mail) !== $userEmail) {
+    if ($contactEmail != $userEmail) {
+      CRM_Core_BAO_Log::audit($user->uid, 'users.mail', $contactEmail);
       CRM_Core_BAO_UFMatch::updateContactEmail($contactID, $userEmail);
     }
 
@@ -199,7 +201,6 @@ function civicrm_user_view($user, $view_mode) {
   ) .
   '</div>';
     }
-
 
     $adminPerm = CRM_Core_Config::$_userSystem->admin_permissions ?? 'administer CiviCRM';
     $isAdmin = CRM_Core_Permission::check($adminPerm);
