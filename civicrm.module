@@ -293,6 +293,11 @@ function civicrm_cron() {
     if ($hour > 7 && !$disableSpgateway) {
       CRM_Core_Payment_SPGATEWAY::doExecuteAllRecur($time);
     }
+    # linepay recur sync
+    $disableLinePay = \Drupal\Core\Site\Settings::get('civicrm.disable_linepay_execute', FALSE);
+    if ($hour > 7 && !$disableLinePay) {
+      CRM_Core_Payment_LinePay::doExecuteAllRecur($time);
+    }
 
     # cancel stuck batch
     CRM_Batch_BAO_Batch::cancelStuckBatch();
