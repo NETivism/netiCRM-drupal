@@ -115,7 +115,7 @@ function civicrm_init() {
   // Check persisted identity on ordinary pages as well as CiviCRM routes.
   $scope = isset($_SESSION['CiviCRM']) ? $_SESSION['CiviCRM'] : [];
   if (is_array($scope) && (isset($scope['ufID']) || isset($scope['userID']))) {
-    civicrm_initialize(TRUE);
+    civicrm_initialize();
   }
 
   $customCSS = variable_get('civicrm_custom_css_url', '');
@@ -477,10 +477,9 @@ function civicrm_page_build($page) {
  * Initialize CiviCRM. Call this function from other modules too if
  * they use the CiviCRM API.
  *
- * @param bool $refreshSession Also verify Session identity when already initialized.
  * @return bool Whether CiviCRM initialized successfully.
  */
-function civicrm_initialize($refreshSession = FALSE) {
+function civicrm_initialize() {
   // Check for php version and ensure its greater than minPhpVersion
   $minPhpVersion = '5.3.3';
   if (version_compare(PHP_VERSION, $minPhpVersion) < 0) {
@@ -559,7 +558,6 @@ function civicrm_initialize($refreshSession = FALSE) {
     if (isset($config->userSystem)) {
       CRM_Core_BAO_UFMatch::refreshSession();
     }
-    $refreshSession = FALSE;
 
     // Add module-specific header elements
     $header = civicrm_html_head();
@@ -588,12 +586,6 @@ function civicrm_initialize($refreshSession = FALSE) {
       }
     }
     // CRM_Core_Config::singleton()->userSystem->setMySQLTimeZone();
-  }
-
-  // First initialization already refreshed; hook_init may also call us after
-  // another module initialized CiviCRM earlier in this request.
-  if ($refreshSession) {
-    CRM_Core_BAO_UFMatch::refreshSession();
   }
   return TRUE;
 }
