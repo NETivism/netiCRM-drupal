@@ -98,12 +98,16 @@ class Civicrm {
     }
 
     // Initialize the system by creating a config object
-    \CRM_Core_Config::singleton();
+    $config = \CRM_Core_Config::singleton();
 
     // Mark CiviCRM as initialized.
     $this->initialized = TRUE;
     // Validate persisted identity before a controller/profile can use CRM data.
-    \CRM_Core_BAO_UFMatch::refreshSession();
+    // Skip when CiviCRM bootstraps Drupal (extern/cli): Config is still under
+    // construction and userSystem is not assigned yet.
+    if (isset($config->userSystem)) {
+      \CRM_Core_BAO_UFMatch::refreshSession();
+    }
   }
 
   public function isInitialized() {
