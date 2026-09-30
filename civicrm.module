@@ -554,7 +554,11 @@ function civicrm_initialize($refreshSession = FALSE) {
 
     // initialize the system by creating a config object
     $config = CRM_Core_Config::singleton();
-    CRM_Core_BAO_UFMatch::refreshSession();
+    // Skip when CiviCRM bootstraps Drupal (extern/cli): Config is still under
+    // construction and userSystem is not assigned yet.
+    if (isset($config->userSystem)) {
+      CRM_Core_BAO_UFMatch::refreshSession();
+    }
     $refreshSession = FALSE;
 
     // Add module-specific header elements
