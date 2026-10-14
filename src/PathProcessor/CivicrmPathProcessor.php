@@ -20,8 +20,8 @@ class CivicrmPathProcessor implements InboundPathProcessorInterface {
       $longest = '';
       foreach (array_keys($items) as $item) {
         $item = '/' . $item;
-        // if he current path is a civicrm path
-        if ((strpos($path, $item) === 0)) {
+        // if the current path is a civicrm path, match complete path segments only
+        if ($path === $item || strpos($path, $item . '/') === 0) {
           // discover longest matching civicrm path in the request path
 
           if (strlen($item) > strlen($longest)) {
@@ -31,7 +31,7 @@ class CivicrmPathProcessor implements InboundPathProcessorInterface {
       }
       if (!empty($longest)) {
         // parse url component parameters from path
-        $params = str_replace($longest, '', $path);
+        $params = substr($path, strlen($longest));
         // replace slashes with colons and the controller will piece it back together
         if (strlen($params)) {
           $params = str_replace('/', ':', $params);
