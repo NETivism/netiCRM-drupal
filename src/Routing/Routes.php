@@ -24,8 +24,8 @@ class Routes {
     foreach ($items as $path => $item) {
       $requirement = [];
 
+      $perm = '';
       if (!empty($item['access_arguments'])) {
-        $perm = '';
         $operator = '+';
         if (!empty($item['access_arguments'][1])) {
           $operator = $item['access_arguments'][1] == 'and' ? ',' : '+';
@@ -36,6 +36,17 @@ class Routes {
         else {
           $perm = $item['access_arguments'][0];
         }
+      }
+
+      // CRM_Core_Permission::checkLoggedIn ignores access_arguments, only require an authenticated user
+      if (isset($item['access_callback']) && \CRM_Core_Permission::isLoggedInCallback($item['access_callback'])) {
+        $requirement['_user_is_logged_in'] = 'TRUE';
+        // children still inherit access_arguments from this item in CRM_Core_Menu::fillMenuValues
+        if ($perm !== '') {
+          $permissions[$path] = $perm;
+        }
+      }
+      elseif ($perm !== '') {
         $requirement['_permission'] = $perm;
         $permissions[$path] = $requirement['_permission'];
       }
